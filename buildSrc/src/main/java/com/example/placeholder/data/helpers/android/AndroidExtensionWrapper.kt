@@ -4,10 +4,10 @@ import org.gradle.api.DomainObjectSet
 import org.gradle.api.NamedDomainObjectContainer
 
 class AndroidExtensionWrapper(private val androidExtension: Any) {
-    //    private val clazz: Class<*> = Class.forName("com.android.build.gradle.internal.dsl.BaseAppModuleExtension")
+
     private val clazz: Class<*> = androidExtension.javaClass
-    private val getSourceSetsMethod = clazz.getMethod("getSourceSets")
-    private val getApplicationVariantsMethod = clazz.getMethod("getApplicationVariants")
+    private val getSourceSetsMethod by lazy { clazz.getMethod("getSourceSets") }
+    private val getApplicationVariantsMethod by lazy { clazz.getMethod("getApplicationVariants") }
 
     fun getSourceSets(): Map<String, AndroidSourceSetWrapper> {
         val generic = getSourceSetsMethod.invoke(androidExtension) as NamedDomainObjectContainer<*>
