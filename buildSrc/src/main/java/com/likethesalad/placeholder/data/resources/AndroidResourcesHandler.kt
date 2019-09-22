@@ -19,7 +19,7 @@ class AndroidResourcesHandler(private val filesProvider: FilesProvider) : Resour
 
     override fun saveGatheredStrings(stringsGathered: StringsGatheredModel) {
         val jsonStrings = gson.toJson(stringsGathered)
-        filesProvider.getStringsResourcesFileForFolder(stringsGathered.valueFolderName).writeText(jsonStrings)
+        filesProvider.getGatheredStringsFileForFolder(stringsGathered.valueFolderName).writeText(jsonStrings)
     }
 
     override fun saveResolvedStringListForValuesFolder(

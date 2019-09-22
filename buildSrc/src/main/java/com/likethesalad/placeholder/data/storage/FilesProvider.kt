@@ -18,7 +18,7 @@ interface FilesProvider {
      * Internal incremental file of all strings gathered from one values folder.
      * @param valuesFolderName - The name of the values folder these strings will be for.
      */
-    fun getStringsResourcesFileForFolder(valuesFolderName: String): File
+    fun getGatheredStringsFileForFolder(valuesFolderName: String): File
 
     fun getAllGatheredStringsFiles(): List<File>
 

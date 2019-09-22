@@ -31,7 +31,7 @@ open class GatherTemplatesTask : DefaultTask() {
     @TaskAction
     fun gatherTemplateStrings() {
         val baseStringsFile =
-            filesProvider.getStringsResourcesFileForFolder(AndroidFilesProvider.BASE_VALUES_FOLDER_NAME)
+            filesProvider.getGatheredStringsFileForFolder(AndroidFilesProvider.BASE_VALUES_FOLDER_NAME)
         val baseStrings = resourcesHandler.getGatheredStringsFromFile(baseStringsFile).getMergedStrings()
         for (stringFile in filesProvider.getAllGatheredStringsFiles()) {
             val templates = generateTemplatesForStringFile(stringFile, baseStrings)

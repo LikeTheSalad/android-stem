@@ -47,7 +47,7 @@ class AndroidFilesProvider(
         return resolvedFiles
     }
 
-    override fun getStringsResourcesFileForFolder(valuesFolderName: String): File {
+    override fun getGatheredStringsFileForFolder(valuesFolderName: String): File {
         return File(
             getGatheredStringsFolder(),
             "${getStringFileNameForValuesFolder(valuesFolderName)}.json"
