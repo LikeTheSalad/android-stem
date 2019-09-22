@@ -5,8 +5,9 @@ plugins {
     id 'maven-publish'
 }
 
-group 'com.example'
-version '1.0-SNAPSHOT'
+group 'com.likethesalad'
+ext.artifact = 'placeholder-resolver'
+version '1.2'
 
 repositories {
     mavenCentral()
@@ -24,8 +25,8 @@ dependencies {
 gradlePlugin {
     plugins {
         placeholderPlugin {
-            id = 'com.example.placeholder'
-            implementationClass = 'com.example.placeholder.ResolvePlaceholdersPlugin'
+            id = project.artifact
+            implementationClass = 'com.likethesalad.placeholder.ResolvePlaceholdersPlugin'
         }
     }
 }
@@ -33,9 +34,9 @@ gradlePlugin {
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId = 'com.example.placeholder'
-            artifactId = 'resolver'
-            version = '1.1'
+            groupId = project.group
+            artifactId = project.artifact
+            version = project.version
 
             from components.java
         }
