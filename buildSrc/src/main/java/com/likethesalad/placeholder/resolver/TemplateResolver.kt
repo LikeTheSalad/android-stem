@@ -66,7 +66,7 @@ class TemplateResolver(private val recursiveLevelDetector: RecursiveLevelDetecto
     }
 
     private fun stripTemplatePrefix(text: String): String {
-        return text.replace(Constants.TEMPLATE_STRING_REGEX, "")
+        return text.replace(Constants.TEMPLATE_STRING_PREFIX_REGEX, "")
     }
 
     private fun containsTemplateAsPlaceholder(content: String): Boolean {
