@@ -1,4 +1,4 @@
-package com.example.placeholder.data.helpers.android
+package com.example.placeholder.data.helpers.wrappers
 
 import org.gradle.api.DomainObjectSet
 import org.gradle.api.NamedDomainObjectContainer

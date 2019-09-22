@@ -1,4 +1,4 @@
-package com.example.placeholder.data.helpers.android
+package com.example.placeholder.data.helpers.wrappers
 
 class AndroidSourceSetWrapper(private val androidSourceSet: Any) {
 
