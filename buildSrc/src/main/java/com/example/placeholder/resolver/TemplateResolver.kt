@@ -1,0 +1,84 @@
+package com.example.placeholder.resolver
+
+import com.example.placeholder.data.Constants
+import com.example.placeholder.models.StringResourceModel
+import com.example.placeholder.models.StringsTemplatesModel
+
+class TemplateResolver(private val recursiveLevelDetector: RecursiveLevelDetector) {
+
+    fun resolveTemplates(stringsTemplatesModel: StringsTemplatesModel): List<StringResourceModel> {
+        return if (stringsTemplatesModel.templates.any { containsTemplateAsPlaceholder(it.content) }) {
+            // If there's recursive templates
+            resolveRecursiveTemplates(stringsTemplatesModel.templates, stringsTemplatesModel.values)
+        } else {
+            // If there's no recursive templates
+            resolveSimpleTemplates(stringsTemplatesModel.templates, stringsTemplatesModel.values)
+        }
+    }
+
+    private fun resolveRecursiveTemplates(
+        templates: List<StringResourceModel>,
+        originalValues: Map<String, String>
+    ): List<StringResourceModel> {
+        // Get metaList of recursive level per template
+        val recursiveLevelMetaList = recursiveLevelDetector.orderTemplatesByRecursiveLevel(templates)
+
+        // Make the values mutable:
+        val mutableValues = HashMap(originalValues)
+
+        // The result:
+        val resolvedTemplateList = mutableListOf<StringResourceModel>()
+
+        for (lst in recursiveLevelMetaList) {
+            // Resolve this lst templates:
+            val templatesResolved = resolveSimpleTemplates(lst, mutableValues)
+
+            // Add resolved templates to the result:
+            resolvedTemplateList.addAll(templatesResolved)
+
+            // Add resolved templates to the values so that recursive templates can find them
+            for (it in templatesResolved) {
+                // Have to add the prefix as it's removed when resolved
+                mutableValues[Constants.TEMPLATE_STRING_PREFIX + it.name] = it.content
+            }
+        }
+
+        return resolvedTemplateList
+    }
+
+    private fun resolveSimpleTemplates(
+        templateList: List<StringResourceModel>,
+        values: Map<String, String>
+    ): List<StringResourceModel> {
+        val resolvedTemplates = mutableListOf<StringResourceModel>()
+        for (it in templateList) {
+            resolvedTemplates.add(getResolvedStringResourceModel(it, values))
+        }
+        return resolvedTemplates
+    }
+
+    private fun getResolvedStringResourceModel(original: StringResourceModel, values: Map<String, String>)
+            : StringResourceModel {
+        return StringResourceModel(
+            stripTemplatePrefix(original.name),
+            resolve(original.content, values)
+        )
+    }
+
+    private fun stripTemplatePrefix(text: String): String {
+        return text.replace(Constants.TEMPLATE_STRING_REGEX, "")
+    }
+
+    private fun containsTemplateAsPlaceholder(content: String): Boolean {
+        return Constants.TEMPLATE_AS_PLACEHOLDER_REGEX.containsMatchIn(content)
+    }
+
+    private fun resolve(template: String, values: Map<String, String>): String {
+        var resolvedString = template
+        val occurrences = Constants.PLACEHOLDER_REGEX.findAll(template).toList().map { it.groupValues[1] }.toSet()
+        for (it in occurrences) {
+            resolvedString = resolvedString.replace("\${$it}", values.getValue(it))
+        }
+        return resolvedString
+    }
+}
