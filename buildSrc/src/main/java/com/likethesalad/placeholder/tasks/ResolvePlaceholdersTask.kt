@@ -36,7 +36,7 @@ open class ResolvePlaceholdersTask : DefaultTask() {
                 filterNonTranslatableStringsForLanguageFolder(templatesModel.valuesFolderName, resolvedTemplates)
             if (curatedTemplates.isNotEmpty()) {
                 resourcesHandler.saveResolvedStringListForValuesFolder(
-                    resolvedTemplates,
+                    curatedTemplates,
                     templatesModel.valuesFolderName
                 )
             } else {
