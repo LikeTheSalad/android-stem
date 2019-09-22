@@ -7,11 +7,13 @@ data class StringResourceModel(
 
     companion object {
         private const val ATTR_NAME = "name"
+        private const val ATTR_TRANSLATABLE = "translatable"
     }
 
     constructor(name: String, content: String) : this(mapOf(ATTR_NAME to name), content)
 
     val name = attributes.getValue(ATTR_NAME)
+    val translatable: Boolean = attributes.getOrDefault(ATTR_TRANSLATABLE, "true").toBoolean()
 
     override fun compareTo(other: StringResourceModel): Int {
         return name.compareTo(other.name)

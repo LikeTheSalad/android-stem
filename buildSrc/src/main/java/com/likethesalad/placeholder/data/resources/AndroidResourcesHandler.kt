@@ -31,6 +31,13 @@ class AndroidResourcesHandler(private val filesProvider: FilesProvider) : Resour
         resDocument.saveToFile(filesProvider.getResolvedFileForValuesFolder(valuesFolderName))
     }
 
+    override fun removeResolvedStringFileIfExistsForValuesFolder(valuesFolderName: String) {
+        val file = filesProvider.getResolvedFileForValuesFolder(valuesFolderName)
+        if (file.exists()) {
+            file.delete()
+        }
+    }
+
     override fun getTemplatesFromFile(templateFile: File): StringsTemplatesModel {
         return if (templateFile.exists()) {
             gson.fromJson(templateFile.readText(), StringsTemplatesModel::class.java)

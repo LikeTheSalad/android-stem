@@ -13,6 +13,8 @@ interface ResourcesHandler {
 
     fun saveResolvedStringListForValuesFolder(resolvedStrings: List<StringResourceModel>, valuesFolderName: String)
 
+    fun removeResolvedStringFileIfExistsForValuesFolder(valuesFolderName: String)
+
     fun saveTemplatesToFile(templates: StringsTemplatesModel, templateFile: File)
 
     fun saveGatheredStrings(stringsGathered: StringsGatheredModel)
