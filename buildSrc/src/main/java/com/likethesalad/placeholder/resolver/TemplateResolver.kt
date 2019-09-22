@@ -59,8 +59,10 @@ class TemplateResolver(private val recursiveLevelDetector: RecursiveLevelDetecto
 
     private fun getResolvedStringResourceModel(original: StringResourceModel, values: Map<String, String>)
             : StringResourceModel {
+        val attrs = original.attributes.toMutableMap()
+        attrs[StringResourceModel.ATTR_NAME] = stripTemplatePrefix(original.name)
         return StringResourceModel(
-            stripTemplatePrefix(original.name),
+            attrs,
             resolve(original.content, values)
         )
     }

@@ -20,20 +20,6 @@ class StringResourceModelTest {
     }
 
     @Test
-    fun checkSecondaryConstructor_attributes_setup() {
-        // Given
-        val name = "some_name"
-        val content = "some content"
-
-        // When
-        val stringResourceModel = StringResourceModel(name, content)
-
-        // Then
-        Truth.assertThat(stringResourceModel.attributes).containsExactly("name", "some_name")
-        Truth.assertThat(stringResourceModel.content).isEqualTo("some content")
-    }
-
-    @Test
     fun checkComparability_based_on_name() {
         // Given
         val srmList = mutableListOf(

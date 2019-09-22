@@ -6,8 +6,8 @@ data class StringResourceModel(
 ) : Comparable<StringResourceModel> {
 
     companion object {
-        private const val ATTR_NAME = "name"
-        private const val ATTR_TRANSLATABLE = "translatable"
+        const val ATTR_NAME = "name"
+        const val ATTR_TRANSLATABLE = "translatable"
     }
 
     constructor(name: String, content: String) : this(mapOf(ATTR_NAME to name), content)
