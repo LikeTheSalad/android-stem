@@ -1,6 +1,6 @@
 package com.likethesalad.placeholder.models
 
-class TasksNamesModel(buildVariant: String) {
+class TasksNamesModel(val buildVariant: String) {
 
     companion object {
         private const val GATHER_RAW_STRINGS_NAME_FORMAT = "gather%sRawStrings"
