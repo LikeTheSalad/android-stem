@@ -19,7 +19,7 @@ class AndroidFilesProvider(
         const val STRINGS_FILE_NAME_FORMAT = "strings%s"
         const val TEMPLATES_FILE_NAME_FORMAT = "templates%s"
         const val VALUES_FOLDER_NAME_FORMAT = "values%s"
-        val RAW_VALUES_FILE_REGEX = Regex("^(?!resolved)[A-Za-z0-9_]+\\.xml\$")
+        val RAW_VALUES_FILE_REGEX = Regex("^(?!resolved\\.xml)[A-Za-z0-9_]+\\.xml\$")
         val VALUES_FOLDER_REGEX = Regex("values(-[a-z]{2}(-r[A-Z]{2})*)*")
         val VALUES_SUFFIX_REGEX = Regex("values(-[a-zA-Z-]+)*")
         val STRINGS_SUFFIX_REGEX = Regex("strings(-[a-zA-Z-]+)*")
@@ -92,6 +92,14 @@ class AndroidFilesProvider(
         }
     }
 
+    override fun getAllFoldersRawResourcesFiles(): List<RawFiles> {
+        val rawFilesModels = mutableListOf<RawFiles>()
+        for (folderName in getValuesFolderNames()) {
+            rawFilesModels.add(getRawResourcesFilesForFolder(folderName))
+        }
+        return rawFilesModels
+    }
+
     private fun getFlavorRawFiles(
         valuesFolderName: String,
         mainResDirs: Set<File>,
@@ -110,14 +118,6 @@ class AndroidFilesProvider(
             valuesFolderName,
             getResourcesFiles(valuesFolderName, mainResDirs)
         )
-    }
-
-    override fun getAllFoldersRawResourcesFiles(): List<RawFiles> {
-        val rawFilesModels = mutableListOf<RawFiles>()
-        for (folderName in getValuesFolderNames()) {
-            rawFilesModels.add(getRawResourcesFilesForFolder(folderName))
-        }
-        return rawFilesModels
     }
 
     private fun getValuesFolderNames(): Set<String> {
