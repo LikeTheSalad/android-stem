@@ -1,0 +1,4 @@
+<resources>
+    <string name="welcome_1">The spanish welcome message for TesT</string>
+    <string name="message_non_translatable_1" translatable="false">Non translatable spanish TesT</string>
+</resources>

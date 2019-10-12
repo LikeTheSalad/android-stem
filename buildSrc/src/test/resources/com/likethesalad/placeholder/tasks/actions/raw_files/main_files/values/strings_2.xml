@@ -1,4 +1,4 @@
 <resources>
-    <string name="welcome_2">The welcome message for TesT</string>
-    <string name="message_non_translatable_2" translatable="false">Non translatable TesT</string>
+    <string name="welcome_2">The welcome2 message for TesT</string>
+    <string name="message_non_translatable_2" translatable="false">Non translatable2 TesT</string>
 </resources>

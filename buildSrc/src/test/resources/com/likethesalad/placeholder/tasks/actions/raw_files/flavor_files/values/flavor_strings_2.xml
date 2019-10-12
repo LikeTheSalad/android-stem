@@ -1,0 +1,4 @@
+<resources>
+    <string name="welcome_2">The welcome flavor2 message for TesT</string>
+    <string name="message_non_translatable_2" translatable="false">Non translatable flavor2 TesT</string>
+</resources>
