@@ -1,10 +1,6 @@
 package com.likethesalad.placeholder.tasks
 
-import com.likethesalad.placeholder.data.resources.ResourcesHandler
-import com.likethesalad.placeholder.data.storage.AndroidFilesProvider
-import com.likethesalad.placeholder.data.storage.FilesProvider
-import com.likethesalad.placeholder.models.StringResourceModel
-import com.likethesalad.placeholder.resolver.TemplateResolver
+import com.likethesalad.placeholder.tasks.actions.ResolvePlaceholdersAction
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputFiles
@@ -13,46 +9,14 @@ import java.io.File
 
 open class ResolvePlaceholdersTask : DefaultTask() {
 
-    lateinit var resourcesHandler: ResourcesHandler
-    lateinit var filesProvider: FilesProvider
-    lateinit var templateResolver: TemplateResolver
+    lateinit var resolvePlaceholdersAction: ResolvePlaceholdersAction
 
     @InputFiles
-    fun getTemplatesFiles(): List<File> {
-        return filesProvider.getAllTemplatesFiles()
-    }
+    fun getTemplatesFiles(): List<File> = resolvePlaceholdersAction.getTemplatesFiles()
 
     @OutputFiles
-    fun getResolvedFiles(): List<File> {
-        return filesProvider.getAllExpectedResolvedFiles()
-    }
+    fun getResolvedFiles(): List<File> = resolvePlaceholdersAction.getResolvedFiles()
 
     @TaskAction
-    fun resolve() {
-        for (templateFile in filesProvider.getAllTemplatesFiles()) {
-            val templatesModel = resourcesHandler.getTemplatesFromFile(templateFile)
-            val resolvedTemplates = templateResolver.resolveTemplates(templatesModel)
-            val curatedTemplates =
-                filterNonTranslatableStringsForLanguageFolder(templatesModel.valuesFolderName, resolvedTemplates)
-            if (curatedTemplates.isNotEmpty()) {
-                resourcesHandler.saveResolvedStringListForValuesFolder(
-                    curatedTemplates,
-                    templatesModel.valuesFolderName
-                )
-            } else {
-                // Clean up
-                resourcesHandler.removeResolvedStringFileIfExistsForValuesFolder(templatesModel.valuesFolderName)
-            }
-        }
-    }
-
-    private fun filterNonTranslatableStringsForLanguageFolder(
-        valuesFolderName: String,
-        resolvedStrings: List<StringResourceModel>
-    ): List<StringResourceModel> {
-        if (valuesFolderName != AndroidFilesProvider.BASE_VALUES_FOLDER_NAME) {
-            return resolvedStrings.filter { it.translatable }
-        }
-        return resolvedStrings
-    }
+    fun resolve() = resolvePlaceholdersAction.resolve()
 }

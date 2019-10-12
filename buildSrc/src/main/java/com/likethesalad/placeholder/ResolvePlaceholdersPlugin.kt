@@ -9,6 +9,9 @@ import com.likethesalad.placeholder.resolver.TemplateResolver
 import com.likethesalad.placeholder.tasks.GatherRawStringsTask
 import com.likethesalad.placeholder.tasks.GatherTemplatesTask
 import com.likethesalad.placeholder.tasks.ResolvePlaceholdersTask
+import com.likethesalad.placeholder.tasks.actions.GatherRawStringsAction
+import com.likethesalad.placeholder.tasks.actions.GatherTemplatesAction
+import com.likethesalad.placeholder.tasks.actions.ResolvePlaceholdersAction
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -43,8 +46,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project> {
             GatherRawStringsTask::class.java
         ) {
             it.group = RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME
-            it.resourcesHandler = androidResourcesHandler
-            it.filesProvider = filesProvider
+            it.gatherRawStringsAction = GatherRawStringsAction(filesProvider, androidResourcesHandler)
         }
 
         val gatherTemplatesTask = project.tasks.create(
@@ -54,8 +56,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project> {
             it.group = RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME
             it.dependsOn(gatherStringsTask)
 
-            it.resourcesHandler = androidResourcesHandler
-            it.filesProvider = filesProvider
+            it.gatherTemplatesAction = GatherTemplatesAction(filesProvider, androidResourcesHandler)
         }
 
         val resolvePlaceholdersTask = project.tasks.create(
@@ -65,9 +66,11 @@ class ResolvePlaceholdersPlugin : Plugin<Project> {
             it.group = RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME
             it.dependsOn(gatherTemplatesTask)
 
-            it.resourcesHandler = androidResourcesHandler
-            it.filesProvider = filesProvider
-            it.templateResolver = TemplateResolver(RecursiveLevelDetector())
+            it.resolvePlaceholdersAction = ResolvePlaceholdersAction(
+                filesProvider,
+                androidResourcesHandler,
+                TemplateResolver(RecursiveLevelDetector())
+            )
         }
 
         androidVariantHelper.generateResValuesTask.dependsOn(resolvePlaceholdersTask)
