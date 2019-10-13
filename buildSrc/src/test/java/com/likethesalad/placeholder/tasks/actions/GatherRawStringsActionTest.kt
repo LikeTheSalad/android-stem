@@ -9,18 +9,13 @@ import com.likethesalad.placeholder.models.raw.FlavorValuesRawFiles
 import com.likethesalad.placeholder.models.raw.MainValuesRawFiles
 import io.mockk.*
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TemporaryFolder
 import java.io.File
 
 class GatherRawStringsActionTest {
     private lateinit var gatherRawStringsAction: GatherRawStringsAction
     private lateinit var filesProvider: AndroidFilesProvider
     private lateinit var resourcesHandler: AndroidResourcesHandler
-
-    @get:Rule
-    val temporaryFolder = TemporaryFolder()
 
     @Before
     fun setUp() {
