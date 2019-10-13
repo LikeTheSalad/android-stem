@@ -16,9 +16,8 @@ class AndroidFilesProvider(
         const val OUTPUT_RESOLVED_FILE_NAME = "resolved.xml"
 
         const val GATHERED_STRINGS_FILE_NAME = "strings"
-        const val TEMPLATES_FILE_NAME_FORMAT = "templates%s"
+        const val TEMPLATES_FILE_NAME = "templates"
         const val VALUES_FOLDER_NAME = "values"
-        const val VALUES_FOLDER_NAME_FORMAT = "values%s"
         val RAW_VALUES_FILE_REGEX = Regex("^(?!resolved\\.xml)[A-Za-z0-9_]+\\.xml\$")
         val VALUES_FOLDER_REGEX = Regex("values(-[a-z]{2}(-r[A-Z]{2})*)*")
         val STRINGS_SUFFIX_REGEX = Regex("strings(-[a-zA-Z-]+)*")
@@ -58,10 +57,10 @@ class AndroidFilesProvider(
         return getGatheredStringsFolder().listFiles()?.toList() ?: emptyList()
     }
 
-    override fun getTemplateFileForStringFile(stringFile: File): File {
+    override fun getTemplateFile(suffix: String): File {
         return File(
             getTemplatesFolder(),
-            "${getTemplateFileNameForStringsFile(stringFile.name)}.json"
+            "$TEMPLATES_FILE_NAME$suffix.json"
         )
     }
 
@@ -80,7 +79,9 @@ class AndroidFilesProvider(
     }
 
     override fun getAllExpectedTemplatesFiles(): List<File> {
-        return getAllGatheredStringsFiles().map { getTemplateFileForStringFile(it) }
+        return getAllGatheredStringsFiles().map {
+            getTemplateFile(STRINGS_SUFFIX_REGEX.find(it.name)!!.groupValues[1])
+        }
     }
 
     override fun getRawResourcesFilesForFolder(valuesFolderName: String): RawFiles {
@@ -159,12 +160,6 @@ class AndroidFilesProvider(
                 VALUES_FOLDER_REGEX.matches(name)
             }?.toList() ?: emptyList()
         }.flatten()
-    }
-
-    private fun getTemplateFileNameForStringsFile(stringsFileName: String): String {
-        val match = STRINGS_SUFFIX_REGEX.find(stringsFileName)!!
-        val suffix = match.groupValues[1]
-        return String.format(TEMPLATES_FILE_NAME_FORMAT, suffix)
     }
 
     private fun getGatheredStringsFolder(): File {

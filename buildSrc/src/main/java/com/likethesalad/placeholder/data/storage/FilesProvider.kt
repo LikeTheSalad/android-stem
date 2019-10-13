@@ -26,7 +26,7 @@ interface FilesProvider {
      * Internal incremental file that contains only template strings and their values.
      * @param stringFile -  The string file where the gathered raw strings are in.
      */
-    fun getTemplateFileForStringFile(stringFile: File): File
+    fun getTemplateFile(suffix: String = ""): File
 
     fun getAllTemplatesFiles(): List<File>
 

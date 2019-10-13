@@ -211,10 +211,9 @@ class AndroidFilesProviderTest {
         // Given:
         createIncrementalFolder()
         val templatesFolder = createFolderInsideIncrementalFolder("templates")
-        val stringFile = temporaryFolder.newFile("strings.json")
 
         // When:
-        val result = androidFilesProvider.getTemplateFileForStringFile(stringFile)
+        val result = androidFilesProvider.getTemplateFile()
 
         // Then:
         Truth.assertThat(result.absolutePath).isEqualTo("${templatesFolder.absolutePath}/templates.json")
@@ -225,10 +224,9 @@ class AndroidFilesProviderTest {
         // Given:
         createIncrementalFolder()
         val templatesFolder = createFolderInsideIncrementalFolder("templates")
-        val stringFile = temporaryFolder.newFile("strings-es.json")
 
         // When:
-        val result = androidFilesProvider.getTemplateFileForStringFile(stringFile)
+        val result = androidFilesProvider.getTemplateFile("-es")
 
         // Then:
         Truth.assertThat(result.absolutePath).isEqualTo("${templatesFolder.absolutePath}/templates-es.json")

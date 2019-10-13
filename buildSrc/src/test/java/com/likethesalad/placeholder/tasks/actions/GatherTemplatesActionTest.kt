@@ -68,7 +68,7 @@ class GatherTemplatesActionTest {
         every {
             filesProvider.getGatheredStringsFile()
         } returns gatheredStringsFile
-        every { filesProvider.getTemplateFileForStringFile(gatheredStringsFile) } returns placeholderTemplateFile
+        every { filesProvider.getTemplateFile() } returns placeholderTemplateFile
         every {
             resourcesHandler.getTemplatesFromFile(placeholderTemplateFile)
         } returns StringsTemplatesModel("", listOf(), mapOf())
@@ -90,7 +90,7 @@ class GatherTemplatesActionTest {
         every {
             filesProvider.getGatheredStringsFile()
         } returns gatheredStringsFile
-        every { filesProvider.getTemplateFileForStringFile(gatheredStringsFile) } returns placeholderTemplateFile
+        every { filesProvider.getTemplateFile() } returns placeholderTemplateFile
         every { filesProvider.getAllGatheredStringsFiles() } returns listOf(gatheredStringsFile)
 
         // When:
@@ -114,8 +114,8 @@ class GatherTemplatesActionTest {
         every {
             filesProvider.getGatheredStringsFile()
         } returns gatheredStringsFile1
-        every { filesProvider.getTemplateFileForStringFile(gatheredStringsFile1) } returns placeholderTemplateFile1
-        every { filesProvider.getTemplateFileForStringFile(gatheredStringsFile2) } returns placeholderTemplateFile2
+        every { filesProvider.getTemplateFile() } returns placeholderTemplateFile1
+        every { filesProvider.getTemplateFile("-es") } returns placeholderTemplateFile2
 
         every {
             resourcesHandler.getTemplatesFromFile(placeholderTemplateFile1)

@@ -2,7 +2,6 @@ package com.likethesalad.placeholder.tasks.actions
 
 import com.likethesalad.placeholder.data.Constants
 import com.likethesalad.placeholder.data.resources.ResourcesHandler
-import com.likethesalad.placeholder.data.storage.AndroidFilesProvider
 import com.likethesalad.placeholder.data.storage.FilesProvider
 import com.likethesalad.placeholder.models.StringResourceModel
 import com.likethesalad.placeholder.models.StringsTemplatesModel
@@ -25,7 +24,7 @@ class GatherTemplatesAction(
         val baseStrings = resourcesHandler.getGatheredStringsFromFile(baseStringsFile).getMergedStrings()
         for (stringFile in filesProvider.getAllGatheredStringsFiles()) {
             val templates = generateTemplatesForStringFile(stringFile, baseStrings)
-            val templatesFile = filesProvider.getTemplateFileForStringFile(stringFile)
+            val templatesFile = filesProvider.getTemplateFile(templates.suffix)
             val oldTemplates = resourcesHandler.getTemplatesFromFile(templatesFile)
             if (templates != oldTemplates) {
                 // Update the templates file only if needed.
