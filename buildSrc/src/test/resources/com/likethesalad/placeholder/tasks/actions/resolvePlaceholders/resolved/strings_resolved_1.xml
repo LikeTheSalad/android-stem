@@ -1,0 +1,5 @@
+<resources>
+    <string name="welcome">The welcome message for TesT</string>
+    <string name="message_non_translatable" translatable="false">Non translatable Random string</string>
+    <string name="this_contains_template">This is the welcome: The welcome message for TesT</string>
+</resources>
