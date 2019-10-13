@@ -234,10 +234,10 @@ class GatherRawStringsActionTest {
     }
 
     private fun getRawMainFile(folderName: String, fileName: String): File {
-        return File(javaClass.getResource("raw_files/main_files/$folderName/$fileName").file)
+        return File(javaClass.getResource("gatherRawStrings/raw_files/main_files/$folderName/$fileName").file)
     }
 
     private fun getRawFlavorFile(folderName: String, fileName: String): File {
-        return File(javaClass.getResource("raw_files/flavor_files/$folderName/$fileName").file)
+        return File(javaClass.getResource("gatherRawStrings/raw_files/flavor_files/$folderName/$fileName").file)
     }
 }
