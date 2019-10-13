@@ -1,7 +1,6 @@
 package com.likethesalad.placeholder.tasks.actions
 
 import com.likethesalad.placeholder.data.resources.ResourcesHandler
-import com.likethesalad.placeholder.data.storage.AndroidFilesProvider
 import com.likethesalad.placeholder.data.storage.FilesProvider
 import com.likethesalad.placeholder.models.StringResourceModel
 import com.likethesalad.placeholder.resolver.TemplateResolver
@@ -26,24 +25,25 @@ class ResolvePlaceholdersAction(
             val templatesModel = resourcesHandler.getTemplatesFromFile(templateFile)
             val resolvedTemplates = templateResolver.resolveTemplates(templatesModel)
             val curatedTemplates =
-                filterNonTranslatableStringsForLanguageFolder(templatesModel.valuesFolderName, resolvedTemplates)
+                filterNonTranslatableStringsForLanguage(templatesModel.suffix, resolvedTemplates)
             if (curatedTemplates.isNotEmpty()) {
-                resourcesHandler.saveResolvedStringListForValuesFolder(
+                resourcesHandler.saveResolvedStringList(
                     curatedTemplates,
-                    templatesModel.valuesFolderName
+                    templatesModel.suffix
                 )
             } else {
                 // Clean up
-                resourcesHandler.removeResolvedStringFileIfExistsForValuesFolder(templatesModel.valuesFolderName)
+                resourcesHandler.removeResolvedStringFileIfExists(templatesModel.suffix)
             }
         }
     }
 
-    private fun filterNonTranslatableStringsForLanguageFolder(
-        valuesFolderName: String,
+    private fun filterNonTranslatableStringsForLanguage(
+        suffix: String,
         resolvedStrings: List<StringResourceModel>
     ): List<StringResourceModel> {
-        if (valuesFolderName != AndroidFilesProvider.BASE_VALUES_FOLDER_NAME) {
+        if (suffix.isNotEmpty()) {
+            // It is a language specific file
             return resolvedStrings.filter { it.translatable }
         }
         return resolvedStrings

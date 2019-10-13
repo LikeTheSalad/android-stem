@@ -1,7 +1,6 @@
 package com.likethesalad.placeholder.tasks.actions
 
 import com.likethesalad.placeholder.data.resources.ResourcesHandler
-import com.likethesalad.placeholder.data.storage.AndroidFilesProvider
 import com.likethesalad.placeholder.data.storage.FilesProvider
 import com.likethesalad.placeholder.models.StringResourceModel
 import com.likethesalad.placeholder.models.StringsGatheredModel
@@ -22,7 +21,7 @@ class GatherRawStringsAction(
     }
 
     fun getOutputFile(): File {
-        return filesProvider.getGatheredStringsFileForFolder(AndroidFilesProvider.BASE_VALUES_FOLDER_NAME)
+        return filesProvider.getGatheredStringsFile()
     }
 
     fun gatherStrings() {
@@ -42,7 +41,7 @@ class GatherRawStringsAction(
         if (mainStrings.isNotEmpty() || complimentaryStrings.isNotEmpty()) {
             resourcesHandler.saveGatheredStrings(
                 StringsGatheredModel(
-                    rawFilesModel.valuesFolderName,
+                    rawFilesModel.suffix,
                     mainStrings,
                     complimentaryStrings
                 )

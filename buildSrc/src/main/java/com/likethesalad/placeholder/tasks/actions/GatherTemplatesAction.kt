@@ -21,8 +21,7 @@ class GatherTemplatesAction(
     }
 
     fun gatherTemplateStrings() {
-        val baseStringsFile =
-            filesProvider.getGatheredStringsFileForFolder(AndroidFilesProvider.BASE_VALUES_FOLDER_NAME)
+        val baseStringsFile = filesProvider.getGatheredStringsFile()
         val baseStrings = resourcesHandler.getGatheredStringsFromFile(baseStringsFile).getMergedStrings()
         for (stringFile in filesProvider.getAllGatheredStringsFiles()) {
             val templates = generateTemplatesForStringFile(stringFile, baseStrings)
@@ -48,7 +47,7 @@ class GatherTemplatesAction(
         val stringTemplates = mergedStrings.filter { Constants.TEMPLATE_STRING_REGEX.containsMatchIn(it.name) }
         val placeholdersResolved = getPlaceholdersResolved(mergedStrings, stringTemplates)
 
-        return StringsTemplatesModel(specificStrings.valueFolderName, stringTemplates, placeholdersResolved)
+        return StringsTemplatesModel(specificStrings.suffix, stringTemplates, placeholdersResolved)
     }
 
     private fun getPlaceholdersResolved(

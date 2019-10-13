@@ -35,7 +35,7 @@ class AndroidFilesProviderTest {
         setUpResDirs(flavorDirName = "demo")
 
         // When:
-        val result = androidFilesProvider.getResolvedFileForValuesFolder("values")
+        val result = androidFilesProvider.getResolvedFile("")
 
         // Then:
         Truth.assertThat(result.absolutePath).endsWith("demo/res/values/resolved.xml")
@@ -47,7 +47,7 @@ class AndroidFilesProviderTest {
         setUpResDirs()
 
         // When:
-        val result = androidFilesProvider.getResolvedFileForValuesFolder("values")
+        val result = androidFilesProvider.getResolvedFile("")
 
         // Then:
         Truth.assertThat(result.absolutePath).endsWith("main/res/values/resolved.xml")
@@ -59,7 +59,7 @@ class AndroidFilesProviderTest {
         setUpResDirs(flavorDirName = "demo")
 
         // When:
-        val result = androidFilesProvider.getResolvedFileForValuesFolder("values-es")
+        val result = androidFilesProvider.getResolvedFile("-es")
 
         // Then:
         Truth.assertThat(result.absolutePath).endsWith("demo/res/values-es/resolved.xml")
@@ -71,7 +71,7 @@ class AndroidFilesProviderTest {
         setUpResDirs()
 
         // When:
-        val result = androidFilesProvider.getResolvedFileForValuesFolder("values-es")
+        val result = androidFilesProvider.getResolvedFile("-es")
 
         // Then:
         Truth.assertThat(result.absolutePath).endsWith("main/res/values-es/resolved.xml")
@@ -157,7 +157,7 @@ class AndroidFilesProviderTest {
         val incrementalTestFolder = createIncrementalFolder()
 
         // When:
-        val result = androidFilesProvider.getGatheredStringsFileForFolder("values")
+        val result = androidFilesProvider.getGatheredStringsFile()
 
         // Then:
         Truth.assertThat(result.absolutePath).isEqualTo("${incrementalTestFolder.absolutePath}/strings/strings.json")
@@ -169,7 +169,7 @@ class AndroidFilesProviderTest {
         val incrementalTestFolder = createIncrementalFolder()
 
         // When:
-        val result = androidFilesProvider.getGatheredStringsFileForFolder("values-es")
+        val result = androidFilesProvider.getGatheredStringsFile("-es")
 
         // Then:
         Truth.assertThat(result.absolutePath).isEqualTo("${incrementalTestFolder.absolutePath}/strings/strings-es.json")
@@ -320,7 +320,7 @@ class AndroidFilesProviderTest {
         val result = androidFilesProvider.getRawResourcesFilesForFolder(valuesFolderName)
 
         // Then:
-        Truth.assertThat(result.valuesFolderName).isEqualTo(valuesFolderName)
+        Truth.assertThat(result.suffix).isEmpty()
         Truth.assertThat(result.mainValuesRawFiles.map { it.name }).containsExactly(
             "strings.xml",
             "config.xml"
@@ -348,7 +348,7 @@ class AndroidFilesProviderTest {
         val result = androidFilesProvider.getRawResourcesFilesForFolder(valuesFolderName)
 
         // Then:
-        Truth.assertThat(result.valuesFolderName).isEqualTo(valuesFolderName)
+        Truth.assertThat(result.suffix).isEmpty()
         Truth.assertThat(result.mainValuesRawFiles.map { it.name }).containsExactly(
             "strings.xml",
             "config.xml"
@@ -377,7 +377,7 @@ class AndroidFilesProviderTest {
         val result = androidFilesProvider.getRawResourcesFilesForFolder(valuesFolderName)
 
         // Then:
-        Truth.assertThat(result.valuesFolderName).isEqualTo(valuesFolderName)
+        Truth.assertThat(result.suffix).isEmpty()
         Truth.assertThat(result.mainValuesRawFiles.map { it.name }).containsExactly(
             "strings.xml",
             "config.xml",
@@ -410,7 +410,7 @@ class AndroidFilesProviderTest {
         val result = androidFilesProvider.getRawResourcesFilesForFolder(valuesFolderName)
 
         // Then:
-        Truth.assertThat(result.valuesFolderName).isEqualTo(valuesFolderName)
+        Truth.assertThat(result.suffix).isEmpty()
         Truth.assertThat(result.mainValuesRawFiles.map { it.name }).containsExactly(
             "strings.xml",
             "config.xml",

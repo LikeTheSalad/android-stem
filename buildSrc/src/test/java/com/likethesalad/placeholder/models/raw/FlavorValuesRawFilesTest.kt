@@ -10,15 +10,14 @@ class FlavorValuesRawFilesTest {
     @Test
     fun check_valuesFolderName_and_flavorName_setup() {
         // Given:
-        val valuesName = "values"
         val flavorName = "demo"
 
         // When:
-        val flavorValuesRawFiles = FlavorValuesRawFiles(flavorName, valuesName, mockk(), mockk())
+        val flavorValuesRawFiles = FlavorValuesRawFiles(flavorName, "", mockk(), mockk())
 
         // Then:
         Truth.assertThat(flavorValuesRawFiles.flavorName).isEqualTo(flavorName)
-        Truth.assertThat(flavorValuesRawFiles.valuesFolderName).isEqualTo(valuesName)
+        Truth.assertThat(flavorValuesRawFiles.suffix).isEmpty()
     }
 
     @Test
@@ -29,7 +28,7 @@ class FlavorValuesRawFilesTest {
 
         // When:
         val flavorValuesRawFiles = FlavorValuesRawFiles(
-            "demo", "values",
+            "demo", "",
             complementaryFiles, mainFiles
         )
 

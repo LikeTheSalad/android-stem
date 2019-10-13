@@ -19,20 +19,20 @@ class AndroidResourcesHandler(private val filesProvider: FilesProvider) : Resour
 
     override fun saveGatheredStrings(stringsGathered: StringsGatheredModel) {
         val jsonStrings = gson.toJson(stringsGathered)
-        filesProvider.getGatheredStringsFileForFolder(stringsGathered.valueFolderName).writeText(jsonStrings)
+        filesProvider.getGatheredStringsFile(stringsGathered.suffix).writeText(jsonStrings)
     }
 
-    override fun saveResolvedStringListForValuesFolder(
+    override fun saveResolvedStringList(
         resolvedStrings: List<StringResourceModel>,
-        valuesFolderName: String
+        suffix: String
     ) {
         val resDocument = AndroidXmlResDocument()
         resDocument.appendAllStringResources(resolvedStrings)
-        resDocument.saveToFile(filesProvider.getResolvedFileForValuesFolder(valuesFolderName))
+        resDocument.saveToFile(filesProvider.getResolvedFile(suffix))
     }
 
-    override fun removeResolvedStringFileIfExistsForValuesFolder(valuesFolderName: String) {
-        val file = filesProvider.getResolvedFileForValuesFolder(valuesFolderName)
+    override fun removeResolvedStringFileIfExists(suffix: String) {
+        val file = filesProvider.getResolvedFile(suffix)
         if (file.exists()) {
             file.delete()
         }

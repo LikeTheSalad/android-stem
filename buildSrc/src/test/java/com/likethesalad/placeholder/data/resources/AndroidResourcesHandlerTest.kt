@@ -37,7 +37,7 @@ class AndroidResourcesHandlerTest {
         val result = androidResourcesHandler.getGatheredStringsFromFile(file)
 
         // Then:
-        Truth.assertThat(result.valueFolderName).isEqualTo("values")
+        Truth.assertThat(result.suffix).isEmpty()
         Truth.assertThat(result.complementaryStrings).isEmpty()
         Truth.assertThat(result.mainStrings.size).isEqualTo(3)
         Truth.assertThat(result.mainStrings.map { it.name }).containsExactly(
@@ -66,9 +66,8 @@ class AndroidResourcesHandlerTest {
     @Test
     fun check_saveGatheredStrings() {
         // Given:
-        val folder = "values"
         val file = temporaryFolder.newFile()
-        every { androidFilesProvider.getGatheredStringsFileForFolder(folder) }.returns(file)
+        every { androidFilesProvider.getGatheredStringsFile() }.returns(file)
         val mainStrings = listOf(
             StringResourceModel("the_name", "the content"),
             StringResourceModel("the_name2", "the content 2"),
@@ -79,7 +78,7 @@ class AndroidResourcesHandlerTest {
                 ), "The content 3"
             )
         )
-        val stringsGathered = StringsGatheredModel(folder, mainStrings, emptyList())
+        val stringsGathered = StringsGatheredModel("", mainStrings, emptyList())
 
         // When:
         androidResourcesHandler.saveGatheredStrings(stringsGathered)
@@ -103,10 +102,10 @@ class AndroidResourcesHandlerTest {
             "Non translatable TesT"
         )
         val list = listOf(stringResourceModel1, stringResourceModel2)
-        every { androidFilesProvider.getResolvedFileForValuesFolder(valuesFolder) }.returns(resolvedFile)
+        every { androidFilesProvider.getResolvedFile(valuesFolder) }.returns(resolvedFile)
 
         // When:
-        androidResourcesHandler.saveResolvedStringListForValuesFolder(list, valuesFolder)
+        androidResourcesHandler.saveResolvedStringList(list, valuesFolder)
 
         // Then:
         val expectedResult = File(javaClass.getResource("save_resolved_strings.xml").file).readText()
@@ -119,10 +118,10 @@ class AndroidResourcesHandlerTest {
         val valueFolderName = "values"
         val fileMock = mockk<File>(relaxed = true)
         every { fileMock.exists() }.returns(true)
-        every { androidFilesProvider.getResolvedFileForValuesFolder(valueFolderName) }.returns(fileMock)
+        every { androidFilesProvider.getResolvedFile(valueFolderName) }.returns(fileMock)
 
         // When:
-        androidResourcesHandler.removeResolvedStringFileIfExistsForValuesFolder(valueFolderName)
+        androidResourcesHandler.removeResolvedStringFileIfExists(valueFolderName)
 
         // Then:
         verify { fileMock.delete() }
@@ -134,10 +133,10 @@ class AndroidResourcesHandlerTest {
         val valueFolderName = "values"
         val fileMock = mockk<File>(relaxed = true)
         every { fileMock.exists() }.returns(false)
-        every { androidFilesProvider.getResolvedFileForValuesFolder(valueFolderName) }.returns(fileMock)
+        every { androidFilesProvider.getResolvedFile(valueFolderName) }.returns(fileMock)
 
         // When:
-        androidResourcesHandler.removeResolvedStringFileIfExistsForValuesFolder(valueFolderName)
+        androidResourcesHandler.removeResolvedStringFileIfExists(valueFolderName)
 
         // Then:
         verify(exactly = 0) { fileMock.delete() }
@@ -152,7 +151,7 @@ class AndroidResourcesHandlerTest {
         val result = androidResourcesHandler.getTemplatesFromFile(templatesFile)
 
         // Then:
-        Truth.assertThat(result.valuesFolderName).isEqualTo("values")
+        Truth.assertThat(result.suffix).isEmpty()
         Truth.assertThat(result.templates.size).isEqualTo(2)
         Truth.assertThat(result.templates.map { it.name }).containsExactly(
             "template_welcome",
@@ -186,7 +185,7 @@ class AndroidResourcesHandlerTest {
         val result = androidResourcesHandler.getTemplatesFromFile(fileMock)
 
         // Then:
-        Truth.assertThat(result.valuesFolderName).isEmpty()
+        Truth.assertThat(result.suffix).isEmpty()
         Truth.assertThat(result.templates).isEmpty()
         Truth.assertThat(result.values).isEmpty()
     }
@@ -202,7 +201,7 @@ class AndroidResourcesHandlerTest {
             ), "Non translatable \${app_name}"
         )
         val templates = StringsTemplatesModel(
-            "values",
+            "",
             listOf(template1, template2),
             mapOf("app_name" to "TesT")
         )

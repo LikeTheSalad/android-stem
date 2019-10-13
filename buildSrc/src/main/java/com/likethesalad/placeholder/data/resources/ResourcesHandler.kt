@@ -11,9 +11,9 @@ interface ResourcesHandler {
 
     fun getTemplatesFromFile(templateFile: File): StringsTemplatesModel
 
-    fun saveResolvedStringListForValuesFolder(resolvedStrings: List<StringResourceModel>, valuesFolderName: String)
+    fun saveResolvedStringList(resolvedStrings: List<StringResourceModel>, suffix: String)
 
-    fun removeResolvedStringFileIfExistsForValuesFolder(valuesFolderName: String)
+    fun removeResolvedStringFileIfExists(suffix: String)
 
     fun saveTemplatesToFile(templates: StringsTemplatesModel, templateFile: File)
 

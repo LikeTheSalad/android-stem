@@ -4,10 +4,10 @@ import java.io.File
 
 class FlavorValuesRawFiles(
     val flavorName: String,
-    valuesFolderName: String,
+    suffix: String,
     val complimentaryRawFiles: List<File>,
     flavorValuesRawFiles: List<File>
-) : RawFiles(valuesFolderName, flavorValuesRawFiles) {
+) : RawFiles(suffix, flavorValuesRawFiles) {
 
     override fun getRawFilesMetaList(): List<List<File>> {
         return listOf(complimentaryRawFiles, mainValuesRawFiles)

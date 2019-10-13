@@ -14,24 +14,23 @@ class AndroidFilesProvider(
         const val TEMPLATES_FOLDER_NAME = "templates"
         const val STRINGS_FOLDER_NAME = "strings"
         const val OUTPUT_RESOLVED_FILE_NAME = "resolved.xml"
-        const val BASE_VALUES_FOLDER_NAME = "values"
 
-        const val STRINGS_FILE_NAME_FORMAT = "strings%s"
+        const val GATHERED_STRINGS_FILE_NAME = "strings"
         const val TEMPLATES_FILE_NAME_FORMAT = "templates%s"
+        const val VALUES_FOLDER_NAME = "values"
         const val VALUES_FOLDER_NAME_FORMAT = "values%s"
         val RAW_VALUES_FILE_REGEX = Regex("^(?!resolved\\.xml)[A-Za-z0-9_]+\\.xml\$")
         val VALUES_FOLDER_REGEX = Regex("values(-[a-z]{2}(-r[A-Z]{2})*)*")
-        val VALUES_SUFFIX_REGEX = Regex("values(-[a-zA-Z-]+)*")
         val STRINGS_SUFFIX_REGEX = Regex("strings(-[a-zA-Z-]+)*")
         val TEMPLATES_SUFFIX_REGEX = Regex("templates(-[a-zA-Z-]+)*")
     }
 
-    override fun getResolvedFileForValuesFolder(valuesFolderName: String): File {
+    override fun getResolvedFile(suffix: String): File {
         val resourcesDirs = androidVariantHelper.resourceDirs
         val folder = if (resourcesDirs.hasFlavorDirs) {
-            File(resourcesDirs.flavorDirs.first().absolutePath + "/" + valuesFolderName)
+            File(resourcesDirs.flavorDirs.first().absolutePath + "/" + "$VALUES_FOLDER_NAME$suffix")
         } else {
-            File(resourcesDirs.mainDirs.first().absolutePath + "/" + valuesFolderName)
+            File(resourcesDirs.mainDirs.first().absolutePath + "/" + "$VALUES_FOLDER_NAME$suffix")
         }
         if (!folder.exists()) {
             folder.mkdirs()
@@ -42,15 +41,16 @@ class AndroidFilesProvider(
     override fun getAllExpectedResolvedFiles(): List<File> {
         val resolvedFiles = mutableListOf<File>()
         for (template in getAllTemplatesFiles()) {
-            resolvedFiles.add(getResolvedFileForValuesFolder(getValuesFolderNameForTemplateFile(template.name)))
+            val suffix = TEMPLATES_SUFFIX_REGEX.find(template.name)!!.groupValues[1]
+            resolvedFiles.add(getResolvedFile(suffix))
         }
         return resolvedFiles
     }
 
-    override fun getGatheredStringsFileForFolder(valuesFolderName: String): File {
+    override fun getGatheredStringsFile(suffix: String): File {
         return File(
             getGatheredStringsFolder(),
-            "${getStringFileNameForValuesFolder(valuesFolderName)}.json"
+            "$GATHERED_STRINGS_FILE_NAME$suffix.json"
         )
     }
 
@@ -85,10 +85,11 @@ class AndroidFilesProvider(
 
     override fun getRawResourcesFilesForFolder(valuesFolderName: String): RawFiles {
         val resourcesDirs = androidVariantHelper.resourceDirs
+        val suffix = VALUES_FOLDER_REGEX.find(valuesFolderName)!!.groupValues[1]
         return if (androidVariantHelper.isFlavored) {
-            getFlavorRawFiles(valuesFolderName, resourcesDirs.mainDirs, resourcesDirs.flavorDirs)
+            getFlavorRawFiles(suffix, resourcesDirs.mainDirs, resourcesDirs.flavorDirs)
         } else {
-            getMainRawFiles(valuesFolderName, resourcesDirs.mainDirs)
+            getMainRawFiles(suffix, resourcesDirs.mainDirs)
         }
     }
 
@@ -101,22 +102,22 @@ class AndroidFilesProvider(
     }
 
     private fun getFlavorRawFiles(
-        valuesFolderName: String,
+        suffix: String,
         mainResDirs: Set<File>,
         flavorResDirs: Set<File>
     ): FlavorValuesRawFiles {
         return FlavorValuesRawFiles(
             androidVariantHelper.flavor,
-            valuesFolderName,
-            getResourcesFiles(valuesFolderName, mainResDirs),
-            getResourcesFiles(valuesFolderName, flavorResDirs)
+            suffix,
+            getResourcesFiles(suffix, mainResDirs),
+            getResourcesFiles(suffix, flavorResDirs)
         )
     }
 
-    private fun getMainRawFiles(valuesFolderName: String, mainResDirs: Set<File>): MainValuesRawFiles {
+    private fun getMainRawFiles(suffix: String, mainResDirs: Set<File>): MainValuesRawFiles {
         return MainValuesRawFiles(
-            valuesFolderName,
-            getResourcesFiles(valuesFolderName, mainResDirs)
+            suffix,
+            getResourcesFiles(suffix, mainResDirs)
         )
     }
 
@@ -134,8 +135,8 @@ class AndroidFilesProvider(
         return valuesFoldersNames
     }
 
-    private fun getResourcesFiles(valuesFolderName: String, resourcesDirs: Set<File>): List<File> {
-        val valuesFolders = getValuesFoldersByName(valuesFolderName, resourcesDirs)
+    private fun getResourcesFiles(suffix: String, resourcesDirs: Set<File>): List<File> {
+        val valuesFolders = getValuesFolders(suffix, resourcesDirs)
         return valuesFolders.map {
             it.listFiles { _, name ->
                 RAW_VALUES_FILE_REGEX.matches(name)
@@ -143,7 +144,8 @@ class AndroidFilesProvider(
         }.flatten()
     }
 
-    private fun getValuesFoldersByName(valuesFolderName: String, resourcesDirs: Set<File>): List<File> {
+    private fun getValuesFolders(suffix: String, resourcesDirs: Set<File>): List<File> {
+        val valuesFolderName = VALUES_FOLDER_NAME + suffix
         return resourcesDirs.map {
             it.listFiles { _, name ->
                 name == valuesFolderName
@@ -157,18 +159,6 @@ class AndroidFilesProvider(
                 VALUES_FOLDER_REGEX.matches(name)
             }?.toList() ?: emptyList()
         }.flatten()
-    }
-
-    private fun getStringFileNameForValuesFolder(valuesFolderName: String): String {
-        val match = VALUES_SUFFIX_REGEX.find(valuesFolderName)!!
-        val suffix = match.groupValues[1]
-        return String.format(STRINGS_FILE_NAME_FORMAT, suffix)
-    }
-
-    private fun getValuesFolderNameForTemplateFile(templatesFileName: String): String {
-        val match = TEMPLATES_SUFFIX_REGEX.find(templatesFileName)!!
-        val suffix = match.groupValues[1]
-        return String.format(VALUES_FOLDER_NAME_FORMAT, suffix)
     }
 
     private fun getTemplateFileNameForStringsFile(stringsFileName: String): String {

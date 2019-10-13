@@ -10,7 +10,7 @@ interface FilesProvider {
      * will go to, this will be into the project's sourceSets resources.
      * @param valuesFolderName -  The values folder name the resolves strings are going to.
      */
-    fun getResolvedFileForValuesFolder(valuesFolderName: String): File
+    fun getResolvedFile(suffix: String): File
 
     fun getAllExpectedResolvedFiles(): List<File>
 
@@ -18,7 +18,7 @@ interface FilesProvider {
      * Internal incremental file of all strings gathered from one values folder.
      * @param valuesFolderName - The name of the values folder these strings will be for.
      */
-    fun getGatheredStringsFileForFolder(valuesFolderName: String): File
+    fun getGatheredStringsFile(suffix: String = ""): File
 
     fun getAllGatheredStringsFiles(): List<File>
 

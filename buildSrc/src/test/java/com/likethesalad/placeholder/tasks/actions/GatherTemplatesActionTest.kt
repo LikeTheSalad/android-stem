@@ -3,7 +3,6 @@ package com.likethesalad.placeholder.tasks.actions
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.data.resources.AndroidResourcesHandler
 import com.likethesalad.placeholder.data.resources.ResourcesHandler
-import com.likethesalad.placeholder.data.storage.AndroidFilesProvider
 import com.likethesalad.placeholder.data.storage.FilesProvider
 import com.likethesalad.placeholder.models.StringsTemplatesModel
 import io.mockk.every
@@ -67,7 +66,7 @@ class GatherTemplatesActionTest {
         val placeholderTemplateFile = temporaryFolder.newFile("the_template_placeholder.json")
         val expectedGatheredTemplates = getTemplatesFile("templates_1.json").readText()
         every {
-            filesProvider.getGatheredStringsFileForFolder(AndroidFilesProvider.BASE_VALUES_FOLDER_NAME)
+            filesProvider.getGatheredStringsFile()
         } returns gatheredStringsFile
         every { filesProvider.getTemplateFileForStringFile(gatheredStringsFile) } returns placeholderTemplateFile
         every {
@@ -89,7 +88,7 @@ class GatherTemplatesActionTest {
         val gatheredStringsFile = getGatheredStringFile("strings_1.json")
         val placeholderTemplateFile = getTemplatesFile("templates_1.json")
         every {
-            filesProvider.getGatheredStringsFileForFolder(AndroidFilesProvider.BASE_VALUES_FOLDER_NAME)
+            filesProvider.getGatheredStringsFile()
         } returns gatheredStringsFile
         every { filesProvider.getTemplateFileForStringFile(gatheredStringsFile) } returns placeholderTemplateFile
         every { filesProvider.getAllGatheredStringsFiles() } returns listOf(gatheredStringsFile)
@@ -113,7 +112,7 @@ class GatherTemplatesActionTest {
         val expectedGatheredTemplates2 = getTemplatesFile("templates_1_es.json").readText()
 
         every {
-            filesProvider.getGatheredStringsFileForFolder(AndroidFilesProvider.BASE_VALUES_FOLDER_NAME)
+            filesProvider.getGatheredStringsFile()
         } returns gatheredStringsFile1
         every { filesProvider.getTemplateFileForStringFile(gatheredStringsFile1) } returns placeholderTemplateFile1
         every { filesProvider.getTemplateFileForStringFile(gatheredStringsFile2) } returns placeholderTemplateFile2

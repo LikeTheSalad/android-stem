@@ -1,7 +1,7 @@
 package com.likethesalad.placeholder.models
 
 data class StringsGatheredModel(
-    val valueFolderName: String,
+    val suffix: String,
     val mainStrings: List<StringResourceModel>,
     val complementaryStrings: List<List<StringResourceModel>>
 ) {

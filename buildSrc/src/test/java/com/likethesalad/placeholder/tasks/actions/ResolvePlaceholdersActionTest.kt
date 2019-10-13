@@ -66,7 +66,7 @@ class ResolvePlaceholdersActionTest {
         val resultPlaceholderFile = temporaryFolder.newFile()
         val expectedResult = getResolvedFile("strings_resolved_1.xml").readText()
         every { filesProvider.getAllTemplatesFiles() } returns listOf(template)
-        every { filesProvider.getResolvedFileForValuesFolder("values") } returns resultPlaceholderFile
+        every { filesProvider.getResolvedFile("") } returns resultPlaceholderFile
 
         // When:
         resolvePlaceholdersAction.resolve()
@@ -74,7 +74,7 @@ class ResolvePlaceholdersActionTest {
         // Then:
         verify { resourcesHandler.getTemplatesFromFile(template) }
         verify { templateResolver.resolveTemplates(any()) }
-        verify { resourcesHandler.saveResolvedStringListForValuesFolder(any(), any()) }
+        verify { resourcesHandler.saveResolvedStringList(any(), any()) }
         Truth.assertThat(resultPlaceholderFile.readText()).isEqualTo(expectedResult)
     }
 
@@ -85,7 +85,7 @@ class ResolvePlaceholdersActionTest {
         val resultPlaceholderFile = temporaryFolder.newFile()
         val expectedResult = getResolvedFile("strings_resolved_1_es.xml").readText()
         every { filesProvider.getAllTemplatesFiles() } returns listOf(template)
-        every { filesProvider.getResolvedFileForValuesFolder("values-es") } returns resultPlaceholderFile
+        every { filesProvider.getResolvedFile("-es") } returns resultPlaceholderFile
 
         // When:
         resolvePlaceholdersAction.resolve()
@@ -93,7 +93,7 @@ class ResolvePlaceholdersActionTest {
         // Then:
         verify { resourcesHandler.getTemplatesFromFile(template) }
         verify { templateResolver.resolveTemplates(any()) }
-        verify { resourcesHandler.saveResolvedStringListForValuesFolder(any(), any()) }
+        verify { resourcesHandler.saveResolvedStringList(any(), any()) }
         Truth.assertThat(resultPlaceholderFile.readText()).isEqualTo(expectedResult)
     }
 
@@ -103,7 +103,7 @@ class ResolvePlaceholdersActionTest {
         val template = getTemplateFile("the_templates_1.json")
         every { filesProvider.getAllTemplatesFiles() } returns listOf(template)
         every { templateResolver.resolveTemplates(any()) } returns emptyList()
-        every { resourcesHandler.removeResolvedStringFileIfExistsForValuesFolder(any()) } just Runs
+        every { resourcesHandler.removeResolvedStringFileIfExists(any()) } just Runs
 
         // When:
         resolvePlaceholdersAction.resolve()
@@ -111,8 +111,8 @@ class ResolvePlaceholdersActionTest {
         // Then:
         verify { resourcesHandler.getTemplatesFromFile(template) }
         verify { templateResolver.resolveTemplates(any()) }
-        verify(exactly = 0) { resourcesHandler.saveResolvedStringListForValuesFolder(any(), any()) }
-        verify { resourcesHandler.removeResolvedStringFileIfExistsForValuesFolder("values") }
+        verify(exactly = 0) { resourcesHandler.saveResolvedStringList(any(), any()) }
+        verify { resourcesHandler.removeResolvedStringFileIfExists("") }
     }
 
     private fun getTemplateFile(fileName: String): File {

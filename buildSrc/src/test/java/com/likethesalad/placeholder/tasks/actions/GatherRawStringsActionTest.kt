@@ -100,7 +100,7 @@ class GatherRawStringsActionTest {
     fun check_getOutputFile() {
         // Given:
         val outputFile = mockk<File>()
-        every { filesProvider.getGatheredStringsFileForFolder(AndroidFilesProvider.BASE_VALUES_FOLDER_NAME) }.returns(
+        every { filesProvider.getGatheredStringsFile() }.returns(
             outputFile
         )
 
@@ -117,7 +117,7 @@ class GatherRawStringsActionTest {
         val folderName = "values"
         val xmlFiles = mutableListOf<File>()
         xmlFiles.add(getRawMainFile(folderName, "strings_1.xml"))
-        val mainRawFile = MainValuesRawFiles("values", xmlFiles)
+        val mainRawFile = MainValuesRawFiles("", xmlFiles)
         val savedStringsSlot = slot<StringsGatheredModel>()
         every { filesProvider.getAllFoldersRawResourcesFiles() }.returns(listOf(mainRawFile))
         every { resourcesHandler.saveGatheredStrings(capture(savedStringsSlot)) } just Runs
@@ -128,7 +128,7 @@ class GatherRawStringsActionTest {
         // Then:
         Truth.assertThat(savedStringsSlot.isCaptured).isTrue()
         val capturedStringsGathered = savedStringsSlot.captured
-        Truth.assertThat(capturedStringsGathered.valueFolderName).isEqualTo(folderName)
+        Truth.assertThat(capturedStringsGathered.suffix).isEmpty()
         Truth.assertThat(capturedStringsGathered.mainStrings).containsExactly(
             StringResourceModel("welcome_1", "The welcome message for TesT"),
             StringResourceModel(
@@ -162,7 +162,7 @@ class GatherRawStringsActionTest {
         val xmlFiles = mutableListOf<File>()
         xmlFiles.add(getRawMainFile(folderName, "strings_1.xml"))
         xmlFiles.add(getRawMainFile(folderName, "strings_2.xml"))
-        val mainRawFile = MainValuesRawFiles("values", xmlFiles)
+        val mainRawFile = MainValuesRawFiles("", xmlFiles)
         val savedStringsSlot = slot<StringsGatheredModel>()
         every { filesProvider.getAllFoldersRawResourcesFiles() }.returns(listOf(mainRawFile))
         every { resourcesHandler.saveGatheredStrings(capture(savedStringsSlot)) } just Runs
@@ -173,7 +173,7 @@ class GatherRawStringsActionTest {
         // Then:
         Truth.assertThat(savedStringsSlot.isCaptured).isTrue()
         val captured = savedStringsSlot.captured
-        Truth.assertThat(captured.valueFolderName).isEqualTo(folderName)
+        Truth.assertThat(captured.suffix).isEmpty()
         Truth.assertThat(captured.mainStrings).containsExactly(
             StringResourceModel("welcome_1", "The welcome message for TesT"),
             StringResourceModel(
@@ -198,7 +198,7 @@ class GatherRawStringsActionTest {
         val flavorValuesFiles = mutableListOf<File>()
         flavorValuesFiles.add(getRawFlavorFile(flavorValuesFolder, "flavor_strings_1.xml"))
 
-        val flavorRawFile = FlavorValuesRawFiles("demo", flavorValuesFolder, mainValuesFiles, flavorValuesFiles)
+        val flavorRawFile = FlavorValuesRawFiles("demo", "", mainValuesFiles, flavorValuesFiles)
         val savedStringsSlot = slot<StringsGatheredModel>()
         every { filesProvider.getAllFoldersRawResourcesFiles() }.returns(listOf(flavorRawFile))
         every { resourcesHandler.saveGatheredStrings(capture(savedStringsSlot)) } just Runs
@@ -209,7 +209,7 @@ class GatherRawStringsActionTest {
         // Then:
         Truth.assertThat(savedStringsSlot.isCaptured).isTrue()
         val capturedStringsGathered = savedStringsSlot.captured
-        Truth.assertThat(capturedStringsGathered.valueFolderName).isEqualTo(flavorValuesFolder)
+        Truth.assertThat(capturedStringsGathered.suffix).isEmpty()
         Truth.assertThat(capturedStringsGathered.mainStrings).containsExactly(
             StringResourceModel("welcome_1", "The welcome flavor message for TesT"),
             StringResourceModel(
