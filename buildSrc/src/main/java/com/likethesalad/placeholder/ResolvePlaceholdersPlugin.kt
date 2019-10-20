@@ -4,6 +4,7 @@ import com.likethesalad.placeholder.data.helpers.AndroidProjectHelper
 import com.likethesalad.placeholder.data.helpers.AndroidVariantHelper
 import com.likethesalad.placeholder.data.resources.AndroidResourcesHandler
 import com.likethesalad.placeholder.data.storage.AndroidFilesProvider
+import com.likethesalad.placeholder.models.PlaceholderExtension
 import com.likethesalad.placeholder.resolver.RecursiveLevelDetector
 import com.likethesalad.placeholder.resolver.TemplateResolver
 import com.likethesalad.placeholder.tasks.GatherRawStringsTask
@@ -22,10 +23,19 @@ class ResolvePlaceholdersPlugin : Plugin<Project> {
     }
 
     override fun apply(project: Project) {
-        val projectHelper = AndroidProjectHelper(project)
-        project.afterEvaluate {
-            projectHelper.androidExtension.getApplicationVariants().forEach {
-                createResolvePlaceholdersTaskForVariant(project, it.getName(), it.getFlavorName(), projectHelper)
+        project.plugins.withId("com.android.application") {
+            val extension = project.extensions.create("stringXmlReference", PlaceholderExtension::class.java)
+            val projectHelper = AndroidProjectHelper(project)
+            project.afterEvaluate {
+                projectHelper.androidExtension.getApplicationVariants().forEach {
+                    createResolvePlaceholdersTaskForVariant(
+                        project,
+                        it.getName(),
+                        it.getFlavorName(),
+                        projectHelper,
+                        extension
+                    )
+                }
             }
         }
     }
@@ -34,7 +44,8 @@ class ResolvePlaceholdersPlugin : Plugin<Project> {
         project: Project,
         variantName: String,
         flavorName: String,
-        androidProjectHelper: AndroidProjectHelper
+        androidProjectHelper: AndroidProjectHelper,
+        extension: PlaceholderExtension
     ) {
 
         val androidVariantHelper = AndroidVariantHelper(androidProjectHelper, variantName, flavorName)
@@ -73,7 +84,9 @@ class ResolvePlaceholdersPlugin : Plugin<Project> {
             )
         }
 
-        androidVariantHelper.mergeResourcesTask.dependsOn(resolvePlaceholdersTask)
-        androidVariantHelper.generateResValuesTask?.mustRunAfter(resolvePlaceholdersTask)
+        if (extension.resolveOnBuild) {
+            androidVariantHelper.mergeResourcesTask.dependsOn(resolvePlaceholdersTask)
+            androidVariantHelper.generateResValuesTask?.mustRunAfter(resolvePlaceholdersTask)
+        }
     }
 }
