@@ -18,6 +18,7 @@ class TasksNamesModelTest {
         Truth.assertThat(tasksNamesModel.gatherStringTemplatesName).isEqualTo("gatherTheVariantStringTemplates")
         Truth.assertThat(tasksNamesModel.resolvePlaceholdersName).isEqualTo("resolveTheVariantPlaceholders")
         Truth.assertThat(tasksNamesModel.generateResValuesName).isEqualTo("generateTheVariantResValues")
+        Truth.assertThat(tasksNamesModel.mergeResourcesName).isEqualTo("mergeTheVariantResources")
     }
 
     @Test
@@ -33,5 +34,6 @@ class TasksNamesModelTest {
         Truth.assertThat(tasksNamesModel.gatherStringTemplatesName).isEqualTo("gatherStringTemplates")
         Truth.assertThat(tasksNamesModel.resolvePlaceholdersName).isEqualTo("resolvePlaceholders")
         Truth.assertThat(tasksNamesModel.generateResValuesName).isEqualTo("generateResValues")
+        Truth.assertThat(tasksNamesModel.mergeResourcesName).isEqualTo("mergeResources")
     }
 }

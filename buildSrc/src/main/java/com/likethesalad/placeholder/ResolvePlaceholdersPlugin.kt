@@ -73,6 +73,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project> {
             )
         }
 
-        androidVariantHelper.generateResValuesTask.dependsOn(resolvePlaceholdersTask)
+        androidVariantHelper.mergeResourcesTask.dependsOn(resolvePlaceholdersTask)
+        androidVariantHelper.generateResValuesTask?.mustRunAfter(resolvePlaceholdersTask)
     }
 }

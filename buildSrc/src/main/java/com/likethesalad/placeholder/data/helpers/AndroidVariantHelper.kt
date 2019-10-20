@@ -16,8 +16,12 @@ class AndroidVariantHelper(
     val isFlavored = flavor.isNotEmpty()
     val tasksNames = TasksNamesModel(buildVariant)
 
-    val generateResValuesTask: Task by lazy {
-        projectHelper.project.tasks.findByName(tasksNames.generateResValuesName)!!
+    val generateResValuesTask: Task? by lazy {
+        projectHelper.project.tasks.findByName(tasksNames.generateResValuesName)
+    }
+
+    val mergeResourcesTask: Task by lazy {
+        projectHelper.project.tasks.findByName(tasksNames.mergeResourcesName)!!
     }
 
     val resourceDirs: ResDirs by lazy {

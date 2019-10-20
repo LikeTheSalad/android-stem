@@ -72,6 +72,25 @@ class AndroidVariantHelperTest {
     }
 
     @Test
+    fun check_mergeResourcesTask() {
+        // Given:
+        val projectMock = mockk<Project>()
+        val taskContainerMock = mockk<TaskContainer>()
+        val taskMock = mockk<Task>()
+        every { projectMock.tasks }.returns(taskContainerMock)
+        every { projectHelper.project }.returns(projectMock)
+        val androidVariantHelper = getNonFlavoredAndroidVariantHelper()
+        every { taskContainerMock.findByName(androidVariantHelper.tasksNames.mergeResourcesName) }.returns(taskMock)
+
+        // When:
+        val result = androidVariantHelper.mergeResourcesTask
+
+        // Then:
+        Truth.assertThat(result).isEqualTo(taskMock)
+        verify { taskContainerMock.findByName(androidVariantHelper.tasksNames.mergeResourcesName) }
+    }
+
+    @Test
     fun check_resourceDirs() {
         // Given:
         val files = setOf<File>(mockk(), mockk())
