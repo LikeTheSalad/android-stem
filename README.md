@@ -23,7 +23,7 @@ In other words, if you're looking to do something like this:
     <string name="welcome_message">Welcome to My App Name</string>
 </resources>
 ```
-Without having to write any Java/Kotlin code, then you're in the right place.
+Without having to write any Java/Kotlin code, then this plugin might help you.
 
 ## How to use
 ### 1.- Defining your templates
@@ -38,7 +38,7 @@ we'll need a template for the string `welcome_message`:
 </resources>
 ```
 Every template must start with the `template_` prefix (this prefix will be
-removed for the resolved string). Also, every the placeholder must have
+removed for the resolved string). Also, every placeholder must have
 this format: `${ANOTHER_STRING_NAME}`.
 
 A template can contain from zero to any amount of placeholders. Any string within your values folder (even other templates) can be referenced
