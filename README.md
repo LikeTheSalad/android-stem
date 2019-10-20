@@ -83,7 +83,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        ...
+        //...
         classpath "com.likethesalad.android:string-reference:[LATEST VERSION]"
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -99,7 +99,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'placeholder-resolver'
 
 android {
-  ...
+  //...
 }
 ```
 
@@ -121,8 +121,9 @@ stringXmlReference {
 
 And that's it, now you'll have to make sure to trigger the task
 manually whenever you need your resolved strings to get
-updated by running: `resolvePlaceholders` task or any of its
-variants depending on your build configuration.
-For example, to run only the debug variant, you'll have to run:
-`resolveDebugPlaceholders`, or if you have flavors setup in your application
-then you can run `resolve[YourFlavor]DebugPlaceholders` and so on.
+updated by running: `resolve[BUILD_VARIANT]Placeholders` depending
+on your build configuration. For example, to run it for the debug variant,
+you'll have to run: `resolveDebugPlaceholders`, or if you have flavors
+setup in your application, e.g. say you have 'demo' as a flavor defined,
+then you can run `resolveDemoDebugPlaceholders` to generate the strings
+for the demo flavor on the debug variant and so on.
