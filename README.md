@@ -1,5 +1,6 @@
 # Android String XML Reference
-## What is it
+What is it
+---
 Android String XML Reference is a Gradle plugin which will
 resolve placeholders of XML strings referenced in other XML strings
 at buildtime. You won't have to write any Java/Kotlin code into your
@@ -25,7 +26,8 @@ In other words, if you're looking to do something like this:
 ```
 Without having to write any Java/Kotlin code, then this plugin might help you.
 
-## How to use
+How to use
+---
 ### 1.- Defining your templates
 The first thing you need to do is to define your string templates,
 the ones that will contain references to other strings, you can do so
@@ -73,7 +75,8 @@ The following cases are supported:
 - Flavor specific strings.
 - Flavor specific with multi-language strings.
 
-## Adding it to your project
+Adding it to your project
+---
 In order to add it to your project, first you'll need to add this
 classpath into your `buildscript` dependencies block of your root project
 `build.gradle` file:
@@ -84,7 +87,7 @@ buildscript {
     }
     dependencies {
         //...
-        classpath "com.likethesalad.android:string-reference:[LATEST VERSION]"
+        classpath "com.likethesalad.android:string-reference:1.0.0"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -103,7 +106,8 @@ android {
 }
 ```
 
-## Running it manually
+Running it manually
+---
 The task that resolves the string templates is incremental,
 it won't run unless there are changes to the templates and/or
 their values. Meaning that your build process won't have to run this
@@ -127,3 +131,27 @@ you'll have to run: `resolveDebugPlaceholders`, or if you have flavors
 setup in your application, e.g. say you have 'demo' as a flavor defined,
 then you can run `resolveDemoDebugPlaceholders` to generate the strings
 for the demo flavor on the debug variant and so on.
+
+License
+---
+    MIT License
+    
+    Copyright (c) 2019 LikeTheSalad.
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+    
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+    
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
