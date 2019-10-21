@@ -8,7 +8,7 @@ interface FilesProvider {
     /**
      * Returns the final file where all of the resolved strings
      * will go to, this will be into the project's sourceSets resources.
-     * @param valuesFolderName -  The values folder name the resolves strings are going to.
+     * @param suffix -  The values folder name suffix.
      */
     fun getResolvedFile(suffix: String): File
 
@@ -16,7 +16,7 @@ interface FilesProvider {
 
     /**
      * Internal incremental file of all strings gathered from one values folder.
-     * @param valuesFolderName - The name of the values folder these strings will be for.
+     * @param suffix - The suffix of the values folder name.
      */
     fun getGatheredStringsFile(suffix: String = ""): File
 
@@ -24,7 +24,7 @@ interface FilesProvider {
 
     /**
      * Internal incremental file that contains only template strings and their values.
-     * @param stringFile -  The string file where the gathered raw strings are in.
+     * @param suffix - The string file name suffix.
      */
     fun getTemplateFile(suffix: String = ""): File
 
