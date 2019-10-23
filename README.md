@@ -1,7 +1,4 @@
 # Android String XML Reference
-> PLEASE READ: This plugin is in review for uploading to Maven central repo
-> so it is currently now available for downloading, it should become available
-> by the end of this week.
 
 What is it
 ---
@@ -87,7 +84,7 @@ classpath into your `buildscript` dependencies block of your root project
 ```groovy
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
     }
     dependencies {
         //...
