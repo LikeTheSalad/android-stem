@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.3.50'
     id 'java-gradle-plugin'
     id 'maven-publish'
+    id "com.jfrog.bintray" version "1.8.4"
 }
 
 group 'com.likethesalad.android'
@@ -33,12 +34,55 @@ gradlePlugin {
 
 publishing {
     publications {
-        maven(MavenPublication) {
+        myPublication(MavenPublication) {
             groupId = project.group
             artifactId = project.artifact
             version = project.version
 
             from components.java
+
+            pom {
+                name = 'Android String XML Reference'
+                description = 'This is a Gradle plugin for Android applications which resolves XML string references in other XML strings.'
+                url = 'https://github.com/LikeTheSalad/android-string-reference'
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://opensource.org/licenses/MIT'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'LikeTheSalad'
+                        name = 'Cesar Munoz'
+                        email = 'likethesalad@gmail.com'
+                    }
+                }
+                scm {
+                    url = 'https://github.com/LikeTheSalad/android-string-reference'
+                }
+            }
+        }
+    }
+}
+
+bintray {
+    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+    publications = ['myPublication']
+    pkg {
+        repo = 'public-repo'
+        name = project.artifact
+        licenses = ['MIT']
+        vcsUrl = 'https://github.com/LikeTheSalad/android-string-reference.git'
+        labels = ['android', 'gradle', 'plugin', 'string']
+        publicDownloadNumbers = true
+        version {
+            name = project.version
+            gpg {
+                sign = true
+                passphrase = project.hasProperty('passphrase') ? project.property('passphrase') : System.getenv('PASSPHRASE')
+            }
         }
     }
 }
