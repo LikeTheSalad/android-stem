@@ -32,6 +32,21 @@ gradlePlugin {
     }
 }
 
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar) {
+    from javadoc.destinationDir
+    classifier = 'javadoc'
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
 publishing {
     publications {
         myPublication(MavenPublication) {
@@ -39,6 +54,8 @@ publishing {
             artifactId = project.artifact
             version = project.version
 
+            artifact sourcesJar
+            artifact javadocJar
             from components.java
 
             pom {
@@ -74,6 +91,9 @@ bintray {
         repo = 'public-repo'
         name = project.artifact
         licenses = ['MIT']
+        desc = 'This is a Gradle plugin for Android applications which resolves XML string references in other XML strings.'
+        websiteUrl = 'https://github.com/LikeTheSalad/android-string-reference'
+        issueTrackerUrl = 'https://github.com/LikeTheSalad/android-string-reference/issues'
         vcsUrl = 'https://github.com/LikeTheSalad/android-string-reference.git'
         labels = ['android', 'gradle', 'plugin', 'string']
         publicDownloadNumbers = true
