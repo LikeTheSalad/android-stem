@@ -85,6 +85,8 @@ classpath into your `buildscript` dependencies block of your root project
 buildscript {
     repositories {
         jcenter()
+        //or
+        mavenCentral()
     }
     dependencies {
         //...
