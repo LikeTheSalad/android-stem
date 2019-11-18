@@ -76,6 +76,21 @@ The following cases are supported:
 - Flavor specific strings.
 - Flavor specific with multi-language strings.
 
+
+> Both **values and templates** can be overriden for a different **language** and
+> also for a different **flavor**. So if for example you have templates in your
+> project which contain the app name placeholder (e.g. ${app_name}) then if you
+> need to create a flavor with a different app name value, you just have
+> to override the '*app_name*' string inside the flavor's 'values' foler 
+> and that's it, now for this flavor you'll get all of the old strings but with
+> the new app_name.
+
+> Same for languages, based on the example above, if you need to translate your
+> '*welcome_message*' to spanish for example, you just have to override the template
+> '*template_welcome_message*' inside the 'values-es' folder and you'll get the
+> trasnlated '*welcome_message*' in the 'resolved.xml' file inside the 'values-es' folder.
+
+
 Adding it to your project
 ---
 In order to add it to your project, first you'll need to add this
