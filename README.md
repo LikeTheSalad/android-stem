@@ -88,7 +88,7 @@ The following cases are supported:
 > Same for languages, based on the example above, if you need to translate your
 > '*welcome_message*' to spanish for example, you just have to override the template
 > '*template_welcome_message*' inside the 'values-es' folder and you'll get the
-> trasnlated '*welcome_message*' in the 'resolved.xml' file inside the 'values-es' folder.
+> translated '*welcome_message*' in the 'resolved.xml' file inside the 'values-es' folder.
 
 
 Adding it to your project
