@@ -15,13 +15,13 @@ In other words, if you're looking to do something like this:
 ```xml
 <resources>
     <string name="app_name">My App Name</string>
-    <string name="welcome_message">Welcome to ${app_name}</string>
+    <string name="template_welcome_message">Welcome to ${app_name}</string>
 </resources>
 ```
 #### Output:
 ```xml
+<!-- Auto generated -->
 <resources>
-    <string name="app_name">My App Name</string>
     <string name="welcome_message">Welcome to My App Name</string>
 </resources>
 ```
