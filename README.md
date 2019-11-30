@@ -1,3 +1,5 @@
+[ ![Download](https://api.bintray.com/packages/likethesalad/public-repo/string-reference/images/download.svg) ](https://bintray.com/likethesalad/public-repo/string-reference/_latestVersion)
+[![Android Arsenal]( https://img.shields.io/badge/Android%20Arsenal-Android%20String%20XML%20Reference-green.svg?style=flat )]( https://android-arsenal.com/details/1/7967 )
 # Android String XML Reference
 
 What is it
