@@ -22,7 +22,7 @@ class ResStrings(
         return mergedMap.values.sorted()
     }
 
-    fun hasTemplates(): Boolean {
+    fun hasLocalTemplates(): Boolean {
         return stringsMap.keys.any { Constants.TEMPLATE_STRING_REGEX.matches(it) }
     }
 
@@ -41,6 +41,16 @@ class ResStrings(
         }
 
         return mergedMap.values.sorted()
+    }
+
+    fun hasLocalValuesForTemplates(): Boolean {
+        val nonTemplatesPlaceholders = getLocalNonTemplatesNames().map { "\${$it}" }
+        val mergedTemplatesContents = getMergedTemplates().map { it.content }
+        return nonTemplatesPlaceholders.any { placeholder -> mergedTemplatesContents.any { it.contains(placeholder) } }
+    }
+
+    private fun getLocalNonTemplatesNames(): List<String> {
+        return stringsMap.keys.filter { !Constants.TEMPLATE_STRING_REGEX.matches(it) }
     }
 
     private fun getLocalTemplates(): List<StringResourceModel> {

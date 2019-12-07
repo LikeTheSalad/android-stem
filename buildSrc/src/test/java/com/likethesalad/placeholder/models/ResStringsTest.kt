@@ -130,7 +130,7 @@ class ResStringsTest {
     }
 
     @Test
-    fun `Get if it contains templates`() {
+    fun `Get if it contains local templates`() {
         // Given
         val resStringsWithTemplates = ResStrings(
             listOf(
@@ -146,8 +146,8 @@ class ResStringsTest {
         )
 
         // Then
-        Truth.assertThat(resStringsWithTemplates.hasTemplates()).isTrue()
-        Truth.assertThat(resStringsWithNoTemplates.hasTemplates()).isFalse()
+        Truth.assertThat(resStringsWithTemplates.hasLocalTemplates()).isTrue()
+        Truth.assertThat(resStringsWithNoTemplates.hasLocalTemplates()).isFalse()
     }
 
     @Test
@@ -179,15 +179,50 @@ class ResStringsTest {
 
     @Test
     fun `Get if it has values for templates`() {
+        // Given
+        val resStringsWithValuesForLocal = getResStringsWithValuesForLocalTemplates()
+        val resStringsWithValuesForParent = getResStringsWithValuesForParentTemplates()
+        val resStringsWithValuesForMerged = getResStringsWithValuesForMergedTemplates()
 
+        // Then
+        Truth.assertThat(resStringsWithValuesForLocal.hasLocalValuesForTemplates()).isTrue()
+        Truth.assertThat(resStringsWithValuesForParent.hasLocalValuesForTemplates()).isTrue()
+        Truth.assertThat(resStringsWithValuesForMerged.hasLocalValuesForTemplates()).isTrue()
     }
 
     private fun getResStringsWithValuesForLocalTemplates(): ResStrings {
         return ResStrings(
             listOf(
                 StringResourceModel("some_string", "Some content"),
-                StringResourceModel("template_other_string", "Some content")
+                StringResourceModel("template_other_string", "Some content with \${some_string}")
             )
+        )
+    }
+
+    private fun getResStringsWithValuesForParentTemplates(): ResStrings {
+        val parentResStrings = ResStrings(
+            listOf(
+                StringResourceModel("template_other_string", "Some content with \${some_string}")
+            )
+        )
+        return ResStrings(
+            listOf(
+                StringResourceModel("some_string", "Some content")
+            ), parentResStrings
+        )
+    }
+
+    private fun getResStringsWithValuesForMergedTemplates(): ResStrings {
+        val parentResStrings = ResStrings(
+            listOf(
+                StringResourceModel("template_other_string", "Some content with \${random_string}")
+            )
+        )
+        return ResStrings(
+            listOf(
+                StringResourceModel("template_other_string", "Some content with \${some_string}"),
+                StringResourceModel("some_string", "Some content")
+            ), parentResStrings
         )
     }
 }
