@@ -128,4 +128,25 @@ class ResStringsTest {
             StringResourceModel("the_parent_string", "Parent value")
         ).inOrder()
     }
+
+    @Test
+    fun `Get if it contains templates`() {
+        // Given
+        val resStringsWithTemplates = ResStrings(
+            listOf(
+                StringResourceModel("string_name", "String value"),
+                StringResourceModel("template_some_string", "String value \${string_name}")
+            )
+        )
+        val resStringsWithNoTemplates = ResStrings(
+            listOf(
+                StringResourceModel("string_name", "String value"),
+                StringResourceModel("some_string", "String value2")
+            )
+        )
+
+        // Then
+        Truth.assertThat(resStringsWithTemplates.hasTemplates()).isTrue()
+        Truth.assertThat(resStringsWithNoTemplates.hasTemplates()).isFalse()
+    }
 }

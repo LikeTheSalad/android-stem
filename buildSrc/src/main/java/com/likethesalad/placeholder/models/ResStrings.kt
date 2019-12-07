@@ -1,5 +1,7 @@
 package com.likethesalad.placeholder.models
 
+import com.likethesalad.placeholder.data.Constants
+
 class ResStrings(
     strings: List<StringResourceModel>,
     private val parentResStrings: ResStrings? = null
@@ -17,7 +19,11 @@ class ResStrings(
         }
 
         addLocalStrings(mergedMap)
-        return mergedMap.values.sortedBy { it.name }
+        return mergedMap.values.sorted()
+    }
+
+    fun hasTemplates(): Boolean {
+        return stringsMap.keys.any { Constants.TEMPLATE_STRING_REGEX.matches(it) }
     }
 
     private fun addLocalStrings(mergedMap: MutableMap<String, StringResourceModel>) {
