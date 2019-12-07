@@ -9,16 +9,16 @@ class ResStrings(
     private val stringsMap = mutableMapOf<String, StringResourceModel>()
 
     init {
-        initializeLocalMapWithStrings(strings)
+        addStringsToMap(strings, stringsMap)
     }
 
     fun getMergedStrings(): List<StringResourceModel> {
         val mergedMap = mutableMapOf<String, StringResourceModel>()
         if (parentResStrings != null) {
-            addParentStrings(parentResStrings, mergedMap)
+            addStringsToMap(parentResStrings.getMergedStrings(), mergedMap)
         }
 
-        addLocalStrings(mergedMap)
+        addStringsToMap(stringsMap.values, mergedMap)
         return mergedMap.values.sorted()
     }
 
@@ -26,24 +26,33 @@ class ResStrings(
         return stringsMap.keys.any { Constants.TEMPLATE_STRING_REGEX.matches(it) }
     }
 
-    private fun addLocalStrings(mergedMap: MutableMap<String, StringResourceModel>) {
-        for ((key, value) in stringsMap) {
-            mergedMap[key] = value
+    fun getMergedTemplates(): List<StringResourceModel> {
+        val mergedMap = mutableMapOf<String, StringResourceModel>()
+        if (parentResStrings != null) {
+            val templates = parentResStrings.getMergedTemplates()
+            for (it in templates) {
+                mergedMap[it.name] = it
+            }
         }
-    }
 
-    private fun addParentStrings(
-        parentResStrings: ResStrings,
-        mergedMap: MutableMap<String, StringResourceModel>
-    ) {
-        for (it in parentResStrings.getMergedStrings()) {
+        val localTemplates = getLocalTemplates()
+        for (it in localTemplates) {
             mergedMap[it.name] = it
         }
+
+        return mergedMap.values.sorted()
     }
 
-    private fun initializeLocalMapWithStrings(strings: List<StringResourceModel>) {
+    private fun getLocalTemplates(): List<StringResourceModel> {
+        return stringsMap.values.filter { Constants.TEMPLATE_STRING_REGEX.matches(it.name) }
+    }
+
+    private fun addStringsToMap(
+        strings: Collection<StringResourceModel>,
+        map: MutableMap<String, StringResourceModel>
+    ) {
         for (it in strings) {
-            stringsMap[it.name] = it
+            map[it.name] = it
         }
     }
 }
