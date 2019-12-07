@@ -183,11 +183,22 @@ class ResStringsTest {
         val resStringsWithValuesForLocal = getResStringsWithValuesForLocalTemplates()
         val resStringsWithValuesForParent = getResStringsWithValuesForParentTemplates()
         val resStringsWithValuesForMerged = getResStringsWithValuesForMergedTemplates()
+        val resStringsWithNoValuesForTemplates = getResStringsWithNoValuesForTemplates()
 
         // Then
         Truth.assertThat(resStringsWithValuesForLocal.hasLocalValuesForTemplates()).isTrue()
         Truth.assertThat(resStringsWithValuesForParent.hasLocalValuesForTemplates()).isTrue()
         Truth.assertThat(resStringsWithValuesForMerged.hasLocalValuesForTemplates()).isTrue()
+        Truth.assertThat(resStringsWithNoValuesForTemplates.hasLocalValuesForTemplates()).isFalse()
+    }
+
+    private fun getResStringsWithNoValuesForTemplates(): ResStrings {
+        return ResStrings(
+            listOf(
+                StringResourceModel("some_string", "Some content"),
+                StringResourceModel("template_other_string", "Some content with \${another_string}")
+            )
+        )
     }
 
     private fun getResStringsWithValuesForLocalTemplates(): ResStrings {
