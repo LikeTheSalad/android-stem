@@ -14,7 +14,7 @@ class ResStringsTest {
             )
         )
 
-        val listOfStrings = resStrings.getMergedStrings()
+        val listOfStrings = resStrings.mergedStrings
 
         Truth.assertThat(listOfStrings).containsExactly(
             StringResourceModel("my_str_name", "The content"),
@@ -33,7 +33,7 @@ class ResStringsTest {
             parentResStrings
         )
 
-        Truth.assertThat(resStrings.getMergedStrings()).containsExactly(
+        Truth.assertThat(resStrings.mergedStrings).containsExactly(
             StringResourceModel("the_parent_string", "Parent value"),
             StringResourceModel("child_string", "Child value")
         )
@@ -56,7 +56,7 @@ class ResStringsTest {
             parentResStrings
         )
 
-        Truth.assertThat(resStrings.getMergedStrings()).containsExactly(
+        Truth.assertThat(resStrings.mergedStrings).containsExactly(
             StringResourceModel("the_parent_string", "Parent value"),
             StringResourceModel("child_string", "Child value"),
             StringResourceModel("common_string", "Child common string")
@@ -94,7 +94,7 @@ class ResStringsTest {
         )
 
         // Then
-        Truth.assertThat(resStrings.getMergedStrings()).containsExactly(
+        Truth.assertThat(resStrings.mergedStrings).containsExactly(
             StringResourceModel(
                 mapOf(
                     "name" to commonStringName,
@@ -122,7 +122,7 @@ class ResStringsTest {
         )
 
         // Then
-        Truth.assertThat(resStrings.getMergedStrings()).containsExactly(
+        Truth.assertThat(resStrings.mergedStrings).containsExactly(
             StringResourceModel("another_string", "Child another value"),
             StringResourceModel("child_string", "Child value"),
             StringResourceModel("the_parent_string", "Parent value")
@@ -170,7 +170,7 @@ class ResStringsTest {
         )
 
         // Then
-        Truth.assertThat(resStrings.getMergedTemplates()).containsExactly(
+        Truth.assertThat(resStrings.mergedTemplates).containsExactly(
             StringResourceModel("template_child_string", "Child template"),
             StringResourceModel("template_other_string", "String value2"),
             StringResourceModel("template_some_string", "Child value common")

@@ -8,28 +8,19 @@ class ResStrings(
 ) {
     private val stringsMap = mutableMapOf<String, StringResourceModel>()
 
-    init {
-        addStringsToMap(strings, stringsMap)
-    }
-
-    fun getMergedStrings(): List<StringResourceModel> {
+    val mergedStrings: List<StringResourceModel> by lazy {
         val mergedMap = mutableMapOf<String, StringResourceModel>()
         if (parentResStrings != null) {
-            addStringsToMap(parentResStrings.getMergedStrings(), mergedMap)
+            addStringsToMap(parentResStrings.mergedStrings, mergedMap)
         }
 
         addStringsToMap(stringsMap.values, mergedMap)
-        return mergedMap.values.sorted()
+        mergedMap.values.sorted()
     }
-
-    fun hasLocalTemplates(): Boolean {
-        return stringsMap.keys.any { Constants.TEMPLATE_STRING_REGEX.matches(it) }
-    }
-
-    fun getMergedTemplates(): List<StringResourceModel> {
+    val mergedTemplates: List<StringResourceModel> by lazy {
         val mergedMap = mutableMapOf<String, StringResourceModel>()
         if (parentResStrings != null) {
-            val templates = parentResStrings.getMergedTemplates()
+            val templates = parentResStrings.mergedTemplates
             for (it in templates) {
                 mergedMap[it.name] = it
             }
@@ -40,12 +31,20 @@ class ResStrings(
             mergedMap[it.name] = it
         }
 
-        return mergedMap.values.sorted()
+        mergedMap.values.sorted()
+    }
+
+    init {
+        addStringsToMap(strings, stringsMap)
+    }
+
+    fun hasLocalTemplates(): Boolean {
+        return stringsMap.keys.any { Constants.TEMPLATE_STRING_REGEX.matches(it) }
     }
 
     fun hasLocalValuesForTemplates(): Boolean {
         val nonTemplatesPlaceholders = getLocalNonTemplatesNames().map { "\${$it}" }
-        val mergedTemplatesContents = getMergedTemplates().map { it.content }
+        val mergedTemplatesContents = mergedTemplates.map { it.content }
         return nonTemplatesPlaceholders.any { placeholder -> mergedTemplatesContents.any { it.contains(placeholder) } }
     }
 
