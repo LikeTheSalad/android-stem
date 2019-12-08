@@ -8,6 +8,10 @@ class ResStrings(
 ) {
     private val stringsMap = mutableMapOf<String, StringResourceModel>()
 
+    init {
+        addStringsToMap(strings, stringsMap)
+    }
+
     val mergedStrings: List<StringResourceModel> by lazy {
         val mergedMap = mutableMapOf<String, StringResourceModel>()
         if (parentResStrings != null) {
@@ -33,19 +37,13 @@ class ResStrings(
 
         mergedMap.values.sorted()
     }
-
-    init {
-        addStringsToMap(strings, stringsMap)
+    val hasLocalTemplates: Boolean by lazy {
+        stringsMap.keys.any { Constants.TEMPLATE_STRING_REGEX.matches(it) }
     }
-
-    fun hasLocalTemplates(): Boolean {
-        return stringsMap.keys.any { Constants.TEMPLATE_STRING_REGEX.matches(it) }
-    }
-
-    fun hasLocalValuesForTemplates(): Boolean {
+    val hasLocalValuesForTemplates: Boolean by lazy {
         val nonTemplatesPlaceholders = getLocalNonTemplatesNames().map { "\${$it}" }
         val mergedTemplatesContents = mergedTemplates.map { it.content }
-        return nonTemplatesPlaceholders.any { placeholder -> mergedTemplatesContents.any { it.contains(placeholder) } }
+        nonTemplatesPlaceholders.any { placeholder -> mergedTemplatesContents.any { it.contains(placeholder) } }
     }
 
     private fun getLocalNonTemplatesNames(): List<String> {

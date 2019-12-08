@@ -146,8 +146,8 @@ class ResStringsTest {
         )
 
         // Then
-        Truth.assertThat(resStringsWithTemplates.hasLocalTemplates()).isTrue()
-        Truth.assertThat(resStringsWithNoTemplates.hasLocalTemplates()).isFalse()
+        Truth.assertThat(resStringsWithTemplates.hasLocalTemplates).isTrue()
+        Truth.assertThat(resStringsWithNoTemplates.hasLocalTemplates).isFalse()
     }
 
     @Test
@@ -186,10 +186,10 @@ class ResStringsTest {
         val resStringsWithNoValuesForTemplates = getResStringsWithNoValuesForTemplates()
 
         // Then
-        Truth.assertThat(resStringsWithValuesForLocal.hasLocalValuesForTemplates()).isTrue()
-        Truth.assertThat(resStringsWithValuesForParent.hasLocalValuesForTemplates()).isTrue()
-        Truth.assertThat(resStringsWithValuesForMerged.hasLocalValuesForTemplates()).isTrue()
-        Truth.assertThat(resStringsWithNoValuesForTemplates.hasLocalValuesForTemplates()).isFalse()
+        Truth.assertThat(resStringsWithValuesForLocal.hasLocalValuesForTemplates).isTrue()
+        Truth.assertThat(resStringsWithValuesForParent.hasLocalValuesForTemplates).isTrue()
+        Truth.assertThat(resStringsWithValuesForMerged.hasLocalValuesForTemplates).isTrue()
+        Truth.assertThat(resStringsWithNoValuesForTemplates.hasLocalValuesForTemplates).isFalse()
     }
 
     private fun getResStringsWithNoValuesForTemplates(): ResStrings {
