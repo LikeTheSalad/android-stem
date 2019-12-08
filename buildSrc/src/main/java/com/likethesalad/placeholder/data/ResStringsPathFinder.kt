@@ -1,6 +1,6 @@
 package com.likethesalad.placeholder.data
 
-class ResStringsPathResolver(
+class ResStringsPathFinder(
     private val variantName: String,
     private val flavors: List<String>,
     private val variantType: String
@@ -20,7 +20,7 @@ class ResStringsPathResolver(
     }
 
     private fun addFullVariantName(pathList: MutableList<String>) {
-        if (variantName != variantType) {
+        if (flavors.isNotEmpty()) {
             pathList.add(variantName)
         }
     }
