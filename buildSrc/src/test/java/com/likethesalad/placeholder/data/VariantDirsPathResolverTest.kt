@@ -3,7 +3,7 @@ package com.likethesalad.placeholder.data
 import com.google.common.truth.Truth
 import org.junit.Test
 
-class ResStringsPathFinderTest {
+class VariantDirsPathResolverTest {
 
     @Test
     fun `Get path list from empty flavors`() {
@@ -50,8 +50,8 @@ class ResStringsPathFinderTest {
         suffix: String,
         vararg expectedPathItems: String
     ) {
-        val resStringsPathFinder = ResStringsPathFinder(variantName, flavors, suffix)
+        val variantDirsPathResolver = VariantDirsPathResolver(variantName, flavors, suffix)
 
-        Truth.assertThat(resStringsPathFinder.getPath()).containsExactlyElementsIn(expectedPathItems).inOrder()
+        Truth.assertThat(variantDirsPathResolver.getPath()).containsExactlyElementsIn(expectedPathItems).inOrder()
     }
 }

@@ -1,6 +1,6 @@
 package com.likethesalad.placeholder.data
 
-class ResStringsPathFinder(
+class VariantDirsPathResolver(
     private val variantName: String,
     private val flavors: List<String>,
     private val variantType: String
