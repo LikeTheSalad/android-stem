@@ -30,7 +30,7 @@ class AndroidProjectHelperTest {
         val sourceSets = setOf(
             TestAndroidSourceSet("values", sourceSetFiles)
         )
-        val appVariants = setOf<TestApplicationVariant>(
+        val appVariants = setOf(
             TestApplicationVariant("demoDebug", "demo")
         )
         val androidExtension = TestAndroidExtension(sourceSets, appVariants)
@@ -56,5 +56,11 @@ class AndroidProjectHelperTest {
         val appVariant = resultVariants.first()
         Truth.assertThat(appVariant.getName()).isEqualTo("demoDebug")
         Truth.assertThat(appVariant.getFlavorName()).isEqualTo("demo")
+    }
+
+    @Test
+    fun `Get project src dir path`() {
+        val srcDirPath = "/some/path/to/src"
+        every {  }
     }
 }
