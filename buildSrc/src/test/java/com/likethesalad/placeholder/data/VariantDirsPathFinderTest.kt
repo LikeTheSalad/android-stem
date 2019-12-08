@@ -42,11 +42,11 @@ class VariantDirsPathFinderTest {
         createResFolderFor("main")
         createResFolderFor("full")
         createResFolderFor("another")
-        every { variantDirsPathResolver.getPath() }.returns(resolvedPaths)
+        every { variantDirsPathResolver.pathList }.returns(resolvedPaths)
         every { androidExtensionWrapper.getSourceSets() }.returns(getSourceSetsMap(resolvedPaths))
 
         // When
-        val result = variantDirsPathFinder.getExistingPaths()
+        val result = variantDirsPathFinder.getExistingPathsResDirs()
 
         // Then
         Truth.assertThat(result.map { it.map { file -> file.absolutePath } }).containsExactly(

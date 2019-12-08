@@ -52,6 +52,6 @@ class VariantDirsPathResolverTest {
     ) {
         val variantDirsPathResolver = VariantDirsPathResolver(variantName, flavors, suffix)
 
-        Truth.assertThat(variantDirsPathResolver.getPath()).containsExactlyElementsIn(expectedPathItems).inOrder()
+        Truth.assertThat(variantDirsPathResolver.pathList).containsExactlyElementsIn(expectedPathItems).inOrder()
     }
 }

@@ -9,14 +9,14 @@ class VariantDirsPathResolver(
         private const val BASE_PATH = "main"
     }
 
-    fun getPath(): List<String> {
+    val pathList: List<String> by lazy {
         val pathList = mutableListOf<String>()
         pathList.add(BASE_PATH)
         addFlavorPaths(pathList)
         addVariantNameWithoutType(pathList)
         addVariantType(pathList)
         addFullVariantName(pathList)
-        return pathList
+        pathList
     }
 
     private fun addFullVariantName(pathList: MutableList<String>) {

@@ -8,9 +8,9 @@ class VariantDirsPathFinder(
     private val androidProjectHelper: AndroidProjectHelper
 ) {
 
-    fun getExistingPaths(): List<Set<File>> {
+    fun getExistingPathsResDirs(): List<Set<File>> {
         val existing = mutableListOf<Set<File>>()
-        val pathResolved = variantDirsPathResolver.getPath()
+        val pathResolved = variantDirsPathResolver.pathList
         val sourceSets = androidProjectHelper.androidExtension.getSourceSets()
 
         for (resolved in pathResolved) {
