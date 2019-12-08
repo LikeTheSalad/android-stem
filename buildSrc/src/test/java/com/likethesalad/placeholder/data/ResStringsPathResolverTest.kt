@@ -7,13 +7,14 @@ class ResStringsPathResolverTest {
 
     @Test
     fun `Get path list from empty flavors`() {
-        validatePathList(emptyList(), "debug", "main", "debug")
-        validatePathList(emptyList(), "release", "main", "release")
+        validatePathList("debug", emptyList(), "debug", "main", "debug")
+        validatePathList("release", emptyList(), "release", "main", "release")
     }
 
     @Test
     fun `Get path list from raw string with one flavor`() {
         validatePathList(
+            "fullDebug",
             listOf("full"), "debug",
             "main", "full", "debug", "fullDebug"
         )
@@ -22,20 +23,34 @@ class ResStringsPathResolverTest {
     @Test
     fun `Get path list from raw string with multiple flavors`() {
         validatePathList(
+            "demoStableDebug",
             listOf("demo", "stable"), "debug",
             "main", "stable", "demo",
             "demoStable", "debug", "demoStableDebug"
         )
 
         validatePathList(
+            "demoStablePaidDebug",
             listOf("demo", "stable", "paid"), "debug",
             "main", "paid", "stable", "demo",
             "demoStablePaid", "debug", "demoStablePaidDebug"
         )
+
+        validatePathList(
+            "demoStablePaidAnimeDebug",
+            listOf("demo", "stable", "paid", "anime"), "debug",
+            "main", "anime", "paid", "stable", "demo",
+            "demoStablePaidAnime", "debug", "demoStablePaidAnimeDebug"
+        )
     }
 
-    private fun validatePathList(flavors: List<String>, suffix: String, vararg pathItems: String) {
-        val resStringsPathResolver = ResStringsPathResolver(flavors, suffix)
+    private fun validatePathList(
+        variantName: String,
+        flavors: List<String>,
+        suffix: String,
+        vararg pathItems: String
+    ) {
+        val resStringsPathResolver = ResStringsPathResolver(variantName, flavors, suffix)
 
         Truth.assertThat(resStringsPathResolver.getPath()).containsExactlyElementsIn(pathItems).inOrder()
     }
