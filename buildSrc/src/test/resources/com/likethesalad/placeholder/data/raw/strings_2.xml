@@ -1,0 +1,4 @@
+<resources>
+    <string name="welcome_3">The welcome message for TesT3</string>
+    <dimension name="message_non_translatable_1">20dp</dimension>
+</resources>
