@@ -39,31 +39,53 @@ class VariantDirsPathFinderTest {
     fun `Get path tree filtered by available dirs`() {
         // Given
         val resolvedPaths = listOf("main", "demo", "full", "else", "another")
-        createResFolderFor("main")
-        createResFolderFor("full")
-        createResFolderFor("another")
+        val mainFolders = createResFolderFor("main", "res", "res2")
+        val fullFolders = createResFolderFor("full", "res")
+        val anotherFolders = createResFolderFor("another", "res", "res1")
         every { variantDirsPathResolver.pathList }.returns(resolvedPaths)
-        every { androidExtensionWrapper.getSourceSets() }.returns(getSourceSetsMap(resolvedPaths))
+        every { androidExtensionWrapper.getSourceSets() }.returns(
+            getSourceSetsMap(
+                mapOf(
+                    "main" to mainFolders,
+                    "demo" to emptyList(),
+                    "full" to fullFolders,
+                    "else" to emptyList(),
+                    "another" to anotherFolders
+                )
+            )
+        )
 
         // When
         val result = variantDirsPathFinder.getExistingPathsResDirs()
 
         // Then
-        Truth.assertThat(result.map { it.map { file -> file.absolutePath } }).containsExactly(
-            listOf("$srcPath/main/res"),
-            listOf("$srcPath/full/res"),
-            listOf("$srcPath/another/res")
+        Truth.assertThat(result.size).isEqualTo(3)
+        Truth.assertThat(result.getValue("main").map { it.absolutePath }).containsExactly(
+            "$srcPath/main/res",
+            "$srcPath/main/res2"
+        )
+        Truth.assertThat(result.getValue("full").map { it.absolutePath }).containsExactly(
+            "$srcPath/full/res"
+        )
+        Truth.assertThat(result.getValue("another").map { it.absolutePath }).containsExactly(
+            "$srcPath/another/res",
+            "$srcPath/another/res1"
         )
     }
 
-    private fun createResFolderFor(path: String) {
-        temporaryFolder.newFolder("src", path, "res")
+    private fun createResFolderFor(path: String, vararg resFolderNames: String): List<File> {
+        val fileList = mutableListOf<File>()
+        for (resName in resFolderNames) {
+            fileList.add(temporaryFolder.newFolder("src", path, resName))
+        }
+        return fileList
     }
 
-    private fun getSourceSetsMap(resolvedPaths: List<String>): Map<String, AndroidSourceSetWrapper> {
+    private fun getSourceSetsMap(existingPaths: Map<String, List<File>>):
+            Map<String, AndroidSourceSetWrapper> {
         val result = mutableMapOf<String, AndroidSourceSetWrapper>()
-        for (it in resolvedPaths) {
-            result[it] = getSourceSets(it, setOf(File("$srcPath/$it/res")))
+        for ((k, v) in existingPaths) {
+            result[k] = getSourceSets(k, v.toSet())
         }
         return result
     }
