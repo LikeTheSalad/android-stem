@@ -6,7 +6,7 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import java.io.File
 
-class ResValuesFilesTest {
+class ValuesFilesTest {
 
     @get:Rule
     val temporaryFolder = TemporaryFolder()
@@ -28,7 +28,7 @@ class ResValuesFilesTest {
             )
         )
         val resDirs = setOf(res1, res2)
-        val resValuesFiles = ResValuesFiles(variantName, resDirs)
+        val resValuesFiles = ValuesFiles(variantName, resDirs)
 
         val valuesFiles = resValuesFiles.xmlValuesFiles
         Truth.assertThat(valuesFiles.size).isEqualTo(3)
@@ -61,7 +61,7 @@ class ResValuesFilesTest {
             )
         )
         val resDirs = setOf(res1)
-        val resValuesFiles = ResValuesFiles(variantName, resDirs)
+        val resValuesFiles = ValuesFiles(variantName, resDirs)
 
         val valuesFiles = resValuesFiles.xmlValuesFiles
         Truth.assertThat(valuesFiles.size).isEqualTo(2)

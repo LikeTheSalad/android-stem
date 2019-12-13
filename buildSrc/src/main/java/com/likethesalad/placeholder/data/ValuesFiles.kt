@@ -4,7 +4,7 @@ import com.likethesalad.placeholder.utils.ValuesNameUtils
 import com.likethesalad.placeholder.utils.XmlUtils
 import java.io.File
 
-class ResValuesFiles(
+class ValuesFiles(
     variantName: String,
     val resDirs: Set<File>
 ) {

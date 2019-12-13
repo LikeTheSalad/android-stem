@@ -2,10 +2,19 @@ package com.likethesalad.placeholder.models
 
 import com.likethesalad.placeholder.data.Constants
 
-class ResStrings(
+class ValuesStrings(
+    valuesFolderName: String,
     strings: List<StringResourceModel>,
-    private val parentResStrings: ResStrings? = null
+    private val parentValuesStrings: ValuesStrings? = null
 ) {
+
+    companion object {
+        private val VALUES_SUFFIX_REGEX = Regex("values(-[a-z]{2}(-r[A-Z]{2})*)*")
+    }
+
+    val valuesSuffix: String by lazy {
+        VALUES_SUFFIX_REGEX.find(valuesFolderName)!!.groupValues[1]
+    }
     private val stringsMap = mutableMapOf<String, StringResourceModel>()
 
     init {
@@ -14,8 +23,8 @@ class ResStrings(
 
     val mergedStrings: List<StringResourceModel> by lazy {
         val mergedMap = mutableMapOf<String, StringResourceModel>()
-        if (parentResStrings != null) {
-            addStringsToMap(parentResStrings.mergedStrings, mergedMap)
+        if (parentValuesStrings != null) {
+            addStringsToMap(parentValuesStrings.mergedStrings, mergedMap)
         }
 
         addStringsToMap(stringsMap.values, mergedMap)
@@ -23,8 +32,8 @@ class ResStrings(
     }
     val mergedTemplates: List<StringResourceModel> by lazy {
         val mergedMap = mutableMapOf<String, StringResourceModel>()
-        if (parentResStrings != null) {
-            val templates = parentResStrings.mergedTemplates
+        if (parentValuesStrings != null) {
+            val templates = parentValuesStrings.mergedTemplates
             for (it in templates) {
                 mergedMap[it.name] = it
             }

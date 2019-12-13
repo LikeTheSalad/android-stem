@@ -56,7 +56,7 @@ class VariantDirsPathFinderTest {
         )
 
         // When
-        val result = variantDirsPathFinder.getExistingPathsResDirs()
+        val result = variantDirsPathFinder.existingPathsResDirs
 
         // Then
         Truth.assertThat(result.size).isEqualTo(3)

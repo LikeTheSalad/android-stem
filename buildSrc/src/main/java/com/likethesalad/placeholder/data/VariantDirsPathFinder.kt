@@ -8,7 +8,7 @@ class VariantDirsPathFinder(
     private val androidProjectHelper: AndroidProjectHelper
 ) {
 
-    fun getExistingPathsResDirs(): Map<String, Set<File>> {
+    val existingPathsResDirs: Map<String, Set<File>> by lazy {
         val existing = mutableMapOf<String, Set<File>>()
         val pathResolved = variantDirsPathResolver.pathList
         val sourceSets = androidProjectHelper.androidExtension.getSourceSets()
@@ -20,6 +20,6 @@ class VariantDirsPathFinder(
             }
         }
 
-        return existing
+        existing
     }
 }
