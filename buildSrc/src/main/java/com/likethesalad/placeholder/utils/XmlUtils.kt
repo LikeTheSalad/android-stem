@@ -9,6 +9,7 @@ import org.w3c.dom.Node
 class XmlUtils {
 
     companion object {
+        private val RAW_VALUES_FILE_REGEX = Regex("^(?!resolved\\.xml)[A-Za-z0-9_]+\\.xml\$")
 
         fun stringResourceModelToElement(document: Document, stringResourceModel: StringResourceModel): Element {
             val strElement = document.createElement(XML_STRING_TAG)
@@ -27,6 +28,10 @@ class XmlUtils {
                 attributesMap[attr.nodeName] = attr.textContent
             }
             return StringResourceModel(attributesMap, node.textContent)
+        }
+
+        fun isValidRawXmlFileName(name: String): Boolean {
+            return RAW_VALUES_FILE_REGEX.matches(name)
         }
     }
 }

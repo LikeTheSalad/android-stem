@@ -17,14 +17,14 @@ class ResValuesFilesTest {
         val res1 = getResDirWithFolders(
             "res1", mapOf(
                 "values" to listOf("strings.xml", "strings2.xml"),
-                "values-es" to listOf("strings-es1.xml"),
+                "values-es" to listOf("strings_es1.xml"),
                 "values-pt" to emptyList()
             )
         )
         val res2 = getResDirWithFolders(
             "res2", mapOf(
                 "values" to listOf("strings.xml", "strings3.xml"),
-                "values-it" to listOf("strings-it.xml", "strings-it2.xml")
+                "values-it" to listOf("strings_it.xml", "strings_it2.xml")
             )
         )
         val resDirs = setOf(res1, res2)
@@ -41,12 +41,39 @@ class ResValuesFilesTest {
         )
         assertThatValuesFilesContainsFiles(
             valuesFiles.getValue("values-es"),
-            "${res1.absolutePath}/values-es/strings-es1.xml"
+            "${res1.absolutePath}/values-es/strings_es1.xml"
         )
         assertThatValuesFilesContainsFiles(
             valuesFiles.getValue("values-it"),
-            "${res2.absolutePath}/values-it/strings-it.xml",
-            "${res2.absolutePath}/values-it/strings-it2.xml"
+            "${res2.absolutePath}/values-it/strings_it.xml",
+            "${res2.absolutePath}/values-it/strings_it2.xml"
+        )
+    }
+
+    @Test
+    fun `Filter out generated file and non xml files`() {
+        val variantName = "client"
+        val res1 = getResDirWithFolders(
+            "res1", mapOf(
+                "values" to listOf("strings.xml", "strings2.xml", "something.xml2"),
+                "values-es" to listOf("strings_es1.xml", "strings_es.cml", "resolved.xml"),
+                "values-pt" to emptyList()
+            )
+        )
+        val resDirs = setOf(res1)
+        val resValuesFiles = ResValuesFiles(variantName, resDirs)
+
+        val valuesFiles = resValuesFiles.xmlValuesFiles
+        Truth.assertThat(valuesFiles.size).isEqualTo(2)
+
+        assertThatValuesFilesContainsFiles(
+            valuesFiles.getValue("values"),
+            "${res1.absolutePath}/values/strings.xml",
+            "${res1.absolutePath}/values/strings2.xml"
+        )
+        assertThatValuesFilesContainsFiles(
+            valuesFiles.getValue("values-es"),
+            "${res1.absolutePath}/values-es/strings_es1.xml"
         )
     }
 

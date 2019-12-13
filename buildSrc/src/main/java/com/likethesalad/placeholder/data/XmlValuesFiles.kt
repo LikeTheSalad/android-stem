@@ -6,8 +6,8 @@ import java.io.File
 
 class XmlValuesFiles(val filesSet: Set<File>) {
 
-    fun getStringResources(): Set<StringResourceModel> {
-        return filesSet.map {
+    val stringResources: Set<StringResourceModel> by lazy {
+        filesSet.map {
             AndroidXmlResDocument.readFromFile(it).getStringResourceList()
         }.flatten().toSet()
     }

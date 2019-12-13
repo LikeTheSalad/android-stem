@@ -1,7 +1,7 @@
 package com.likethesalad.placeholder.utils
 
-import com.likethesalad.placeholder.models.StringResourceModel
 import com.google.common.truth.Truth
+import com.likethesalad.placeholder.models.StringResourceModel
 import org.junit.Test
 import javax.xml.parsers.DocumentBuilderFactory
 
@@ -45,5 +45,19 @@ class XmlUtilsTest {
             "other_attr", "other attr value",
             "third_attr", "third value"
         )
+    }
+
+    @Test
+    fun `Check is valid xml file name to gather raw strings`() {
+        assertValidXmlRawFileName("strings.xml", true)
+        assertValidXmlRawFileName("something.xml", true)
+        assertValidXmlRawFileName("resolved.xml", false)
+        assertValidXmlRawFileName("strings.xml2", false)
+        assertValidXmlRawFileName("strings", false)
+        assertValidXmlRawFileName("strings.cxml", false)
+    }
+
+    private fun assertValidXmlRawFileName(name: String, shouldBeValid: Boolean) {
+        Truth.assertThat(XmlUtils.isValidRawXmlFileName(name)).isEqualTo(shouldBeValid)
     }
 }

@@ -1,6 +1,7 @@
 package com.likethesalad.placeholder.data
 
 import com.likethesalad.placeholder.utils.ValuesNameUtils
+import com.likethesalad.placeholder.utils.XmlUtils
 import java.io.File
 
 class ResValuesFiles(
@@ -28,7 +29,9 @@ class ResValuesFiles(
 
         for (resDir in resDirs) {
             getValuesFolderFromDir(resDir, valuesFolderName)?.let {
-                filesInValuesFolder.addAll(it.listFiles() ?: emptyArray())
+                filesInValuesFolder.addAll(it.listFiles { _, name ->
+                    XmlUtils.isValidRawXmlFileName(name)
+                } ?: emptyArray())
             }
         }
 

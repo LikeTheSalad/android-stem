@@ -16,7 +16,7 @@ class XmlValuesFilesTest {
 
         val valuesFiles = XmlValuesFiles(valuesFilesSet)
 
-        Truth.assertThat(valuesFiles.getStringResources()).containsExactly(
+        Truth.assertThat(valuesFiles.stringResources).containsExactly(
             StringResourceModel("welcome_1", "The welcome message for TesT1"),
             StringResourceModel("welcome_3", "The welcome message for TesT3"),
             StringResourceModel(
