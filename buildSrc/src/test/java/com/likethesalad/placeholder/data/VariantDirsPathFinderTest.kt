@@ -5,6 +5,7 @@ import com.likethesalad.placeholder.data.helpers.AndroidProjectHelper
 import com.likethesalad.placeholder.data.helpers.wrappers.AndroidExtensionWrapper
 import com.likethesalad.placeholder.data.helpers.wrappers.AndroidSourceDirectorySetWrapper
 import com.likethesalad.placeholder.data.helpers.wrappers.AndroidSourceSetWrapper
+import com.likethesalad.placeholder.models.VariantResPaths
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Before
@@ -59,18 +60,20 @@ class VariantDirsPathFinderTest {
         val result = variantDirsPathFinder.existingPathsResDirs
 
         // Then
-        Truth.assertThat(result.size).isEqualTo(3)
-        Truth.assertThat(result.getValue("main").map { it.absolutePath }).containsExactly(
-            "$srcPath/main/res",
-            "$srcPath/main/res2"
-        )
-        Truth.assertThat(result.getValue("full").map { it.absolutePath }).containsExactly(
-            "$srcPath/full/res"
-        )
-        Truth.assertThat(result.getValue("another").map { it.absolutePath }).containsExactly(
-            "$srcPath/another/res",
-            "$srcPath/another/res1"
-        )
+        Truth.assertThat(result).containsExactly(
+            VariantResPaths(
+                "main",
+                mainFolders.toSet()
+            ),
+            VariantResPaths(
+                "full",
+                fullFolders.toSet()
+            ),
+            VariantResPaths(
+                "another",
+                anotherFolders.toSet()
+            )
+        ).inOrder()
     }
 
     private fun createResFolderFor(path: String, vararg resFolderNames: String): List<File> {

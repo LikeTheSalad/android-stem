@@ -6,7 +6,7 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import java.io.File
 
-class ValuesFilesTest {
+class VariantValuesFoldersTest {
 
     @get:Rule
     val temporaryFolder = TemporaryFolder()
@@ -28,9 +28,9 @@ class ValuesFilesTest {
             )
         )
         val resDirs = setOf(res1, res2)
-        val resValuesFiles = ValuesFiles(variantName, resDirs)
+        val resValuesFiles = VariantValuesFolders(variantName, resDirs)
 
-        val valuesFiles = resValuesFiles.xmlValuesFiles
+        val valuesFiles = resValuesFiles.valuesStringFiles
         Truth.assertThat(valuesFiles.size).isEqualTo(3)
         assertThatValuesFilesContainsFiles(
             valuesFiles.getValue("values"),
@@ -61,9 +61,9 @@ class ValuesFilesTest {
             )
         )
         val resDirs = setOf(res1)
-        val resValuesFiles = ValuesFiles(variantName, resDirs)
+        val resValuesFiles = VariantValuesFolders(variantName, resDirs)
 
-        val valuesFiles = resValuesFiles.xmlValuesFiles
+        val valuesFiles = resValuesFiles.valuesStringFiles
         Truth.assertThat(valuesFiles.size).isEqualTo(2)
 
         assertThatValuesFilesContainsFiles(
@@ -77,8 +77,8 @@ class ValuesFilesTest {
         )
     }
 
-    private fun assertThatValuesFilesContainsFiles(xmlValuesFiles: XmlValuesFiles, vararg filePaths: String) {
-        Truth.assertThat(xmlValuesFiles.filesSet.map { it.absolutePath }).containsExactlyElementsIn(filePaths)
+    private fun assertThatValuesFilesContainsFiles(valuesStringFiles: ValuesStringFiles, vararg filePaths: String) {
+        Truth.assertThat(valuesStringFiles.filesSet.map { it.absolutePath }).containsExactlyElementsIn(filePaths)
     }
 
     private fun getResDirWithFolders(resDirName: String, valuesFolders: Map<String, List<String>>): File {

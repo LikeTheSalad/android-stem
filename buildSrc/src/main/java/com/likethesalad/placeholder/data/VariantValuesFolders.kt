@@ -4,18 +4,18 @@ import com.likethesalad.placeholder.utils.ValuesNameUtils
 import com.likethesalad.placeholder.utils.XmlUtils
 import java.io.File
 
-class ValuesFiles(
+class VariantValuesFolders(
     variantName: String,
     val resDirs: Set<File>
 ) {
 
-    val xmlValuesFiles: Map<String, XmlValuesFiles> by lazy {
-        val valuesFilesMap = mutableMapOf<String, XmlValuesFiles>()
+    val valuesStringFiles: Map<String, ValuesStringFiles> by lazy {
+        val valuesFilesMap = mutableMapOf<String, ValuesStringFiles>()
         val valuesFolderNames = ValuesNameUtils.getUniqueValuesDirName(resDirs)
         for (valuesFolderName in valuesFolderNames) {
             val filesInValuesFolder = getFilesFromValuesFolders(valuesFolderName)
             if (filesInValuesFolder.isNotEmpty()) {
-                valuesFilesMap[valuesFolderName] = XmlValuesFiles(filesInValuesFolder.toSet())
+                valuesFilesMap[valuesFolderName] = ValuesStringFiles(filesInValuesFolder.toSet())
             }
         }
 

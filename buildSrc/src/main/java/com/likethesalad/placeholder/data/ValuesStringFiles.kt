@@ -4,7 +4,7 @@ import com.likethesalad.placeholder.models.StringResourceModel
 import com.likethesalad.placeholder.utils.AndroidXmlResDocument
 import java.io.File
 
-class XmlValuesFiles(val filesSet: Set<File>) {
+class ValuesStringFiles(val filesSet: Set<File>) {
 
     val stringResources: Set<StringResourceModel> by lazy {
         filesSet.map {
