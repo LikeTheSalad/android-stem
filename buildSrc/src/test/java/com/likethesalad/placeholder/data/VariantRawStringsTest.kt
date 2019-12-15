@@ -13,10 +13,9 @@ class VariantRawStringsTest {
     @Test
     fun `Get raw strings for unflavored variant`() {
         val mainResDirs = getVariantMapDir("main", "res")
-        val variantDirsPathFinder = mockk<VariantDirsPathFinder>()
-        every { variantDirsPathFinder.existingPathsResDirs }.returns(
-            listOf(
-                VariantResPaths("main", mainResDirs.values.toSet())
+        val variantDirsPathFinder = getVariantDirsPathFinder(
+            mapOf(
+                "main" to mainResDirs
             )
         )
 
@@ -33,6 +32,47 @@ class VariantRawStringsTest {
                 null
             )
         )
+    }
+
+    @Test
+    fun `Get raw strings for unflavored variant with multiple res dirs`() {
+        val mainResDirs = getVariantMapDir("main", "res", "res_2")
+        val variantDirsPathFinder = getVariantDirsPathFinder(
+            mapOf(
+                "main" to mainResDirs
+            )
+        )
+
+        val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
+
+        Truth.assertThat(variantRawStrings.getValuesStrings()).containsExactly(
+            ValuesStrings(
+                "values",
+                ValuesStringFiles(
+                    setOf(
+                        File(mainResDirs["res"], "values/strings.xml"),
+                        File(mainResDirs["res_2"], "values/strings.xml")
+                    )
+                ),
+                null
+            )
+        )
+    }
+
+    private fun getVariantDirsPathFinder(existingVariantsWithDirs: Map<String, Map<String, File>>)
+            : VariantDirsPathFinder {
+        val variantResPaths = mutableListOf<VariantResPaths>()
+        for ((variantName, resMap) in existingVariantsWithDirs) {
+            val setOfPaths = resMap.toList().map {
+                it.second
+            }.toSet()
+            variantResPaths.add(VariantResPaths(variantName, setOfPaths))
+        }
+
+        val variantDirsPathFinder = mockk<VariantDirsPathFinder>()
+        every { variantDirsPathFinder.existingPathsResDirs }.returns(variantResPaths)
+
+        return variantDirsPathFinder
     }
 
     private fun getVariantMapDir(variantName: String, vararg resDirsNames: String): Map<String, File> {
