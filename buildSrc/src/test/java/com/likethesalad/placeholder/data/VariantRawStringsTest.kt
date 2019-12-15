@@ -3,12 +3,15 @@ package com.likethesalad.placeholder.data
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.models.ValuesStrings
 import com.likethesalad.placeholder.models.VariantResPaths
+import com.likethesalad.placeholder.testutils.TestResourcesHandler
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Test
 import java.io.File
 
 class VariantRawStringsTest {
+
+    private val resourcesHandler = TestResourcesHandler(javaClass)
 
     @Test
     fun `Get raw strings for unflavored variant`() {
@@ -36,7 +39,7 @@ class VariantRawStringsTest {
 
     @Test
     fun `Get raw strings for unflavored variant with multiple res dirs`() {
-        val mainResDirs = getVariantMapDir("main", "res", "res_2")
+        val mainResDirs = getVariantMapDir("main", "res", "res2")
         val variantDirsPathFinder = getVariantDirsPathFinder(
             mapOf(
                 "main" to mainResDirs
@@ -51,10 +54,41 @@ class VariantRawStringsTest {
                 ValuesStringFiles(
                     setOf(
                         File(mainResDirs["res"], "values/strings.xml"),
-                        File(mainResDirs["res_2"], "values/strings.xml")
+                        File(mainResDirs["res2"], "values/strings.xml")
                     )
                 ),
                 null
+            )
+        )
+    }
+
+    @Test
+    fun `Get raw strings for unflavored multilingual variant`() {
+        val mainResDirs = getVariantMapDir("main", "resMultilingual")
+        val variantDirsPathFinder = getVariantDirsPathFinder(
+            mapOf(
+                "main" to mainResDirs
+            )
+        )
+
+        val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
+
+        val baseValuesStrings = ValuesStrings(
+            "values",
+            ValuesStringFiles(
+                setOf(
+                    File(mainResDirs["resMultilingual"], "values/strings.xml")
+                )
+            ),
+            null
+        )
+        Truth.assertThat(variantRawStrings.getValuesStrings()).containsExactly(
+            baseValuesStrings,
+            ValuesStrings(
+                "values-es",
+                ValuesStringFiles(
+                    setOf(File(mainResDirs["resMultilingual"], "values-es/strings_es.xml"))
+                ), baseValuesStrings
             )
         )
     }
@@ -79,7 +113,7 @@ class VariantRawStringsTest {
         val dirs = mutableMapOf<String, File>()
         for (resDirName in resDirsNames) {
             dirs[resDirName] =
-                File(javaClass.getResource("raw/variantMock/$variantName/$resDirName").file)
+                resourcesHandler.getResourceFile("raw/variantMock/$variantName/$resDirName")
         }
         return dirs
     }
