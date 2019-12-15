@@ -73,10 +73,10 @@ class VariantRawStrings(private val variantDirsPathFinder: VariantDirsPathFinder
         valuesStringFilesMap: Map<String, ValuesStringFiles>,
         parentStrings: ValuesStrings?
     ): ValuesStrings? {
-        val stringResources = valuesStringFilesMap[valuesFolderName]?.stringResources ?: return null
+        val valuesStringFiles = valuesStringFilesMap[valuesFolderName] ?: return null
         return ValuesStrings(
             valuesFolderName,
-            stringResources,
+            valuesStringFiles,
             parentStrings
         )
     }
