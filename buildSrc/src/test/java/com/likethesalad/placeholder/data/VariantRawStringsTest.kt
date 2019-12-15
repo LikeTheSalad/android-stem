@@ -1,7 +1,6 @@
 package com.likethesalad.placeholder.data
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.models.StringResourceModel
 import com.likethesalad.placeholder.models.ValuesStrings
 import com.likethesalad.placeholder.models.VariantResPaths
 import io.mockk.every
@@ -13,29 +12,35 @@ class VariantRawStringsTest {
 
     @Test
     fun `Get raw strings for unflavored variant`() {
-//        val mainSetDir = getVariantSetDir("main")
-//        val variantDirsPathFinder = mockk<VariantDirsPathFinder>()
-//        every { variantDirsPathFinder.existingPathsResDirs }.returns(
-//            listOf(
-//                VariantResPaths("main", mainSetDir)
-//            )
-//        )
-//
-//        val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
-//
-//        Truth.assertThat(variantRawStrings.getValuesStrings()).containsExactly(
-//            ValuesStrings(
-//                "values",
-//                setOf(
-//                    StringResourceModel("welcome_1", "The welcome message for TesT1"),
-//                    StringResourceModel("message_1", "The message TesT1")
-//                ),
-//                null
-//            )
-//        )
+        val mainResDirs = getVariantMapDir("main", "res")
+        val variantDirsPathFinder = mockk<VariantDirsPathFinder>()
+        every { variantDirsPathFinder.existingPathsResDirs }.returns(
+            listOf(
+                VariantResPaths("main", mainResDirs.values.toSet())
+            )
+        )
+
+        val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
+
+        Truth.assertThat(variantRawStrings.getValuesStrings()).containsExactly(
+            ValuesStrings(
+                "values",
+                ValuesStringFiles(
+                    setOf(
+                        File(mainResDirs["res"], "values/strings.xml")
+                    )
+                ),
+                null
+            )
+        )
     }
 
-    private fun getVariantSetDir(variantName: String): Set<File> {
-        return setOf(File(javaClass.getResource("raw/variantMock/$variantName/res").file))
+    private fun getVariantMapDir(variantName: String, vararg resDirsNames: String): Map<String, File> {
+        val dirs = mutableMapOf<String, File>()
+        for (resDirName in resDirsNames) {
+            dirs[resDirName] =
+                File(javaClass.getResource("raw/variantMock/$variantName/$resDirName").file)
+        }
+        return dirs
     }
 }
