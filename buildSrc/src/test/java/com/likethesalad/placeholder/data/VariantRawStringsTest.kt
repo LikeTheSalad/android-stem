@@ -26,7 +26,7 @@ class VariantRawStringsTest {
         Truth.assertThat(variantRawStrings.getValuesStrings()).containsExactly(
             ValuesStrings(
                 "values",
-                listOf(
+                setOf(
                     StringResourceModel("welcome_1", "The welcome message for TesT1"),
                     StringResourceModel("message_1", "The message TesT1")
                 ),

@@ -9,7 +9,7 @@ class ValuesStringsTest {
     fun `Get strings previously set`() {
         val resStrings = ValuesStrings(
             "values",
-            listOf(
+            setOf(
                 StringResourceModel("my_str_name", "The content"),
                 StringResourceModel("my_str_name2", "The content2")
             )
@@ -27,12 +27,12 @@ class ValuesStringsTest {
     fun `Get strings from parent`() {
         val parentResStrings = ValuesStrings(
             "values",
-            listOf(StringResourceModel("the_parent_string", "Parent value"))
+            setOf(StringResourceModel("the_parent_string", "Parent value"))
         )
 
         val resStrings = ValuesStrings(
             "values",
-            listOf(StringResourceModel("child_string", "Child value")),
+            setOf(StringResourceModel("child_string", "Child value")),
             parentResStrings
         )
 
@@ -46,7 +46,7 @@ class ValuesStringsTest {
     fun `Override parent strings content with the same name`() {
         val parentResStrings = ValuesStrings(
             "values",
-            listOf(
+            setOf(
                 StringResourceModel("the_parent_string", "Parent value"),
                 StringResourceModel("common_string", "Parent common string")
             )
@@ -54,7 +54,7 @@ class ValuesStringsTest {
 
         val resStrings = ValuesStrings(
             "values",
-            listOf(
+            setOf(
                 StringResourceModel("child_string", "Child value"),
                 StringResourceModel("common_string", "Child common string")
             ),
@@ -81,7 +81,7 @@ class ValuesStringsTest {
         )
         val parentResStrings = ValuesStrings(
             "values",
-            listOf(
+            setOf(
                 commonParentString,
                 StringResourceModel("other_parent_string", "Some parent string")
             )
@@ -89,7 +89,7 @@ class ValuesStringsTest {
 
         val resStrings = ValuesStrings(
             "values",
-            listOf(
+            setOf(
                 StringResourceModel(
                     mapOf(
                         "name" to commonStringName,
@@ -118,12 +118,12 @@ class ValuesStringsTest {
         // Given
         val parentResStrings = ValuesStrings(
             "values",
-            listOf(StringResourceModel("the_parent_string", "Parent value"))
+            setOf(StringResourceModel("the_parent_string", "Parent value"))
         )
 
         val resStrings = ValuesStrings(
             "values",
-            listOf(
+            setOf(
                 StringResourceModel("child_string", "Child value"),
                 StringResourceModel("another_string", "Child another value")
             ),
@@ -143,14 +143,14 @@ class ValuesStringsTest {
         // Given
         val resStringsWithTemplates = ValuesStrings(
             "values",
-            listOf(
+            setOf(
                 StringResourceModel("string_name", "String value"),
                 StringResourceModel("template_some_string", "String value \${string_name}")
             )
         )
         val resStringsWithNoTemplates = ValuesStrings(
             "values",
-            listOf(
+            setOf(
                 StringResourceModel("string_name", "String value"),
                 StringResourceModel("some_string", "String value2")
             )
@@ -166,7 +166,7 @@ class ValuesStringsTest {
         // Given
         val parentStrings = ValuesStrings(
             "values",
-            listOf(
+            setOf(
                 StringResourceModel("string_name", "String value"),
                 StringResourceModel("template_some_string", "String value \${string_name}"),
                 StringResourceModel("template_other_string", "String value2")
@@ -175,7 +175,7 @@ class ValuesStringsTest {
 
         val resStrings = ValuesStrings(
             "values",
-            listOf(
+            setOf(
                 StringResourceModel("child_string_name", "Child value"),
                 StringResourceModel("template_child_string", "Child template"),
                 StringResourceModel("template_some_string", "Child value common")
@@ -215,7 +215,7 @@ class ValuesStringsTest {
     private fun assertValuesFolderNameSuffix(valuesFolderName: String, expectedSuffix: String) {
         val resStrings = ValuesStrings(
             valuesFolderName,
-            emptyList()
+            emptySet()
         )
         Truth.assertThat(resStrings.valuesSuffix).isEqualTo(expectedSuffix)
     }
@@ -223,7 +223,7 @@ class ValuesStringsTest {
     private fun getResStringsWithNoValuesForTemplates(): ValuesStrings {
         return ValuesStrings(
             "values",
-            listOf(
+            setOf(
                 StringResourceModel("some_string", "Some content"),
                 StringResourceModel("template_other_string", "Some content with \${another_string}")
             )
@@ -233,7 +233,7 @@ class ValuesStringsTest {
     private fun getResStringsWithValuesForLocalTemplates(): ValuesStrings {
         return ValuesStrings(
             "values",
-            listOf(
+            setOf(
                 StringResourceModel("some_string", "Some content"),
                 StringResourceModel("template_other_string", "Some content with \${some_string}")
             )
@@ -243,13 +243,13 @@ class ValuesStringsTest {
     private fun getResStringsWithValuesForParentTemplates(): ValuesStrings {
         val parentResStrings = ValuesStrings(
             "values",
-            listOf(
+            setOf(
                 StringResourceModel("template_other_string", "Some content with \${some_string}")
             )
         )
         return ValuesStrings(
             "values",
-            listOf(
+            setOf(
                 StringResourceModel("some_string", "Some content")
             ), parentResStrings
         )
@@ -258,13 +258,13 @@ class ValuesStringsTest {
     private fun getResStringsWithValuesForMergedTemplates(): ValuesStrings {
         val parentResStrings = ValuesStrings(
             "values",
-            listOf(
+            setOf(
                 StringResourceModel("template_other_string", "Some content with \${random_string}")
             )
         )
         return ValuesStrings(
             "values",
-            listOf(
+            setOf(
                 StringResourceModel("template_other_string", "Some content with \${some_string}"),
                 StringResourceModel("some_string", "Some content")
             ), parentResStrings

@@ -2,9 +2,9 @@ package com.likethesalad.placeholder.models
 
 import com.likethesalad.placeholder.data.Constants
 
-class ValuesStrings(
-    valuesFolderName: String,
-    strings: List<StringResourceModel>,
+data class ValuesStrings(
+    val valuesFolderName: String,
+    val strings: Set<StringResourceModel>,
     private val parentValuesStrings: ValuesStrings? = null
 ) {
 

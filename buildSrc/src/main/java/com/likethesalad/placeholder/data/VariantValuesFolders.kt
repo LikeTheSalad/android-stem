@@ -6,7 +6,7 @@ import java.io.File
 
 class VariantValuesFolders(
     variantName: String,
-    val resDirs: Set<File>
+    private val resDirs: Set<File>
 ) {
 
     val valuesStringFiles: Map<String, ValuesStringFiles> by lazy {
