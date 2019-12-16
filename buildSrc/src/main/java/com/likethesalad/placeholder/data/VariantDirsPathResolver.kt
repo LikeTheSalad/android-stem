@@ -1,17 +1,16 @@
 package com.likethesalad.placeholder.data
 
+import com.likethesalad.placeholder.data.VariantDirsPathHandler.Companion.BASE_DIR_PATH
+
 class VariantDirsPathResolver(
     private val variantName: String,
     private val flavors: List<String>,
-    private val variantType: String
+    val variantType: String
 ) {
-    companion object {
-        private const val BASE_PATH = "main"
-    }
 
     val pathList: List<String> by lazy {
         val pathList = mutableListOf<String>()
-        pathList.add(BASE_PATH)
+        pathList.add(BASE_DIR_PATH)
         addFlavorPaths(pathList)
         addVariantNameWithoutType(pathList)
         addVariantType(pathList)
