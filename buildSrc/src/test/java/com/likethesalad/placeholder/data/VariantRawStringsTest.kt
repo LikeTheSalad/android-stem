@@ -29,7 +29,7 @@ class VariantRawStringsTest {
                 "values",
                 ValuesStringFiles(
                     setOf(
-                        File(mainResDirs["res"], "values/strings.xml")
+                        File(mainResDirs.getValue("res"), "values/strings.xml")
                     )
                 ),
                 null
@@ -53,8 +53,8 @@ class VariantRawStringsTest {
                 "values",
                 ValuesStringFiles(
                     setOf(
-                        File(mainResDirs["res"], "values/strings.xml"),
-                        File(mainResDirs["res2"], "values/strings.xml")
+                        File(mainResDirs.getValue("res"), "values/strings.xml"),
+                        File(mainResDirs.getValue("res2"), "values/strings.xml")
                     )
                 ),
                 null
@@ -77,7 +77,7 @@ class VariantRawStringsTest {
             "values",
             ValuesStringFiles(
                 setOf(
-                    File(mainResDirs["resMultilingual"], "values/strings.xml")
+                    File(mainResDirs.getValue("resMultilingual"), "values/strings.xml")
                 )
             ),
             null
@@ -87,8 +87,96 @@ class VariantRawStringsTest {
             ValuesStrings(
                 "values-es",
                 ValuesStringFiles(
-                    setOf(File(mainResDirs["resMultilingual"], "values-es/strings_es.xml"))
+                    setOf(File(mainResDirs.getValue("resMultilingual"), "values-es/strings_es.xml"))
                 ), baseValuesStrings
+            )
+        )
+    }
+
+    @Test
+    fun `Get raw strings for single dimension flavored variant`() {
+        val mainVariant = "main"
+        val flavor = "client"
+        val mainResDirs = getVariantMapDir(mainVariant, "res")
+        val flavorResDirs = getVariantMapDir(flavor, "res")
+        val variantDirsPathFinder = getVariantDirsPathFinder(
+            mapOf(
+                mainVariant to mainResDirs,
+                flavor to flavorResDirs
+            )
+        )
+
+        val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
+
+        val baseValuesStrings = ValuesStrings(
+            "values",
+            ValuesStringFiles(
+                setOf(
+                    File(mainResDirs.getValue("res"), "values/strings.xml")
+                )
+            ),
+            null
+        )
+
+        Truth.assertThat(variantRawStrings.getValuesStrings()).containsExactly(
+            ValuesStrings(
+                "values",
+                ValuesStringFiles(
+                    setOf(
+                        File(flavorResDirs.getValue("res"), "values/strings.xml")
+                    )
+                ),
+                baseValuesStrings
+            )
+        )
+    }
+
+    @Test
+    fun `Get raw strings for single dimension multilingual base flavored variant`() {
+        val mainVariant = "main"
+        val flavor = "client"
+        val mainResDirs = getVariantMapDir(mainVariant, "res", "resMultilingual")
+        val flavorResDirs = getVariantMapDir(flavor, "res")
+        val variantDirsPathFinder = getVariantDirsPathFinder(
+            mapOf(
+                mainVariant to mainResDirs,
+                flavor to flavorResDirs
+            )
+        )
+
+        val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
+
+        val mainBaseValuesStrings = ValuesStrings(
+            "values",
+            ValuesStringFiles(
+                setOf(
+                    File(mainResDirs.getValue("res"), "values/strings.xml"),
+                    File(mainResDirs.getValue("resMultilingual"), "values/strings.xml")
+                )
+            ),
+            null
+        )
+
+        val clientBaseValuesStrings = ValuesStrings(
+            "values",
+            ValuesStringFiles(
+                setOf(
+                    File(flavorResDirs.getValue("res"), "values/strings.xml")
+                )
+            ),
+            mainBaseValuesStrings
+        )
+
+        Truth.assertThat(variantRawStrings.getValuesStrings()).containsExactly(
+            clientBaseValuesStrings,
+            ValuesStrings(
+                "values-es",
+                ValuesStringFiles(
+                    setOf(
+                        File(mainResDirs.getValue("resMultilingual"), "values-es/strings_es.xml")
+                    )
+                ),
+                clientBaseValuesStrings
             )
         )
     }

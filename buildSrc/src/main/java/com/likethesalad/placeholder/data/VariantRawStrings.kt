@@ -56,11 +56,14 @@ class VariantRawStrings(private val variantDirsPathFinder: VariantDirsPathFinder
     ): ValuesStrings? {
         var lastValuesStrings: ValuesStrings? = parentStrings
         for (valuesStringFilesMap in valuesStringFilesMapList) {
-            lastValuesStrings = getValuesStringsFromVariantValuesFolder(
+            val valuesStrings = getValuesStringsFromVariantValuesFolder(
                 valuesFolderName,
                 valuesStringFilesMap,
                 lastValuesStrings
             )
+            if (valuesStrings != null) {
+                lastValuesStrings = valuesStrings
+            }
         }
         if (lastValuesStrings != parentStrings) {
             return lastValuesStrings
