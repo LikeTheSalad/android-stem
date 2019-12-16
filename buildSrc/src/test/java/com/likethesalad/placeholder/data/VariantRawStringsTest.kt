@@ -24,7 +24,7 @@ class VariantRawStringsTest {
 
         val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
 
-        Truth.assertThat(variantRawStrings.getValuesStrings()).containsExactly(
+        Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
             ValuesStrings(
                 "values",
                 ValuesStringFiles(
@@ -48,7 +48,7 @@ class VariantRawStringsTest {
 
         val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
 
-        Truth.assertThat(variantRawStrings.getValuesStrings()).containsExactly(
+        Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
             ValuesStrings(
                 "values",
                 ValuesStringFiles(
@@ -82,7 +82,7 @@ class VariantRawStringsTest {
             ),
             null
         )
-        Truth.assertThat(variantRawStrings.getValuesStrings()).containsExactly(
+        Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
             baseValuesStrings,
             ValuesStrings(
                 "values-es",
@@ -118,7 +118,7 @@ class VariantRawStringsTest {
             null
         )
 
-        Truth.assertThat(variantRawStrings.getValuesStrings()).containsExactly(
+        Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
             ValuesStrings(
                 "values",
                 ValuesStringFiles(
@@ -167,7 +167,7 @@ class VariantRawStringsTest {
             mainBaseValuesStrings
         )
 
-        Truth.assertThat(variantRawStrings.getValuesStrings()).containsExactly(
+        Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
             clientBaseValuesStrings,
             ValuesStrings(
                 "values-es",
@@ -217,7 +217,7 @@ class VariantRawStringsTest {
             mainBaseValuesStrings
         )
 
-        Truth.assertThat(variantRawStrings.getValuesStrings()).containsExactly(
+        Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
             clientBaseValuesStrings,
             ValuesStrings(
                 "values-es",
@@ -278,7 +278,7 @@ class VariantRawStringsTest {
             clientBaseValuesStrings
         )
 
-        Truth.assertThat(variantRawStrings.getValuesStrings()).containsExactly(
+        Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
             clientBaseValuesStrings,
             ValuesStrings(
                 "values-es",

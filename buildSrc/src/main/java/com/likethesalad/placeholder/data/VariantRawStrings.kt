@@ -8,7 +8,7 @@ class VariantRawStrings(private val variantDirsPathFinder: VariantDirsPathFinder
         private const val BASE_VALUES_FOLDER_NAME = "values"
     }
 
-    fun getValuesStrings(): Collection<ValuesStrings> {
+    val valuesStrings: Collection<ValuesStrings> by lazy {
         val valuesStringFilesMapList = getStringFilesMapList()
         val uniqueValuesFolderNames = getUniqueValuesFolderNames(valuesStringFilesMapList.map { it.keys })
 
@@ -17,7 +17,7 @@ class VariantRawStrings(private val variantDirsPathFinder: VariantDirsPathFinder
             valuesStringFilesMapList
         )
 
-        return valuesStringsPerFolder.values
+        valuesStringsPerFolder.values
     }
 
     private fun getValuesStringsMapPerFolder(
