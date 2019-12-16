@@ -4,6 +4,7 @@ import com.likethesalad.placeholder.data.Constants
 import com.likethesalad.placeholder.data.ValuesStringFiles
 
 data class ValuesStrings(
+    val variantName: String,
     val valuesFolderName: String,
     val valuesStringFiles: ValuesStringFiles,
     private val parentValuesStrings: ValuesStrings? = null

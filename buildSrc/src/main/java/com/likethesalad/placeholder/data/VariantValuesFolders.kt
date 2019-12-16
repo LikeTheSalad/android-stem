@@ -5,7 +5,7 @@ import com.likethesalad.placeholder.utils.XmlUtils
 import java.io.File
 
 class VariantValuesFolders(
-    variantName: String,
+    val variantName: String,
     private val resDirs: Set<File>
 ) {
 

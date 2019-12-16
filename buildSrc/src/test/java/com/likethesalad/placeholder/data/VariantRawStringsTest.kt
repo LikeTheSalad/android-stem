@@ -26,6 +26,7 @@ class VariantRawStringsTest {
 
         Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
             ValuesStrings(
+                "main",
                 "values",
                 ValuesStringFiles(
                     setOf(
@@ -50,6 +51,7 @@ class VariantRawStringsTest {
 
         Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
             ValuesStrings(
+                "main",
                 "values",
                 ValuesStringFiles(
                     setOf(
@@ -74,6 +76,7 @@ class VariantRawStringsTest {
         val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
 
         val baseValuesStrings = ValuesStrings(
+            "main",
             "values",
             ValuesStringFiles(
                 setOf(
@@ -85,6 +88,7 @@ class VariantRawStringsTest {
         Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
             baseValuesStrings,
             ValuesStrings(
+                "main",
                 "values-es",
                 ValuesStringFiles(
                     setOf(File(mainResDirs.getValue("resMultilingual"), "values-es/strings_es.xml"))
@@ -109,6 +113,7 @@ class VariantRawStringsTest {
         val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
 
         val baseValuesStrings = ValuesStrings(
+            "main",
             "values",
             ValuesStringFiles(
                 setOf(
@@ -120,6 +125,7 @@ class VariantRawStringsTest {
 
         Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
             ValuesStrings(
+                "client",
                 "values",
                 ValuesStringFiles(
                     setOf(
@@ -147,6 +153,7 @@ class VariantRawStringsTest {
         val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
 
         val mainBaseValuesStrings = ValuesStrings(
+            "main",
             "values",
             ValuesStringFiles(
                 setOf(
@@ -158,6 +165,7 @@ class VariantRawStringsTest {
         )
 
         val clientBaseValuesStrings = ValuesStrings(
+            "client",
             "values",
             ValuesStringFiles(
                 setOf(
@@ -170,6 +178,7 @@ class VariantRawStringsTest {
         Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
             clientBaseValuesStrings,
             ValuesStrings(
+                "main",
                 "values-es",
                 ValuesStringFiles(
                     setOf(
@@ -197,6 +206,7 @@ class VariantRawStringsTest {
         val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
 
         val mainBaseValuesStrings = ValuesStrings(
+            "main",
             "values",
             ValuesStringFiles(
                 setOf(
@@ -207,6 +217,7 @@ class VariantRawStringsTest {
         )
 
         val clientBaseValuesStrings = ValuesStrings(
+            "client",
             "values",
             ValuesStringFiles(
                 setOf(
@@ -220,6 +231,7 @@ class VariantRawStringsTest {
         Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
             clientBaseValuesStrings,
             ValuesStrings(
+                "client",
                 "values-es",
                 ValuesStringFiles(
                     setOf(
@@ -247,6 +259,7 @@ class VariantRawStringsTest {
         val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
 
         val mainBaseValuesStrings = ValuesStrings(
+            "main",
             "values",
             ValuesStringFiles(
                 setOf(
@@ -258,6 +271,7 @@ class VariantRawStringsTest {
         )
 
         val clientBaseValuesStrings = ValuesStrings(
+            "client",
             "values",
             ValuesStringFiles(
                 setOf(
@@ -269,6 +283,7 @@ class VariantRawStringsTest {
         )
 
         val mainEsBaseValuesStrings = ValuesStrings(
+            "main",
             "values-es",
             ValuesStringFiles(
                 setOf(
@@ -281,6 +296,7 @@ class VariantRawStringsTest {
         Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
             clientBaseValuesStrings,
             ValuesStrings(
+                "client",
                 "values-es",
                 ValuesStringFiles(
                     setOf(
