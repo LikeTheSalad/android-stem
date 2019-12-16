@@ -18,6 +18,14 @@ data class ValuesStrings(
         VALUES_SUFFIX_REGEX.find(valuesFolderName)!!.groupValues[1]
     }
     private val stringsMap = mutableMapOf<String, StringResourceModel>()
+    private val hasLocalTemplates: Boolean by lazy {
+        stringsMap.keys.any { Constants.TEMPLATE_STRING_REGEX.matches(it) }
+    }
+    private val hasLocalValuesForTemplates: Boolean by lazy {
+        val nonTemplatesPlaceholders = getLocalNonTemplatesNames().map { "\${$it}" }
+        val mergedTemplatesContents = mergedTemplates.map { it.content }
+        nonTemplatesPlaceholders.any { placeholder -> mergedTemplatesContents.any { it.contains(placeholder) } }
+    }
 
     init {
         addStringsToMap(valuesStringFiles.stringResources, stringsMap)
@@ -48,13 +56,10 @@ data class ValuesStrings(
 
         mergedMap.values.sorted()
     }
-    val hasLocalTemplates: Boolean by lazy {
-        stringsMap.keys.any { Constants.TEMPLATE_STRING_REGEX.matches(it) }
-    }
-    val hasLocalValuesForTemplates: Boolean by lazy {
-        val nonTemplatesPlaceholders = getLocalNonTemplatesNames().map { "\${$it}" }
-        val mergedTemplatesContents = mergedTemplates.map { it.content }
-        nonTemplatesPlaceholders.any { placeholder -> mergedTemplatesContents.any { it.contains(placeholder) } }
+    val topContentVariantName: String by lazy {
+        if (hasLocalTemplates || hasLocalValuesForTemplates) {
+            variantName
+        } else parentValuesStrings?.topContentVariantName ?: ""
     }
 
     private fun getLocalNonTemplatesNames(): List<String> {

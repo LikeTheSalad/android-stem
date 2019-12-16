@@ -169,35 +169,6 @@ class ValuesStringsTest {
     }
 
     @Test
-    fun `Get if it contains local templates`() {
-        // Given
-        val resStringsWithTemplates = ValuesStrings(
-            "main",
-            "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel("string_name", "String value"),
-                    StringResourceModel("template_some_string", "String value \${string_name}")
-                )
-            )
-        )
-        val resStringsWithNoTemplates = ValuesStrings(
-            "main",
-            "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel("string_name", "String value"),
-                    StringResourceModel("some_string", "String value2")
-                )
-            )
-        )
-
-        // Then
-        Truth.assertThat(resStringsWithTemplates.hasLocalTemplates).isTrue()
-        Truth.assertThat(resStringsWithNoTemplates.hasLocalTemplates).isFalse()
-    }
-
-    @Test
     fun `Get merged templates sorted by name`() {
         // Given
         val parentStrings = ValuesStrings(
@@ -233,25 +204,167 @@ class ValuesStringsTest {
     }
 
     @Test
-    fun `Get if it has values for templates`() {
-        // Given
-        val resStringsWithValuesForLocal = getResStringsWithValuesForLocalTemplates()
-        val resStringsWithValuesForParent = getResStringsWithValuesForParentTemplates()
-        val resStringsWithValuesForMerged = getResStringsWithValuesForMergedTemplates()
-        val resStringsWithNoValuesForTemplates = getResStringsWithNoValuesForTemplates()
-
-        // Then
-        Truth.assertThat(resStringsWithValuesForLocal.hasLocalValuesForTemplates).isTrue()
-        Truth.assertThat(resStringsWithValuesForParent.hasLocalValuesForTemplates).isTrue()
-        Truth.assertThat(resStringsWithValuesForMerged.hasLocalValuesForTemplates).isTrue()
-        Truth.assertThat(resStringsWithNoValuesForTemplates.hasLocalValuesForTemplates).isFalse()
-    }
-
-    @Test
     fun `Get values folder name suffix`() {
         assertValuesFolderNameSuffix("values", "")
         assertValuesFolderNameSuffix("values-es", "-es")
         assertValuesFolderNameSuffix("values-es-rVE", "-es-rVE")
+    }
+
+    @Test
+    fun `Get top content variant name when client has templates`() {
+        // Given
+        val parentStrings = ValuesStrings(
+            "main",
+            "values",
+            getValuesStringFiles(
+                setOf(
+                    StringResourceModel("string_name", "String value"),
+                    StringResourceModel("template_some_string", "String value \${string_name}"),
+                    StringResourceModel("template_other_string", "String value2")
+                )
+            )
+        )
+
+        val resStrings = ValuesStrings(
+            "client",
+            "values",
+            getValuesStringFiles(
+                setOf(
+                    StringResourceModel("child_string_name", "Child value"),
+                    StringResourceModel("template_child_string", "Child template"),
+                    StringResourceModel("template_some_string", "Child value common")
+                )
+            ), parentStrings
+        )
+
+        // Then
+        Truth.assertThat(resStrings.topContentVariantName).isEqualTo("client")
+    }
+
+    @Test
+    fun `Get top content variant name when client has values`() {
+        // Given
+        val parentStrings = ValuesStrings(
+            "main",
+            "values",
+            getValuesStringFiles(
+                setOf(
+                    StringResourceModel("string_name", "String value"),
+                    StringResourceModel("template_some_string", "String value \${string_name}"),
+                    StringResourceModel("template_other_string", "String value2")
+                )
+            )
+        )
+
+        val resStrings = ValuesStrings(
+            "client",
+            "values",
+            getValuesStringFiles(
+                setOf(
+                    StringResourceModel("string_name", "Child value")
+                )
+            ), parentStrings
+        )
+
+        // Then
+        Truth.assertThat(resStrings.topContentVariantName).isEqualTo("client")
+    }
+
+    @Test
+    fun `Get top content variant name when client has values from grand parent templates`() {
+        // Given
+        val parentStrings = ValuesStrings(
+            "main",
+            "values",
+            getValuesStringFiles(
+                setOf(
+                    StringResourceModel("string_name", "String value"),
+                    StringResourceModel("template_some_string", "String value \${string_name}"),
+                    StringResourceModel("template_other_string", "String value2")
+                )
+            )
+        )
+
+        val resStrings = ValuesStrings(
+            "client",
+            "values",
+            getValuesStringFiles(
+                setOf(
+                    StringResourceModel("some_string_name", "Child value")
+                )
+            ), parentStrings
+        )
+
+        val resStrings2 = ValuesStrings(
+            "environment",
+            "values",
+            getValuesStringFiles(
+                setOf(
+                    StringResourceModel("string_name", "Environment value")
+                )
+            ), resStrings
+        )
+
+        // Then
+        Truth.assertThat(resStrings2.topContentVariantName).isEqualTo("environment")
+    }
+
+    @Test
+    fun `Get top content variant name when client has neither values nor templates`() {
+        // Given
+        val parentStrings = ValuesStrings(
+            "main",
+            "values",
+            getValuesStringFiles(
+                setOf(
+                    StringResourceModel("string_name", "String value"),
+                    StringResourceModel("template_some_string", "String value \${string_name}"),
+                    StringResourceModel("template_other_string", "String value2")
+                )
+            )
+        )
+
+        val resStrings = ValuesStrings(
+            "client",
+            "values",
+            getValuesStringFiles(
+                setOf(
+                    StringResourceModel("custom_client_string", "Child value")
+                )
+            ), parentStrings
+        )
+
+        // Then
+        Truth.assertThat(resStrings.topContentVariantName).isEqualTo("main")
+    }
+
+    @Test
+    fun `Get top content variant name when client and main have neither values nor templates`() {
+        // Given
+        val parentStrings = ValuesStrings(
+            "main",
+            "values",
+            getValuesStringFiles(
+                setOf(
+                    StringResourceModel("string_name", "String value"),
+                    StringResourceModel("some_string", "String value2"),
+                    StringResourceModel("other_string", "String value3")
+                )
+            )
+        )
+
+        val resStrings = ValuesStrings(
+            "client",
+            "values",
+            getValuesStringFiles(
+                setOf(
+                    StringResourceModel("custom_client_string", "Child value")
+                )
+            ), parentStrings
+        )
+
+        // Then
+        Truth.assertThat(resStrings.topContentVariantName).isEqualTo("")
     }
 
     private fun assertValuesFolderNameSuffix(valuesFolderName: String, expectedSuffix: String) {
