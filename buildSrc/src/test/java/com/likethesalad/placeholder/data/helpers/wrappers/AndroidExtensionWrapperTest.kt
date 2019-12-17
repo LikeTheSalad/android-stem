@@ -18,8 +18,8 @@ class AndroidExtensionWrapperTest {
         mockk(), mockk(), mockk()
     )
     private val appVariants = setOf(
-        TestApplicationVariant("demoDebug", "demo"),
-        TestApplicationVariant("paidDebug", "paid")
+        TestApplicationVariant("demoDebug", "demo", emptyList()),
+        TestApplicationVariant("paidDebug", "paid", emptyList())
     )
 
     @Before

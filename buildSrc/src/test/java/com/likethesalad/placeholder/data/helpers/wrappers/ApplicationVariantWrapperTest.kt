@@ -2,6 +2,7 @@ package com.likethesalad.placeholder.data.helpers.wrappers
 
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.data.helpers.wrappers.testutils.TestApplicationVariant
+import com.likethesalad.placeholder.data.helpers.wrappers.testutils.TestProductFlavor
 import org.junit.Before
 import org.junit.Test
 
@@ -10,10 +11,14 @@ class ApplicationVariantWrapperTest {
     private lateinit var applicationVariantWrapper: ApplicationVariantWrapper
     private val name = "theName"
     private val flavor = "the"
+    private val productFlavors = listOf(
+        TestProductFlavor("one"),
+        TestProductFlavor("two")
+    )
 
     @Before
     fun setUp() {
-        val testApplicationVariant = TestApplicationVariant(name, flavor)
+        val testApplicationVariant = TestApplicationVariant(name, flavor, productFlavors)
         applicationVariantWrapper = ApplicationVariantWrapper(testApplicationVariant)
     }
 
@@ -33,5 +38,14 @@ class ApplicationVariantWrapperTest {
 
         // Then:
         Truth.assertThat(result).isEqualTo(flavor)
+    }
+
+    @Test
+    fun check_getProductFlavors() {
+        // When:
+        val result = applicationVariantWrapper.getProductFlavors()
+
+        // Then:
+        Truth.assertThat(result).isEqualTo(productFlavors.map { ProductFlavorWrapper(it) })
     }
 }

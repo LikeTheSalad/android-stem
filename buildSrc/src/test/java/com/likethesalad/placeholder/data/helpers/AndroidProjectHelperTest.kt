@@ -31,7 +31,7 @@ class AndroidProjectHelperTest {
             TestAndroidSourceSet("values", sourceSetFiles)
         )
         val appVariants = setOf(
-            TestApplicationVariant("demoDebug", "demo")
+            TestApplicationVariant("demoDebug", "demo", emptyList())
         )
         val androidExtension = TestAndroidExtension(sourceSets, appVariants)
         val extensions = mockk<ExtensionContainer>()
