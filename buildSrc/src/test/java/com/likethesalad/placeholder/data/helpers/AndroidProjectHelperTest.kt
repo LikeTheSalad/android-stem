@@ -1,6 +1,7 @@
 package com.likethesalad.placeholder.data.helpers
 
 import com.google.common.truth.Truth
+import com.likethesalad.placeholder.data.helpers.wrappers.testutils.TestAndroidBuildType
 import com.likethesalad.placeholder.data.helpers.wrappers.testutils.TestAndroidExtension
 import com.likethesalad.placeholder.data.helpers.wrappers.testutils.TestAndroidSourceSet
 import com.likethesalad.placeholder.data.helpers.wrappers.testutils.TestApplicationVariant
@@ -31,7 +32,10 @@ class AndroidProjectHelperTest {
             TestAndroidSourceSet("values", sourceSetFiles)
         )
         val appVariants = setOf(
-            TestApplicationVariant("demoDebug", "demo", emptyList())
+            TestApplicationVariant(
+                "demoDebug", "demo", emptyList(),
+                TestAndroidBuildType("debug")
+            )
         )
         val androidExtension = TestAndroidExtension(sourceSets, appVariants)
         val extensions = mockk<ExtensionContainer>()
@@ -61,6 +65,6 @@ class AndroidProjectHelperTest {
     @Test
     fun `Get project src dir path`() {
         val srcDirPath = "/some/path/to/src"
-        every {  }
+        every { }
     }
 }

@@ -1,6 +1,7 @@
 package com.likethesalad.placeholder.data.helpers.wrappers
 
 import com.google.common.truth.Truth
+import com.likethesalad.placeholder.data.helpers.wrappers.testutils.TestAndroidBuildType
 import com.likethesalad.placeholder.data.helpers.wrappers.testutils.TestAndroidExtension
 import com.likethesalad.placeholder.data.helpers.wrappers.testutils.TestAndroidSourceSet
 import com.likethesalad.placeholder.data.helpers.wrappers.testutils.TestApplicationVariant
@@ -18,8 +19,14 @@ class AndroidExtensionWrapperTest {
         mockk(), mockk(), mockk()
     )
     private val appVariants = setOf(
-        TestApplicationVariant("demoDebug", "demo", emptyList()),
-        TestApplicationVariant("paidDebug", "paid", emptyList())
+        TestApplicationVariant(
+            "demoDebug", "demo", emptyList(),
+            TestAndroidBuildType("debug")
+        ),
+        TestApplicationVariant(
+            "paidDebug", "paid", emptyList(),
+            TestAndroidBuildType("debug")
+        )
     )
 
     @Before

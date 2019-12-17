@@ -1,6 +1,7 @@
 package com.likethesalad.placeholder.data.helpers.wrappers
 
 import com.google.common.truth.Truth
+import com.likethesalad.placeholder.data.helpers.wrappers.testutils.TestAndroidBuildType
 import com.likethesalad.placeholder.data.helpers.wrappers.testutils.TestApplicationVariant
 import com.likethesalad.placeholder.data.helpers.wrappers.testutils.TestProductFlavor
 import org.junit.Before
@@ -18,7 +19,10 @@ class ApplicationVariantWrapperTest {
 
     @Before
     fun setUp() {
-        val testApplicationVariant = TestApplicationVariant(name, flavor, productFlavors)
+        val testApplicationVariant = TestApplicationVariant(
+            name, flavor, productFlavors,
+            TestAndroidBuildType("debug")
+        )
         applicationVariantWrapper = ApplicationVariantWrapper(testApplicationVariant)
     }
 
@@ -47,5 +51,14 @@ class ApplicationVariantWrapperTest {
 
         // Then:
         Truth.assertThat(result).isEqualTo(productFlavors.map { ProductFlavorWrapper(it) })
+    }
+
+    @Test
+    fun check_getBuildType() {
+        // When:
+        val result = applicationVariantWrapper.getBuildType()
+
+        // Then:
+        Truth.assertThat(applicationVariantWrapper.getBuildType().getName()).isEqualTo("debug")
     }
 }
