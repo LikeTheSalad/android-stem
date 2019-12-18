@@ -7,10 +7,10 @@ import org.gradle.api.Task
 class AndroidVariantHelper(
     projectHelper: AndroidProjectHelper,
     buildVariant: String,
-    val flavor: String
+    val flavor: String = ""//todo delete
 ) {
     companion object {
-        const val MAIN_FLAVOR_NAME = "main"
+        const val MAIN_FLAVOR_NAME = "main"//todo delete
     }
 
     val isFlavored = flavor.isNotEmpty()
