@@ -35,10 +35,36 @@ class PathIdentityResolverTest {
         val variantName = "clientDebug"
         val sourceSet = getVariantSourceSet(variantName, "res")
         every { androidExtensionWrapper.getSourceSets() }.returns(mapOf(variantName to sourceSet))
-        val pathIdentity = PathIdentity(variantName, "values", "")
 
+        assertRawStringsFilePath(
+            PathIdentity(variantName, "values", ""),
+            "clientDebug/res/values/resolved.xml"
+        )
+        assertRawStringsFilePath(
+            PathIdentity(variantName, "values-es", "-es"),
+            "clientDebug/res/values-es/resolved.xml"
+        )
+    }
+
+    @Test
+    fun `Get resolved strings file when there's more than a res folder`() {
+        val variantName = "clientDebug"
+        val sourceSet = getVariantSourceSet(variantName, "res1", "res2")
+        every { androidExtensionWrapper.getSourceSets() }.returns(mapOf(variantName to sourceSet))
+
+        assertRawStringsFilePath(
+            PathIdentity(variantName, "values", ""),
+            "clientDebug/res1/values/resolved.xml"
+        )
+        assertRawStringsFilePath(
+            PathIdentity(variantName, "values-es", "-es"),
+            "clientDebug/res1/values-es/resolved.xml"
+        )
+    }
+
+    private fun assertRawStringsFilePath(pathIdentity: PathIdentity, expectedRelativePath: String) {
         Truth.assertThat(pathIdentityResolver.getRawStringsFile(pathIdentity).absolutePath)
-            .isEqualTo(File(srcDir, "clientDebug/res/values/resolved.xml").absolutePath)
+            .isEqualTo(File(srcDir, expectedRelativePath).absolutePath)
     }
 
     private fun getVariantSourceSet(variantName: String, vararg resDirNames: String): AndroidSourceSetWrapper {
