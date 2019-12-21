@@ -11,7 +11,7 @@ data class ValuesStrings(
 ) {
 
     companion object {
-        private val VALUES_SUFFIX_REGEX = Regex("values(-[a-z]{2}(-r[A-Z]{2})*)*")
+        private val VALUES_SUFFIX_REGEX = Regex("values(-[a-z]{2}(-r[A-Z]{2})*)*")//todo single values regex
     }
 
     val valuesSuffix: String by lazy {
@@ -56,10 +56,10 @@ data class ValuesStrings(
 
         mergedMap.values.sorted()
     }
-    val topContentVariantName: String by lazy {
+    val primaryVariantName: String by lazy {
         if (hasLocalTemplates || hasLocalValuesForTemplates) {
             variantName
-        } else parentValuesStrings?.topContentVariantName ?: ""
+        } else parentValuesStrings?.primaryVariantName ?: ""
     }
 
     private fun getLocalNonTemplatesNames(): List<String> {

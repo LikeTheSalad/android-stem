@@ -238,7 +238,7 @@ class ValuesStringsTest {
         )
 
         // Then
-        Truth.assertThat(resStrings.topContentVariantName).isEqualTo("client")
+        Truth.assertThat(resStrings.primaryVariantName).isEqualTo("client")
     }
 
     @Test
@@ -267,7 +267,7 @@ class ValuesStringsTest {
         )
 
         // Then
-        Truth.assertThat(resStrings.topContentVariantName).isEqualTo("client")
+        Truth.assertThat(resStrings.primaryVariantName).isEqualTo("client")
     }
 
     @Test
@@ -306,7 +306,7 @@ class ValuesStringsTest {
         )
 
         // Then
-        Truth.assertThat(resStrings2.topContentVariantName).isEqualTo("environment")
+        Truth.assertThat(resStrings2.primaryVariantName).isEqualTo("environment")
     }
 
     @Test
@@ -335,7 +335,7 @@ class ValuesStringsTest {
         )
 
         // Then
-        Truth.assertThat(resStrings.topContentVariantName).isEqualTo("main")
+        Truth.assertThat(resStrings.primaryVariantName).isEqualTo("main")
     }
 
     @Test
@@ -364,7 +364,7 @@ class ValuesStringsTest {
         )
 
         // Then
-        Truth.assertThat(resStrings.topContentVariantName).isEqualTo("")
+        Truth.assertThat(resStrings.primaryVariantName).isEqualTo("")
     }
 
     private fun assertValuesFolderNameSuffix(valuesFolderName: String, expectedSuffix: String) {

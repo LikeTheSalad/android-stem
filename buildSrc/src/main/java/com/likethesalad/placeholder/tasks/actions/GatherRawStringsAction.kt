@@ -1,57 +1,32 @@
 package com.likethesalad.placeholder.tasks.actions
 
+import com.likethesalad.placeholder.data.VariantRawStrings
 import com.likethesalad.placeholder.data.resources.ResourcesHandler
-import com.likethesalad.placeholder.data.storage.FilesProvider
-import com.likethesalad.placeholder.models.StringResourceModel
+import com.likethesalad.placeholder.models.PathIdentity
 import com.likethesalad.placeholder.models.StringsGatheredModel
-import com.likethesalad.placeholder.models.raw.FlavorValuesRawFiles
-import com.likethesalad.placeholder.models.raw.RawFiles
-import com.likethesalad.placeholder.utils.AndroidXmlResDocument
-import java.io.File
+import com.likethesalad.placeholder.models.ValuesStrings
 
 class GatherRawStringsAction(
-    private val filesProvider: FilesProvider,
+    private val variantRawStrings: VariantRawStrings,
     private val resourcesHandler: ResourcesHandler
 ) {
 
-    fun getInputFiles(): List<File> {
-        return filesProvider.getAllFoldersRawResourcesFiles().map {
-            it.getRawFilesMetaList().flatten()
-        }.flatten()
-    }
-
-    fun getOutputFile(): File {
-        return filesProvider.getGatheredStringsFile()
-    }
-
     fun gatherStrings() {
-        for (folderRawFiles in filesProvider.getAllFoldersRawResourcesFiles()) {
-            gatherStringsForFolder(folderRawFiles)
+        for (valuesStrings in variantRawStrings.valuesStrings) {
+            if (valuesStrings.primaryVariantName.isNotEmpty()) {
+                resourcesHandler.saveGatheredStrings(valuesStringsToStringsGathered(valuesStrings))
+            }
         }
     }
 
-    private fun gatherStringsForFolder(rawFilesModel: RawFiles) {
-        val mainStrings = getStringListFromFiles(rawFilesModel.mainValuesRawFiles)
-
-        val complimentaryStrings: List<List<StringResourceModel>> = when (rawFilesModel) {
-            is FlavorValuesRawFiles -> listOf(getStringListFromFiles(rawFilesModel.complimentaryRawFiles))
-            else -> listOf()
-        }
-
-        if (mainStrings.isNotEmpty() || complimentaryStrings.isNotEmpty()) {
-            resourcesHandler.saveGatheredStrings(
-                StringsGatheredModel(
-                    rawFilesModel.suffix,
-                    mainStrings,
-                    complimentaryStrings
-                )
-            )
-        }
-    }
-
-    private fun getStringListFromFiles(files: List<File>): List<StringResourceModel> {
-        return files.map {
-            AndroidXmlResDocument.readFromFile(it)
-        }.flatMap { it.getStringResourceList() }
+    private fun valuesStringsToStringsGathered(valuesStrings: ValuesStrings): StringsGatheredModel {
+        return StringsGatheredModel(
+            PathIdentity(
+                valuesStrings.variantName,
+                valuesStrings.valuesFolderName,
+                valuesStrings.valuesSuffix
+            ),
+            valuesStrings.mergedStrings
+        )
     }
 }

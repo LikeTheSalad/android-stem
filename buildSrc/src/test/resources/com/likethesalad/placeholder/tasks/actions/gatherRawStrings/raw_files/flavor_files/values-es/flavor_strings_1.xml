@@ -1,4 +1,0 @@
-<resources>
-    <string name="welcome_1">The flavor spanish welcome message for TesT</string>
-    <string name="message_non_translatable_1" translatable="false">Non translatable flavor spanish TesT</string>
-</resources>
