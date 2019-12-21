@@ -26,7 +26,7 @@ class ResolvePlaceholdersActionTest {
     @Before
     fun setUp() {
         filesProvider = mockk()
-        resourcesHandler = spyk(AndroidResourcesHandler(filesProvider))
+//        resourcesHandler = spyk(AndroidResourcesHandler(filesProvider))
         templateResolver = spyk(TemplateResolver(RecursiveLevelDetector()))
         resolvePlaceholdersAction = ResolvePlaceholdersAction(filesProvider, resourcesHandler, templateResolver)
     }

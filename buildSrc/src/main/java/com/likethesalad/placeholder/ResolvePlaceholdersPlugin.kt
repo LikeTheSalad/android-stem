@@ -50,14 +50,14 @@ class ResolvePlaceholdersPlugin : Plugin<Project> {
 
         val androidVariantHelper = AndroidVariantHelper(androidProjectHelper, variantName, flavorName)
         val filesProvider = AndroidFilesProvider(androidVariantHelper)
-        val androidResourcesHandler = AndroidResourcesHandler(filesProvider)
+//        val androidResourcesHandler = AndroidResourcesHandler(filesProvider)
 
         val gatherStringsTask = project.tasks.create(
             androidVariantHelper.tasksNames.gatherRawStringsName,
             GatherRawStringsTask::class.java
         ) {
             it.group = RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME
-            it.gatherRawStringsAction = GatherRawStringsAction(filesProvider, androidResourcesHandler)
+//            it.gatherRawStringsAction = GatherRawStringsAction(filesProvider, androidResourcesHandler)
         }
 
         val gatherTemplatesTask = project.tasks.create(
@@ -67,7 +67,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project> {
             it.group = RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME
             it.dependsOn(gatherStringsTask)
 
-            it.gatherTemplatesAction = GatherTemplatesAction(filesProvider, androidResourcesHandler)
+//            it.gatherTemplatesAction = GatherTemplatesAction(filesProvider, androidResourcesHandler)
         }
 
         val resolvePlaceholdersTask = project.tasks.create(
@@ -77,11 +77,11 @@ class ResolvePlaceholdersPlugin : Plugin<Project> {
             it.group = RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME
             it.dependsOn(gatherTemplatesTask)
 
-            it.resolvePlaceholdersAction = ResolvePlaceholdersAction(
-                filesProvider,
-                androidResourcesHandler,
-                TemplateResolver(RecursiveLevelDetector())
-            )
+//            it.resolvePlaceholdersAction = ResolvePlaceholdersAction(
+//                filesProvider,
+//                androidResourcesHandler,
+//                TemplateResolver(RecursiveLevelDetector())
+//            )
         }
 
         if (extension.resolveOnBuild) {

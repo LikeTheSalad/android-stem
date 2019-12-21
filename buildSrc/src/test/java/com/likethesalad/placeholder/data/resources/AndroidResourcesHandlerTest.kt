@@ -147,7 +147,7 @@ class AndroidResourcesHandlerTest {
         val result = androidResourcesHandler.getTemplatesFromFile(templatesFile)
 
         // Then:
-        Truth.assertThat(result.suffix).isEmpty()
+        Truth.assertThat(result.pathIdentity).isEqualTo(PathIdentity("client", "values-es", "-es"))
         Truth.assertThat(result.templates.size).isEqualTo(2)
         Truth.assertThat(result.templates.map { it.name }).containsExactly(
             "template_welcome",
@@ -172,21 +172,6 @@ class AndroidResourcesHandlerTest {
     }
 
     @Test
-    fun check_getTemplatesFromFile_file_not_exists() {
-        // Given:
-        val fileMock = mockk<File>()
-        every { fileMock.exists() }.returns(false)
-
-        // When:
-        val result = androidResourcesHandler.getTemplatesFromFile(fileMock)
-
-        // Then:
-        Truth.assertThat(result.suffix).isEmpty()
-        Truth.assertThat(result.templates).isEmpty()
-        Truth.assertThat(result.values).isEmpty()
-    }
-
-    @Test
     fun check_saveTemplatesToFile() {
         // Given:
         val template1 = StringResourceModel("template_welcome", "The welcome message for \${app_name}")
@@ -196,15 +181,17 @@ class AndroidResourcesHandlerTest {
                 "translatable" to "false"
             ), "Non translatable \${app_name}"
         )
+        val pathIdentity = PathIdentity("client", "values-es", "-es")
         val templates = StringsTemplatesModel(
-            "",
+            pathIdentity,
             listOf(template1, template2),
             mapOf("app_name" to "TesT")
         )
         val file = temporaryFolder.newFile()
+        every { pathIdentityResolver.getTemplateStringsFile(pathIdentity) }.returns(file)
 
         // When:
-        androidResourcesHandler.saveTemplatesToFile(templates, file)
+        androidResourcesHandler.saveTemplates(templates)
 
         // Then:
         val expectedResult = File(javaClass.getResource("string_templates.json").file).readText()

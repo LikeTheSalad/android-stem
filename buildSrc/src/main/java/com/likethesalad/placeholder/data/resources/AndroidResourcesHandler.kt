@@ -43,15 +43,11 @@ class AndroidResourcesHandler(
     }
 
     override fun getTemplatesFromFile(templateFile: File): StringsTemplatesModel {
-        return if (templateFile.exists()) {
-            gson.fromJson(templateFile.readText(), StringsTemplatesModel::class.java)
-        } else {
-            StringsTemplatesModel("", listOf(), mapOf())
-        }
+        return gson.fromJson(templateFile.readText(), StringsTemplatesModel::class.java)
     }
 
-    override fun saveTemplatesToFile(templates: StringsTemplatesModel, templateFile: File) {
+    override fun saveTemplates(templates: StringsTemplatesModel) {
         val jsonTemplates = gson.toJson(templates)
-        templateFile.writeText(jsonTemplates)
+        pathIdentityResolver.getTemplateStringsFile(templates.pathIdentity).writeText(jsonTemplates)
     }
 }

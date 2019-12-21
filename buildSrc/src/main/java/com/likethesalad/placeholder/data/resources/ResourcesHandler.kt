@@ -15,7 +15,7 @@ interface ResourcesHandler {
 
     fun removeResolvedStringFileIfExists(suffix: String)
 
-    fun saveTemplatesToFile(templates: StringsTemplatesModel, templateFile: File)
+    fun saveTemplates(templates: StringsTemplatesModel)
 
     fun saveGatheredStrings(stringsGathered: StringsGatheredModel)
 }
