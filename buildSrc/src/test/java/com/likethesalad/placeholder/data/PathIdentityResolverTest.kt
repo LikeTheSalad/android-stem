@@ -5,6 +5,7 @@ import com.likethesalad.placeholder.data.helpers.AndroidVariantHelper
 import com.likethesalad.placeholder.data.helpers.wrappers.AndroidExtensionWrapper
 import com.likethesalad.placeholder.data.helpers.wrappers.AndroidSourceDirectorySetWrapper
 import com.likethesalad.placeholder.data.helpers.wrappers.AndroidSourceSetWrapper
+import com.likethesalad.placeholder.data.storage.IncrementalDirsProvider
 import com.likethesalad.placeholder.models.PathIdentity
 import io.mockk.every
 import io.mockk.mockk
@@ -24,6 +25,7 @@ class PathIdentityResolverTest {
     private lateinit var incrementalDir: File
     private lateinit var androidExtensionWrapper: AndroidExtensionWrapper
     private lateinit var androidVariantHelper: AndroidVariantHelper
+    private lateinit var incrementalDirsProvider: IncrementalDirsProvider
     private lateinit var pathIdentityResolver: PathIdentityResolver
 
     @Before
@@ -32,8 +34,9 @@ class PathIdentityResolverTest {
         incrementalDir = temporaryFolder.newFolder("build", "incremental", "taskName")
         androidVariantHelper = mockk()
         every { androidVariantHelper.incrementalDir }.returns(incrementalDir.absolutePath)
+        incrementalDirsProvider = IncrementalDirsProvider(androidVariantHelper)
         androidExtensionWrapper = mockk()
-        pathIdentityResolver = PathIdentityResolver(androidExtensionWrapper, androidVariantHelper)
+        pathIdentityResolver = PathIdentityResolver(androidExtensionWrapper, incrementalDirsProvider)
     }
 
     @Test
@@ -78,6 +81,23 @@ class PathIdentityResolverTest {
             PathIdentity("client", "values-es", "-es"),
             "strings/strings-es.json"
         )
+    }
+
+    @Test
+    fun `Get template strings file`() {
+        assertTemplateStringsFilePath(
+            PathIdentity("main", "values", ""),
+            "templates/templates.json"
+        )
+        assertTemplateStringsFilePath(
+            PathIdentity("client", "values-es", "-es"),
+            "templates/templates-es.json"
+        )
+    }
+
+    private fun assertTemplateStringsFilePath(pathIdentity: PathIdentity, expectedRelativePath: String) {
+        Truth.assertThat(pathIdentityResolver.getTemplateStringsFile(pathIdentity).absolutePath)
+            .isEqualTo(File(incrementalDir, expectedRelativePath).absolutePath)
     }
 
     private fun assertRawStringsFilePath(pathIdentity: PathIdentity, expectedRelativePath: String) {

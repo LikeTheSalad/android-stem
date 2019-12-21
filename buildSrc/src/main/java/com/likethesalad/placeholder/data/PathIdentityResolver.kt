@@ -1,14 +1,14 @@
 package com.likethesalad.placeholder.data
 
-import com.likethesalad.placeholder.data.helpers.AndroidVariantHelper
 import com.likethesalad.placeholder.data.helpers.wrappers.AndroidExtensionWrapper
 import com.likethesalad.placeholder.data.helpers.wrappers.AndroidSourceSetWrapper
+import com.likethesalad.placeholder.data.storage.IncrementalDirsProvider
 import com.likethesalad.placeholder.models.PathIdentity
 import java.io.File
 
 class PathIdentityResolver(
     androidExtensionWrapper: AndroidExtensionWrapper,
-    androidVariantHelper: AndroidVariantHelper
+    private val incrementalDirsProvider: IncrementalDirsProvider
 ) {
 
     companion object {
@@ -16,7 +16,6 @@ class PathIdentityResolver(
     }
 
     private val sourceSets: Map<String, AndroidSourceSetWrapper> by lazy { androidExtensionWrapper.getSourceSets() }
-    private val incrementalDir: File by lazy { File(androidVariantHelper.incrementalDir) }
 
     fun getResolvedStringsFile(pathIdentity: PathIdentity): File {
         val srcDir = sourceSets.getValue(pathIdentity.variantName).getRes().getSrcDirs().first()
@@ -25,6 +24,10 @@ class PathIdentityResolver(
     }
 
     fun getRawStringsFile(pathIdentity: PathIdentity): File {
-        return File(incrementalDir, "strings/strings${pathIdentity.suffix}.json")
+        return File(incrementalDirsProvider.getRawStringsDir(), "strings${pathIdentity.suffix}.json")
+    }
+
+    fun getTemplateStringsFile(pathIdentity: PathIdentity): File {
+        return File(incrementalDirsProvider.getTemplateStringsDir(), "templates${pathIdentity.suffix}.json")
     }
 }
