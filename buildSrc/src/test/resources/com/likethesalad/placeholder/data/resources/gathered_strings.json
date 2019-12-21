@@ -1,31 +1,34 @@
 {
-  "suffix": "",
-  "mainStrings": [
+  "pathIdentity": {
+    "variantName": "client",
+    "valuesFolderName": "values",
+    "suffix": ""
+  },
+  "mergedStrings": [
     {
-      "name": "app_name",
+      "name": "the_name",
       "translatable": true,
       "attributes": {
-        "name": "app_name"
+        "name": "the_name"
       },
-      "content": "TesT"
+      "content": "the content"
     },
     {
-      "name": "template_welcome",
+      "name": "the_name2",
       "translatable": true,
       "attributes": {
-        "name": "template_welcome"
+        "name": "the_name2"
       },
-      "content": "The welcome message for ${app_name}"
+      "content": "the content 2"
     },
     {
-      "name": "template_message_non_translatable",
+      "name": "the_name3",
       "translatable": false,
       "attributes": {
-        "name": "template_message_non_translatable",
+        "name": "the_name3",
         "translatable": "false"
       },
-      "content": "Non translatable ${app_name}"
+      "content": "The content 3"
     }
-  ],
-  "complementaryStrings": []
+  ]
 }

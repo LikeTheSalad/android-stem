@@ -1,7 +1,9 @@
 package com.likethesalad.placeholder.data.resources
 
 import com.google.common.truth.Truth
+import com.likethesalad.placeholder.data.PathIdentityResolver
 import com.likethesalad.placeholder.data.storage.AndroidFilesProvider
+import com.likethesalad.placeholder.models.PathIdentity
 import com.likethesalad.placeholder.models.StringResourceModel
 import com.likethesalad.placeholder.models.StringsGatheredModel
 import com.likethesalad.placeholder.models.StringsTemplatesModel
@@ -16,8 +18,9 @@ import java.io.File
 
 class AndroidResourcesHandlerTest {
 
-    private lateinit var androidResourcesHandler: AndroidResourcesHandler
     private lateinit var androidFilesProvider: AndroidFilesProvider
+    private lateinit var pathIdentityResolver: PathIdentityResolver
+    private lateinit var androidResourcesHandler: AndroidResourcesHandler
 
     @get:Rule
     val temporaryFolder = TemporaryFolder()
@@ -25,7 +28,8 @@ class AndroidResourcesHandlerTest {
     @Before
     fun setUp() {
         androidFilesProvider = mockk()
-        androidResourcesHandler = AndroidResourcesHandler(androidFilesProvider)
+        pathIdentityResolver = mockk()
+        androidResourcesHandler = AndroidResourcesHandler(androidFilesProvider, pathIdentityResolver)
     }
 
     @Test
@@ -37,38 +41,30 @@ class AndroidResourcesHandlerTest {
         val result = androidResourcesHandler.getGatheredStringsFromFile(file)
 
         // Then:
-        Truth.assertThat(result.suffix).isEmpty()
-        Truth.assertThat(result.complementaryStrings).isEmpty()
-        Truth.assertThat(result.mainStrings.size).isEqualTo(3)
-        Truth.assertThat(result.mainStrings.map { it.name }).containsExactly(
-            "app_name",
-            "template_welcome",
-            "template_message_non_translatable"
+        Truth.assertThat(result.pathIdentity).isEqualTo(
+            PathIdentity("client", "values", "")
         )
-        val contentsByName = result.mainStrings.map { it.name to it.content }.toMap()
-        Truth.assertThat(contentsByName.getValue("app_name")).isEqualTo("TesT")
-        Truth.assertThat(contentsByName.getValue("template_welcome")).isEqualTo("The welcome message for \${app_name}")
-        Truth.assertThat(contentsByName.getValue("template_message_non_translatable"))
-            .isEqualTo("Non translatable \${app_name}")
-        val attrsByName = result.mainStrings.map { it.name to it.attributes }.toMap()
-        Truth.assertThat(attrsByName.getValue("app_name")).containsExactly(
-            "name", "app_name"
-        )
-        Truth.assertThat(attrsByName.getValue("template_welcome")).containsExactly(
-            "name", "template_welcome"
-        )
-        Truth.assertThat(attrsByName.getValue("template_message_non_translatable")).containsExactly(
-            "name", "template_message_non_translatable",
-            "translatable", "false"
+        Truth.assertThat(result.mergedStrings).isEqualTo(
+            listOf(
+                StringResourceModel("the_name", "the content"),
+                StringResourceModel("the_name2", "the content 2"),
+                StringResourceModel(
+                    mapOf(
+                        "name" to "the_name3",
+                        "translatable" to "false"
+                    ), "The content 3"
+                )
+            )
         )
     }
 
     @Test
     fun check_saveGatheredStrings() {
         // Given:
+        val pathIdentity = PathIdentity("client", "values", "")
         val file = temporaryFolder.newFile()
-        every { androidFilesProvider.getGatheredStringsFile() }.returns(file)
-        val mainStrings = listOf(
+        every { pathIdentityResolver.getRawStringsFile(pathIdentity) }.returns(file)
+        val mergedStrings = listOf(
             StringResourceModel("the_name", "the content"),
             StringResourceModel("the_name2", "the content 2"),
             StringResourceModel(
@@ -78,7 +74,7 @@ class AndroidResourcesHandlerTest {
                 ), "The content 3"
             )
         )
-        val stringsGathered = StringsGatheredModel("", mainStrings, emptyList())
+        val stringsGathered = StringsGatheredModel(pathIdentity, mergedStrings)
 
         // When:
         androidResourcesHandler.saveGatheredStrings(stringsGathered)
