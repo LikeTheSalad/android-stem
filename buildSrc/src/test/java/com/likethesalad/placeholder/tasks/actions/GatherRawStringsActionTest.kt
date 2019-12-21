@@ -3,6 +3,7 @@ package com.likethesalad.placeholder.tasks.actions
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.data.VariantRawStrings
 import com.likethesalad.placeholder.data.resources.ResourcesHandler
+import com.likethesalad.placeholder.data.storage.IncrementalDataCleaner
 import com.likethesalad.placeholder.models.PathIdentity
 import com.likethesalad.placeholder.models.StringResourceModel
 import com.likethesalad.placeholder.models.StringsGatheredModel
@@ -18,13 +19,19 @@ class GatherRawStringsActionTest {
 
     private lateinit var variantRawStrings: VariantRawStrings
     private lateinit var resourcesHandler: ResourcesHandler
+    private lateinit var incrementalDataCleaner: IncrementalDataCleaner
     private lateinit var gatherRawStringsAction: GatherRawStringsAction
 
     @Before
     fun setUp() {
         variantRawStrings = mockk()
         resourcesHandler = mockk(relaxUnitFun = true)
-        gatherRawStringsAction = GatherRawStringsAction(variantRawStrings, resourcesHandler)
+        incrementalDataCleaner = mockk(relaxUnitFun = true)
+        gatherRawStringsAction = GatherRawStringsAction(
+            variantRawStrings,
+            resourcesHandler,
+            incrementalDataCleaner
+        )
     }
 
     @Test
@@ -43,6 +50,7 @@ class GatherRawStringsActionTest {
 
         gatherRawStringsAction.gatherStrings()
 
+        verify { incrementalDataCleaner.clearRawStrings() }
         verify { resourcesHandler.saveGatheredStrings(capture(gatheredStringsCaptor)) }
         Truth.assertThat(gatheredStringsCaptor.captured).isEqualTo(
             StringsGatheredModel(
@@ -67,6 +75,7 @@ class GatherRawStringsActionTest {
 
         gatherRawStringsAction.gatherStrings()
 
+        verify { incrementalDataCleaner.clearRawStrings() }
         verify(exactly = 0) { resourcesHandler.saveGatheredStrings(any()) }
     }
 
@@ -104,6 +113,7 @@ class GatherRawStringsActionTest {
 
         gatherRawStringsAction.gatherStrings()
 
+        verify { incrementalDataCleaner.clearRawStrings() }
         verify(exactly = 2) { resourcesHandler.saveGatheredStrings(capture(gatheredStringsCaptor)) }
         Truth.assertThat(gatheredStringsCaptor.size).isEqualTo(2)
         Truth.assertThat(gatheredStringsCaptor.first()).isEqualTo(
