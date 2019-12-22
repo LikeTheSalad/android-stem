@@ -3,30 +3,34 @@ package com.likethesalad.placeholder.tasks.actions
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.data.resources.ResourcesHandler
 import com.likethesalad.placeholder.data.storage.FilesProvider
+import com.likethesalad.placeholder.data.storage.IncrementalDataCleaner
+import com.likethesalad.placeholder.models.PathIdentity
+import com.likethesalad.placeholder.models.StringResourceModel
+import com.likethesalad.placeholder.models.StringsGatheredModel
 import com.likethesalad.placeholder.models.StringsTemplatesModel
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TemporaryFolder
 import java.io.File
 
 class GatherTemplatesActionTest {
 
-    private lateinit var gatherTemplatesAction: GatherTemplatesAction
     private lateinit var filesProvider: FilesProvider
     private lateinit var resourcesHandler: ResourcesHandler
-
-    @get:Rule
-    val temporaryFolder = TemporaryFolder()
+    private lateinit var incrementalDataCleaner: IncrementalDataCleaner
+    private lateinit var gatherTemplatesAction: GatherTemplatesAction
 
     @Before
     fun setUp() {
         filesProvider = mockk()
-//        resourcesHandler = spyk(AndroidResourcesHandler(filesProvider))
-        gatherTemplatesAction = GatherTemplatesAction(filesProvider, resourcesHandler)
+        resourcesHandler = mockk(relaxUnitFun = true)
+        incrementalDataCleaner = mockk(relaxUnitFun = true)
+        gatherTemplatesAction = GatherTemplatesAction(
+            filesProvider, resourcesHandler,
+            incrementalDataCleaner
+        )
     }
 
     @Test
@@ -60,85 +64,76 @@ class GatherTemplatesActionTest {
     @Test
     fun check_gatherTemplateStrings_single_file() {
 //        // Given:
-//        val gatheredStringsFile = getGatheredStringFile("strings_1.json")
-//        val placeholderTemplateFile = temporaryFolder.newFile("the_template_placeholder.json")
-//        val expectedGatheredTemplates = getTemplatesFile("templates_1.json").readText()
-//        every {
-//            filesProvider.getGatheredStringsFile()
-//        } returns gatheredStringsFile
-//        every { filesProvider.getTemplateFile() } returns placeholderTemplateFile
-//        every {
-//            resourcesHandler.getTemplatesFromFile(placeholderTemplateFile)
-//        } returns StringsTemplatesModel("", listOf(), mapOf())
-//        every { filesProvider.getAllGatheredStringsFiles() } returns listOf(gatheredStringsFile)
-//
-//        // When:
-//        gatherTemplatesAction.gatherTemplateStrings()
-//
-//        // Then:
-//        verify { resourcesHandler.saveTemplates(any(), eq(placeholderTemplateFile)) }
-//        Truth.assertThat(placeholderTemplateFile.readText()).isEqualTo(expectedGatheredTemplates)
-    }
+        val gatheredStringsFile = mockk<File>()
+        val gatheredStringsFileEs = mockk<File>()
+        val (gatheredStrings, expectedGatheredTemplates) = getRawAndTemplatesPair(
+            "client",
+            "values", ""
+        )
+        val (gatheredStringsEs, expectedGatheredTemplatesEs) = getRawAndTemplatesPair(
+            "main",
+            "values-es", "-es"
+        )
 
-    @Test
-    fun check_gatherTemplateStrings_old_equals_new() {
-        // Given:
-        val gatheredStringsFile = getGatheredStringFile("strings_1.json")
-        val placeholderTemplateFile = getTemplatesFile("templates_1.json")
-        every {
-            filesProvider.getGatheredStringsFile()
-        } returns gatheredStringsFile
-        every { filesProvider.getTemplateFile() } returns placeholderTemplateFile
-        every { filesProvider.getAllGatheredStringsFiles() } returns listOf(gatheredStringsFile)
+        every { resourcesHandler.getGatheredStringsFromFile(gatheredStringsFile) }.returns(gatheredStrings)
+        every { resourcesHandler.getGatheredStringsFromFile(gatheredStringsFileEs) }.returns(gatheredStringsEs)
+        every { filesProvider.getAllGatheredStringsFiles() } returns listOf(
+            gatheredStringsFile,
+            gatheredStringsFileEs
+        )
 
         // When:
         gatherTemplatesAction.gatherTemplateStrings()
 
         // Then:
-//        verify(exactly = 0) { resourcesHandler.saveTemplates(any(), any()) }
+        verify { incrementalDataCleaner.clearTemplateStrings() }
+        verify { resourcesHandler.saveTemplates(expectedGatheredTemplates) }
+        verify { resourcesHandler.saveTemplates(expectedGatheredTemplatesEs) }
     }
 
-    @Test
-    fun check_gatherTemplateStrings_multiple_files() {
-//        // Given:
-//        val gatheredStringsFile1 = getGatheredStringFile("strings_1.json")
-//        val placeholderTemplateFile1 = temporaryFolder.newFile("the_template_placeholder1.json")
-//        val expectedGatheredTemplates1 = getTemplatesFile("templates_1.json").readText()
-//
-//        val gatheredStringsFile2 = getGatheredStringFile("strings_1_es.json")
-//        val placeholderTemplateFile2 = temporaryFolder.newFile("the_template_placeholder2.json")
-//        val expectedGatheredTemplates2 = getTemplatesFile("templates_1_es.json").readText()
-//
-//        every {
-//            filesProvider.getGatheredStringsFile()
-//        } returns gatheredStringsFile1
-//        every { filesProvider.getTemplateFile() } returns placeholderTemplateFile1
-//        every { filesProvider.getTemplateFile("-es") } returns placeholderTemplateFile2
-//
-//        every {
-//            resourcesHandler.getTemplatesFromFile(placeholderTemplateFile1)
-//        } returns StringsTemplatesModel("", listOf(), mapOf())
-//        every {
-//            resourcesHandler.getTemplatesFromFile(placeholderTemplateFile2)
-//        } returns StringsTemplatesModel("", listOf(), mapOf())
-//
-//        every { filesProvider.getAllGatheredStringsFiles() } returns listOf(gatheredStringsFile1, gatheredStringsFile2)
-//
-//        // When:
-//        gatherTemplatesAction.gatherTemplateStrings()
-//
-//        // Then:
-//        verify { resourcesHandler.saveTemplates(any(), eq(placeholderTemplateFile1)) }
-//        verify { resourcesHandler.saveTemplates(any(), eq(placeholderTemplateFile2)) }
-//        Truth.assertThat(placeholderTemplateFile1.readText()).isEqualTo(expectedGatheredTemplates1)
-//        Truth.assertThat(placeholderTemplateFile2.readText()).isEqualTo(expectedGatheredTemplates2)
-    }
-
-    private fun getGatheredStringFile(fileName: String): File {
-        return File(javaClass.getResource("gatherTemplates/gathered_string_files/$fileName").file)
-    }
-
-    private fun getTemplatesFile(fileName: String): File {
-        return File(javaClass.getResource("gatherTemplates/templates_files/$fileName").file)
+    private fun getRawAndTemplatesPair(
+        variantName: String,
+        valuesFolderName: String,
+        suffix: String
+    ): Pair<StringsGatheredModel, StringsTemplatesModel> {
+        val pathIdentity = PathIdentity(variantName, valuesFolderName, suffix)
+        val gatheredStrings = StringsGatheredModel(
+            pathIdentity,
+            listOf(
+                StringResourceModel("app_name", "TesT"),
+                StringResourceModel("other_string", "Random string"),
+                StringResourceModel("template_welcome", "The welcome message for \${app_name}"),
+                StringResourceModel(
+                    mapOf(
+                        "name" to "template_message_non_translatable",
+                        "translatable" to "false"
+                    ), "Non translatable \${app_name}"
+                ),
+                StringResourceModel(
+                    "template_this_contains_template",
+                    "This is the welcome: \${template_welcome}"
+                )
+            )
+        )
+        val expectedGatheredTemplates = StringsTemplatesModel(
+            pathIdentity,
+            listOf(
+                StringResourceModel("template_welcome", "The welcome message for \${app_name}"),
+                StringResourceModel(
+                    mapOf(
+                        "name" to "template_message_non_translatable",
+                        "translatable" to "false"
+                    ), "Non translatable \${app_name}"
+                ),
+                StringResourceModel(
+                    "template_this_contains_template",
+                    "This is the welcome: \${template_welcome}"
+                )
+            ), mapOf(
+                "app_name" to "TesT",
+                "template_welcome" to "The welcome message for \${app_name}"
+            )
+        )
+        return Pair(gatheredStrings, expectedGatheredTemplates)
     }
 }

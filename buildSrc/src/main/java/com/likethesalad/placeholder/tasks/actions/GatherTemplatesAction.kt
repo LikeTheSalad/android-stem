@@ -3,13 +3,16 @@ package com.likethesalad.placeholder.tasks.actions
 import com.likethesalad.placeholder.data.Constants
 import com.likethesalad.placeholder.data.resources.ResourcesHandler
 import com.likethesalad.placeholder.data.storage.FilesProvider
+import com.likethesalad.placeholder.data.storage.IncrementalDataCleaner
 import com.likethesalad.placeholder.models.StringResourceModel
+import com.likethesalad.placeholder.models.StringsGatheredModel
 import com.likethesalad.placeholder.models.StringsTemplatesModel
 import java.io.File
 
 class GatherTemplatesAction(
     private val filesProvider: FilesProvider,
-    private val resourcesHandler: ResourcesHandler
+    private val resourcesHandler: ResourcesHandler,
+    private val incrementalDataCleaner: IncrementalDataCleaner
 ) {
     fun getStringFiles(): List<File> {
         return filesProvider.getAllGatheredStringsFiles()
@@ -20,34 +23,22 @@ class GatherTemplatesAction(
     }
 
     fun gatherTemplateStrings() {
-//        val baseStringsFile = filesProvider.getGatheredStringsFile()
-//        val baseStrings = resourcesHandler.getGatheredStringsFromFile(baseStringsFile).getMergedStrings()
-//        for (stringFile in filesProvider.getAllGatheredStringsFiles()) {
-//            val templates = generateTemplatesForStringFile(stringFile, baseStrings)
-//            val templatesFile = filesProvider.getTemplateFile(templates.suffix)
-//            val oldTemplates = resourcesHandler.getTemplatesFromFile(templatesFile)
-//            if (templates != oldTemplates) {
-//                // Update the templates file only if needed.
-//                resourcesHandler.saveTemplatesToFile(templates, templatesFile)
-//            }
-//        }
+        incrementalDataCleaner.clearTemplateStrings()
+
+        for (stringFile in filesProvider.getAllGatheredStringsFiles()) {
+            val gatheredString = resourcesHandler.getGatheredStringsFromFile(stringFile)
+            resourcesHandler.saveTemplates(gatheredStringsToTemplateStrings(gatheredString))
+        }
     }
 
-    private fun generateTemplatesForStringFile(
-        stringFile: File,
-        baseStrings: Map<String, StringResourceModel>
+    private fun gatheredStringsToTemplateStrings(
+        gatheredStrings: StringsGatheredModel
     ): StringsTemplatesModel {
-//        val stringsMap = baseStrings.toMutableMap()
-//        val specificStrings = resourcesHandler.getGatheredStringsFromFile(stringFile)
-//        for (specificString in specificStrings.getMergedStrings().values) {
-//            stringsMap[specificString.name] = specificString
-//        }
-//        val mergedStrings = stringsMap.values
-//        val stringTemplates = mergedStrings.filter { Constants.TEMPLATE_STRING_REGEX.containsMatchIn(it.name) }
-//        val placeholdersResolved = getPlaceholdersResolved(mergedStrings, stringTemplates)
-//
-//        return StringsTemplatesModel(specificStrings.suffix, stringTemplates, placeholdersResolved)
-        TODO()
+        val mergedStrings = gatheredStrings.mergedStrings
+        val stringTemplates = mergedStrings.filter { Constants.TEMPLATE_STRING_REGEX.containsMatchIn(it.name) }
+        val placeholdersResolved = getPlaceholdersResolved(mergedStrings, stringTemplates)
+
+        return StringsTemplatesModel(gatheredStrings.pathIdentity, stringTemplates, placeholdersResolved)
     }
 
     private fun getPlaceholdersResolved(
