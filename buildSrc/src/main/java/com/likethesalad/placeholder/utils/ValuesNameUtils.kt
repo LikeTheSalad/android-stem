@@ -10,18 +10,16 @@ class ValuesNameUtils {
             return VALUES_FOLDER_NAME_REGEX.matches(name)
         }
 
-        fun getUniqueValuesDirName(resDirs: Set<File>): Set<String> {
-            return getValuesFolders(resDirs).map {
-                it.name
-            }.toSet()
-        }
-
-        private fun getValuesFolders(resDirs: Set<File>): List<File> {
+        fun getValuesFolders(resDirs: Set<File>): List<File> {
             return resDirs.map {
                 it.listFiles { _, name ->
-                    ValuesNameUtils.isValueName(name)
+                    isValueName(name)
                 }?.toList() ?: emptyList()
             }.flatten()
+        }
+
+        fun getValuesNameSuffix(valuesFolderName: String): String {
+            return VALUES_FOLDER_NAME_REGEX.find(valuesFolderName)!!.groupValues[1]
         }
     }
 }

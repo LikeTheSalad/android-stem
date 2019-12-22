@@ -2,6 +2,7 @@ package com.likethesalad.placeholder.models
 
 import com.likethesalad.placeholder.data.Constants
 import com.likethesalad.placeholder.data.ValuesStringFiles
+import com.likethesalad.placeholder.utils.ValuesNameUtils
 
 data class ValuesStrings(
     val variantName: String,
@@ -10,12 +11,8 @@ data class ValuesStrings(
     private val parentValuesStrings: ValuesStrings? = null
 ) {
 
-    companion object {
-        private val VALUES_SUFFIX_REGEX = Regex("values(-[a-z]{2}(-r[A-Z]{2})*)*")//todo single values regex
-    }
-
     val valuesSuffix: String by lazy {
-        VALUES_SUFFIX_REGEX.find(valuesFolderName)!!.groupValues[1]
+        ValuesNameUtils.getValuesNameSuffix(valuesFolderName)
     }
     private val stringsMap = mutableMapOf<String, StringResourceModel>()
     private val hasLocalTemplates: Boolean by lazy {

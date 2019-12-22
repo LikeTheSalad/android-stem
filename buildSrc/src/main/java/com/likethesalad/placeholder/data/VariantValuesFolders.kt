@@ -11,7 +11,7 @@ class VariantValuesFolders(
 
     val valuesStringFiles: Map<String, ValuesStringFiles> by lazy {
         val valuesFilesMap = mutableMapOf<String, ValuesStringFiles>()
-        val valuesFolderNames = ValuesNameUtils.getUniqueValuesDirName(resDirs)
+        val valuesFolderNames = getUniqueValuesDirName(resDirs)
         for (valuesFolderName in valuesFolderNames) {
             val filesInValuesFolder = getFilesFromValuesFolders(valuesFolderName)
             if (filesInValuesFolder.isNotEmpty()) {
@@ -44,6 +44,12 @@ class VariantValuesFolders(
             return valuesFolder
         }
         return null
+    }
+
+    private fun getUniqueValuesDirName(resDirs: Set<File>): Set<String> {
+        return ValuesNameUtils.getValuesFolders(resDirs).map {
+            it.name
+        }.toSet()
     }
 
 }

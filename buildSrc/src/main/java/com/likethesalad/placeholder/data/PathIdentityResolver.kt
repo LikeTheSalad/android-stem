@@ -1,5 +1,6 @@
 package com.likethesalad.placeholder.data
 
+import com.likethesalad.placeholder.data.Constants.Companion.RESOLVED_FILE_NAME
 import com.likethesalad.placeholder.data.helpers.wrappers.AndroidExtensionWrapper
 import com.likethesalad.placeholder.data.helpers.wrappers.AndroidSourceSetWrapper
 import com.likethesalad.placeholder.data.storage.IncrementalDirsProvider
@@ -10,10 +11,6 @@ class PathIdentityResolver(
     androidExtensionWrapper: AndroidExtensionWrapper,
     private val incrementalDirsProvider: IncrementalDirsProvider
 ) {
-
-    companion object {
-        private const val RESOLVED_FILE_NAME = "resolved.xml"
-    }
 
     private val sourceSets: Map<String, AndroidSourceSetWrapper> by lazy { androidExtensionWrapper.getSourceSets() }
 

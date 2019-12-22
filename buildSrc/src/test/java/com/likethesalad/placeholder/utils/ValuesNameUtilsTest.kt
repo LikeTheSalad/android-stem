@@ -21,17 +21,51 @@ class ValuesNameUtilsTest {
     }
 
     @Test
-    fun `Get all unique language values folder names`() {
+    fun `Get all valid values folders`() {
         val resDirs = setOf(
-            getDirWithValuesFolders("src", "values", "values-es", "values-it"),
+            getDirWithValuesFolders(
+                "src", "values", "values-es", "values-it",
+                "novalues"
+            ),
             getDirWithValuesFolders("src2", "values", "values-en", "values-pt"),
-            getDirWithValuesFolders("src3", "values", "values-es", "values-fr")
+            getDirWithValuesFolders(
+                "src3", "values", "values-es", "something",
+                "values-fr"
+            )
         )
-        val result = ValuesNameUtils.getUniqueValuesDirName(resDirs)
+        val result = ValuesNameUtils.getValuesFolders(resDirs)
 
-        Truth.assertThat(result).containsExactly(
-            "values", "values-es", "values-en", "values-it", "values-pt", "values-fr"
+        assertContainsExactlyValuesFolder(
+            result,
+            "src/values",
+            "src/values-es",
+            "src/values-it",
+            "src2/values",
+            "src2/values-en",
+            "src2/values-pt",
+            "src3/values",
+            "src3/values-es",
+            "src3/values-fr"
         )
+    }
+
+    @Test
+    fun `Get suffix from values folder name`() {
+        verifyValidSuffix("values", "")
+        verifyValidSuffix("values-es", "-es")
+        verifyValidSuffix("values-es-rES", "-es-rES")
+    }
+
+    private fun assertContainsExactlyValuesFolder(
+        folders: List<File>,
+        vararg valuesFolderPaths: String
+    ) {
+        val fullValuesFolderPaths = valuesFolderPaths.map { "${temporaryFolder.root.absolutePath}/$it" }
+        Truth.assertThat(folders.map { it.absolutePath }).containsExactlyElementsIn(fullValuesFolderPaths)
+    }
+
+    private fun verifyValidSuffix(valuesFolderName: String, expectedSuffix: String) {
+        Truth.assertThat(ValuesNameUtils.getValuesNameSuffix(valuesFolderName)).isEqualTo(expectedSuffix)
     }
 
     private fun getDirWithValuesFolders(dirName: String, vararg valuesFolderNames: String): File {
