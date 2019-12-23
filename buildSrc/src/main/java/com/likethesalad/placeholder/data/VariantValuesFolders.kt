@@ -1,17 +1,17 @@
 package com.likethesalad.placeholder.data
 
-import com.likethesalad.placeholder.utils.ValuesNameUtils
+import com.likethesalad.placeholder.data.storage.ValuesFoldersExtractor
 import com.likethesalad.placeholder.utils.XmlUtils
 import java.io.File
 
 class VariantValuesFolders(
     val variantName: String,
-    private val resDirs: Set<File>
+    valuesFoldersExtractor: ValuesFoldersExtractor
 ) {
-
+    private val valuesFolders: List<File> by lazy { valuesFoldersExtractor.getValuesFolders() }
     val valuesStringFiles: Map<String, ValuesStringFiles> by lazy {
         val valuesFilesMap = mutableMapOf<String, ValuesStringFiles>()
-        val valuesFolderNames = getUniqueValuesDirName(resDirs)
+        val valuesFolderNames = getUniqueValuesDirName()
         for (valuesFolderName in valuesFolderNames) {
             val filesInValuesFolder = getFilesFromValuesFolders(valuesFolderName)
             if (filesInValuesFolder.isNotEmpty()) {
@@ -27,27 +27,19 @@ class VariantValuesFolders(
     ): List<File> {
         val filesInValuesFolder = mutableListOf<File>()
 
-        for (resDir in resDirs) {
-            getValuesFolderFromDir(resDir, valuesFolderName)?.let {
-                filesInValuesFolder.addAll(it.listFiles { _, name ->
-                    XmlUtils.isValidRawXmlFileName(name)
-                } ?: emptyArray())
-            }
+        val foldersWithName = valuesFolders.filter { it.name == valuesFolderName }
+
+        for (folder in foldersWithName) {
+            filesInValuesFolder.addAll(folder.listFiles { _, name ->
+                XmlUtils.isValidRawXmlFileName(name)
+            } ?: emptyArray())
         }
 
         return filesInValuesFolder
     }
 
-    private fun getValuesFolderFromDir(dir: File, valuesFolderName: String): File? {
-        val valuesFolder = File(dir, valuesFolderName)
-        if (valuesFolder.exists()) {
-            return valuesFolder
-        }
-        return null
-    }
-
-    private fun getUniqueValuesDirName(resDirs: Set<File>): Set<String> {
-        return ValuesNameUtils.getValuesFolders(resDirs).map {
+    private fun getUniqueValuesDirName(): Set<String> {
+        return valuesFolders.map {
             it.name
         }.toSet()
     }

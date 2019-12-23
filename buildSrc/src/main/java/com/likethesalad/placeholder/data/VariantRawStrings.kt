@@ -1,5 +1,6 @@
 package com.likethesalad.placeholder.data
 
+import com.likethesalad.placeholder.data.storage.ValuesFoldersExtractor
 import com.likethesalad.placeholder.models.ValuesStrings
 import com.likethesalad.placeholder.models.VariantStringFiles
 
@@ -96,7 +97,8 @@ class VariantRawStrings(private val variantDirsPathFinder: VariantDirsPathFinder
 
     private fun getVariantStringFilesList(): List<VariantStringFiles> {
         val dirsPaths = variantDirsPathFinder.existingPathsResDirs
-        val variantValuesFoldersList = dirsPaths.map { VariantValuesFolders(it.variantName, it.paths) }
+        val variantValuesFoldersList =
+            dirsPaths.map { VariantValuesFolders(it.variantName, ValuesFoldersExtractor(it.paths)) }
         return variantValuesFoldersList.map { VariantStringFiles(it.variantName, it.valuesStringFiles) }
     }
 
