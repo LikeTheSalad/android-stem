@@ -48,7 +48,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project> {
         extension: PlaceholderExtension
     ) {
 
-        val androidVariantHelper = AndroidVariantHelper(androidProjectHelper, variantName, flavorName)
+        val androidVariantHelper = AndroidVariantHelper(androidProjectHelper, variantName)
         val filesProvider = AndroidFilesProvider(androidVariantHelper)
 //        val androidResourcesHandler = AndroidResourcesHandler(filesProvider)
 

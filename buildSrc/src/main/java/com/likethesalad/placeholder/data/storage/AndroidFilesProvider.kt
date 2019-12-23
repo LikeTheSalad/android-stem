@@ -1,8 +1,6 @@
 package com.likethesalad.placeholder.data.storage
 
 import com.likethesalad.placeholder.data.helpers.AndroidVariantHelper
-import com.likethesalad.placeholder.models.raw.FlavorValuesRawFiles
-import com.likethesalad.placeholder.models.raw.MainValuesRawFiles
 import com.likethesalad.placeholder.models.raw.RawFiles
 import java.io.File
 
@@ -72,82 +70,13 @@ class AndroidFilesProvider(
         }
     }
 
-    override fun getRawResourcesFilesForFolder(valuesFolderName: String): RawFiles {
-        val resourcesDirs = androidVariantHelper.resourceDirs
-        val suffix = VALUES_FOLDER_REGEX.find(valuesFolderName)!!.groupValues[1]
-        return if (androidVariantHelper.isFlavored) {
-            getFlavorRawFiles(suffix, resourcesDirs.mainDirs, resourcesDirs.flavorDirs)
-        } else {
-            getMainRawFiles(suffix, resourcesDirs.mainDirs)
-        }
-    }
-
     override fun getAllFoldersRawResourcesFiles(): List<RawFiles> {
-        val rawFilesModels = mutableListOf<RawFiles>()
-        for (folderName in getValuesFolderNames()) {
-            rawFilesModels.add(getRawResourcesFilesForFolder(folderName))
-        }
-        return rawFilesModels
-    }
-
-    private fun getFlavorRawFiles(
-        suffix: String,
-        mainResDirs: Set<File>,
-        flavorResDirs: Set<File>
-    ): FlavorValuesRawFiles {
-        return FlavorValuesRawFiles(
-            androidVariantHelper.flavor,
-            suffix,
-            getResourcesFiles(suffix, mainResDirs),
-            getResourcesFiles(suffix, flavorResDirs)
-        )
-    }
-
-    private fun getMainRawFiles(suffix: String, mainResDirs: Set<File>): MainValuesRawFiles {
-        return MainValuesRawFiles(
-            suffix,
-            getResourcesFiles(suffix, mainResDirs)
-        )
-    }
-
-    private fun getValuesFolderNames(): Set<String> {
-        val valuesFoldersNames = mutableSetOf<String>()
-        val resDirs = androidVariantHelper.resourceDirs
-        val mainDirsValueFiles = getAllValuesFolders(resDirs.mainDirs)
-        valuesFoldersNames.addAll(mainDirsValueFiles.map { it.name })
-
-        if (resDirs.hasFlavorDirs) {
-            val flavorDirsValueFiles = getAllValuesFolders(resDirs.flavorDirs)
-            valuesFoldersNames.addAll(flavorDirsValueFiles.map { it.name })
-        }
-
-        return valuesFoldersNames
-    }
-
-    private fun getResourcesFiles(suffix: String, resourcesDirs: Set<File>): List<File> {
-        val valuesFolders = getValuesFolders(suffix, resourcesDirs)
-        return valuesFolders.map {
-            it.listFiles { _, name ->
-                RAW_VALUES_FILE_REGEX.matches(name)
-            }?.toList() ?: emptyList()
-        }.flatten()
-    }
-
-    private fun getValuesFolders(suffix: String, resourcesDirs: Set<File>): List<File> {
-        val valuesFolderName = VALUES_FOLDER_NAME + suffix
-        return resourcesDirs.map {
-            it.listFiles { _, name ->
-                name == valuesFolderName
-            }?.toList() ?: emptyList()
-        }.flatten()
-    }
-
-    private fun getAllValuesFolders(resourcesDirs: Set<File>): List<File> {
-        return resourcesDirs.map {
-            it.listFiles { _, name ->
-                VALUES_FOLDER_REGEX.matches(name)
-            }?.toList() ?: emptyList()
-        }.flatten()
+//        val rawFilesModels = mutableListOf<RawFiles>()
+//        for (folderName in getValuesFolderNames()) {
+//            rawFilesModels.add(getRawResourcesFilesForFolder(folderName))
+//        }
+//        return rawFilesModels
+        TODO()
     }
 
     private fun getGatheredStringsFolder(): File {

@@ -30,13 +30,5 @@ interface FilesProvider {
 
     fun getAllExpectedTemplatesFiles(): List<File>
 
-    /**
-     * Returns a list of lists for all of the files within the values folder of the application/flavor except for the
-     * 'resolved.xml' file which is this plugin's output.
-     * @param valuesFolderName -  The name of the folder where the placeholders are being resolved. This is usually
-     * `values` but it could change for other languages.
-     */
-    fun getRawResourcesFilesForFolder(valuesFolderName: String): RawFiles
-
     fun getAllFoldersRawResourcesFiles(): List<RawFiles>
 }
