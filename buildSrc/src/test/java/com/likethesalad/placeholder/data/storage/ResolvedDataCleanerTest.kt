@@ -1,13 +1,10 @@
 package com.likethesalad.placeholder.data.storage
 
-import com.likethesalad.placeholder.data.Constants.Companion.RESOLVED_FILE_NAME
+import com.google.common.truth.Truth
 import com.likethesalad.placeholder.data.VariantDirsPathFinder
-import com.likethesalad.placeholder.data.helpers.wrappers.AndroidSourceDirectorySetWrapper
-import com.likethesalad.placeholder.data.helpers.wrappers.AndroidSourceSetWrapper
 import com.likethesalad.placeholder.models.VariantResPaths
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -18,43 +15,89 @@ class ResolvedDataCleanerTest {
     @get:Rule
     val temporaryFolder = TemporaryFolder()
 
-    private lateinit var variantDirsPathFinder: VariantDirsPathFinder
-    private lateinit var resolvedDataCleaner: ResolvedDataCleaner
-
-    @Before
-    fun setup() {
-        resolvedDataCleaner = ResolvedDataCleaner(variantDirsPathFinder)
-    }
-
     @Test
-    fun `Remove all resolved xml files from all res dirs of all variants listed on this buildVariant`() {
+    fun `Remove all resolved xml files from all res dirs of the buildVariant folder`() {
+        // Given
+        val variantDirsPathFinder = mockk<VariantDirsPathFinder>()
         val variantName = "clientDebug"
-        val listOfDirsForThisVariant = listOf("main", "client", "clientDebug", "debug")
-        every { variantDirsPathFinder.existingPathsResDirs }
+        val otherVariantName = "client"
+        val variantResPath = mockk<VariantResPaths>()
+        val otherVariantResPath = mockk<VariantResPaths>()
+        val resDir = getResDirWithXmlFiles(
+            variantName, "res",
+            mapOf(
+                "values" to listOf("resolved.xml", "something.xml"),
+                "values-es" to listOf("resolved.xml")
+            )
+        )
+        val resDir2 = getResDirWithXmlFiles(
+            variantName, "res2",
+            mapOf(
+                "values-it" to listOf("resolved.xml", "res2valueFile.xml")
+            )
+        )
+        val otherResDir = getResDirWithXmlFiles(
+            otherVariantName, "res",
+            mapOf(
+                "values" to listOf("resolved.xml", "something.xml"),
+                "values-es" to listOf("resolved.xml")
+            )
+        )
+        every { variantResPath.paths }.returns(setOf(resDir, resDir2))
+        every { variantResPath.variantName }.returns(variantName)
+        every { otherVariantResPath.paths }.returns(setOf(otherResDir))
+        every { otherVariantResPath.variantName }.returns(otherVariantName)
+        every { variantDirsPathFinder.existingPathsResDirs }.returns(
+            listOf(
+                variantResPath,
+                otherVariantResPath
+            )
+        )
+        assertFileExist(resDir, "values/resolved.xml", true)
+        assertFileExist(resDir, "values/something.xml", true)
+        assertFileExist(resDir, "values-es/resolved.xml", true)
+        assertFileExist(resDir2, "values-it/res2valueFile.xml", true)
+        assertFileExist(resDir2, "values-it/resolved.xml", true)
+        assertFileExist(otherResDir, "values/resolved.xml", true)
+        assertFileExist(otherResDir, "values/something.xml", true)
+        assertFileExist(otherResDir, "values-es/resolved.xml", true)
+
+        // When
+        val resolvedDataCleaner = ResolvedDataCleaner(variantName, variantDirsPathFinder)
+        resolvedDataCleaner.removeResolvedFiles()
+
+        // Then
+        assertFileExist(resDir, "values/resolved.xml", false)
+        assertFileExist(resDir, "values/something.xml", true)
+        assertFileExist(resDir, "values-es/resolved.xml", false)
+        assertFileExist(resDir2, "values-it/res2valueFile.xml", true)
+        assertFileExist(resDir2, "values-it/resolved.xml", false)
+        assertFileExist(otherResDir, "values/resolved.xml", true)
+        assertFileExist(otherResDir, "values/something.xml", true)
+        assertFileExist(otherResDir, "values-es/resolved.xml", true)
     }
 
-    private fun getResDirsWithResolvedXmlFile(
-        variantName: String,
-        valuesFolderName: String,
-        resDirsWithResolvedFile: Map<String, Boolean>
-    ): VariantResPaths {
-        val androidSourceSetWrapper = mockk<AndroidSourceSetWrapper>()
-        val androidSourceDirSetWrapper = mockk<AndroidSourceDirectorySetWrapper>()
-        val resDirs = mutableSetOf<File>()
+    private fun assertFileExist(resDir: File, fileRelativePath: String, fileExist: Boolean) {
+        Truth.assertThat(File(resDir, fileRelativePath).exists()).isEqualTo(fileExist)
+    }
 
-        for ((resDirName, addResolvedFile) in resDirsWithResolvedFile) {
-            val resDir = temporaryFolder.newFolder("src", variantName, resDirName, valuesFolderName)
-            if (addResolvedFile) {
-                temporaryFolder
-                    .newFile("src/$variantName/$resDirName/$valuesFolderName/$RESOLVED_FILE_NAME")
+    private fun getResDirWithXmlFiles(
+        variantName: String,
+        resDirName: String,
+        valuesFoldersWithFiles: Map<String, List<String>>
+    ): File {
+        val resDir = temporaryFolder.newFolder(
+            "src", variantName, resDirName
+        )
+
+        for ((valuesFolderName, valuesFiles) in valuesFoldersWithFiles) {
+            temporaryFolder.newFolder("src", variantName, resDirName, valuesFolderName)
+
+            for (fileName in valuesFiles) {
+                temporaryFolder.newFile("src/$variantName/$resDirName/$valuesFolderName/$fileName")
             }
-            resDirs.add(resDir)
         }
 
-        every { androidSourceDirSetWrapper.getSrcDirs() }.returns(resDirs)
-        every { androidSourceSetWrapper.getRes() }.returns(androidSourceDirSetWrapper)
-
-//        return androidSourceSetWrapper
-        TODO()
+        return resDir
     }
 }
