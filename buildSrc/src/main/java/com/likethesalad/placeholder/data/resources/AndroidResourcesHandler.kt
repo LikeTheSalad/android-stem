@@ -2,7 +2,6 @@ package com.likethesalad.placeholder.data.resources
 
 import com.google.gson.Gson
 import com.likethesalad.placeholder.data.PathIdentityResolver
-import com.likethesalad.placeholder.data.storage.FilesProvider
 import com.likethesalad.placeholder.models.PathIdentity
 import com.likethesalad.placeholder.models.StringResourceModel
 import com.likethesalad.placeholder.models.StringsGatheredModel
@@ -12,7 +11,6 @@ import java.io.File
 
 
 class AndroidResourcesHandler(
-    private val filesProvider: FilesProvider,
     private val pathIdentityResolver: PathIdentityResolver
 ) : ResourcesHandler {
 

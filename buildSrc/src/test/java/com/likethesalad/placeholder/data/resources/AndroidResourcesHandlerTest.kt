@@ -2,7 +2,6 @@ package com.likethesalad.placeholder.data.resources
 
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.data.PathIdentityResolver
-import com.likethesalad.placeholder.data.storage.AndroidFilesProvider
 import com.likethesalad.placeholder.models.PathIdentity
 import com.likethesalad.placeholder.models.StringResourceModel
 import com.likethesalad.placeholder.models.StringsGatheredModel
@@ -17,7 +16,6 @@ import java.io.File
 
 class AndroidResourcesHandlerTest {
 
-    private lateinit var androidFilesProvider: AndroidFilesProvider
     private lateinit var pathIdentityResolver: PathIdentityResolver
     private lateinit var androidResourcesHandler: AndroidResourcesHandler
 
@@ -26,9 +24,8 @@ class AndroidResourcesHandlerTest {
 
     @Before
     fun setUp() {
-        androidFilesProvider = mockk()
         pathIdentityResolver = mockk()
-        androidResourcesHandler = AndroidResourcesHandler(androidFilesProvider, pathIdentityResolver)
+        androidResourcesHandler = AndroidResourcesHandler(pathIdentityResolver)
     }
 
     @Test
