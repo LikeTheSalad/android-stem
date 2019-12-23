@@ -21,21 +21,18 @@ class ResolvePlaceholdersAction(
     }
 
     fun resolve() {
-//        for (templateFile in filesProvider.getAllTemplatesFiles()) {
-//            val templatesModel = resourcesHandler.getTemplatesFromFile(templateFile)
-//            val resolvedTemplates = templateResolver.resolveTemplates(templatesModel)
-//            val curatedTemplates =
-//                filterNonTranslatableStringsForLanguage(templatesModel.suffix, resolvedTemplates)
-//            if (curatedTemplates.isNotEmpty()) {
-//                resourcesHandler.saveResolvedStringList(
-//                    curatedTemplates,
-//                    templatesModel.suffix
-//                )
-//            } else {
-//                // Clean up
-//                resourcesHandler.removeResolvedStringFileIfExists(templatesModel.suffix)
-//            }
-//        }
+        for (templateFile in filesProvider.getAllTemplatesFiles()) {
+            val templatesModel = resourcesHandler.getTemplatesFromFile(templateFile)
+            val resolvedTemplates = templateResolver.resolveTemplates(templatesModel)
+            val curatedTemplates =
+                filterNonTranslatableStringsForLanguage(templatesModel.pathIdentity.suffix, resolvedTemplates)
+            if (curatedTemplates.isNotEmpty()) {
+                resourcesHandler.saveResolvedStringList(
+                    curatedTemplates,
+                    templatesModel.pathIdentity
+                )
+            }
+        }
     }
 
     private fun filterNonTranslatableStringsForLanguage(

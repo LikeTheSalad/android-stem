@@ -10,8 +10,6 @@ interface FilesProvider {
      * will go to, this will be into the project's sourceSets resources.
      * @param suffix -  The values folder name suffix.
      */
-    fun getResolvedFile(suffix: String): File
-
     fun getAllExpectedResolvedFiles(): List<File>
 
     /**

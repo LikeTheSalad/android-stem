@@ -84,59 +84,59 @@ class AndroidResourcesHandlerTest {
         Truth.assertThat(file.readText()).isEqualTo(fileResult.readText())
     }
 
-    @Test
-    fun check_saveResolvedStringListForValuesFolder() {
-        // Given:
-        val valuesFolder = "values"
-        val resolvedFile = temporaryFolder.newFile()
-        val stringResourceModel1 = StringResourceModel("welcome", "The welcome message for TesT")
-        val stringResourceModel2 = StringResourceModel(
-            mapOf(
-                "name" to "message_non_translatable",
-                "translatable" to "false"
-            ),
-            "Non translatable TesT"
-        )
-        val list = listOf(stringResourceModel1, stringResourceModel2)
-        every { androidFilesProvider.getResolvedFile(valuesFolder) }.returns(resolvedFile)
-
-        // When:
-        androidResourcesHandler.saveResolvedStringList(list, valuesFolder)
-
-        // Then:
-        val expectedResult = File(javaClass.getResource("save_resolved_strings.xml").file).readText()
-        Truth.assertThat(resolvedFile.readText()).isEqualTo(expectedResult)
-    }
-
-    @Test
-    fun check_removeResolvedStringFileIfExistsForValuesFolder_exists() {
-        // Given:
-        val valueFolderName = "values"
-        val fileMock = mockk<File>(relaxed = true)
-        every { fileMock.exists() }.returns(true)
-        every { androidFilesProvider.getResolvedFile(valueFolderName) }.returns(fileMock)
-
-        // When:
-        androidResourcesHandler.removeResolvedStringFileIfExists(valueFolderName)
-
-        // Then:
-        verify { fileMock.delete() }
-    }
-
-    @Test
-    fun check_removeResolvedStringFileIfExistsForValuesFolder_not_exists() {
-        // Given:
-        val valueFolderName = "values"
-        val fileMock = mockk<File>(relaxed = true)
-        every { fileMock.exists() }.returns(false)
-        every { androidFilesProvider.getResolvedFile(valueFolderName) }.returns(fileMock)
-
-        // When:
-        androidResourcesHandler.removeResolvedStringFileIfExists(valueFolderName)
-
-        // Then:
-        verify(exactly = 0) { fileMock.delete() }
-    }
+//    @Test
+//    fun check_saveResolvedStringListForValuesFolder() {
+//        // Given:
+//        val valuesFolder = "values"
+//        val resolvedFile = temporaryFolder.newFile()
+//        val stringResourceModel1 = StringResourceModel("welcome", "The welcome message for TesT")
+//        val stringResourceModel2 = StringResourceModel(
+//            mapOf(
+//                "name" to "message_non_translatable",
+//                "translatable" to "false"
+//            ),
+//            "Non translatable TesT"
+//        )
+//        val list = listOf(stringResourceModel1, stringResourceModel2)
+//        every { androidFilesProvider.getResolvedFile(valuesFolder) }.returns(resolvedFile)
+//
+//        // When:
+//        androidResourcesHandler.saveResolvedStringList(list, valuesFolder)
+//
+//        // Then:
+//        val expectedResult = File(javaClass.getResource("save_resolved_strings.xml").file).readText()
+//        Truth.assertThat(resolvedFile.readText()).isEqualTo(expectedResult)
+//    }
+//
+//    @Test
+//    fun check_removeResolvedStringFileIfExistsForValuesFolder_exists() {
+//        // Given:
+//        val valueFolderName = "values"
+//        val fileMock = mockk<File>(relaxed = true)
+//        every { fileMock.exists() }.returns(true)
+//        every { androidFilesProvider.getResolvedFile(valueFolderName) }.returns(fileMock)
+//
+//        // When:
+//        androidResourcesHandler.removeResolvedStringFileIfExists(valueFolderName)
+//
+//        // Then:
+//        verify { fileMock.delete() }
+//    }
+//
+//    @Test
+//    fun check_removeResolvedStringFileIfExistsForValuesFolder_not_exists() {
+//        // Given:
+//        val valueFolderName = "values"
+//        val fileMock = mockk<File>(relaxed = true)
+//        every { fileMock.exists() }.returns(false)todo
+//        every { androidFilesProvider.getResolvedFile(valueFolderName) }.returns(fileMock)
+//
+//        // When:
+//        androidResourcesHandler.removeResolvedStringFileIfExists(valueFolderName)
+//
+//        // Then:
+//        verify(exactly = 0) { fileMock.delete() }
+//    }
 
     @Test
     fun check_getTemplatesFromFile_file_exists() {

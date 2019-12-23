@@ -1,5 +1,6 @@
 package com.likethesalad.placeholder.data.resources
 
+import com.likethesalad.placeholder.models.PathIdentity
 import com.likethesalad.placeholder.models.StringResourceModel
 import com.likethesalad.placeholder.models.StringsGatheredModel
 import com.likethesalad.placeholder.models.StringsTemplatesModel
@@ -11,9 +12,7 @@ interface ResourcesHandler {
 
     fun getTemplatesFromFile(templateFile: File): StringsTemplatesModel
 
-    fun saveResolvedStringList(resolvedStrings: List<StringResourceModel>, suffix: String)
-
-    fun removeResolvedStringFileIfExists(suffix: String)
+    fun saveResolvedStringList(resolvedStrings: List<StringResourceModel>, pathIdentity: PathIdentity)
 
     fun saveTemplates(templates: StringsTemplatesModel)
 

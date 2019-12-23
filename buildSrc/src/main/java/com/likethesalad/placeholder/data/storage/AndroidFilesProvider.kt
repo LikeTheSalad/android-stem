@@ -24,26 +24,14 @@ class AndroidFilesProvider(
         val TEMPLATES_SUFFIX_REGEX = Regex("templates(-[a-zA-Z-]+)*")
     }
 
-    override fun getResolvedFile(suffix: String): File {
-        val resourcesDirs = androidVariantHelper.resourceDirs
-        val folder = if (resourcesDirs.hasFlavorDirs) {
-            File(resourcesDirs.flavorDirs.first().absolutePath + "/" + "$VALUES_FOLDER_NAME$suffix")
-        } else {
-            File(resourcesDirs.mainDirs.first().absolutePath + "/" + "$VALUES_FOLDER_NAME$suffix")
-        }
-        if (!folder.exists()) {
-            folder.mkdirs()
-        }
-        return File(folder, OUTPUT_RESOLVED_FILE_NAME)
-    }
-
     override fun getAllExpectedResolvedFiles(): List<File> {
-        val resolvedFiles = mutableListOf<File>()
-        for (template in getAllTemplatesFiles()) {
-            val suffix = TEMPLATES_SUFFIX_REGEX.find(template.name)!!.groupValues[1]
-            resolvedFiles.add(getResolvedFile(suffix))
-        }
-        return resolvedFiles
+//        val resolvedFiles = mutableListOf<File>()
+//        for (template in getAllTemplatesFiles()) {
+//            val suffix = TEMPLATES_SUFFIX_REGEX.find(template.name)!!.groupValues[1]
+//            resolvedFiles.add(getResolvedFile(suffix))
+//        }
+//        return resolvedFiles
+        TODO()
     }
 
     override fun getGatheredStringsFile(suffix: String): File {

@@ -3,6 +3,7 @@ package com.likethesalad.placeholder.data.resources
 import com.google.gson.Gson
 import com.likethesalad.placeholder.data.PathIdentityResolver
 import com.likethesalad.placeholder.data.storage.FilesProvider
+import com.likethesalad.placeholder.models.PathIdentity
 import com.likethesalad.placeholder.models.StringResourceModel
 import com.likethesalad.placeholder.models.StringsGatheredModel
 import com.likethesalad.placeholder.models.StringsTemplatesModel
@@ -28,18 +29,11 @@ class AndroidResourcesHandler(
 
     override fun saveResolvedStringList(
         resolvedStrings: List<StringResourceModel>,
-        suffix: String
+        pathIdentity: PathIdentity
     ) {
         val resDocument = AndroidXmlResDocument()
         resDocument.appendAllStringResources(resolvedStrings)
-        resDocument.saveToFile(filesProvider.getResolvedFile(suffix))
-    }
-
-    override fun removeResolvedStringFileIfExists(suffix: String) {
-        val file = filesProvider.getResolvedFile(suffix)
-        if (file.exists()) {
-            file.delete()
-        }
+        resDocument.saveToFile(pathIdentityResolver.getResolvedStringsFile(pathIdentity))
     }
 
     override fun getTemplatesFromFile(templateFile: File): StringsTemplatesModel {
