@@ -1,9 +1,8 @@
 package com.likethesalad.placeholder.data.storage
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.data.helpers.AndroidVariantHelper
+import com.likethesalad.placeholder.data.OutputStringFileResolver
 import com.likethesalad.placeholder.models.ResDirs
-import com.likethesalad.placeholder.models.raw.FlavorValuesRawFiles
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Before
@@ -14,8 +13,9 @@ import java.io.File
 
 class AndroidFilesProviderTest {
 
+    private lateinit var outputStringFileResolver: OutputStringFileResolver
+    private lateinit var incrementalDirsProvider: IncrementalDirsProvider
     private lateinit var androidFilesProvider: AndroidFilesProvider
-    private lateinit var androidVariantHelper: AndroidVariantHelper
     @get:Rule
     val temporaryFolder = TemporaryFolder()
 
@@ -25,8 +25,9 @@ class AndroidFilesProviderTest {
 
     @Before
     fun setUp() {
-        androidVariantHelper = mockk()
-        androidFilesProvider = AndroidFilesProvider(androidVariantHelper)
+        outputStringFileResolver = mockk()
+        incrementalDirsProvider = mockk()
+        androidFilesProvider = AndroidFilesProvider(outputStringFileResolver, incrementalDirsProvider)
     }
 
 //    @Test

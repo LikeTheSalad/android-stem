@@ -1,7 +1,7 @@
 package com.likethesalad.placeholder.data.resources
 
 import com.google.gson.Gson
-import com.likethesalad.placeholder.data.PathIdentityResolver
+import com.likethesalad.placeholder.data.OutputStringFileResolver
 import com.likethesalad.placeholder.models.PathIdentity
 import com.likethesalad.placeholder.models.StringResourceModel
 import com.likethesalad.placeholder.models.StringsGatheredModel
@@ -11,7 +11,7 @@ import java.io.File
 
 
 class AndroidResourcesHandler(
-    private val pathIdentityResolver: PathIdentityResolver
+    private val outputStringFileResolver: OutputStringFileResolver
 ) : ResourcesHandler {
 
     private val gson = Gson()
@@ -22,7 +22,7 @@ class AndroidResourcesHandler(
 
     override fun saveGatheredStrings(stringsGathered: StringsGatheredModel) {
         val jsonStrings = gson.toJson(stringsGathered)
-        pathIdentityResolver.getRawStringsFile(stringsGathered.pathIdentity).writeText(jsonStrings)
+        outputStringFileResolver.getRawStringsFile(stringsGathered.pathIdentity.suffix).writeText(jsonStrings)
     }
 
     override fun saveResolvedStringList(
@@ -31,7 +31,7 @@ class AndroidResourcesHandler(
     ) {
         val resDocument = AndroidXmlResDocument()
         resDocument.appendAllStringResources(resolvedStrings)
-        resDocument.saveToFile(pathIdentityResolver.getResolvedStringsFile(pathIdentity))
+        resDocument.saveToFile(outputStringFileResolver.getResolvedStringsFile(pathIdentity.valuesFolderName))
     }
 
     override fun getTemplatesFromFile(templateFile: File): StringsTemplatesModel {
@@ -40,6 +40,6 @@ class AndroidResourcesHandler(
 
     override fun saveTemplates(templates: StringsTemplatesModel) {
         val jsonTemplates = gson.toJson(templates)
-        pathIdentityResolver.getTemplateStringsFile(templates.pathIdentity).writeText(jsonTemplates)
+        outputStringFileResolver.getTemplateStringsFile(templates.pathIdentity.suffix).writeText(jsonTemplates)
     }
 }

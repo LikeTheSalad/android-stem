@@ -15,7 +15,7 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import java.io.File
 
-class PathIdentityResolverTest {
+class OutputStringFileResolverTest {
 
     @get:Rule
     val temporaryFolder = TemporaryFolder()
@@ -26,7 +26,7 @@ class PathIdentityResolverTest {
     private lateinit var androidExtensionWrapper: AndroidExtensionWrapper
     private lateinit var androidVariantHelper: AndroidVariantHelper
     private lateinit var incrementalDirsProvider: IncrementalDirsProvider
-    private lateinit var pathIdentityResolver: PathIdentityResolver
+    private lateinit var outputStringFileResolver: OutputStringFileResolver
 
     @Before
     fun setup() {
@@ -36,7 +36,11 @@ class PathIdentityResolverTest {
         every { androidVariantHelper.incrementalDir }.returns(incrementalDir.absolutePath)
         incrementalDirsProvider = IncrementalDirsProvider(androidVariantHelper)
         androidExtensionWrapper = mockk()
-        pathIdentityResolver = PathIdentityResolver(androidExtensionWrapper, incrementalDirsProvider)
+        outputStringFileResolver = OutputStringFileResolver(
+            "clientDebug",
+            androidExtensionWrapper,
+            incrementalDirsProvider
+        )
     }
 
     @Test
@@ -96,18 +100,20 @@ class PathIdentityResolverTest {
     }
 
     private fun assertTemplateStringsFilePath(pathIdentity: PathIdentity, expectedRelativePath: String) {
-        Truth.assertThat(pathIdentityResolver.getTemplateStringsFile(pathIdentity).absolutePath)
+        Truth.assertThat(outputStringFileResolver.getTemplateStringsFile(pathIdentity.suffix).absolutePath)
             .isEqualTo(File(incrementalDir, expectedRelativePath).absolutePath)
     }
 
     private fun assertRawStringsFilePath(pathIdentity: PathIdentity, expectedRelativePath: String) {
-        Truth.assertThat(pathIdentityResolver.getRawStringsFile(pathIdentity).absolutePath)
+        Truth.assertThat(outputStringFileResolver.getRawStringsFile(pathIdentity.suffix).absolutePath)
             .isEqualTo(File(incrementalDir, expectedRelativePath).absolutePath)
     }
 
     private fun assertResolvedStringsFilePath(pathIdentity: PathIdentity, expectedRelativePath: String) {
-        Truth.assertThat(pathIdentityResolver.getResolvedStringsFile(pathIdentity).absolutePath)
-            .isEqualTo(File(srcDir, expectedRelativePath).absolutePath)
+        Truth.assertThat(
+            outputStringFileResolver.getResolvedStringsFile(pathIdentity.valuesFolderName)
+                .absolutePath
+        ).isEqualTo(File(srcDir, expectedRelativePath).absolutePath)
     }
 
     private fun getVariantSourceSet(variantName: String, vararg resDirNames: String): AndroidSourceSetWrapper {

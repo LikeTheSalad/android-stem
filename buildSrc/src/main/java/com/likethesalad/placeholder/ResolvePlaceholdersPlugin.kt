@@ -49,7 +49,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project> {
     ) {
 
         val androidVariantHelper = AndroidVariantHelper(androidProjectHelper, variantName)
-        val filesProvider = AndroidFilesProvider(androidVariantHelper)
+//        val filesProvider = AndroidFilesProvider(androidVariantHelper)
 //        val androidResourcesHandler = AndroidResourcesHandler(filesProvider)
 
         val gatherStringsTask = project.tasks.create(

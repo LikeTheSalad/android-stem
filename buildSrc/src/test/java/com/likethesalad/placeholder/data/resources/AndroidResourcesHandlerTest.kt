@@ -1,7 +1,7 @@
 package com.likethesalad.placeholder.data.resources
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.data.PathIdentityResolver
+import com.likethesalad.placeholder.data.OutputStringFileResolver
 import com.likethesalad.placeholder.models.PathIdentity
 import com.likethesalad.placeholder.models.StringResourceModel
 import com.likethesalad.placeholder.models.StringsGatheredModel
@@ -16,7 +16,7 @@ import java.io.File
 
 class AndroidResourcesHandlerTest {
 
-    private lateinit var pathIdentityResolver: PathIdentityResolver
+    private lateinit var outputStringFileResolver: OutputStringFileResolver
     private lateinit var androidResourcesHandler: AndroidResourcesHandler
 
     @get:Rule
@@ -24,8 +24,8 @@ class AndroidResourcesHandlerTest {
 
     @Before
     fun setUp() {
-        pathIdentityResolver = mockk()
-        androidResourcesHandler = AndroidResourcesHandler(pathIdentityResolver)
+        outputStringFileResolver = mockk()
+        androidResourcesHandler = AndroidResourcesHandler(outputStringFileResolver)
     }
 
     @Test
@@ -59,7 +59,7 @@ class AndroidResourcesHandlerTest {
         // Given:
         val pathIdentity = PathIdentity("client", "values", "")
         val file = temporaryFolder.newFile()
-        every { pathIdentityResolver.getRawStringsFile(pathIdentity) }.returns(file)
+        every { outputStringFileResolver.getRawStringsFile("") }.returns(file)
         val mergedStrings = listOf(
             StringResourceModel("the_name", "the content"),
             StringResourceModel("the_name2", "the content 2"),
@@ -83,7 +83,9 @@ class AndroidResourcesHandlerTest {
     @Test
     fun check_saveResolvedStringList() {
         // Given:
+        val valuesFolderName = "values"
         val pathIdentity = mockk<PathIdentity>()
+        every { pathIdentity.valuesFolderName }.returns(valuesFolderName)
         val resolvedFile = temporaryFolder.newFile()
         val stringResourceModel1 = StringResourceModel("welcome", "The welcome message for TesT")
         val stringResourceModel2 = StringResourceModel(
@@ -94,7 +96,7 @@ class AndroidResourcesHandlerTest {
             "Non translatable TesT"
         )
         val list = listOf(stringResourceModel1, stringResourceModel2)
-        every { pathIdentityResolver.getResolvedStringsFile(pathIdentity) }.returns(resolvedFile)
+        every { outputStringFileResolver.getResolvedStringsFile(valuesFolderName) }.returns(resolvedFile)
 
         // When:
         androidResourcesHandler.saveResolvedStringList(list, pathIdentity)
@@ -154,7 +156,7 @@ class AndroidResourcesHandlerTest {
             mapOf("app_name" to "TesT")
         )
         val file = temporaryFolder.newFile()
-        every { pathIdentityResolver.getTemplateStringsFile(pathIdentity) }.returns(file)
+        every { outputStringFileResolver.getTemplateStringsFile("-es") }.returns(file)
 
         // When:
         androidResourcesHandler.saveTemplates(templates)
