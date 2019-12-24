@@ -4,7 +4,13 @@ import com.likethesalad.placeholder.data.helpers.AndroidVariantHelper
 import java.io.File
 
 class IncrementalDirsProvider(androidVariantHelper: AndroidVariantHelper) {
-    private val incrementalDir = File(androidVariantHelper.incrementalDir)
+    private val incrementalDir: File by lazy {
+        val dir = File(androidVariantHelper.incrementalDir)
+        if (!dir.exists()) {
+            dir.createNewFile()
+        }
+        dir
+    }
 
     fun getRawStringsDir(): File {
         return getIncrementalDirAndCreateIfNotExists("strings")
