@@ -2,10 +2,8 @@ package com.likethesalad.placeholder.data
 
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.data.helpers.AndroidVariantHelper
-import com.likethesalad.placeholder.data.helpers.wrappers.AndroidExtensionWrapper
-import com.likethesalad.placeholder.data.helpers.wrappers.AndroidSourceDirectorySetWrapper
-import com.likethesalad.placeholder.data.helpers.wrappers.AndroidSourceSetWrapper
 import com.likethesalad.placeholder.data.storage.IncrementalDirsProvider
+import com.likethesalad.placeholder.data.storage.VariantBuildResolvedDir
 import com.likethesalad.placeholder.models.PathIdentity
 import io.mockk.every
 import io.mockk.mockk
@@ -23,9 +21,9 @@ class OutputStringFileResolverTest {
     private val srcDirName = "src"
     private lateinit var srcDir: File
     private lateinit var incrementalDir: File
-    private lateinit var androidExtensionWrapper: AndroidExtensionWrapper
     private lateinit var androidVariantHelper: AndroidVariantHelper
     private lateinit var incrementalDirsProvider: IncrementalDirsProvider
+    private lateinit var variantBuildResolvedDir: VariantBuildResolvedDir
     private lateinit var outputStringFileResolver: OutputStringFileResolver
 
     @Before
@@ -35,10 +33,9 @@ class OutputStringFileResolverTest {
         androidVariantHelper = mockk()
         every { androidVariantHelper.incrementalDir }.returns(incrementalDir.absolutePath)
         incrementalDirsProvider = IncrementalDirsProvider(androidVariantHelper)
-        androidExtensionWrapper = mockk()
+        variantBuildResolvedDir = mockk()
         outputStringFileResolver = OutputStringFileResolver(
-            "clientDebug",
-            androidExtensionWrapper,
+            variantBuildResolvedDir,
             incrementalDirsProvider
         )
     }
@@ -46,8 +43,7 @@ class OutputStringFileResolverTest {
     @Test
     fun `Get resolved strings file`() {
         val variantName = "clientDebug"
-        val sourceSet = getVariantSourceSet(variantName, "res")
-        every { androidExtensionWrapper.getSourceSets() }.returns(mapOf(variantName to sourceSet))
+        every { variantBuildResolvedDir.resolvedDir }.returns(File(srcDir, "clientDebug/res/"))
 
         assertResolvedStringsFilePath(
             PathIdentity(variantName, "values", ""),
@@ -62,8 +58,7 @@ class OutputStringFileResolverTest {
     @Test
     fun `Get resolved strings file when there's more than a res folder`() {
         val variantName = "clientDebug"
-        val sourceSet = getVariantSourceSet(variantName, "res1", "res2")
-        every { androidExtensionWrapper.getSourceSets() }.returns(mapOf(variantName to sourceSet))
+        every { variantBuildResolvedDir.resolvedDir }.returns(File(srcDir, "clientDebug/res1/"))
 
         assertResolvedStringsFilePath(
             PathIdentity(variantName, "values", ""),
@@ -114,15 +109,5 @@ class OutputStringFileResolverTest {
             outputStringFileResolver.getResolvedStringsFile(pathIdentity.valuesFolderName)
                 .absolutePath
         ).isEqualTo(File(srcDir, expectedRelativePath).absolutePath)
-    }
-
-    private fun getVariantSourceSet(variantName: String, vararg resDirNames: String): AndroidSourceSetWrapper {
-        val resDirs = resDirNames.map { temporaryFolder.newFolder(srcDirName, variantName, it) }
-        val sourceDirSet = mockk<AndroidSourceDirectorySetWrapper>()
-        every { sourceDirSet.getSrcDirs() }.returns(resDirs.toSet())
-
-        val sourceSet = mockk<AndroidSourceSetWrapper>()
-        every { sourceSet.getRes() }.returns(sourceDirSet)
-        return sourceSet
     }
 }

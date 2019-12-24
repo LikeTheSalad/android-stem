@@ -3,22 +3,17 @@ package com.likethesalad.placeholder.data
 import com.likethesalad.placeholder.data.Constants.Companion.RAW_STRING_BASE_FILE_NAME
 import com.likethesalad.placeholder.data.Constants.Companion.RESOLVED_FILE_NAME
 import com.likethesalad.placeholder.data.Constants.Companion.TEMPLATE_BASE_FILE_NAME
-import com.likethesalad.placeholder.data.helpers.wrappers.AndroidExtensionWrapper
 import com.likethesalad.placeholder.data.storage.IncrementalDirsProvider
+import com.likethesalad.placeholder.data.storage.VariantBuildResolvedDir
 import java.io.File
 
 class OutputStringFileResolver(
-    buildVariantName: String,
-    androidExtensionWrapper: AndroidExtensionWrapper,
+    private val variantBuildResolvedDir: VariantBuildResolvedDir,
     private val incrementalDirsProvider: IncrementalDirsProvider
 ) {
 
-    private val variantResDir: File by lazy {
-        androidExtensionWrapper.getSourceSets().getValue(buildVariantName).getRes().getSrcDirs().first()
-    }
-
     fun getResolvedStringsFile(valuesFolderName: String): File {
-        return File(variantResDir, "$valuesFolderName/$RESOLVED_FILE_NAME")
+        return File(variantBuildResolvedDir.resolvedDir, "$valuesFolderName/$RESOLVED_FILE_NAME")
     }
 
     fun getRawStringsFile(suffix: String): File {

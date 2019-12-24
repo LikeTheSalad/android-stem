@@ -7,10 +7,7 @@ import com.likethesalad.placeholder.data.VariantRawStrings
 import com.likethesalad.placeholder.data.helpers.AndroidProjectHelper
 import com.likethesalad.placeholder.data.helpers.AndroidVariantHelper
 import com.likethesalad.placeholder.data.resources.AndroidResourcesHandler
-import com.likethesalad.placeholder.data.storage.AndroidFilesProvider
-import com.likethesalad.placeholder.data.storage.IncrementalDataCleaner
-import com.likethesalad.placeholder.data.storage.IncrementalDirsProvider
-import com.likethesalad.placeholder.data.storage.ResolvedDataCleaner
+import com.likethesalad.placeholder.data.storage.*
 import com.likethesalad.placeholder.models.PlaceholderExtension
 import com.likethesalad.placeholder.resolver.RecursiveLevelDetector
 import com.likethesalad.placeholder.resolver.TemplateResolver
@@ -57,12 +54,18 @@ class ResolvePlaceholdersPlugin : Plugin<Project> {
         extension: PlaceholderExtension
     ) {
 
+
         val androidVariantHelper = AndroidVariantHelper(androidProjectHelper, variantName)
         val incrementalDirsProvider = IncrementalDirsProvider(androidVariantHelper)
         val incrementalDataCleaner = IncrementalDataCleaner(incrementalDirsProvider)
-        val outputStringFileResolver = OutputStringFileResolver(
+        val variantBuildResolvedDir = VariantBuildResolvedDir(
             variantName,
+            project.buildDir,
             androidProjectHelper.androidExtension,
+            true
+        )
+        val outputStringFileResolver = OutputStringFileResolver(
+            variantBuildResolvedDir,
             incrementalDirsProvider
         )
         val filesProvider = AndroidFilesProvider(outputStringFileResolver, incrementalDirsProvider)
