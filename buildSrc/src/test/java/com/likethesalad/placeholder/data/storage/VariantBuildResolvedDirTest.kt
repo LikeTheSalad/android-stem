@@ -6,6 +6,7 @@ import com.likethesalad.placeholder.data.helpers.wrappers.AndroidSourceDirectory
 import com.likethesalad.placeholder.data.helpers.wrappers.AndroidSourceSetWrapper
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -20,14 +21,25 @@ class VariantBuildResolvedDirTest {
     fun `Get build res dir for variant and don't keep it`() {
         val variantName = "demoDebug"
         val buildDir = temporaryFolder.newFolder("build")
+        val androidExtensionWrapper = mockk<AndroidExtensionWrapper>()
+        val variantSourceSets = mockk<AndroidSourceSetWrapper>()
+        val variantSourceDirectorySetWrapper = mockk<AndroidSourceDirectorySetWrapper>(relaxUnitFun = true)
+        val oldSrcDir = temporaryFolder.newFolder("res")
+        val oldSrcDir2 = temporaryFolder.newFolder("res2")
+        val newSrcDir = File(buildDir, "generated/resolved/$variantName")
+        every { variantSourceDirectorySetWrapper.getSrcDirs() }.returns(setOf(oldSrcDir, oldSrcDir2))
+        every { variantSourceSets.getRes() }.returns(variantSourceDirectorySetWrapper)
+        every { androidExtensionWrapper.getSourceSets() }.returns(mapOf(variantName to variantSourceSets))
         val variantBuildResolvedDir = VariantBuildResolvedDir(
             variantName, buildDir,
-            mockk(), false
+            androidExtensionWrapper,
+            false
         )
 
         Truth.assertThat(variantBuildResolvedDir.resolvedDir).isEqualTo(
-            File(buildDir, "generated/resolved/$variantName")
+            newSrcDir
         )
+        verify { variantSourceDirectorySetWrapper.setSrcDirs(setOf(oldSrcDir, oldSrcDir2, newSrcDir)) }
     }
 
     @Test
@@ -35,12 +47,7 @@ class VariantBuildResolvedDirTest {
         val variantName = "demoDebug"
         val buildDir = mockk<File>()
         val androidExtensionWrapper = mockk<AndroidExtensionWrapper>()
-        val variantBuildResolvedDir = VariantBuildResolvedDir(
-            variantName,
-            buildDir,
-            androidExtensionWrapper,
-            true
-        )
+
         every { androidExtensionWrapper.getSourceSets() }.returns(
             mapOf(
                 variantName to getVariantSourceSet(
@@ -48,6 +55,13 @@ class VariantBuildResolvedDirTest {
                     "res"
                 )
             )
+        )
+
+        val variantBuildResolvedDir = VariantBuildResolvedDir(
+            variantName,
+            buildDir,
+            androidExtensionWrapper,
+            true
         )
 
         Truth.assertThat(variantBuildResolvedDir.resolvedDir).isEqualTo(

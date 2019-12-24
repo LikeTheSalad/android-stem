@@ -53,8 +53,6 @@ class ResolvePlaceholdersPlugin : Plugin<Project> {
         androidProjectHelper: AndroidProjectHelper,
         extension: PlaceholderExtension
     ) {
-
-
         val androidVariantHelper = AndroidVariantHelper(androidProjectHelper, variantName)
         val incrementalDirsProvider = IncrementalDirsProvider(androidVariantHelper)
         val incrementalDataCleaner = IncrementalDataCleaner(incrementalDirsProvider)

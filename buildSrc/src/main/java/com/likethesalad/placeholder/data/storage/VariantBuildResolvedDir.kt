@@ -4,17 +4,24 @@ import com.likethesalad.placeholder.data.helpers.wrappers.AndroidExtensionWrappe
 import java.io.File
 
 class VariantBuildResolvedDir(
-    variantName: String,
+    private val variantName: String,
     buildDir: File,
-    androidExtensionWrapper: AndroidExtensionWrapper,
+    private val androidExtensionWrapper: AndroidExtensionWrapper,
     keepResolvedFiles: Boolean
 ) {
 
-    val resolvedDir: File by lazy {
-        if (keepResolvedFiles) {
-            androidExtensionWrapper.getSourceSets().getValue(variantName).getRes().getSrcDirs().first()
-        } else {
-            File(buildDir, "generated/resolved/$variantName")
-        }
+    val resolvedDir: File = if (keepResolvedFiles) {
+        androidExtensionWrapper.getSourceSets().getValue(variantName).getRes().getSrcDirs().first()
+    } else {
+        val dir = File(buildDir, "generated/resolved/$variantName")
+        addResolvedDirToSourceSets(dir)
+        dir
+    }
+
+
+    private fun addResolvedDirToSourceSets(resolvedDir: File) {
+        val variantSourceDirSets = androidExtensionWrapper.getSourceSets().getValue(variantName).getRes()
+        val srcDirs = variantSourceDirSets.getSrcDirs()
+        variantSourceDirSets.setSrcDirs(srcDirs + resolvedDir)
     }
 }
