@@ -62,7 +62,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project> {
             variantName,
             project.buildDir,
             androidProjectHelper.androidExtension,
-            true
+            extension.keepResolvedFiles
         )
         val outputStringFileResolver = OutputStringFileResolver(
             variantBuildResolvedDir,
