@@ -61,10 +61,4 @@ class AndroidProjectHelperTest {
         Truth.assertThat(appVariant.getName()).isEqualTo("demoDebug")
         Truth.assertThat(appVariant.getFlavorName()).isEqualTo("demo")
     }
-
-    @Test
-    fun `Get project src dir path`() {
-        val srcDirPath = "/some/path/to/src"
-        every { }
-    }
 }
