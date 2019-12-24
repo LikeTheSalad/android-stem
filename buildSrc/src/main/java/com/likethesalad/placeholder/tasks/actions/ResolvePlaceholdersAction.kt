@@ -2,6 +2,7 @@ package com.likethesalad.placeholder.tasks.actions
 
 import com.likethesalad.placeholder.data.resources.ResourcesHandler
 import com.likethesalad.placeholder.data.storage.FilesProvider
+import com.likethesalad.placeholder.data.storage.ResolvedDataCleaner
 import com.likethesalad.placeholder.models.StringResourceModel
 import com.likethesalad.placeholder.resolver.TemplateResolver
 import java.io.File
@@ -9,7 +10,8 @@ import java.io.File
 class ResolvePlaceholdersAction(
     private val filesProvider: FilesProvider,
     private val resourcesHandler: ResourcesHandler,
-    private val templateResolver: TemplateResolver
+    private val templateResolver: TemplateResolver,
+    private val resolvedDataCleaner: ResolvedDataCleaner
 ) {
 
     fun getTemplatesFiles(): List<File> {
@@ -21,6 +23,7 @@ class ResolvePlaceholdersAction(
     }
 
     fun resolve() {
+        resolvedDataCleaner.removeResolvedFiles()
         for (templateFile in filesProvider.getAllTemplatesFiles()) {
             val templatesModel = resourcesHandler.getTemplatesFromFile(templateFile)
             val resolvedTemplates = templateResolver.resolveTemplates(templatesModel)

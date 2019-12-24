@@ -3,6 +3,7 @@ package com.likethesalad.placeholder.tasks.actions
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.data.resources.ResourcesHandler
 import com.likethesalad.placeholder.data.storage.FilesProvider
+import com.likethesalad.placeholder.data.storage.ResolvedDataCleaner
 import com.likethesalad.placeholder.models.PathIdentity
 import com.likethesalad.placeholder.models.StringResourceModel
 import com.likethesalad.placeholder.models.StringsTemplatesModel
@@ -16,17 +17,23 @@ import java.io.File
 
 class ResolvePlaceholdersActionTest {
 
-    private lateinit var resolvePlaceholdersAction: ResolvePlaceholdersAction
     private lateinit var filesProvider: FilesProvider
     private lateinit var resourcesHandler: ResourcesHandler
     private lateinit var templateResolver: TemplateResolver
+    private lateinit var resolvedDataCleaner: ResolvedDataCleaner
+
+    private lateinit var resolvePlaceholdersAction: ResolvePlaceholdersAction
 
     @Before
     fun setUp() {
         filesProvider = mockk()
         resourcesHandler = mockk(relaxUnitFun = true)
         templateResolver = mockk(relaxUnitFun = true)
-        resolvePlaceholdersAction = ResolvePlaceholdersAction(filesProvider, resourcesHandler, templateResolver)
+        resolvedDataCleaner = mockk(relaxUnitFun = true)
+        resolvePlaceholdersAction = ResolvePlaceholdersAction(
+            filesProvider, resourcesHandler,
+            templateResolver, resolvedDataCleaner
+        )
     }
 
     @Test
@@ -74,6 +81,7 @@ class ResolvePlaceholdersActionTest {
         resolvePlaceholdersAction.resolve()
 
         // Then:
+        verify { resolvedDataCleaner.removeResolvedFiles() }
         verify { resourcesHandler.saveResolvedStringList(expectedResult, pathIdentity) }
     }
 
@@ -96,6 +104,7 @@ class ResolvePlaceholdersActionTest {
         resolvePlaceholdersAction.resolve()
 
         // Then:
+        verify { resolvedDataCleaner.removeResolvedFiles() }
         verify { resourcesHandler.saveResolvedStringList(translatableStrings, pathIdentity) }
     }
 
@@ -118,6 +127,7 @@ class ResolvePlaceholdersActionTest {
         resolvePlaceholdersAction.resolve()
 
         // Then:
+        verify { resolvedDataCleaner.removeResolvedFiles() }
         verify { resourcesHandler.saveResolvedStringList(allStrings, pathIdentity) }
     }
 
