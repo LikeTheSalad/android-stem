@@ -2,7 +2,7 @@ package com.likethesalad.placeholder.resolver
 
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.models.StringResourceModel
-import junit.framework.Assert.fail
+import junit.framework.TestCase.fail
 import org.junit.Test
 
 class RecursiveLevelDetectorTest {

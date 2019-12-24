@@ -55,10 +55,6 @@ class ApplicationVariantWrapperTest {
 
     @Test
     fun check_getBuildType() {
-        // When:
-        val result = applicationVariantWrapper.getBuildType()
-
-        // Then:
         Truth.assertThat(applicationVariantWrapper.getBuildType().getName()).isEqualTo("debug")
     }
 }
