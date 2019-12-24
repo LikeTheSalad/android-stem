@@ -1,9 +1,15 @@
 package com.likethesalad.placeholder
 
+import com.likethesalad.placeholder.data.OutputStringFileResolver
+import com.likethesalad.placeholder.data.VariantDirsPathFinder
+import com.likethesalad.placeholder.data.VariantDirsPathResolver
+import com.likethesalad.placeholder.data.VariantRawStrings
 import com.likethesalad.placeholder.data.helpers.AndroidProjectHelper
 import com.likethesalad.placeholder.data.helpers.AndroidVariantHelper
 import com.likethesalad.placeholder.data.resources.AndroidResourcesHandler
 import com.likethesalad.placeholder.data.storage.AndroidFilesProvider
+import com.likethesalad.placeholder.data.storage.IncrementalDataCleaner
+import com.likethesalad.placeholder.data.storage.IncrementalDirsProvider
 import com.likethesalad.placeholder.models.PlaceholderExtension
 import com.likethesalad.placeholder.resolver.RecursiveLevelDetector
 import com.likethesalad.placeholder.resolver.TemplateResolver
@@ -31,7 +37,8 @@ class ResolvePlaceholdersPlugin : Plugin<Project> {
                     createResolvePlaceholdersTaskForVariant(
                         project,
                         it.getName(),
-                        it.getFlavorName(),
+                        it.getBuildType().getName(),
+                        it.getProductFlavors().map { flavor -> flavor.getName() },
                         projectHelper,
                         extension
                     )
@@ -43,21 +50,35 @@ class ResolvePlaceholdersPlugin : Plugin<Project> {
     private fun createResolvePlaceholdersTaskForVariant(
         project: Project,
         variantName: String,
-        flavorName: String,
+        variantType: String,
+        flavors: List<String>,
         androidProjectHelper: AndroidProjectHelper,
         extension: PlaceholderExtension
     ) {
 
         val androidVariantHelper = AndroidVariantHelper(androidProjectHelper, variantName)
-//        val filesProvider = AndroidFilesProvider(androidVariantHelper)
-//        val androidResourcesHandler = AndroidResourcesHandler(filesProvider)
+        val incrementalDirsProvider = IncrementalDirsProvider(androidVariantHelper)
+        val incrementalDataCleaner = IncrementalDataCleaner(incrementalDirsProvider)
+        val outputStringFileResolver = OutputStringFileResolver(
+            variantName,
+            androidProjectHelper.androidExtension,
+            incrementalDirsProvider
+        )
+        val filesProvider = AndroidFilesProvider(outputStringFileResolver, incrementalDirsProvider)
+        val androidResourcesHandler = AndroidResourcesHandler(outputStringFileResolver)
+        val variantDirsPathResolver = VariantDirsPathResolver(variantName, flavors, variantType)
+        val variantDirsPathFinder = VariantDirsPathFinder(variantDirsPathResolver, androidProjectHelper)
+        val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
 
         val gatherStringsTask = project.tasks.create(
             androidVariantHelper.tasksNames.gatherRawStringsName,
             GatherRawStringsTask::class.java
         ) {
             it.group = RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME
-//            it.gatherRawStringsAction = GatherRawStringsAction(filesProvider, androidResourcesHandler)
+            it.gatherRawStringsAction = GatherRawStringsAction(
+                variantRawStrings, androidResourcesHandler,
+                incrementalDataCleaner
+            )
         }
 
         val gatherTemplatesTask = project.tasks.create(
@@ -67,7 +88,10 @@ class ResolvePlaceholdersPlugin : Plugin<Project> {
             it.group = RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME
             it.dependsOn(gatherStringsTask)
 
-//            it.gatherTemplatesAction = GatherTemplatesAction(filesProvider, androidResourcesHandler)
+            it.gatherTemplatesAction = GatherTemplatesAction(
+                filesProvider, androidResourcesHandler,
+                incrementalDataCleaner
+            )
         }
 
         val resolvePlaceholdersTask = project.tasks.create(
@@ -77,11 +101,11 @@ class ResolvePlaceholdersPlugin : Plugin<Project> {
             it.group = RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME
             it.dependsOn(gatherTemplatesTask)
 
-//            it.resolvePlaceholdersAction = ResolvePlaceholdersAction(
-//                filesProvider,
-//                androidResourcesHandler,
-//                TemplateResolver(RecursiveLevelDetector())
-//            )
+            it.resolvePlaceholdersAction = ResolvePlaceholdersAction(
+                filesProvider,
+                androidResourcesHandler,
+                TemplateResolver(RecursiveLevelDetector())
+            )
         }
 
         if (extension.resolveOnBuild) {
