@@ -2,9 +2,9 @@ package com.likethesalad.placeholder.data.storage
 
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.data.OutputStringFileResolver
-import com.likethesalad.placeholder.models.ResDirs
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.slot
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -16,83 +16,47 @@ class AndroidFilesProviderTest {
     private lateinit var outputStringFileResolver: OutputStringFileResolver
     private lateinit var incrementalDirsProvider: IncrementalDirsProvider
     private lateinit var androidFilesProvider: AndroidFilesProvider
+
     @get:Rule
     val temporaryFolder = TemporaryFolder()
 
+    private lateinit var templatesDir: File
+    private lateinit var stringsDir: File
+
     companion object {
         private const val INCREMENTAL_FOLDER_NAME = "incremental"
+        private const val TEMPLATES_FOLDER_NAME = "templates"
+        private const val MERGED_STRINGS_FOLDER_NAME = "strings"
     }
 
     @Before
     fun setUp() {
         outputStringFileResolver = mockk()
         incrementalDirsProvider = mockk()
+        templatesDir = temporaryFolder.newFolder(INCREMENTAL_FOLDER_NAME, TEMPLATES_FOLDER_NAME)
+        stringsDir = temporaryFolder.newFolder(INCREMENTAL_FOLDER_NAME, MERGED_STRINGS_FOLDER_NAME)
+        every { incrementalDirsProvider.getTemplateStringsDir() }.returns(templatesDir)
+        every { incrementalDirsProvider.getRawStringsDir() }.returns(stringsDir)
         androidFilesProvider = AndroidFilesProvider(outputStringFileResolver, incrementalDirsProvider)
     }
-
-//    @Test
-//    fun check_getResolvedFileForValuesFolder_with_flavor() {
-//        // Given:
-//        setUpResDirs(flavorDirName = "demo")
-//
-//        // When:
-//        val result = androidFilesProvider.getResolvedFile("")
-//
-//        // Then:
-//        Truth.assertThat(result.absolutePath).endsWith("demo/res/values/resolved.xml")
-//    }
-//
-//    @Test
-//    fun check_getResolvedFileForValuesFolder_without_flavor() {
-//        // Given:
-//        setUpResDirs()
-//
-//        // When:
-//        val result = androidFilesProvider.getResolvedFile("")
-//
-//        // Then:
-//        Truth.assertThat(result.absolutePath).endsWith("main/res/values/resolved.xml")
-//    }
-//
-//    @Test
-//    fun check_getResolvedFileForValuesFolder_for_language_with_flavor() {
-//        // Given:
-//        setUpResDirs(flavorDirName = "demo")todo
-//
-//        // When:
-//        val result = androidFilesProvider.getResolvedFile("-es")
-//
-//        // Then:
-//        Truth.assertThat(result.absolutePath).endsWith("demo/res/values-es/resolved.xml")
-//    }
-
-//    @Test
-//    fun check_getResolvedFileForValuesFolder_for_language_without_flavor() {
-//        // Given:
-//        setUpResDirs()
-//
-//        // When:
-//        val result = androidFilesProvider.getResolvedFile("-es")
-//
-//        // Then:
-//        Truth.assertThat(result.absolutePath).endsWith("main/res/values-es/resolved.xml")
-//    }
 
     @Test
     fun check_getAllExpectedResolvedFiles() {
         // Given:
-        setUpResDirs()
         val templateFiles = listOf("templates.json", "templates-es.json", "templates-it.json")
-        createIncrementalFolder()
-        createFolderInsideIncrementalFolder("templates")
-        for (it in templateFiles) {
-            temporaryFolder.newFile("$INCREMENTAL_FOLDER_NAME/templates/$it")
+        addTemplateFilesToTemplatesDir(templateFiles)
+        val valuesFolderName = slot<String>()
+        every {
+            outputStringFileResolver.getResolvedStringsFile(capture(valuesFolderName))
+        }.answers {
+            File(temporaryFolder.root, "main/res/${valuesFolderName.captured}/resolved.xml")
         }
 
         // When:
         val result = androidFilesProvider.getAllExpectedResolvedFiles()
 
         // Then:
+
         Truth.assertThat(result.map { it.absolutePath.replace(temporaryFolder.root.absolutePath, "") })
             .containsExactly(
                 "/main/res/values/resolved.xml",
@@ -104,12 +68,8 @@ class AndroidFilesProviderTest {
     @Test
     fun check_getAllGatheredStringsFiles() {
         // Given:
-        val stringFiles = setOf("strings.json", "strings-es.json", "strings-it.json")
-        createIncrementalFolder()
-        createFolderInsideIncrementalFolder("strings")
-        for (it in stringFiles) {
-            temporaryFolder.newFile("$INCREMENTAL_FOLDER_NAME/strings/$it")
-        }
+        val stringFiles = listOf("strings.json", "strings-es.json", "strings-it.json")
+        addStringFilesToMergedStringsDir(stringFiles)
 
         // When:
         val result = androidFilesProvider.getAllGatheredStringsFiles()
@@ -121,10 +81,6 @@ class AndroidFilesProviderTest {
 
     @Test
     fun check_getAllGatheredStringsFiles_empty() {
-        // Given:
-        createIncrementalFolder()
-        createFolderInsideIncrementalFolder("strings")
-
         // When:
         val result = androidFilesProvider.getAllGatheredStringsFiles()
 
@@ -135,12 +91,8 @@ class AndroidFilesProviderTest {
     @Test
     fun check_getAllTemplatesFiles() {
         // Given:
-        val templates = setOf("templates.json", "templates-es.json", "templates-it.json")
-        createIncrementalFolder()
-        createFolderInsideIncrementalFolder("templates")
-        for (it in templates) {
-            temporaryFolder.newFile("$INCREMENTAL_FOLDER_NAME/templates/$it")
-        }
+        val templates = listOf("templates.json", "templates-es.json", "templates-it.json")
+        addTemplateFilesToTemplatesDir(templates)
 
         // When:
         val result = androidFilesProvider.getAllTemplatesFiles()
@@ -151,10 +103,6 @@ class AndroidFilesProviderTest {
 
     @Test
     fun check_getAllTemplatesFiles_empty() {
-        // Given:
-        createIncrementalFolder()
-        createFolderInsideIncrementalFolder("templates")
-
         // When:
         val result = androidFilesProvider.getAllTemplatesFiles()
 
@@ -165,19 +113,20 @@ class AndroidFilesProviderTest {
     @Test
     fun check_getAllExpectedTemplatesFiles() {
         // Given:
-        val stringFiles = setOf("strings.json", "strings-es.json", "strings-it.json")
-        createIncrementalFolder()
-        createFolderInsideIncrementalFolder("strings")
-        val templatesFolder = createFolderInsideIncrementalFolder("templates")
-        for (it in stringFiles) {
-            temporaryFolder.newFile("$INCREMENTAL_FOLDER_NAME/strings/$it")
+        val stringFiles = listOf("strings.json", "strings-es.json", "strings-it.json")
+        addStringFilesToMergedStringsDir(stringFiles)
+        val suffix = slot<String>()
+        every {
+            outputStringFileResolver.getTemplateStringsFile(capture(suffix))
+        }.answers {
+            File(templatesDir, "templates${suffix.captured}.json")
         }
 
         // When:
         val result = androidFilesProvider.getAllExpectedTemplatesFiles()
 
         // Then:
-        val templatesFolderPath = templatesFolder.absolutePath
+        val templatesFolderPath = templatesDir.absolutePath
         Truth.assertThat(result.map { it.absolutePath }).containsExactly(
             "$templatesFolderPath/templates.json",
             "$templatesFolderPath/templates-es.json",
@@ -187,10 +136,6 @@ class AndroidFilesProviderTest {
 
     @Test
     fun check_getAllExpectedTemplatesFiles_empty() {
-        // Given:
-        createIncrementalFolder()
-        createFolderInsideIncrementalFolder("strings")
-
         // When:
         val result = androidFilesProvider.getAllExpectedTemplatesFiles()
 
@@ -198,35 +143,17 @@ class AndroidFilesProviderTest {
         Truth.assertThat(result).isEmpty()
     }
 
-    private fun createIncrementalFolder(): File {
-        val incrementalTestFolder = temporaryFolder.newFolder(INCREMENTAL_FOLDER_NAME)
-        every { androidVariantHelper.incrementalDir }.returns(incrementalTestFolder.absolutePath)
-        return incrementalTestFolder
+    private fun addTemplateFilesToTemplatesDir(templateFileNames: List<String>) {
+        addFilesToDir(templateFileNames, "$INCREMENTAL_FOLDER_NAME/$TEMPLATES_FOLDER_NAME")
     }
 
-    private fun createFolderInsideIncrementalFolder(folderName: String): File {
-        return temporaryFolder.newFolder(INCREMENTAL_FOLDER_NAME, folderName)
+    private fun addStringFilesToMergedStringsDir(stringFileNames: List<String>) {
+        addFilesToDir(stringFileNames, "$INCREMENTAL_FOLDER_NAME/$MERGED_STRINGS_FOLDER_NAME")
     }
 
-    private fun setUpResDirs(
-        mainResDirsNames: Set<String> = setOf("res"),
-        flavorResDirsNames: Set<String> = setOf("res"),
-        flavorDirName: String? = null
-    ): ResDirs {
-        val mainDirName = "main"
-        val mainResDirs = mutableSetOf<File>()
-        for (it in mainResDirsNames) {
-            mainResDirs.add(temporaryFolder.newFolder(mainDirName, it))
+    private fun addFilesToDir(fileNames: List<String>, dirPath: String) {
+        for (fileName in fileNames) {
+            temporaryFolder.newFile("$dirPath/$fileName")
         }
-
-        val flavorResDirs = mutableSetOf<File>()
-        if (flavorDirName != null) {
-            for (it in flavorResDirsNames) {
-                flavorResDirs.add(temporaryFolder.newFolder(flavorDirName, it))
-            }
-        }
-        val resourceDirs = ResDirs(mainResDirs, flavorResDirs)
-//        every { androidVariantHelper.resourceDirs }.returns(resourceDirs)todo
-        return resourceDirs
     }
 }
