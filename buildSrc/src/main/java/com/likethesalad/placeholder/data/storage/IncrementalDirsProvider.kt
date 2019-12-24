@@ -7,11 +7,19 @@ class IncrementalDirsProvider(androidVariantHelper: AndroidVariantHelper) {
     private val incrementalDir = File(androidVariantHelper.incrementalDir)
 
     fun getRawStringsDir(): File {
-        return File(incrementalDir, "strings")
+        return getIncrementalDirAndCreateIfNotExists("strings")
     }
 
     fun getTemplateStringsDir(): File {
-        return File(incrementalDir, "templates")
+        return getIncrementalDirAndCreateIfNotExists("templates")
     }
 
+    private fun getIncrementalDirAndCreateIfNotExists(dirName: String): File {
+        val dir = File(incrementalDir, dirName)
+        if (!dir.exists()) {
+            dir.createNewFile()
+        }
+
+        return dir
+    }
 }
