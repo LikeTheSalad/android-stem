@@ -58,6 +58,7 @@ And that's it, we've defined a template with a placeholder inside. Meaning that
 when we run the plugin, we'll get as a result the following "resolved" string:
 
 ```xml 
+<!-- Auto generated -->
 <string name="my_message">Welcome to My app name</string>
 ```
 
