@@ -49,13 +49,17 @@ of "placeholders", the placeholder format is `${another_string_name}` where
 Following our example above for our "template_my_message" template, let's say that
 we have another string in our project named "app_name" (which content is "My app name") and we want to place it inside our "template_my_message" template, we can do it like so:
 
-> <string name="template_my_message">Welcome to ${app_name}</string>
+```xml 
+<string name="template_my_message">Welcome to ${app_name}</string>
+```
 
 A template can contain from zero to any amount of placeholders. Any string within your values folder (even other templates) can be referenced inside a placeholder.
 And that's it, we've defined a template with a placeholder inside. Meaning that
 when we run the plugin, we'll get as a result the following "resolved" string:
 
-> <string name="my_message">Welcome to My app name</string>
+```xml 
+<string name="my_message">Welcome to My app name</string>
+```
 
 Notice that for the final "resolved" string name, the `template_` prefix has been removed.
 
@@ -65,8 +69,8 @@ your app's build process, unless you want to change this and rather
 running it manually, which is explained below under `Running it manually`.
 
 Since it runs by default during your project's build, then there's many ways of running it, some of those could be:
-- By pressing on the "play" button of Android Studio. <img src="http://www.myiconfinder.com/uploads/iconsets/256-256-8e4e0ac7549c19267874d5fc67abc8cb.png" alt="play button" width="40"/>
-- By pressing on the "make" button on Android Studio: <img src="http://www.myiconfinder.com/uploads/iconsets/256-256-8e4e0ac7549c19267874d5fc67abc8cb.png" alt="make button" width="40"/>
+- By pressing on the "play" button of Android Studio. *<img src="http://www.myiconfinder.com/uploads/iconsets/256-256-8e4e0ac7549c19267874d5fc67abc8cb.png" alt="play button" width="40"/>
+- By pressing on the "make" button on Android Studio: *<img src="http://www.myiconfinder.com/uploads/iconsets/256-256-8e4e0ac7549c19267874d5fc67abc8cb.png" alt="make button" width="40"/>
 - If you prefer command line, then you can run it by calling the build command: `./gradlew build` or the assemble command: `./gradlew assemble` or by calling the specific task to resolve the strings which has the following format: `./gradlew resolve[BUILD_VARIANT]Placeholders` more info on this command below under "**Running it manually**".
 
 ### 2.1- How to know if it worked?
@@ -74,7 +78,7 @@ Since it runs by default during your project's build, then there's many ways of 
 After the task has run, now you will be able to access to the "resolved" strings,
 which are the previously defined "templates" but without the `template_` prefix.
 So following our previous example of our template "template_my_message", we now
-will be able to access to the new auto-generated resolved string `my_message`, the
+will be able to access to the new auto-generated resolved string: `my_message`, the
 same way as with any other string, e.g. This way for Java and Kotlin: `R.string.my_message` and this way for XML layouts: `@string/my_message`.
 
 ### 2.2- Where do resolved strings go to?
