@@ -72,8 +72,8 @@ running it manually, which is explained below under `Running it manually`.
 Since it runs by default during your project's build, then there's many ways of running it, some of those could be:
 
 - By pressing on the "play" button of Android Studio. ![Play button](./assets/run_button.png "Play button")
-- By pressing on the "make" button on Android Studio: ![Make button](./assets/make_button.png "Make button")
-- If you prefer command line, then you can run it by calling the build command: `./gradlew build` or the assemble command: `./gradlew assemble` or by calling the specific task to resolve the strings which has the following format: `./gradlew resolve[BUILD_VARIANT]Placeholders` more info on this command below under "**Running it manually**".
+- Or, by pressing on the "make" button on Android Studio: ![Make button](./assets/make_button.png "Make button")
+- Or, if you prefer command line, then you can run it by calling the build command: `./gradlew build` or the assemble command: `./gradlew assemble` or by calling the specific task to resolve the strings which has the following format: `./gradlew resolve[BUILD_VARIANT]Placeholders` more info on this command below under "**Running it manually**".
 
 ### 2.1- How to know if it worked?
 
@@ -119,6 +119,23 @@ The following cases are supported:
 
 Adding it to your project
 ---
+
+We're going to need to modify two `build.gradle` files in our project in order to make
+this plugin work, those are:
+
+- **Root's** `build.gradle`
+- **App's** `build.gradle`
+
+To get a better idea of where you can find these files, take a look at this Android Studio
+screenshot below:
+
+![Android studio tree dir](./assets/build_gradle_files.png)
+
+- The number 1 selection is to make sure that you've selected the "Project"
+view in order to see the `build.gradle` files as shown on this image.
+- The number 2 selection represents your **App's build.gradle** file.
+- The number 3 selection represents your **Root's build.gradle** file.
+
 In order to add it to your project, first you'll need to add this
 classpath into your `buildscript` dependencies block of your root project
 `build.gradle` file:
