@@ -180,6 +180,7 @@ apply plugin: 'placeholder-resolver'
 Example:
 
 ```groovy
+// App's build.gradle file
 apply plugin: 'com.android.application'
 apply plugin: 'placeholder-resolver'
 
