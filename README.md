@@ -191,9 +191,9 @@ android {
 
 ![Sync button](./assets/sync_now.png "Sync button")
 
-After your changes to the build.gradle files are done,you should see the above message in Android Studio
-that has a "Sync Now" button. You have to press on that button for the changes to take effect. After your
-sync is done, you'll be ready to go! :) you can start adding your string templates to your app's resources.
+After your changes to the build.gradle files are done, you should see the above message in Android Studio
+that has a "Sync Now" button. You have to click on that button for the changes to take effect. After the
+sync is done, you'll be ready to go! you can start adding your string templates to your app's resources.
 
 Running it manually
 ---
