@@ -11,7 +11,7 @@ Table of Contents
      * [2.1- How to know if it worked?](#21--how-to-know-if-it-worked)
      * [2.2- Where do resolved strings go to?](#22--where-do-resolved-strings-go-to)
   * [Adding it to your project](#adding-it-to-your-project)
-     * [1.- Where to find above mentioned build.gradle files](#1--where-to-find-above-mentioned-buildgradle-files)
+     * [1.- Where to find the build.gradle files](#1--where-to-find-the-buildgradle-files)
      * [2.- What to add to the build.gradle files](#2--what-to-add-to-the-buildgradle-files)
      * [2.1- Changes to your Root's build.gradle file](#21--changes-to-your-roots-buildgradle-file)
      * [2.2- Changes to your App's build.gradle file](#22--changes-to-your-apps-buildgradle-file)
@@ -143,7 +143,7 @@ this plugin work, those are:
 - **Root's** `build.gradle`
 - **App's** `build.gradle`
 
-### 1.- Where to find above mentioned build.gradle files
+### 1.- Where to find the build.gradle files
 To get a better idea of where you can find these files, take a look at this Android Studio
 screenshot below:
 
