@@ -3,24 +3,20 @@
 # Android String XML Reference
 
 Table of Contents
-=================
-
-   * [Android String XML Reference](#android-string-xml-reference)
-      * [What is it](#what-is-it)
-            * [Input:](#input)
-            * [Output:](#output)
-      * [How to use](#how-to-use)
-         * [1.- Templates](#1--templates)
-         * [2.- Running it](#2--running-it)
-         * [2.1- How to know if it worked?](#21--how-to-know-if-it-worked)
-         * [2.2- Where do resolved strings go to?](#22--where-do-resolved-strings-go-to)
-      * [Adding it to your project](#adding-it-to-your-project)
-         * [1.- Where to find above mentioned build.gradle files](#1--where-to-find-above-mentioned-buildgradle-files)
-         * [2.- What to add to the build.gradle files](#2--what-to-add-to-the-buildgradle-files)
-         * [2.1- Changes to your Root's build.gradle file](#21--changes-to-your-roots-buildgradle-file)
-         * [2.2- Changes to your App's build.gradle file](#22--changes-to-your-apps-buildgradle-file)
-      * [Running it manually](#running-it-manually)
-      * [License](#license)
+---
+  * [What is it](#what-is-it)
+  * [How to use](#how-to-use)
+     * [1.- Templates](#1--templates)
+     * [2.- Running it](#2--running-it)
+     * [2.1- How to know if it worked?](#21--how-to-know-if-it-worked)
+     * [2.2- Where do resolved strings go to?](#22--where-do-resolved-strings-go-to)
+  * [Adding it to your project](#adding-it-to-your-project)
+     * [1.- Where to find above mentioned build.gradle files](#1--where-to-find-above-mentioned-buildgradle-files)
+     * [2.- What to add to the build.gradle files](#2--what-to-add-to-the-buildgradle-files)
+     * [2.1- Changes to your Root's build.gradle file](#21--changes-to-your-roots-buildgradle-file)
+     * [2.2- Changes to your App's build.gradle file](#22--changes-to-your-apps-buildgradle-file)
+  * [Running it manually](#running-it-manually)
+  * [License](#license)
 
 
 What is it
