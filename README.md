@@ -71,8 +71,8 @@ running it manually, which is explained below under `Running it manually`.
 
 Since it runs by default during your project's build, then there's many ways of running it, some of those could be:
 
-- By pressing on the "play" button of Android Studio. *<img src="http://www.myiconfinder.com/uploads/iconsets/256-256-8e4e0ac7549c19267874d5fc67abc8cb.png" alt="play button" width="40"/>
-- By pressing on the "make" button on Android Studio: *<img src="http://www.myiconfinder.com/uploads/iconsets/256-256-8e4e0ac7549c19267874d5fc67abc8cb.png" alt="make button" width="40"/>
+- By pressing on the "play" button of Android Studio. ![Play button](./assets/run_button.png "Play button")
+- By pressing on the "make" button on Android Studio: ![Make button](./assets/make_button.png "Make button")
 - If you prefer command line, then you can run it by calling the build command: `./gradlew build` or the assemble command: `./gradlew assemble` or by calling the specific task to resolve the strings which has the following format: `./gradlew resolve[BUILD_VARIANT]Placeholders` more info on this command below under "**Running it manually**".
 
 ### 2.1- How to know if it worked?
