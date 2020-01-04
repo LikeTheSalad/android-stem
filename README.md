@@ -4,9 +4,9 @@
 
 What is it
 ---
-Android String XML Reference is a Gradle plugin which will
-resolve placeholders of XML strings referenced in other XML strings
-at buildtime. You won't have to write any Java/Kotlin code into your
+Android String XML Reference is a Gradle plugin which resolves placeholders
+of XML strings referenced into other XML strings
+at buildtime. You won't have to write any Java or Kotlin code into your
 project to make it work and you will still be able to access to the 'resolved'
 strings the same way as any other manually added string to your
 XML files.
@@ -27,49 +27,73 @@ In other words, if you're looking to do something like this:
     <string name="welcome_message">Welcome to My App Name</string>
 </resources>
 ```
-Without having to write any Java/Kotlin code, then this plugin might help you.
+Without having to write any Java or Kotlin code, then this plugin might help you.
 
 How to use
 ---
-### 1.- Defining your templates
-The first thing you need to do is to define your string templates,
-the ones that will contain references to other strings, you can do so
-in any of your project's XML values files. Based on the example above,
-we'll need a template for the string `welcome_message`:
-```xml
-<resources>
-    <string name="app_name">My App Name</string>
-    <string name="template_welcome_message">Welcome to ${app_name}</string>
-</resources>
+### 1.- Templates
+All you have to do is to define string templates inside your XML string files,
+the file to add these templates to can be any file inside your values folders,
+not necesarily the "strings.xml" file but any other within the same directory will
+work too.
+In order to create a template all you need to do is to set its name with the
+`template_` prefix. So for example, if you want your final "resolved" string name
+to be "my_message", then its template name will be like so:
+
+> <string name="template_my_message">
+
+Your templates will contain references to other strings in the form
+of "placeholders", the placeholder format is `${another_string_name}` where
+"another_string_name" will be the name of any other string you have in your project.
+
+Following our example above for our "template_my_message" template, let's say that
+we have another string in our project named "app_name" (which content is "My app name") and we want to place it inside our "template_my_message" template, we can do it like so:
+
+```xml 
+<string name="template_my_message">Welcome to ${app_name}</string>
 ```
-Every template must start with the `template_` prefix (this prefix will be
-removed for the resolved string). Also, every placeholder must have
-this format: `${ANOTHER_STRING_NAME}`.
 
-A template can contain from zero to any amount of placeholders. Any string within your values folder (even other templates) can be referenced
-inside a placeholder (just please be careful of not creating circular
-dependencies between templates).
+A template can contain from zero to any amount of placeholders. Any string within your values folder (even other templates) can be referenced inside a placeholder.
+And that's it, we've defined a template with a placeholder inside. Meaning that
+when we run the plugin, we'll get as a result the following "resolved" string:
 
-### 2.- Build
+```xml 
+<!-- Auto generated -->
+<string name="my_message">Welcome to My app name</string>
+```
+
+Notice that for the final "resolved" string name, the `template_` prefix has been removed.
+
+### 2.- Running it
 By default, the task that resolves the string templates will run during
 your app's build process, unless you want to change this and rather
 running it manually, which is explained below under `Running it manually`.
 
-After the task finishes, you will be able to see a new XML file
-in your app's values folder, named `resolved.xml`, which will contain
-all of your string templates resolved. For our example, it should look
-like this:
-```xml
-<!--resolved.xml-->
-<resources>
-    <string name="welcome_message">Welcome to My App Name</string>
-</resources>
-```
+Since it runs by default during your project's build, then there's many ways of running it, some of those could be:
 
-And that's it, you can now keep on working on important things without
-caring of writing any code to resolve these placeholders later on
-and/or having to write the same values for many different
-string resources.
+- By pressing on the "play" button of Android Studio. *<img src="http://www.myiconfinder.com/uploads/iconsets/256-256-8e4e0ac7549c19267874d5fc67abc8cb.png" alt="play button" width="40"/>
+- By pressing on the "make" button on Android Studio: *<img src="http://www.myiconfinder.com/uploads/iconsets/256-256-8e4e0ac7549c19267874d5fc67abc8cb.png" alt="make button" width="40"/>
+- If you prefer command line, then you can run it by calling the build command: `./gradlew build` or the assemble command: `./gradlew assemble` or by calling the specific task to resolve the strings which has the following format: `./gradlew resolve[BUILD_VARIANT]Placeholders` more info on this command below under "**Running it manually**".
+
+### 2.1- How to know if it worked?
+
+After the task has run, now you will be able to access to the "resolved" strings,
+which are the previously defined "templates" but without the `template_` prefix.
+So following our previous example of our template "template_my_message", we now
+will be able to access to the new auto-generated resolved string: `my_message`, the
+same way as with any other string, e.g. This way for Java and Kotlin: `R.string.my_message` and this way for XML layouts: `@string/my_message`.
+
+### 2.2- Where do resolved strings go to?
+By default the resolved strings go into your app's `build` folder, specifically under the `build/generated/resolved` path. That's where this plugin places them into when it is run. The build folder is usually ignored for a VCS repository, so the resolved strings won't go into your repo unless you want to change it by applying the following configuration into your app's `build.gradle` file:
+
+```groovy
+// Optional:
+stringXmlReference {
+    keepResolvedFiles = true // By default it is false.
+    // If false: Resolved strings will go into the 'app/build' dir (which is a hidden dir for your VCS).
+    // If true: Resolved string will go into the 'app/src' dir.
+}
+```
 
 The following cases are supported:
 
