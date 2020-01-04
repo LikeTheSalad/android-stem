@@ -132,10 +132,10 @@ screenshot below:
 
 ![Android studio tree dir](./assets/build_gradle_files.png "Android studio tree dir")
 
-- The number 1 selection is to make sure that you've selected the "Project"
+- The **number 1** selection is to make sure that you've selected the "Project"
 view in order to see the `build.gradle` files as shown on this image.
-- The number 2 selection represents your **App's build.gradle** file.
-- The number 3 selection represents your **Root's build.gradle** file.
+- The **number 2** selection represents your **App's build.gradle** file.
+- The **number 3** selection represents your **Root's build.gradle** file.
 
 ### 2.- What to add to the build.gradle files
 
