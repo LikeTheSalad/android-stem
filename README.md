@@ -253,6 +253,10 @@ Those were some of the use cases that you can achieve using this plugin, there's
 Adding it to your project
 ---
 
+> Note: If you're migrating from version `1.0.0` the only change is that now the `resolved.xml` files go by default
+> to the `app/build` folder to keep them hidden from VCS, if you want to keep these files then you can configure this
+> behavior as explained above in `Where do resolved strings go to?`.
+
 We're going to need to modify two `build.gradle` files in our project in order to make
 this plugin work, those are:
 
@@ -277,7 +281,7 @@ First, in your `Root's build.gradle` file, you'll need to add this
 line into your `buildscript` dependencies block:
 
 ```groovy
-classpath "com.likethesalad.android:string-reference:1.0.0"
+classpath "com.likethesalad.android:string-reference:1.1.0"
 ```
 Example:
 
@@ -291,7 +295,7 @@ buildscript {
     }
     dependencies {
         //...
-        classpath "com.likethesalad.android:string-reference:1.0.0"
+        classpath "com.likethesalad.android:string-reference:1.1.0"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
