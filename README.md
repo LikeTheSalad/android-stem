@@ -4,7 +4,6 @@
 
 Table of Contents
 ---
-  * [Table of Contents](#table-of-contents)
   * [What is it](#what-is-it)
   * [How to use](#how-to-use)
      * [1.- Templates](#1--templates)
