@@ -325,18 +325,16 @@ sync is done, you'll be ready to go! you can start adding your string templates 
 
 Running it manually
 ---
-The task that resolves the string templates is incremental,
-it won't run unless there are changes to the templates and/or
-their values. Meaning that your build process won't have to run this
-task every time you compile, but only when it is needed.
-
-If you still want to avoid running the templates resolver task
-automatically during the build process and rather running it manually, then
-you can turn it off by adding the following into your application's
-`build.gradle` file, where you've added this plugin:
+If you want to avoid running the templates resolver task
+automatically during the build process of your project and rather running it manually, then
+you can turn it off by adding the following into your `App's build.gradle` file, where you've added this plugin to:
 ```groovy
+// Optional
 stringXmlReference {
-  resolveOnBuild = false
+  resolveOnBuild = false // By defult it is true.
+  // If true: The string placeholder task will run automatically during your project's build.
+  // If false: The string placeholder task won't run automatically, you'll have to run it by explicitly calling
+  // it as explained below.
 }
 ```
 
