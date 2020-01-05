@@ -25,7 +25,7 @@ Android String XML Reference is a Gradle plugin which resolves placeholders
 of XML strings referenced into other XML strings
 at buildtime. You won't have to write any Java or Kotlin code into your
 project to make it work and you will still be able to access to the 'resolved'
-strings the same way as any other manually added string to your
+strings the same way as with any other manually added string to your
 XML files.
 
 In other words, if you're looking to do something like this:
