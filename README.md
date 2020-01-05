@@ -248,13 +248,13 @@ After building the `demo` variant of our project, we'll get for such variant:
 ```
 So we see that the `app_name` value has been overridden by the demo's app_name, this doesn't only happen for values but also for templates, we can also override templates within our demo's resources.
 
-Those were some of the use cases that you can achieve using this plugin, there's more of them such as overriding flavor's multi languages from the base values folder and also working with multi-dimension flavors. You can play around with it, it all should work the way you'd expect it to work.
+> Those were some of the use cases that you can achieve using this plugin, there's more of them such as overriding flavor's multi languages from the base values folder and also working with multi-dimension flavors. You can play around with it, it all should work the way you'd expect it to work.
 
 Adding it to your project
 ---
 
 > Note: If you're migrating from version `1.0.0` the only change is that now the `resolved.xml` files go by default
-> to the `app/build` folder to keep them hidden from VCS, if you want to keep these files then you can configure this
+> to the `app/build` folder to keep them hidden from your working dir and the VCS, if you still want to keep these files then you can configure this
 > behavior as explained above in `Where do resolved strings go to?`.
 
 We're going to need to modify two `build.gradle` files in our project in order to make
