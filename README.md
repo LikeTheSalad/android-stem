@@ -240,7 +240,7 @@ After building the `demo` variant of our project, we'll get for such variant:
     <string name="welcome_message">Welcome to Demo app</string>
 </resources>
 ```
-So we see that the `app_name` value has been overriden by the demo's app_name, this doesn't only happen for values but also for templates, we can also override templates within our demo's resources.
+So we see that the `app_name` value has been overridden by the demo's app_name, this doesn't only happen for values but also for templates, we can also override templates within our demo's resources.
 
 Those were some of the use cases that you can achieve using this plugin, there's more of them such as overriding flavor's multi languages from the base values folder and also working with multi-dimension flavors. You can play around with it, it all should work the way you'd expect it to work.
 
