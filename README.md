@@ -332,8 +332,8 @@ you can turn it off by adding the following into your `App's build.gradle` file,
 // Optional
 stringXmlReference {
   resolveOnBuild = false // By defult it is true.
-  // If true: The string placeholder task will run automatically during your project's build.
-  // If false: The string placeholder task won't run automatically, you'll have to run it by explicitly calling
+  // If true: The templates resolver task will run automatically during your project's build.
+  // If false: The templates resolver task won't run automatically, you'll have to run it by explicitly calling
   // it as explained below.
 }
 ```
