@@ -4,17 +4,24 @@
 
 Table of Contents
 ---
+  * [Table of Contents](#table-of-contents)
   * [What is it](#what-is-it)
   * [How to use](#how-to-use)
      * [1.- Templates](#1--templates)
      * [2.- Running it](#2--running-it)
      * [2.1- How to know if it worked?](#21--how-to-know-if-it-worked)
      * [2.2- Where do resolved strings go to?](#22--where-do-resolved-strings-go-to)
+  * [Use case examples](#use-case-examples)
+     * [1.- Simple use case](#1--simple-use-case)
+     * [2.- Multi files use case](#2--multi-files-use-case)
+     * [3.- Multi languages use case](#3--multi-languages-use-case)
+     * [4.- Flavors use case](#4--flavors-use-case)
   * [Adding it to your project](#adding-it-to-your-project)
      * [1.- Where to find the build.gradle files](#1--where-to-find-the-buildgradle-files)
      * [2.- What to add to the build.gradle files](#2--what-to-add-to-the-buildgradle-files)
      * [2.1- Changes to your Root's build.gradle file](#21--changes-to-your-roots-buildgradle-file)
      * [2.2- Changes to your App's build.gradle file](#22--changes-to-your-apps-buildgradle-file)
+     * [2.3- Sync your project](#23--sync-your-project)
   * [Running it manually](#running-it-manually)
   * [License](#license)
 
