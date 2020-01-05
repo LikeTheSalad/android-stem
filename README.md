@@ -88,7 +88,7 @@ running it manually, which is explained below under `Running it manually`.
 
 Since it runs by default during your project's build, then there's many ways of running it, some of those could be:
 
-- By pressing on the "play" button of Android Studio. ![Play button](./assets/run_button.png "Play button")
+- By pressing on the "play" button of Android Studio: ![Play button](./assets/run_button.png "Play button")
 - Or, by pressing on the "make" button on Android Studio: ![Make button](./assets/make_button.png "Make button")
 - Or, if you prefer command line, then you can run it by calling the build command: `./gradlew build` or the assemble command: `./gradlew assemble` or by calling the specific task to resolve the strings which has the following format: `./gradlew resolve[BUILD_VARIANT]Placeholders` more info on this command below under "**Running it manually**".
 
@@ -129,10 +129,120 @@ The following cases are supported:
 > the new app_name.
 
 > Same for languages, based on the example above, if you need to translate your
-> '*welcome_message*' to spanish for example, you just have to override the template
-> '*template_welcome_message*' inside the 'values-es' folder and you'll get the
-> translated '*welcome_message*' in the 'resolved.xml' file inside the 'values-es' folder.
+> '*my_message*' string to spanish for example, you just have to override the template
+> '*template_my_message*' inside the 'values-es' folder and you'll get the
+> translated '*my_message*' string in the 'resolved.xml' file inside the 'values-es' folder.
 
+Use case examples
+---
+Here's a couple of examples for some of the use cases supported by this plugin
+
+### 1.- Simple use case
+Within our `app/main/res/values` folder, we have the following file:
+```xml
+<!--strings.xml-->
+<resources>
+    <string name="app_name">Test</string>
+    <string name="template_welcome_message">Welcome to ${app_name}</string>
+</resources>
+```
+After building our project we get:
+```xml
+<!--Auto generated-->
+<resources>
+    <string name="welcome_message">Welcome to Test</string>
+</resources>
+```
+### 2.- Multi files use case
+Within our `app/main/res/values` folder, we have the following files:
+```xml
+<!--strings.xml-->
+<resources>
+    <string name="app_name">Test</string>
+    <string name="template_welcome_message">Welcome to ${app_name}</string>
+    <string name="template_app_version_name">The version for ${app_name} is ${my_version}</string>
+</resources>
+```
+```xml
+<!--my_configs.xml-->
+<resources>
+    <string name="my_version">1.0.0</string>
+</resources>
+```
+After building our project we get:
+```xml
+<resources>
+    <string name="app_version_name">The version for Test is 1.0.0</string>
+    <string name="welcome_message">Welcome to Test</string>
+</resources>
+```
+So no matter which file contains a template or a value used in a template, as long as it's within your app's values folders, then the plugin will find it.
+### 3.- Multi languages use case
+Within our `app/main/res/values` folder, we have the following file:
+```xml
+<!--strings.xml-->
+<resources>
+    <string name="app_name">Test</string>
+    <string name="template_welcome_message">Welcome to ${app_name}</string>
+</resources>
+```
+Then, Within our `app/main/res/values-es` folder, we have the following file:
+```xml
+<!--any_file.xml-->
+<resources>
+    <string name="template_welcome_message">Bienvenido a ${app_name}</string>
+</resources>
+```
+After building our project, what we get for our default `values` folder is:
+```xml
+<!--Auto generated-->
+<resources>
+    <string name="welcome_message">Welcome to Test</string>
+</resources>
+```
+And then what we get for our spanish `values-es` folder is:
+```xml
+<!--Auto generated-->
+<resources>
+    <string name="welcome_message">Bienvenido a Test</string>
+</resources>
+```
+### 4.- Flavors use case
+Let's say we've defined a flavor in our project, named `demo`, then:
+
+Within our `app/main/res/values` folder, we have the following files:
+```xml
+<!--strings.xml-->
+<resources>
+    <string name="app_name">Test</string>
+    <string name="template_welcome_message">Welcome to ${app_name}</string>
+    <string name="template_app_version_name">The version for ${app_name} is ${my_version}</string>
+</resources>
+```
+```xml
+<!--my_configs.xml-->
+<resources>
+    <string name="my_version">1.0.0</string>
+</resources>
+```
+And for our `app/demo/res/values` folder we add the following file:
+```xml
+<!--any_file.xml-->
+<resources>
+    <string name="app_name">Demo app</string>
+</resources>
+```
+After building the `demo` variant of our project, we'll get for such variant:
+```xml
+<!--Auto generated-->
+<resources>
+    <string name="app_version_name">The version for Demo app is 1.0.0</string>
+    <string name="welcome_message">Welcome to Demo app</string>
+</resources>
+```
+So we see that the `app_name` value has been overriden by the demo's app_name, this doesn't only happen for values but also for templates, we can also override templates within our demo's resources.
+
+Those were some of the use cases that you can achieve using this plugin, there's more of them such as overriding flavor's multi languages from the base values folder and also working with multi-dimension flavors. You can play around with it, it all should work the way you'd expect it to work.
 
 Adding it to your project
 ---
