@@ -63,7 +63,9 @@ In order to create a template all you need to do is to set its name with the
 `template_` prefix. So for example, if you want your final "resolved" string name
 to be "my_message", then its template name will be like so:
 
-> <string name="template_my_message">
+```xml
+<string name="template_my_message">
+ ```
 
 Your templates will contain references to other strings in the form
 of "placeholders", the placeholder format is `${another_string_name}` where
