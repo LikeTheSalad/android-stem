@@ -2,7 +2,7 @@ package com.likethesalad.placeholder.data
 
 import com.likethesalad.placeholder.data.storage.ValuesFoldersExtractor
 import com.likethesalad.placeholder.models.ValuesStrings
-import com.likethesalad.placeholder.models.VariantStringFiles
+import com.likethesalad.placeholder.models.VariantXmlFiles
 
 class VariantRawStrings(private val variantDirsPathFinder: VariantDirsPathFinder) {
 
@@ -13,7 +13,7 @@ class VariantRawStrings(private val variantDirsPathFinder: VariantDirsPathFinder
     val valuesStrings: Collection<ValuesStrings> by lazy {
         val variantStringFilesList = getVariantStringFilesList()
         val uniqueValuesFolderNames = getUniqueValuesFolderNames(variantStringFilesList.map {
-            it.valuesStringFiles.keys
+            it.valuesXmlFiles.keys
         })
 
         val valuesStringsPerFolder = getValuesStringsMapPerFolder(
@@ -26,13 +26,14 @@ class VariantRawStrings(private val variantDirsPathFinder: VariantDirsPathFinder
 
     private fun getValuesStringsMapPerFolder(
         uniqueValuesFolderNames: List<String>,
-        variantStringFilesList: List<VariantStringFiles>
+        variantXmlFilesList: List<VariantXmlFiles>
     ): Map<String, ValuesStrings> {
         val valuesStringsPerFolder = mutableMapOf<String, ValuesStrings>()
 
         val baseValuesStrings = getValuesStringsForFolderName(
             BASE_VALUES_FOLDER_NAME,
-            variantStringFilesList, null
+            variantXmlFilesList,
+            null//todo add libs 'values' folder strings here?
         )
         if (baseValuesStrings != null) {
             valuesStringsPerFolder[BASE_VALUES_FOLDER_NAME] = baseValuesStrings
@@ -41,7 +42,7 @@ class VariantRawStrings(private val variantDirsPathFinder: VariantDirsPathFinder
         for (valuesFolderName in uniqueValuesFolderNames) {
             val valuesStrings: ValuesStrings? = getValuesStringsForFolderName(
                 valuesFolderName,
-                variantStringFilesList,
+                variantXmlFilesList,
                 baseValuesStrings
             )
 
@@ -55,15 +56,15 @@ class VariantRawStrings(private val variantDirsPathFinder: VariantDirsPathFinder
 
     private fun getValuesStringsForFolderName(
         valuesFolderName: String,
-        variantStringFilesList: List<VariantStringFiles>,
+        variantXmlFilesList: List<VariantXmlFiles>,
         parentStrings: ValuesStrings?
     ): ValuesStrings? {
         var lastValuesStrings: ValuesStrings? = parentStrings
-        for (valuesStringFiles in variantStringFilesList) {
+        for (valuesStringFiles in variantXmlFilesList) {
             val valuesStrings = getValuesStringsFromVariantValuesFolder(
                 valuesStringFiles.variantName,
                 valuesFolderName,
-                valuesStringFiles.valuesStringFiles,
+                valuesStringFiles.valuesXmlFiles,
                 lastValuesStrings
             )
             if (valuesStrings != null) {
@@ -79,10 +80,10 @@ class VariantRawStrings(private val variantDirsPathFinder: VariantDirsPathFinder
     private fun getValuesStringsFromVariantValuesFolder(
         variantName: String,
         valuesFolderName: String,
-        valuesStringFilesMap: Map<String, ValuesStringFiles>,
+        valuesXmlFilesMap: Map<String, ValuesXmlFiles>,
         parentStrings: ValuesStrings?
     ): ValuesStrings? {
-        val valuesStringFiles = valuesStringFilesMap[valuesFolderName] ?: return null
+        val valuesStringFiles = valuesXmlFilesMap[valuesFolderName] ?: return null
         return ValuesStrings(
             variantName,
             valuesFolderName,
@@ -95,11 +96,11 @@ class VariantRawStrings(private val variantDirsPathFinder: VariantDirsPathFinder
         return valuesFolderNames.flatten().toSet()
     }
 
-    private fun getVariantStringFilesList(): List<VariantStringFiles> {
+    private fun getVariantStringFilesList(): List<VariantXmlFiles> {
         val dirsPaths = variantDirsPathFinder.existingPathsResDirs
         val variantValuesFoldersList =
             dirsPaths.map { VariantValuesFolders(it.variantName, ValuesFoldersExtractor(it.paths)) }
-        return variantValuesFoldersList.map { VariantStringFiles(it.variantName, it.valuesStringFiles) }
+        return variantValuesFoldersList.map { VariantXmlFiles(it.variantName, it.valuesXmlFiles) }
     }
 
 }

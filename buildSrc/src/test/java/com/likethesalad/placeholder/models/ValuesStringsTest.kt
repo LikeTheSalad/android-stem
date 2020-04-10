@@ -1,7 +1,7 @@
 package com.likethesalad.placeholder.models
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.data.ValuesStringFiles
+import com.likethesalad.placeholder.data.ValuesXmlFiles
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Test
@@ -445,8 +445,8 @@ class ValuesStringsTest {
         )
     }
 
-    private fun getValuesStringFiles(stringResources: Set<StringResourceModel>): ValuesStringFiles {
-        val valuesStringFilesMock = mockk<ValuesStringFiles>()
+    private fun getValuesStringFiles(stringResources: Set<StringResourceModel>): ValuesXmlFiles {
+        val valuesStringFilesMock = mockk<ValuesXmlFiles>()
         every { valuesStringFilesMock.stringResources }.returns(stringResources)
         return valuesStringFilesMock
     }

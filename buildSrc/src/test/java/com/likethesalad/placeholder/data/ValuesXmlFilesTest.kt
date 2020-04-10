@@ -5,7 +5,7 @@ import com.likethesalad.placeholder.models.StringResourceModel
 import org.junit.Test
 import java.io.File
 
-class ValuesStringFilesTest {
+class ValuesXmlFilesTest {
 
     @Test
     fun `Get string resources from files`() {
@@ -14,7 +14,7 @@ class ValuesStringFilesTest {
             getResourceFile("strings_2.xml")
         )
 
-        val valuesFiles = ValuesStringFiles(valuesFilesSet)
+        val valuesFiles = ValuesXmlFiles(valuesFilesSet)
 
         Truth.assertThat(valuesFiles.stringResources).containsExactly(
             StringResourceModel("welcome_1", "The welcome message for TesT1"),

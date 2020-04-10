@@ -1,13 +1,13 @@
 package com.likethesalad.placeholder.models
 
 import com.likethesalad.placeholder.data.Constants
-import com.likethesalad.placeholder.data.ValuesStringFiles
+import com.likethesalad.placeholder.data.ValuesXmlFiles
 import com.likethesalad.placeholder.utils.ValuesNameUtils
 
 data class ValuesStrings(
     val variantName: String,
     val valuesFolderName: String,
-    val valuesStringFiles: ValuesStringFiles,
+    val valuesXmlFiles: ValuesXmlFiles,
     private val parentValuesStrings: ValuesStrings? = null
 ) {
 
@@ -25,7 +25,7 @@ data class ValuesStrings(
     }
 
     init {
-        addStringsToMap(valuesStringFiles.stringResources, stringsMap)
+        addStringsToMap(valuesXmlFiles.stringResources, stringsMap)
     }
 
     val mergedStrings: List<StringResourceModel> by lazy {

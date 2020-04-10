@@ -28,7 +28,7 @@ class VariantRawStringsTest {
             ValuesStrings(
                 "main",
                 "values",
-                ValuesStringFiles(
+                ValuesXmlFiles(
                     setOf(
                         File(mainResDirs.getValue("res"), "values/strings.xml")
                     )
@@ -53,7 +53,7 @@ class VariantRawStringsTest {
             ValuesStrings(
                 "main",
                 "values",
-                ValuesStringFiles(
+                ValuesXmlFiles(
                     setOf(
                         File(mainResDirs.getValue("res"), "values/strings.xml"),
                         File(mainResDirs.getValue("res2"), "values/strings.xml")
@@ -78,7 +78,7 @@ class VariantRawStringsTest {
         val baseValuesStrings = ValuesStrings(
             "main",
             "values",
-            ValuesStringFiles(
+            ValuesXmlFiles(
                 setOf(
                     File(mainResDirs.getValue("resMultilingual"), "values/strings.xml")
                 )
@@ -90,7 +90,7 @@ class VariantRawStringsTest {
             ValuesStrings(
                 "main",
                 "values-es",
-                ValuesStringFiles(
+                ValuesXmlFiles(
                     setOf(File(mainResDirs.getValue("resMultilingual"), "values-es/strings_es.xml"))
                 ), baseValuesStrings
             )
@@ -115,7 +115,7 @@ class VariantRawStringsTest {
         val baseValuesStrings = ValuesStrings(
             "main",
             "values",
-            ValuesStringFiles(
+            ValuesXmlFiles(
                 setOf(
                     File(mainResDirs.getValue("res"), "values/strings.xml")
                 )
@@ -127,7 +127,7 @@ class VariantRawStringsTest {
             ValuesStrings(
                 "client",
                 "values",
-                ValuesStringFiles(
+                ValuesXmlFiles(
                     setOf(
                         File(flavorResDirs.getValue("res"), "values/strings.xml")
                     )
@@ -155,7 +155,7 @@ class VariantRawStringsTest {
         val mainBaseValuesStrings = ValuesStrings(
             "main",
             "values",
-            ValuesStringFiles(
+            ValuesXmlFiles(
                 setOf(
                     File(mainResDirs.getValue("res"), "values/strings.xml"),
                     File(mainResDirs.getValue("resMultilingual"), "values/strings.xml")
@@ -167,7 +167,7 @@ class VariantRawStringsTest {
         val clientBaseValuesStrings = ValuesStrings(
             "client",
             "values",
-            ValuesStringFiles(
+            ValuesXmlFiles(
                 setOf(
                     File(flavorResDirs.getValue("res"), "values/strings.xml")
                 )
@@ -180,7 +180,7 @@ class VariantRawStringsTest {
             ValuesStrings(
                 "main",
                 "values-es",
-                ValuesStringFiles(
+                ValuesXmlFiles(
                     setOf(
                         File(mainResDirs.getValue("resMultilingual"), "values-es/strings_es.xml")
                     )
@@ -208,7 +208,7 @@ class VariantRawStringsTest {
         val mainBaseValuesStrings = ValuesStrings(
             "main",
             "values",
-            ValuesStringFiles(
+            ValuesXmlFiles(
                 setOf(
                     File(mainResDirs.getValue("res"), "values/strings.xml")
                 )
@@ -219,7 +219,7 @@ class VariantRawStringsTest {
         val clientBaseValuesStrings = ValuesStrings(
             "client",
             "values",
-            ValuesStringFiles(
+            ValuesXmlFiles(
                 setOf(
                     File(flavorResDirs.getValue("res"), "values/strings.xml"),
                     File(flavorResDirs.getValue("resMulti"), "values/strings.xml")
@@ -233,7 +233,7 @@ class VariantRawStringsTest {
             ValuesStrings(
                 "client",
                 "values-es",
-                ValuesStringFiles(
+                ValuesXmlFiles(
                     setOf(
                         File(flavorResDirs.getValue("resMulti"), "values-es/strings_es.xml")
                     )
@@ -261,7 +261,7 @@ class VariantRawStringsTest {
         val mainBaseValuesStrings = ValuesStrings(
             "main",
             "values",
-            ValuesStringFiles(
+            ValuesXmlFiles(
                 setOf(
                     File(mainResDirs.getValue("res"), "values/strings.xml"),
                     File(mainResDirs.getValue("resMultilingual"), "values/strings.xml")
@@ -273,7 +273,7 @@ class VariantRawStringsTest {
         val clientBaseValuesStrings = ValuesStrings(
             "client",
             "values",
-            ValuesStringFiles(
+            ValuesXmlFiles(
                 setOf(
                     File(flavorResDirs.getValue("res"), "values/strings.xml"),
                     File(flavorResDirs.getValue("resMulti"), "values/strings.xml")
@@ -285,7 +285,7 @@ class VariantRawStringsTest {
         val mainEsBaseValuesStrings = ValuesStrings(
             "main",
             "values-es",
-            ValuesStringFiles(
+            ValuesXmlFiles(
                 setOf(
                     File(mainResDirs.getValue("resMultilingual"), "values-es/strings_es.xml")
                 )
@@ -298,7 +298,7 @@ class VariantRawStringsTest {
             ValuesStrings(
                 "client",
                 "values-es",
-                ValuesStringFiles(
+                ValuesXmlFiles(
                     setOf(
                         File(flavorResDirs.getValue("resMulti"), "values-es/strings_es.xml")
                     )
