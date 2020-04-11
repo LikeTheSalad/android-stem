@@ -4,6 +4,8 @@ class AllowedNamesProvider(allowedNames: List<String>) {
 
     val fullNames: Set<String>
     val startOfNames: Set<String>
+    val allowAll: Boolean
+    val allowNone: Boolean
 
     companion object {
         private const val TYPE_FULL_NAME = 1
@@ -15,6 +17,9 @@ class AllowedNamesProvider(allowedNames: List<String>) {
         val curatedAllowedNames = allowedNames.map { it.trim() }
             .filter { it.isNotEmpty() }
             .toSet()
+        allowAll = curatedAllowedNames.any { it == ANY_CHARS_WILDCARD }
+        allowNone = curatedAllowedNames.isEmpty()
+
         val namesByType = curatedAllowedNames.groupBy {
             when (it.contains(ANY_CHARS_WILDCARD)) {
                 true -> TYPE_START_OF_NAME
@@ -39,6 +44,8 @@ class AllowedNamesProvider(allowedNames: List<String>) {
             curatedStartOfNames.add(item)
         }
 
-        startOfNames = curatedStartOfNames.map { it.replace(ANY_CHARS_WILDCARD, "") }.toSet()
+        startOfNames = curatedStartOfNames.map { it.replace(ANY_CHARS_WILDCARD, "") }
+            .filter { it.isNotEmpty() }
+            .toSet()
     }
 }

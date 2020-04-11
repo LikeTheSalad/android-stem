@@ -11,19 +11,42 @@ class AllowedNamesProviderTest {
         verifyGeneratedLists(
             setOf("something", "something2"),
             setOf("somethingelse:", "thisthing", "more-"),
-            "something", " something2  ", "somethingelse:*", "thisthing*", "more-*"
+            false,
+            false,
+            listOf("something", " something2  ", "somethingelse:*", "thisthing*", "more-*")
         )
         verifyGeneratedLists(
             setOf(),
             setOf("starts:with:"),
-            "starts:with:*",
-            "",
-            "    "
+            false,
+            false,
+            listOf(
+                "starts:with:*",
+                "",
+                "    "
+            )
         )
         verifyGeneratedLists(
             setOf("the:full:name"),
             setOf(),
-            "the:full:name"
+            false,
+            false,
+            listOf("the:full:name")
+        )
+
+        verifyGeneratedLists(
+            setOf(),
+            setOf(),
+            false,
+            true,
+            emptyList()
+        )
+        verifyGeneratedLists(
+            setOf(),
+            setOf(),
+            true,
+            false,
+            listOf("*")
         )
     }
 
@@ -60,10 +83,14 @@ class AllowedNamesProviderTest {
     private fun verifyGeneratedLists(
         expectedFullName: Set<String>,
         expectedStartsWithName: Set<String>,
-        vararg allowedNames: String
+        expectedAllowAll: Boolean,
+        expectedAllowNone: Boolean,
+        allowedNames: List<String>
     ) {
-        val allowedNamesProvider = AllowedNamesProvider(allowedNames.toList())
+        val allowedNamesProvider = AllowedNamesProvider(allowedNames)
         Truth.assertThat(allowedNamesProvider.fullNames).isEqualTo(expectedFullName)
         Truth.assertThat(allowedNamesProvider.startOfNames).isEqualTo(expectedStartsWithName)
+        Truth.assertThat(allowedNamesProvider.allowAll).isEqualTo(expectedAllowAll)
+        Truth.assertThat(allowedNamesProvider.allowNone).isEqualTo(expectedAllowNone)
     }
 }
