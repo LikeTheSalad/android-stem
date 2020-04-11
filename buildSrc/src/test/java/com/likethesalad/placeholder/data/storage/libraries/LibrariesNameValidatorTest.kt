@@ -6,11 +6,6 @@ import org.junit.Test
 class LibrariesNameValidatorTest {
 
     @Test
-    fun initialization() {
-
-    }
-
-    @Test
     fun isNameValid() {
         verifyNameIsValid("something", true, "something")
         verifyNameIsValid("something", false, "something2")
@@ -22,7 +17,8 @@ class LibrariesNameValidatorTest {
     }
 
     private fun verifyNameIsValid(name: String, shouldBeValid: Boolean, vararg allowedNames: String) {
-        val librariesNameValidator = LibrariesNameValidator(allowedNames.toSet())
+        val allowedNamesProvider = AllowedNamesProvider(allowedNames.toList())
+        val librariesNameValidator = LibrariesNameValidator(allowedNamesProvider)
         Truth.assertThat(librariesNameValidator.isNameValid(name)).isEqualTo(shouldBeValid)
     }
 }
