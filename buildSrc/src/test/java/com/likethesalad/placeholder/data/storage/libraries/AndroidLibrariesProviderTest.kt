@@ -15,12 +15,14 @@ import java.io.File
 @Suppress("UnstableApiUsage")
 class AndroidLibrariesProviderTest {
     private lateinit var androidConfigHelper: AndroidConfigHelper
+    private lateinit var librariesNameValidator: LibrariesNameValidator
     private lateinit var androidLibrariesProvider: AndroidLibrariesProvider
 
     @Before
     fun setUp() {
         androidConfigHelper = mockk()
-        androidLibrariesProvider = AndroidLibrariesProvider(androidConfigHelper)
+        librariesNameValidator = mockk()
+        androidLibrariesProvider = AndroidLibrariesProvider(androidConfigHelper, librariesNameValidator)
     }
 
     @Test
@@ -34,11 +36,33 @@ class AndroidLibrariesProviderTest {
             Pair(name2, file2)
         )
         setResolvableDependenciesWith(artifacts)
+        every { librariesNameValidator.isNameValid(any()) }.returns(true)
 
         val libraries = androidLibrariesProvider.getAndroidLibraries()
 
         Truth.assertThat(libraries).containsExactly(
             AndroidLibrary(name1, file1),
+            AndroidLibrary(name2, file2)
+        )
+    }
+
+    @Test
+    fun `getAndroidLibraries filtered by name`() {
+        val name1 = "someLib"
+        val file1 = mockk<File>()
+        val name2 = "someLib2"
+        val file2 = mockk<File>()
+        val artifacts = createMockArtifactsFor(
+            Pair(name1, file1),
+            Pair(name2, file2)
+        )
+        setResolvableDependenciesWith(artifacts)
+        every { librariesNameValidator.isNameValid(name1) }.returns(false)
+        every { librariesNameValidator.isNameValid(name2) }.returns(true)
+
+        val libraries = androidLibrariesProvider.getAndroidLibraries()
+
+        Truth.assertThat(libraries).containsExactly(
             AndroidLibrary(name2, file2)
         )
     }
