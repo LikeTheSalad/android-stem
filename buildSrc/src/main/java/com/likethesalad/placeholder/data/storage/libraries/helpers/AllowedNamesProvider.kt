@@ -1,4 +1,4 @@
-package com.likethesalad.placeholder.data.storage.libraries
+package com.likethesalad.placeholder.data.storage.libraries.helpers
 
 class AllowedNamesProvider(allowedNames: List<String>) {
 

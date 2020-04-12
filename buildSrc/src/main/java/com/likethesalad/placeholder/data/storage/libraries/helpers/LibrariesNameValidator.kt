@@ -1,4 +1,4 @@
-package com.likethesalad.placeholder.data.storage.libraries
+package com.likethesalad.placeholder.data.storage.libraries.helpers
 
 class LibrariesNameValidator(private val allowedNamesProvider: AllowedNamesProvider) {
 

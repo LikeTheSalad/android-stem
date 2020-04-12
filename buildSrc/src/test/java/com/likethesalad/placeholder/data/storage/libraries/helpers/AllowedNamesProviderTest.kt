@@ -1,6 +1,7 @@
-package com.likethesalad.placeholder.data.storage.libraries
+package com.likethesalad.placeholder.data.storage.libraries.helpers
 
 import com.google.common.truth.Truth
+import com.likethesalad.placeholder.data.storage.libraries.helpers.AllowedNamesProvider
 import org.junit.Assert.fail
 import org.junit.Test
 
@@ -87,7 +88,8 @@ class AllowedNamesProviderTest {
         expectedAllowNone: Boolean,
         allowedNames: List<String>
     ) {
-        val allowedNamesProvider = AllowedNamesProvider(allowedNames)
+        val allowedNamesProvider =
+            AllowedNamesProvider(allowedNames)
         Truth.assertThat(allowedNamesProvider.fullNames).isEqualTo(expectedFullName)
         Truth.assertThat(allowedNamesProvider.startOfNames).isEqualTo(expectedStartsWithName)
         Truth.assertThat(allowedNamesProvider.allowAll).isEqualTo(expectedAllowAll)

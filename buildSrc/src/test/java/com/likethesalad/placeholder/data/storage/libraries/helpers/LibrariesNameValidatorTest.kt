@@ -1,4 +1,4 @@
-package com.likethesalad.placeholder.data.storage.libraries
+package com.likethesalad.placeholder.data.storage.libraries.helpers
 
 import com.google.common.truth.Truth
 import org.junit.Test
@@ -19,8 +19,10 @@ class LibrariesNameValidatorTest {
     }
 
     private fun verifyNameIsValid(name: String, shouldBeValid: Boolean, vararg allowedNames: String) {
-        val allowedNamesProvider = AllowedNamesProvider(allowedNames.toList())
-        val librariesNameValidator = LibrariesNameValidator(allowedNamesProvider)
+        val allowedNamesProvider =
+            AllowedNamesProvider(allowedNames.toList())
+        val librariesNameValidator =
+            LibrariesNameValidator(allowedNamesProvider)
         Truth.assertThat(librariesNameValidator.isNameValid(name)).isEqualTo(shouldBeValid)
     }
 }

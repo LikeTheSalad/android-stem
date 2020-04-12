@@ -1,4 +1,4 @@
-package com.likethesalad.placeholder.data.storage.libraries
+package com.likethesalad.placeholder.data.storage.libraries.helpers
 
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.data.helpers.AndroidConfigHelper
@@ -22,7 +22,10 @@ class AndroidLibrariesProviderTest {
     fun setUp() {
         androidConfigHelper = mockk()
         librariesNameValidator = mockk()
-        androidLibrariesProvider = AndroidLibrariesProvider(androidConfigHelper, librariesNameValidator)
+        androidLibrariesProvider = AndroidLibrariesProvider(
+            androidConfigHelper,
+            librariesNameValidator
+        )
     }
 
     @Test
