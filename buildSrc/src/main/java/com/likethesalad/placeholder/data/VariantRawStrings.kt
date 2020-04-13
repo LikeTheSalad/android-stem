@@ -1,10 +1,14 @@
 package com.likethesalad.placeholder.data
 
 import com.likethesalad.placeholder.data.storage.ValuesFoldersExtractor
+import com.likethesalad.placeholder.data.storage.utils.ValuesStringsProvider
 import com.likethesalad.placeholder.models.ValuesStrings
 import com.likethesalad.placeholder.models.VariantXmlFiles
 
-class VariantRawStrings(private val variantDirsPathFinder: VariantDirsPathFinder) {
+class VariantRawStrings(
+    private val variantDirsPathFinder: VariantDirsPathFinder,
+    private val valuesStringsProvider: ValuesStringsProvider
+) {
 
     companion object {
         private const val BASE_VALUES_FOLDER_NAME = "values"
@@ -30,7 +34,7 @@ class VariantRawStrings(private val variantDirsPathFinder: VariantDirsPathFinder
     ): Map<String, ValuesStrings> {
         val valuesStringsPerFolder = mutableMapOf<String, ValuesStrings>()
 
-        val baseValuesStrings = getValuesStringsForFolderName(
+        val baseValuesStrings = valuesStringsProvider.getValuesStringsForFolderFromVariants(
             BASE_VALUES_FOLDER_NAME,
             variantXmlFilesList,
             null//todo add libs 'values' folder strings here?
@@ -40,7 +44,7 @@ class VariantRawStrings(private val variantDirsPathFinder: VariantDirsPathFinder
         }
 
         for (valuesFolderName in uniqueValuesFolderNames) {
-            val valuesStrings: ValuesStrings? = getValuesStringsForFolderName(
+            val valuesStrings: ValuesStrings? = valuesStringsProvider.getValuesStringsForFolderFromVariants(
                 valuesFolderName,
                 variantXmlFilesList,
                 baseValuesStrings
@@ -52,44 +56,6 @@ class VariantRawStrings(private val variantDirsPathFinder: VariantDirsPathFinder
         }
 
         return valuesStringsPerFolder
-    }
-
-    private fun getValuesStringsForFolderName(
-        valuesFolderName: String,
-        variantXmlFilesList: List<VariantXmlFiles>,
-        parentStrings: ValuesStrings?
-    ): ValuesStrings? {
-        var lastValuesStrings: ValuesStrings? = parentStrings
-        for (valuesStringFiles in variantXmlFilesList) {
-            val valuesStrings = getValuesStringsFromVariantValuesFolder(
-                valuesStringFiles.variantName,
-                valuesFolderName,
-                valuesStringFiles.valuesXmlFiles,
-                lastValuesStrings
-            )
-            if (valuesStrings != null) {
-                lastValuesStrings = valuesStrings
-            }
-        }
-        if (lastValuesStrings != parentStrings) {
-            return lastValuesStrings
-        }
-        return null
-    }
-
-    private fun getValuesStringsFromVariantValuesFolder(
-        variantName: String,
-        valuesFolderName: String,
-        valuesXmlFilesMap: Map<String, ValuesXmlFiles>,
-        parentStrings: ValuesStrings?
-    ): ValuesStrings? {
-        val valuesStringFiles = valuesXmlFilesMap[valuesFolderName] ?: return null
-        return ValuesStrings(
-            variantName,
-            valuesFolderName,
-            valuesStringFiles,
-            parentStrings
-        )
     }
 
     private fun getUniqueValuesFolderNames(valuesFolderNames: List<Set<String>>): Set<String> {

@@ -1,6 +1,7 @@
 package com.likethesalad.placeholder.data
 
 import com.google.common.truth.Truth
+import com.likethesalad.placeholder.data.storage.utils.ValuesStringsProvider
 import com.likethesalad.placeholder.models.ValuesStrings
 import com.likethesalad.placeholder.models.VariantResPaths
 import com.likethesalad.placeholder.testutils.TestResourcesHandler
@@ -12,6 +13,7 @@ import java.io.File
 class VariantRawStringsTest {
 
     private val resourcesHandler = TestResourcesHandler(javaClass)
+    private val valuesStringsProvider = ValuesStringsProvider()
 
     @Test
     fun `Get raw strings for unflavored variant`() {
@@ -22,11 +24,10 @@ class VariantRawStringsTest {
             )
         )
 
-        val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
+        val variantRawStrings = VariantRawStrings(variantDirsPathFinder, valuesStringsProvider)
 
         Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
             ValuesStrings(
-                "main",
                 "values",
                 ValuesXmlFiles(
                     setOf(
@@ -47,11 +48,10 @@ class VariantRawStringsTest {
             )
         )
 
-        val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
+        val variantRawStrings = VariantRawStrings(variantDirsPathFinder, valuesStringsProvider)
 
         Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
             ValuesStrings(
-                "main",
                 "values",
                 ValuesXmlFiles(
                     setOf(
@@ -73,10 +73,9 @@ class VariantRawStringsTest {
             )
         )
 
-        val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
+        val variantRawStrings = VariantRawStrings(variantDirsPathFinder, valuesStringsProvider)
 
         val baseValuesStrings = ValuesStrings(
-            "main",
             "values",
             ValuesXmlFiles(
                 setOf(
@@ -88,7 +87,6 @@ class VariantRawStringsTest {
         Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
             baseValuesStrings,
             ValuesStrings(
-                "main",
                 "values-es",
                 ValuesXmlFiles(
                     setOf(File(mainResDirs.getValue("resMultilingual"), "values-es/strings_es.xml"))
@@ -110,10 +108,9 @@ class VariantRawStringsTest {
             )
         )
 
-        val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
+        val variantRawStrings = VariantRawStrings(variantDirsPathFinder, valuesStringsProvider)
 
         val baseValuesStrings = ValuesStrings(
-            "main",
             "values",
             ValuesXmlFiles(
                 setOf(
@@ -125,7 +122,6 @@ class VariantRawStringsTest {
 
         Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
             ValuesStrings(
-                "client",
                 "values",
                 ValuesXmlFiles(
                     setOf(
@@ -150,10 +146,9 @@ class VariantRawStringsTest {
             )
         )
 
-        val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
+        val variantRawStrings = VariantRawStrings(variantDirsPathFinder, valuesStringsProvider)
 
         val mainBaseValuesStrings = ValuesStrings(
-            "main",
             "values",
             ValuesXmlFiles(
                 setOf(
@@ -165,7 +160,6 @@ class VariantRawStringsTest {
         )
 
         val clientBaseValuesStrings = ValuesStrings(
-            "client",
             "values",
             ValuesXmlFiles(
                 setOf(
@@ -178,7 +172,6 @@ class VariantRawStringsTest {
         Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
             clientBaseValuesStrings,
             ValuesStrings(
-                "main",
                 "values-es",
                 ValuesXmlFiles(
                     setOf(
@@ -203,10 +196,9 @@ class VariantRawStringsTest {
             )
         )
 
-        val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
+        val variantRawStrings = VariantRawStrings(variantDirsPathFinder, valuesStringsProvider)
 
         val mainBaseValuesStrings = ValuesStrings(
-            "main",
             "values",
             ValuesXmlFiles(
                 setOf(
@@ -217,7 +209,6 @@ class VariantRawStringsTest {
         )
 
         val clientBaseValuesStrings = ValuesStrings(
-            "client",
             "values",
             ValuesXmlFiles(
                 setOf(
@@ -231,7 +222,6 @@ class VariantRawStringsTest {
         Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
             clientBaseValuesStrings,
             ValuesStrings(
-                "client",
                 "values-es",
                 ValuesXmlFiles(
                     setOf(
@@ -256,10 +246,9 @@ class VariantRawStringsTest {
             )
         )
 
-        val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
+        val variantRawStrings = VariantRawStrings(variantDirsPathFinder, valuesStringsProvider)
 
         val mainBaseValuesStrings = ValuesStrings(
-            "main",
             "values",
             ValuesXmlFiles(
                 setOf(
@@ -271,7 +260,6 @@ class VariantRawStringsTest {
         )
 
         val clientBaseValuesStrings = ValuesStrings(
-            "client",
             "values",
             ValuesXmlFiles(
                 setOf(
@@ -283,7 +271,6 @@ class VariantRawStringsTest {
         )
 
         val mainEsBaseValuesStrings = ValuesStrings(
-            "main",
             "values-es",
             ValuesXmlFiles(
                 setOf(
@@ -296,7 +283,6 @@ class VariantRawStringsTest {
         Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
             clientBaseValuesStrings,
             ValuesStrings(
-                "client",
                 "values-es",
                 ValuesXmlFiles(
                     setOf(

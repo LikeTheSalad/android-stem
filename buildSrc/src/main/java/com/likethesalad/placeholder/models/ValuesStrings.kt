@@ -5,10 +5,9 @@ import com.likethesalad.placeholder.data.ValuesXmlFiles
 import com.likethesalad.placeholder.utils.ValuesNameUtils
 
 data class ValuesStrings(
-    val variantName: String,
     val valuesFolderName: String,
     val valuesXmlFiles: ValuesXmlFiles,
-    private val parentValuesStrings: ValuesStrings? = null
+    val parentValuesStrings: ValuesStrings? = null
 ) {
 
     val valuesSuffix: String by lazy {
@@ -53,10 +52,8 @@ data class ValuesStrings(
 
         mergedMap.values.sorted()
     }
-    val primaryVariantName: String by lazy {
-        if (hasLocalTemplates || hasLocalValuesForTemplates) {
-            variantName
-        } else parentValuesStrings?.primaryVariantName ?: ""
+    val hasTemplatesOrValues: Boolean by lazy {
+        hasLocalTemplates || hasLocalValuesForTemplates || parentValuesStrings?.hasTemplatesOrValues == true
     }
 
     private fun getLocalNonTemplatesNames(): List<String> {

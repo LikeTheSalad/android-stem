@@ -8,6 +8,7 @@ import com.likethesalad.placeholder.data.helpers.AndroidProjectHelper
 import com.likethesalad.placeholder.data.helpers.AndroidVariantHelper
 import com.likethesalad.placeholder.data.resources.AndroidResourcesHandler
 import com.likethesalad.placeholder.data.storage.*
+import com.likethesalad.placeholder.data.storage.utils.ValuesStringsProvider
 import com.likethesalad.placeholder.models.PlaceholderExtension
 import com.likethesalad.placeholder.resolver.RecursiveLevelDetector
 import com.likethesalad.placeholder.resolver.TemplateResolver
@@ -70,7 +71,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project> {
         val androidResourcesHandler = AndroidResourcesHandler(outputStringFileResolver)
         val variantDirsPathResolver = VariantDirsPathResolver(variantName, flavors, variantType)
         val variantDirsPathFinder = VariantDirsPathFinder(variantDirsPathResolver, androidProjectHelper)
-        val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
+        val variantRawStrings = VariantRawStrings(variantDirsPathFinder, ValuesStringsProvider())//todo singleton
         val resolvedDataCleaner = ResolvedDataCleaner(variantName, variantDirsPathFinder)
 
         val gatherStringsTask = project.tasks.create(

@@ -33,7 +33,7 @@ class TemplateResolverTest {
         )
         val templatesModel = StringsTemplatesModel(
             PathIdentity(
-                "main", "values", ""
+                "values", ""
             ), templates, values
         )
 
@@ -67,7 +67,7 @@ class TemplateResolverTest {
         )
         val templatesModel = StringsTemplatesModel(
             PathIdentity(
-                "main", "values", ""
+                "values", ""
             ), templates, values
         )
 
@@ -101,7 +101,7 @@ class TemplateResolverTest {
         )
         val templatesModel = StringsTemplatesModel(
             PathIdentity(
-                "main", "values", ""
+                "values", ""
             ), templates, values
         )
 

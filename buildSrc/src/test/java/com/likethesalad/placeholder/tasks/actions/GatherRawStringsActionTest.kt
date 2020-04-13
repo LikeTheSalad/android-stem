@@ -38,10 +38,9 @@ class GatherRawStringsActionTest {
     fun `Check saved gathered strings`() {
         val strings = listOf(StringResourceModel("the_string_name", "the string content"))
         val valuesStrings = getValuesStrings(
-            "client",
             "values",
             "",
-            "main",
+            true,
             strings
         )
 
@@ -54,7 +53,7 @@ class GatherRawStringsActionTest {
         verify { resourcesHandler.saveGatheredStrings(capture(gatheredStringsCaptor)) }
         Truth.assertThat(gatheredStringsCaptor.captured).isEqualTo(
             StringsGatheredModel(
-                PathIdentity("client", "values", ""),
+                PathIdentity("values", ""),
                 strings
             )
         )
@@ -64,10 +63,9 @@ class GatherRawStringsActionTest {
     fun `Check don't save values strings with no templates nor values for templates`() {
         val strings = listOf(StringResourceModel("the_string_name", "the string content"))
         val valuesStrings = getValuesStrings(
-            "client",
             "values",
             "",
-            "",
+            false,
             strings
         )
 
@@ -94,17 +92,15 @@ class GatherRawStringsActionTest {
             )
         )
         val valuesStrings = getValuesStrings(
-            "client",
             "values",
             "",
-            "main",
+            true,
             valuesStringsList
         )
         val valuesEsStrings = getValuesStrings(
-            "client",
             "values-es",
             "-es",
-            "client",
+            true,
             valuesEsStringsList
         )
 
@@ -118,31 +114,29 @@ class GatherRawStringsActionTest {
         Truth.assertThat(gatheredStringsCaptor.size).isEqualTo(2)
         Truth.assertThat(gatheredStringsCaptor.first()).isEqualTo(
             StringsGatheredModel(
-                PathIdentity("client", "values", ""),
+                PathIdentity("values", ""),
                 valuesStringsList
             )
         )
         Truth.assertThat(gatheredStringsCaptor[1]).isEqualTo(
             StringsGatheredModel(
-                PathIdentity("client", "values-es", "-es"),
+                PathIdentity("values-es", "-es"),
                 valuesEsStringsList
             )
         )
     }
 
     private fun getValuesStrings(
-        variantName: String,
         valuesFolderName: String,
         valuesSuffix: String,
-        primaryVariantName: String,
+        hasValuesOrTemplates: Boolean,
         strings: List<StringResourceModel>
     ): ValuesStrings {
         val valuesStrings = mockk<ValuesStrings>()
-        every { valuesStrings.variantName }.returns(variantName)
         every { valuesStrings.valuesFolderName }.returns(valuesFolderName)
         every { valuesStrings.valuesSuffix }.returns(valuesSuffix)
         every { valuesStrings.mergedStrings }.returns(strings)
-        every { valuesStrings.primaryVariantName }.returns(primaryVariantName)
+        every { valuesStrings.hasTemplatesOrValues }.returns(hasValuesOrTemplates)
 
         return valuesStrings
     }
