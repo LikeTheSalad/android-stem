@@ -1,12 +1,14 @@
 package com.likethesalad.placeholder.data
 
 import com.google.common.truth.Truth
+import com.likethesalad.placeholder.data.storage.libraries.LibrariesValuesStringsProvider
 import com.likethesalad.placeholder.data.storage.utils.ValuesStringsProvider
 import com.likethesalad.placeholder.models.ValuesStrings
 import com.likethesalad.placeholder.models.VariantResPaths
 import com.likethesalad.placeholder.testutils.TestResourcesHandler
 import io.mockk.every
 import io.mockk.mockk
+import org.junit.Before
 import org.junit.Test
 import java.io.File
 
@@ -14,6 +16,12 @@ class VariantRawStringsTest {
 
     private val resourcesHandler = TestResourcesHandler(javaClass)
     private val valuesStringsProvider = ValuesStringsProvider()
+    private lateinit var librariesValuesStringsProvider: LibrariesValuesStringsProvider
+
+    @Before
+    fun setUp() {
+        librariesValuesStringsProvider = mockk()
+    }
 
     @Test
     fun `Get raw strings for unflavored variant`() {
@@ -24,7 +32,7 @@ class VariantRawStringsTest {
             )
         )
 
-        val variantRawStrings = VariantRawStrings(variantDirsPathFinder, valuesStringsProvider)
+        val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
 
         Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
             ValuesStrings(
@@ -48,7 +56,7 @@ class VariantRawStringsTest {
             )
         )
 
-        val variantRawStrings = VariantRawStrings(variantDirsPathFinder, valuesStringsProvider)
+        val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
 
         Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
             ValuesStrings(
@@ -73,7 +81,7 @@ class VariantRawStringsTest {
             )
         )
 
-        val variantRawStrings = VariantRawStrings(variantDirsPathFinder, valuesStringsProvider)
+        val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
 
         val baseValuesStrings = ValuesStrings(
             "values",
@@ -108,7 +116,7 @@ class VariantRawStringsTest {
             )
         )
 
-        val variantRawStrings = VariantRawStrings(variantDirsPathFinder, valuesStringsProvider)
+        val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
 
         val baseValuesStrings = ValuesStrings(
             "values",
@@ -146,7 +154,7 @@ class VariantRawStringsTest {
             )
         )
 
-        val variantRawStrings = VariantRawStrings(variantDirsPathFinder, valuesStringsProvider)
+        val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
 
         val mainBaseValuesStrings = ValuesStrings(
             "values",
@@ -196,7 +204,7 @@ class VariantRawStringsTest {
             )
         )
 
-        val variantRawStrings = VariantRawStrings(variantDirsPathFinder, valuesStringsProvider)
+        val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
 
         val mainBaseValuesStrings = ValuesStrings(
             "values",
@@ -246,7 +254,7 @@ class VariantRawStringsTest {
             )
         )
 
-        val variantRawStrings = VariantRawStrings(variantDirsPathFinder, valuesStringsProvider)
+        val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
 
         val mainBaseValuesStrings = ValuesStrings(
             "values",
@@ -317,5 +325,9 @@ class VariantRawStringsTest {
                 resourcesHandler.getResourceFile("raw/variantMock/$variantName/$resDirName")
         }
         return dirs
+    }
+
+    private fun createVariantRawStrings(variantDirsPathFinder: VariantDirsPathFinder): VariantRawStrings {
+        return VariantRawStrings(variantDirsPathFinder, valuesStringsProvider, librariesValuesStringsProvider)
     }
 }

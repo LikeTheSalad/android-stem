@@ -13,7 +13,11 @@ data class ValuesStrings(
     val valuesSuffix: String by lazy {
         ValuesNameUtils.getValuesNameSuffix(valuesFolderName)
     }
-    private val stringsMap = mutableMapOf<String, StringResourceModel>()
+    private val stringsMap: Map<String, StringResourceModel> by lazy {
+        mutableMapOf<String, StringResourceModel>().also {
+            addStringsToMap(valuesXmlFiles.stringResources, it)
+        }
+    }
     private val hasLocalTemplates: Boolean by lazy {
         stringsMap.keys.any { Constants.TEMPLATE_STRING_REGEX.matches(it) }
     }
@@ -21,10 +25,6 @@ data class ValuesStrings(
         val nonTemplatesPlaceholders = getLocalNonTemplatesNames().map { "\${$it}" }
         val mergedTemplatesContents = mergedTemplates.map { it.content }
         nonTemplatesPlaceholders.any { placeholder -> mergedTemplatesContents.any { it.contains(placeholder) } }
-    }
-
-    init {
-        addStringsToMap(valuesXmlFiles.stringResources, stringsMap)
     }
 
     val mergedStrings: List<StringResourceModel> by lazy {

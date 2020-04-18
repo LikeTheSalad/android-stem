@@ -1,13 +1,15 @@
 package com.likethesalad.placeholder.data
 
 import com.likethesalad.placeholder.data.storage.ValuesFoldersExtractor
+import com.likethesalad.placeholder.data.storage.libraries.LibrariesValuesStringsProvider
 import com.likethesalad.placeholder.data.storage.utils.ValuesStringsProvider
 import com.likethesalad.placeholder.models.ValuesStrings
 import com.likethesalad.placeholder.models.VariantXmlFiles
 
 class VariantRawStrings(
     private val variantDirsPathFinder: VariantDirsPathFinder,
-    private val valuesStringsProvider: ValuesStringsProvider
+    private val valuesStringsProvider: ValuesStringsProvider,
+    private val librariesValuesStringsProvider: LibrariesValuesStringsProvider
 ) {
 
     companion object {
@@ -37,7 +39,7 @@ class VariantRawStrings(
         val baseValuesStrings = valuesStringsProvider.getValuesStringsForFolderFromVariants(
             BASE_VALUES_FOLDER_NAME,
             variantXmlFilesList,
-            null//todo add libs 'values' folder strings here?
+            librariesValuesStringsProvider.getValuesStringsFor(BASE_VALUES_FOLDER_NAME, null)
         )
         if (baseValuesStrings != null) {
             valuesStringsPerFolder[BASE_VALUES_FOLDER_NAME] = baseValuesStrings
@@ -47,7 +49,7 @@ class VariantRawStrings(
             val valuesStrings: ValuesStrings? = valuesStringsProvider.getValuesStringsForFolderFromVariants(
                 valuesFolderName,
                 variantXmlFilesList,
-                baseValuesStrings
+                librariesValuesStringsProvider.getValuesStringsFor(valuesFolderName, baseValuesStrings)
             )
 
             if (valuesStrings != null) {
