@@ -1,8 +1,6 @@
 package com.likethesalad.placeholder.utils
 
 import com.likethesalad.placeholder.data.helpers.AndroidProjectHelper
-import com.likethesalad.placeholder.data.storage.libraries.helpers.AllowedNamesProvider
-import com.likethesalad.placeholder.data.storage.libraries.helpers.LibrariesNameValidator
 import com.likethesalad.placeholder.data.storage.utils.ValuesStringsProvider
 import com.likethesalad.placeholder.models.PlaceholderExtension
 import com.likethesalad.placeholder.resolver.RecursiveLevelDetector
@@ -19,10 +17,6 @@ class TaskActionProviderFactory(
     private val valuesStringsProvider = ValuesStringsProvider()
     private val templateResolver = TemplateResolver(RecursiveLevelDetector())
 
-    private val allowedNamesProvider =
-        AllowedNamesProvider(DependenciesExtensionCleaner.cleanUpDependencies(extension.useStringsFromDependencies))
-    private val librariesNameValidator = LibrariesNameValidator(allowedNamesProvider)
-
     fun create(
         variantName: String,
         variantType: String,
@@ -31,8 +25,7 @@ class TaskActionProviderFactory(
     ): TaskActionProvider {
         return TaskActionProvider(
             buildDir, configuration, variantName, variantType, flavors, androidProjectHelper,
-            valuesStringsProvider, librariesNameValidator, templateResolver,
-            extension.keepResolvedFiles
+            valuesStringsProvider, templateResolver, extension.keepResolvedFiles, extension.useDependenciesRes
         )
     }
 }

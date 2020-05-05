@@ -11,8 +11,6 @@ import com.likethesalad.placeholder.data.resources.AndroidResourcesHandler
 import com.likethesalad.placeholder.data.storage.*
 import com.likethesalad.placeholder.data.storage.libraries.LibrariesFilesProvider
 import com.likethesalad.placeholder.data.storage.libraries.LibrariesValuesStringsProvider
-import com.likethesalad.placeholder.data.storage.libraries.helpers.AndroidLibrariesProvider
-import com.likethesalad.placeholder.data.storage.libraries.helpers.LibrariesNameValidator
 import com.likethesalad.placeholder.data.storage.utils.ValuesStringsProvider
 import com.likethesalad.placeholder.resolver.TemplateResolver
 import com.likethesalad.placeholder.tasks.actions.GatherRawStringsAction
@@ -29,15 +27,14 @@ class TaskActionProvider(
     flavors: List<String>,
     androidProjectHelper: AndroidProjectHelper,
     valuesStringsProvider: ValuesStringsProvider,
-    librariesNameValidator: LibrariesNameValidator,
     templateResolver: TemplateResolver,
-    keepResolvedFiles: Boolean
+    keepResolvedFiles: Boolean,
+    useDependenciesRes: Boolean
 ) {
     val androidVariantHelper = AndroidVariantHelper(androidProjectHelper, variantName)
 
-    private val androidConfigHelper = AndroidConfigHelper(configuration)
-    private val androidLibrariesProvider = AndroidLibrariesProvider(androidConfigHelper, librariesNameValidator)
-    private val librariesFilesProvider = LibrariesFilesProvider(androidLibrariesProvider)
+    val androidConfigHelper = AndroidConfigHelper(configuration)
+    private val librariesFilesProvider = LibrariesFilesProvider(androidConfigHelper, useDependenciesRes)
     private val librariesValuesStringsProvider = LibrariesValuesStringsProvider(librariesFilesProvider)
 
     private val incrementalDirsProvider = IncrementalDirsProvider(androidVariantHelper)

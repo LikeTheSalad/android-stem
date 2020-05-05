@@ -3,5 +3,5 @@ package com.likethesalad.placeholder.models
 open class PlaceholderExtension {
     var resolveOnBuild: Boolean = true
     var keepResolvedFiles: Boolean = false
-    var useStringsFromDependencies: Any = emptyList<String>()
+    var useDependenciesRes: Boolean = false
 }

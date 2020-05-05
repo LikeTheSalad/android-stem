@@ -20,10 +20,11 @@ class ResolvePlaceholdersPlugin : Plugin<Project> {
         project.plugins.withId("com.android.application") {
             val extension = project.extensions.create("stringXmlReference", PlaceholderExtension::class.java)
             val projectHelper = AndroidProjectHelper(project)
-            val taskActionProviderFactory = TaskActionProviderFactory(
-                project.buildDir, projectHelper, extension
-            )
             project.afterEvaluate {
+                val taskActionProviderFactory = TaskActionProviderFactory(
+                    project.buildDir, projectHelper, extension
+                )
+
                 projectHelper.androidExtension.getApplicationVariants().forEach {
                     createResolvePlaceholdersTaskForVariant(
                         project,
@@ -53,6 +54,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project> {
         ) {
             it.group = RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME
             it.gatherRawStringsAction = taskActionProvider.gatherRawStringsAction
+            it.dependenciesRes = taskActionProvider.androidConfigHelper.librariesResDirs
         }
 
         val gatherTemplatesTask = project.tasks.create(
@@ -77,7 +79,6 @@ class ResolvePlaceholdersPlugin : Plugin<Project> {
 
         if (resolveOnBuild) {
             androidVariantHelper.mergeResourcesTask.dependsOn(resolvePlaceholdersTask)
-            androidVariantHelper.generateResValuesTask?.mustRunAfter(resolvePlaceholdersTask)
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.likethesalad.placeholder.data.helpers
 
-import org.gradle.api.artifacts.ArtifactCollection
 import org.gradle.api.artifacts.Configuration
+import org.gradle.api.file.FileCollection
 
 @Suppress("UnstableApiUsage")
 class AndroidConfigHelper(
@@ -9,9 +9,10 @@ class AndroidConfigHelper(
     private val androidArtifactViewActionProvider: AndroidArtifactViewActionProvider = AndroidArtifactViewActionProvider()
 ) {
 
-    fun getResArtifactCollection(): ArtifactCollection {
-        return configuration.incoming
+    val librariesResDirs: FileCollection by lazy {
+        configuration.incoming
             .artifactView(androidArtifactViewActionProvider.getResArtifactViewAction())
             .artifacts
+            .artifactFiles
     }
 }

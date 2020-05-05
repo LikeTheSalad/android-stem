@@ -1,10 +1,10 @@
 package com.likethesalad.placeholder.data.storage.libraries
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.data.storage.libraries.helpers.AndroidLibrariesProvider
-import com.likethesalad.placeholder.models.AndroidLibrary
+import com.likethesalad.placeholder.data.helpers.AndroidConfigHelper
 import io.mockk.every
 import io.mockk.mockk
+import org.gradle.api.file.FileCollection
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -13,45 +13,64 @@ import java.io.File
 
 class LibrariesFilesProviderTest {
 
-    private lateinit var androidLibrariesProvider: AndroidLibrariesProvider
-    private lateinit var librariesFilesProvider: LibrariesFilesProvider
+    private lateinit var androidConfigHelper: AndroidConfigHelper
     @get:Rule
     val temporaryFolder = TemporaryFolder()
 
     @Before
     fun setUp() {
-        androidLibrariesProvider = mockk()
-        librariesFilesProvider = LibrariesFilesProvider(androidLibrariesProvider)
+        androidConfigHelper = mockk()
     }
 
     @Test
-    fun getXmlFilesForFolder() {
-        verifyXmlFilesForFolder("values")
-        verifyXmlFilesForFolder("values-es")
-        verifyXmlFilesForFolder("values-it")
+    fun getXmlFilesForFolder_canUseDependencies_true() {
+        val librariesFilesProvider = LibrariesFilesProvider(androidConfigHelper, true)
+        verifyXmlFilesForFolder("values", librariesFilesProvider, false)
+        verifyXmlFilesForFolder("values-es", librariesFilesProvider, false)
+        verifyXmlFilesForFolder("values-it", librariesFilesProvider, false)
     }
 
-    private fun verifyXmlFilesForFolder(folderName: String) {
+    @Test
+    fun getXmlFilesForFolder_canUseDependencies_false() {
+        val librariesFilesProvider = LibrariesFilesProvider(androidConfigHelper, false)
+        verifyXmlFilesForFolder("values", librariesFilesProvider, true)
+        verifyXmlFilesForFolder("values-es", librariesFilesProvider, true)
+        verifyXmlFilesForFolder("values-it", librariesFilesProvider, true)
+    }
+
+    private fun verifyXmlFilesForFolder(
+        folderName: String,
+        librariesFilesProvider: LibrariesFilesProvider,
+        emptyResponse: Boolean
+    ) {
         val libName1 = "library1"
         val libName2 = "library2"
         val libName3 = "library3"
         val libName4 = "library4"
-        val library1 = AndroidLibrary(libName1, createResDirWithExistingXmlValue(libName1, folderName))
-        val library2 = AndroidLibrary(libName2, createResDirWithExistingXmlValue(libName2, folderName))
-        val library3 = AndroidLibrary(libName3, createEmptyResDir(libName3))
-        val library4 = AndroidLibrary(libName4, createEmptyLibraryDir(libName4))
-        every { androidLibrariesProvider.getAndroidLibraries() }.returns(
+        val libraryResDir1 = createResDirWithExistingXmlValue(libName1, folderName)
+        val libraryResDir2 = createResDirWithExistingXmlValue(libName2, folderName)
+        val libraryResDir3 = createEmptyResDir(libName3)
+        val libraryResDir4 = createEmptyLibraryDir(libName4)
+        val fileCollection = mockk<FileCollection>()
+        every { androidConfigHelper.librariesResDirs }.returns(
+            fileCollection
+        )
+        every { fileCollection.files }.returns(
             setOf(
-                library1, library2, library3, library4
+                libraryResDir1, libraryResDir2, libraryResDir3, libraryResDir4
             )
         )
 
         val files = librariesFilesProvider.getXmlFilesForFolder(folderName)
 
-        Truth.assertThat(files).containsExactly(
-            File(temporaryFolder.root, "$libName1/res/$folderName/$folderName.xml"),
-            File(temporaryFolder.root, "$libName2/res/$folderName/$folderName.xml")
-        )
+        if (emptyResponse) {
+            Truth.assertThat(files).isEmpty()
+        } else {
+            Truth.assertThat(files).containsExactly(
+                File(temporaryFolder.root, "$libName1/res/$folderName/$folderName.xml"),
+                File(temporaryFolder.root, "$libName2/res/$folderName/$folderName.xml")
+            )
+        }
     }
 
     private fun createResDirWithExistingXmlValue(libraryDir: String, valuesFolderName: String): File {
