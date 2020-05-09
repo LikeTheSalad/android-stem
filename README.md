@@ -139,6 +139,27 @@ The following cases are supported:
 > '*template_my_message*' inside the 'values-es' folder and you'll get the
 > translated '*my_message*' string in the 'resolved.xml' file inside the 'values-es' folder.
 
+### 3- Configurable options
+
+This plugin has a default configuration that will work just fine for most projects, but if you think there are some aspects
+of it that you need to change based on the requirements and/or limitations on your project, you might find useful the following
+configuration params that are available for it.
+
+The configurations params available are:
+
+- **resolveOnBuild** (Boolean, added in version 1.0.0). When true, this plugin will automatically resolve your app's templates (only if it's needed to) during your app's build process. When false
+this plugin won't run automatically during your app's build process and instead you'd have to run it manually by calling the
+proper Gradle commands depending on the build variant you'd want to resolve the strings for. More info on this below under
+"Running it manually". The default value for flag is `true`.
+
+- **keepResolvedFiles** (Boolean, added in version 1.1.0). When false, it will send all of the resolved strings to your app's build directory. Otherwise, when true,
+it will send all of the resolved strings to your app's src dir, meaning that you will see them in your working directory.
+The default value for flag is `false`.
+
+- **useDependenciesRes** (Boolean, added in version 1.2.0). When false, it will only take your app's string resources into account
+for resolving your string's placeholders. When true, it will take both your app's strings as well as your app's dependencies strings
+for doing the resolving process. The default value for this flag is `false`.
+
 Use case examples
 ---
 Here's a couple of examples for some of the use cases supported by this plugin
