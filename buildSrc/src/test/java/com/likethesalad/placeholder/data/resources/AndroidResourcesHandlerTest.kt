@@ -38,7 +38,7 @@ class AndroidResourcesHandlerTest {
 
         // Then:
         Truth.assertThat(result.pathIdentity).isEqualTo(
-            PathIdentity("client", "values", "")
+            PathIdentity("values", "")
         )
         Truth.assertThat(result.mergedStrings).isEqualTo(
             listOf(
@@ -57,7 +57,7 @@ class AndroidResourcesHandlerTest {
     @Test
     fun check_saveGatheredStrings() {
         // Given:
-        val pathIdentity = PathIdentity("client", "values", "")
+        val pathIdentity = PathIdentity("values", "")
         val file = temporaryFolder.newFile()
         every { outputStringFileResolver.getRawStringsFile("") }.returns(file)
         val mergedStrings = listOf(
@@ -115,7 +115,7 @@ class AndroidResourcesHandlerTest {
         val result = androidResourcesHandler.getTemplatesFromFile(templatesFile)
 
         // Then:
-        Truth.assertThat(result.pathIdentity).isEqualTo(PathIdentity("client", "values-es", "-es"))
+        Truth.assertThat(result.pathIdentity).isEqualTo(PathIdentity("values-es", "-es"))
         Truth.assertThat(result.templates.size).isEqualTo(2)
         Truth.assertThat(result.templates.map { it.name }).containsExactly(
             "template_welcome",
@@ -149,7 +149,7 @@ class AndroidResourcesHandlerTest {
                 "translatable" to "false"
             ), "Non translatable \${app_name}"
         )
-        val pathIdentity = PathIdentity("client", "values-es", "-es")
+        val pathIdentity = PathIdentity("values-es", "-es")
         val templates = StringsTemplatesModel(
             pathIdentity,
             listOf(template1, template2),

@@ -1,20 +1,23 @@
 package com.likethesalad.placeholder.models
 
 import com.likethesalad.placeholder.data.Constants
-import com.likethesalad.placeholder.data.ValuesStringFiles
+import com.likethesalad.placeholder.data.ValuesXmlFiles
 import com.likethesalad.placeholder.utils.ValuesNameUtils
 
 data class ValuesStrings(
-    val variantName: String,
     val valuesFolderName: String,
-    val valuesStringFiles: ValuesStringFiles,
-    private val parentValuesStrings: ValuesStrings? = null
+    val valuesXmlFiles: ValuesXmlFiles,
+    val parentValuesStrings: ValuesStrings? = null
 ) {
 
     val valuesSuffix: String by lazy {
         ValuesNameUtils.getValuesNameSuffix(valuesFolderName)
     }
-    private val stringsMap = mutableMapOf<String, StringResourceModel>()
+    private val stringsMap: Map<String, StringResourceModel> by lazy {
+        mutableMapOf<String, StringResourceModel>().also {
+            addStringsToMap(valuesXmlFiles.stringResources, it)
+        }
+    }
     private val hasLocalTemplates: Boolean by lazy {
         stringsMap.keys.any { Constants.TEMPLATE_STRING_REGEX.matches(it) }
     }
@@ -22,10 +25,6 @@ data class ValuesStrings(
         val nonTemplatesPlaceholders = getLocalNonTemplatesNames().map { "\${$it}" }
         val mergedTemplatesContents = mergedTemplates.map { it.content }
         nonTemplatesPlaceholders.any { placeholder -> mergedTemplatesContents.any { it.contains(placeholder) } }
-    }
-
-    init {
-        addStringsToMap(valuesStringFiles.stringResources, stringsMap)
     }
 
     val mergedStrings: List<StringResourceModel> by lazy {
@@ -53,10 +52,8 @@ data class ValuesStrings(
 
         mergedMap.values.sorted()
     }
-    val primaryVariantName: String by lazy {
-        if (hasLocalTemplates || hasLocalValuesForTemplates) {
-            variantName
-        } else parentValuesStrings?.primaryVariantName ?: ""
+    val hasTemplatesOrValues: Boolean by lazy {
+        hasLocalTemplates || hasLocalValuesForTemplates || parentValuesStrings?.hasTemplatesOrValues == true
     }
 
     private fun getLocalNonTemplatesNames(): List<String> {

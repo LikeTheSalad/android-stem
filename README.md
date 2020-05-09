@@ -10,6 +10,9 @@ Table of Contents
      * [2.- Running it](#2--running-it)
      * [2.1- How to know if it worked?](#21--how-to-know-if-it-worked)
      * [2.2- Where do resolved strings go to?](#22--where-do-resolved-strings-go-to)
+     * [3- Configurable options](#3--configurable-options)
+     * [3.1- Available configuration parameters](#31--available-configuration-parameters)
+     * [3.2- How to change a configuration parameter?](#32--how-to-change-a-configuration-parameter)
   * [Use case examples](#use-case-examples)
      * [1.- Simple use case](#1--simple-use-case)
      * [2.- Multi files use case](#2--multi-files-use-case)
@@ -57,7 +60,7 @@ How to use
 ### 1.- Templates
 All you have to do is to define string templates inside your XML string files,
 the file to add these templates to can be any file inside your values folders,
-not necesarily the "strings.xml" file but any other within the same directory will
+not necessarily the "strings.xml" file but any other within the same directory will
 work too.
 In order to create a template all you need to do is to set its name with the
 `template_` prefix. So for example, if you want your final "resolved" string name
@@ -126,11 +129,11 @@ The following cases are supported:
 - Flavor specific with multi-language strings.
 
 
-> Both **values and templates** can be overriden for a different **language** and
+> Both **values and templates** can be overridden for a different **language** and
 > also for a different **flavor**. So if for example you have templates in your
 > project which contain the app name placeholder (e.g. ${app_name}) then if you
 > need to create a flavor with a different app name value, you just have
-> to override the '*app_name*' string inside the flavor's 'values' foler 
+> to override the '*app_name*' string inside the flavor's 'values' folder
 > and that's it, now for this flavor you'll get all of the old strings but with
 > the new app_name.
 
@@ -138,6 +141,47 @@ The following cases are supported:
 > '*my_message*' string to spanish for example, you just have to override the template
 > '*template_my_message*' inside the 'values-es' folder and you'll get the
 > translated '*my_message*' string in the 'resolved.xml' file inside the 'values-es' folder.
+
+### 3- Configurable options
+
+This plugin has a default configuration that will work just fine for most projects, but if you think there are some aspects
+of it that you need to change based on the requirements and/or limitations on your project, you might find useful the following
+configuration params that are available for it.
+
+### 3.1- Available configuration parameters
+
+- **resolveOnBuild** (Boolean, default is `true`, added in version 1.0.0). When true, this plugin will automatically resolve your app's templates (only if it's needed to) during your app's build process. When false
+this plugin won't run automatically during your app's build process and instead you'd have to run it manually by calling the
+proper Gradle commands depending on the build variant you'd want to resolve the strings for. More info on this below under
+"Running it manually".
+
+- **keepResolvedFiles** (Boolean, default is `false`, added in version 1.1.0). When false, it will send all of the resolved strings to your app's build directory. Otherwise, when true,
+it will send all of the resolved strings to your app's src dir, meaning that you will see them in your working directory.
+
+- **useDependenciesRes** (Boolean, default is `false`, added in version 1.2.0). When false, it will only take your app's string resources into account
+for resolving your string's placeholders. When true, it will take both your app's strings as well as your app's dependencies strings
+for doing the resolving process.
+
+### 3.2- How to change a configuration parameter?
+
+In order to set any of the configuration parameters available, you'll have to add to your app's `build.gradle` file
+the block **stringXmlReference**, and inside it you can add all of the params you'd want to change and make them
+equal to the values you'd like to set for them.
+
+Here's an example of how to change the params
+
+```groovy
+// App's build.gradle file
+android {
+  //...
+}
+
+// Example of how to change some config flags
+stringXmlReference {
+    keepResolvedFiles = true // It's default value is false.
+    useDependenciesRes = true // It's default value is false.
+}
+```
 
 Use case examples
 ---
@@ -341,7 +385,7 @@ you can turn it off by adding the following into your `App's build.gradle` file,
 ```groovy
 // Optional
 stringXmlReference {
-  resolveOnBuild = false // By defult it is true.
+  resolveOnBuild = false // By default it is true.
   // If true: The templates resolver task will run automatically during your project's build.
   // If false: The templates resolver task won't run automatically, you'll have to run it by explicitly calling
   // it as explained below.

@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 1.2.0 *(09-05-2020)*
+---
+
+ * New: Added new configuration parameter `useDependenciesRes` that allows to gather strings from the app's dependencies when resolving strings.
+
 Version 1.1.0 *(05-01-2020)*
 ---
 

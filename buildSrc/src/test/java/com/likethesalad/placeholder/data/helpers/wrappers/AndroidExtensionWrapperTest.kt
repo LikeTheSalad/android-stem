@@ -21,11 +21,13 @@ class AndroidExtensionWrapperTest {
     private val appVariants = setOf(
         TestApplicationVariant(
             "demoDebug", "demo", emptyList(),
-            TestAndroidBuildType("debug")
+            TestAndroidBuildType("debug"),
+            mockk()
         ),
         TestApplicationVariant(
             "paidDebug", "paid", emptyList(),
-            TestAndroidBuildType("debug")
+            TestAndroidBuildType("debug"),
+            mockk()
         )
     )
 

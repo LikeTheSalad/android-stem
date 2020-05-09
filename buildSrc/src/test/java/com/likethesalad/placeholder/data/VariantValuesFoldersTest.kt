@@ -31,7 +31,7 @@ class VariantValuesFoldersTest {
         val resDirs = setOf(res1, res2)
         val resValuesFiles = VariantValuesFolders(variantName, ValuesFoldersExtractor(resDirs))
 
-        val valuesFiles = resValuesFiles.valuesStringFiles
+        val valuesFiles = resValuesFiles.valuesXmlFiles
         Truth.assertThat(valuesFiles.size).isEqualTo(3)
         assertThatValuesFilesContainsFiles(
             valuesFiles.getValue("values"),
@@ -64,7 +64,7 @@ class VariantValuesFoldersTest {
         val resDirs = setOf(res1)
         val resValuesFiles = VariantValuesFolders(variantName, ValuesFoldersExtractor(resDirs))
 
-        val valuesFiles = resValuesFiles.valuesStringFiles
+        val valuesFiles = resValuesFiles.valuesXmlFiles
         Truth.assertThat(valuesFiles.size).isEqualTo(2)
 
         assertThatValuesFilesContainsFiles(
@@ -78,8 +78,8 @@ class VariantValuesFoldersTest {
         )
     }
 
-    private fun assertThatValuesFilesContainsFiles(valuesStringFiles: ValuesStringFiles, vararg filePaths: String) {
-        Truth.assertThat(valuesStringFiles.filesSet.map { it.absolutePath }).containsExactlyElementsIn(filePaths)
+    private fun assertThatValuesFilesContainsFiles(valuesXmlFiles: ValuesXmlFiles, vararg filePaths: String) {
+        Truth.assertThat(valuesXmlFiles.filesSet.map { it.absolutePath }).containsExactlyElementsIn(filePaths)
     }
 
     private fun getResDirWithFolders(resDirName: String, valuesFolders: Map<String, List<String>>): File {

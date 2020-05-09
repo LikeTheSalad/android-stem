@@ -16,7 +16,7 @@ class GatherRawStringsAction(
     fun gatherStrings() {
         incrementalDataCleaner.clearRawStrings()
         for (valuesStrings in variantRawStrings.valuesStrings) {
-            if (valuesStrings.primaryVariantName.isNotEmpty()) {
+            if (valuesStrings.hasTemplatesOrValues) {
                 resourcesHandler.saveGatheredStrings(valuesStringsToStringsGathered(valuesStrings))
             }
         }
@@ -25,7 +25,6 @@ class GatherRawStringsAction(
     private fun valuesStringsToStringsGathered(valuesStrings: ValuesStrings): StringsGatheredModel {
         return StringsGatheredModel(
             PathIdentity(
-                valuesStrings.variantName,
                 valuesStrings.valuesFolderName,
                 valuesStrings.valuesSuffix
             ),

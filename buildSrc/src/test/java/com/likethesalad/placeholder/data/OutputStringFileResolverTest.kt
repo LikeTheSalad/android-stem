@@ -42,30 +42,28 @@ class OutputStringFileResolverTest {
 
     @Test
     fun `Get resolved strings file`() {
-        val variantName = "clientDebug"
         every { variantBuildResolvedDir.resolvedDir }.returns(File(srcDir, "clientDebug/res/"))
 
         assertResolvedStringsFilePath(
-            PathIdentity(variantName, "values", ""),
+            PathIdentity("values", ""),
             "clientDebug/res/values/resolved.xml"
         )
         assertResolvedStringsFilePath(
-            PathIdentity(variantName, "values-es", "-es"),
+            PathIdentity("values-es", "-es"),
             "clientDebug/res/values-es/resolved.xml"
         )
     }
 
     @Test
     fun `Get resolved strings file when there's more than a res folder`() {
-        val variantName = "clientDebug"
         every { variantBuildResolvedDir.resolvedDir }.returns(File(srcDir, "clientDebug/res1/"))
 
         assertResolvedStringsFilePath(
-            PathIdentity(variantName, "values", ""),
+            PathIdentity("values", ""),
             "clientDebug/res1/values/resolved.xml"
         )
         assertResolvedStringsFilePath(
-            PathIdentity(variantName, "values-es", "-es"),
+            PathIdentity("values-es", "-es"),
             "clientDebug/res1/values-es/resolved.xml"
         )
     }
@@ -73,11 +71,11 @@ class OutputStringFileResolverTest {
     @Test
     fun `Get raw gathered strings file`() {
         assertRawStringsFilePath(
-            PathIdentity("client", "values", ""),
+            PathIdentity("values", ""),
             "strings/strings.json"
         )
         assertRawStringsFilePath(
-            PathIdentity("client", "values-es", "-es"),
+            PathIdentity("values-es", "-es"),
             "strings/strings-es.json"
         )
     }
@@ -85,11 +83,11 @@ class OutputStringFileResolverTest {
     @Test
     fun `Get template strings file`() {
         assertTemplateStringsFilePath(
-            PathIdentity("main", "values", ""),
+            PathIdentity("values", ""),
             "templates/templates.json"
         )
         assertTemplateStringsFilePath(
-            PathIdentity("client", "values-es", "-es"),
+            PathIdentity("values-es", "-es"),
             "templates/templates-es.json"
         )
     }

@@ -67,11 +67,9 @@ class GatherTemplatesActionTest {
         val gatheredStringsFile = mockk<File>()
         val gatheredStringsFileEs = mockk<File>()
         val (gatheredStrings, expectedGatheredTemplates) = getRawAndTemplatesPair(
-            "client",
             "values", ""
         )
         val (gatheredStringsEs, expectedGatheredTemplatesEs) = getRawAndTemplatesPair(
-            "main",
             "values-es", "-es"
         )
 
@@ -92,11 +90,10 @@ class GatherTemplatesActionTest {
     }
 
     private fun getRawAndTemplatesPair(
-        variantName: String,
         valuesFolderName: String,
         suffix: String
     ): Pair<StringsGatheredModel, StringsTemplatesModel> {
-        val pathIdentity = PathIdentity(variantName, valuesFolderName, suffix)
+        val pathIdentity = PathIdentity(valuesFolderName, suffix)
         val gatheredStrings = StringsGatheredModel(
             pathIdentity,
             listOf(

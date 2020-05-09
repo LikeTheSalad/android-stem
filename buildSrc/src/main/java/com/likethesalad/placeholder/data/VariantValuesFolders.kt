@@ -9,13 +9,13 @@ class VariantValuesFolders(
     valuesFoldersExtractor: ValuesFoldersExtractor
 ) {
     private val valuesFolders: List<File> by lazy { valuesFoldersExtractor.getValuesFolders() }
-    val valuesStringFiles: Map<String, ValuesStringFiles> by lazy {
-        val valuesFilesMap = mutableMapOf<String, ValuesStringFiles>()
+    val valuesXmlFiles: Map<String, ValuesXmlFiles> by lazy {
+        val valuesFilesMap = mutableMapOf<String, ValuesXmlFiles>()
         val valuesFolderNames = getUniqueValuesDirName()
         for (valuesFolderName in valuesFolderNames) {
             val filesInValuesFolder = getFilesFromValuesFolders(valuesFolderName)
             if (filesInValuesFolder.isNotEmpty()) {
-                valuesFilesMap[valuesFolderName] = ValuesStringFiles(filesInValuesFolder.toSet())
+                valuesFilesMap[valuesFolderName] = ValuesXmlFiles(filesInValuesFolder.toSet())
             }
         }
 

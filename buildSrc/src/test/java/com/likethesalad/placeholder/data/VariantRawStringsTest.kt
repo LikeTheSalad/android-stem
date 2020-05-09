@@ -1,66 +1,88 @@
 package com.likethesalad.placeholder.data
 
 import com.google.common.truth.Truth
+import com.likethesalad.placeholder.data.storage.libraries.LibrariesValuesStringsProvider
+import com.likethesalad.placeholder.data.storage.utils.ValuesStringsProvider
 import com.likethesalad.placeholder.models.ValuesStrings
 import com.likethesalad.placeholder.models.VariantResPaths
+import com.likethesalad.placeholder.models.VariantXmlFiles
 import com.likethesalad.placeholder.testutils.TestResourcesHandler
 import io.mockk.every
 import io.mockk.mockk
+import org.junit.Before
 import org.junit.Test
 import java.io.File
 
 class VariantRawStringsTest {
 
     private val resourcesHandler = TestResourcesHandler(javaClass)
+    private lateinit var valuesStringsProvider: ValuesStringsProvider
+    private lateinit var librariesValuesStringsProvider: LibrariesValuesStringsProvider
+
+    @Before
+    fun setUp() {
+        valuesStringsProvider = mockk()
+        librariesValuesStringsProvider = mockk()
+    }
 
     @Test
     fun `Get raw strings for unflavored variant`() {
         val mainResDirs = getVariantMapDir("main", "res")
+        val libValuesStrings = getLibValuesStringsMock("values", null)
         val variantDirsPathFinder = getVariantDirsPathFinder(
             mapOf(
                 "main" to mainResDirs
             )
         )
+        val mainVariantXmlFiles = getVariantXmlFiles(
+            "main",
+            mainResDirs,
+            mapOf(
+                "values" to mapOf(
+                    "res" to listOf("strings.xml")
+                )
+            )
+        )
+        val mainValuesStrings = getValuesStringsMock(
+            "values", libValuesStrings,
+            mainVariantXmlFiles
+        )
 
-        val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
+        val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
 
         Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
-            ValuesStrings(
-                "main",
-                "values",
-                ValuesStringFiles(
-                    setOf(
-                        File(mainResDirs.getValue("res"), "values/strings.xml")
-                    )
-                ),
-                null
-            )
+            mainValuesStrings
         )
     }
 
     @Test
     fun `Get raw strings for unflavored variant with multiple res dirs`() {
         val mainResDirs = getVariantMapDir("main", "res", "res2")
+        val libValuesStrings = getLibValuesStringsMock("values", null)
         val variantDirsPathFinder = getVariantDirsPathFinder(
             mapOf(
                 "main" to mainResDirs
             )
         )
+        val mainVariantXmlFiles = getVariantXmlFiles(
+            "main",
+            mainResDirs,
+            mapOf(
+                "values" to mapOf(
+                    "res" to listOf("strings.xml"),
+                    "res2" to listOf("strings.xml")
+                )
+            )
+        )
+        val mainValuesStrings = getValuesStringsMock(
+            "values", libValuesStrings,
+            mainVariantXmlFiles
+        )
 
-        val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
+        val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
 
         Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
-            ValuesStrings(
-                "main",
-                "values",
-                ValuesStringFiles(
-                    setOf(
-                        File(mainResDirs.getValue("res"), "values/strings.xml"),
-                        File(mainResDirs.getValue("res2"), "values/strings.xml")
-                    )
-                ),
-                null
-            )
+            mainValuesStrings
         )
     }
 
@@ -72,28 +94,33 @@ class VariantRawStringsTest {
                 "main" to mainResDirs
             )
         )
-
-        val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
-
-        val baseValuesStrings = ValuesStrings(
-            "main",
-            "values",
-            ValuesStringFiles(
-                setOf(
-                    File(mainResDirs.getValue("resMultilingual"), "values/strings.xml")
+        val mainVariantXmlFiles = getVariantXmlFiles(
+            "main", mainResDirs,
+            mapOf(
+                "values" to mapOf(
+                    "resMultilingual" to listOf("strings.xml")
+                ),
+                "values-es" to mapOf(
+                    "resMultilingual" to listOf("strings_es.xml")
                 )
-            ),
-            null
+            )
         )
+        val baseLibValuesStrings = getLibValuesStringsMock("values", null)
+        val baseValuesStrings = getValuesStringsMock(
+            "values", baseLibValuesStrings,
+            mainVariantXmlFiles
+        )
+        val esLibValuesStrings = getLibValuesStringsMock("values-es", baseValuesStrings)
+        val esValuesStrings = getValuesStringsMock(
+            "values-es", esLibValuesStrings,
+            mainVariantXmlFiles
+        )
+
+        val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
+
         Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
             baseValuesStrings,
-            ValuesStrings(
-                "main",
-                "values-es",
-                ValuesStringFiles(
-                    setOf(File(mainResDirs.getValue("resMultilingual"), "values-es/strings_es.xml"))
-                ), baseValuesStrings
-            )
+            esValuesStrings
         )
     }
 
@@ -109,31 +136,34 @@ class VariantRawStringsTest {
                 flavor to flavorResDirs
             )
         )
-
-        val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
-
-        val baseValuesStrings = ValuesStrings(
-            "main",
-            "values",
-            ValuesStringFiles(
-                setOf(
-                    File(mainResDirs.getValue("res"), "values/strings.xml")
+        val mainVariantXmlFiles = getVariantXmlFiles(
+            mainVariant,
+            mainResDirs,
+            mapOf(
+                "values" to mapOf(
+                    "res" to listOf("strings.xml")
                 )
-            ),
-            null
+            )
+        )
+        val flavorVariantXmlFiles = getVariantXmlFiles(
+            "client",
+            flavorResDirs,
+            mapOf(
+                "values" to mapOf(
+                    "res" to listOf("strings.xml")
+                )
+            )
+        )
+        val baseLibsValuesStrings = getLibValuesStringsMock("values", null)
+        val flavorValuesStrings = getValuesStringsMock(
+            "values", baseLibsValuesStrings,
+            mainVariantXmlFiles, flavorVariantXmlFiles
         )
 
+        val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
+
         Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
-            ValuesStrings(
-                "client",
-                "values",
-                ValuesStringFiles(
-                    setOf(
-                        File(flavorResDirs.getValue("res"), "values/strings.xml")
-                    )
-                ),
-                baseValuesStrings
-            )
+            flavorValuesStrings
         )
     }
 
@@ -149,44 +179,45 @@ class VariantRawStringsTest {
                 flavor to flavorResDirs
             )
         )
-
-        val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
-
-        val mainBaseValuesStrings = ValuesStrings(
-            "main",
-            "values",
-            ValuesStringFiles(
-                setOf(
-                    File(mainResDirs.getValue("res"), "values/strings.xml"),
-                    File(mainResDirs.getValue("resMultilingual"), "values/strings.xml")
+        val mainVariantXmlFiles = getVariantXmlFiles(
+            mainVariant,
+            mainResDirs, mapOf(
+                "values" to mapOf(
+                    "res" to listOf("strings.xml"),
+                    "resMultilingual" to listOf("strings.xml")
+                ),
+                "values-es" to mapOf(
+                    "resMultilingual" to listOf("strings_es.xml")
                 )
-            ),
-            null
+            )
+        )
+        val flavorVariantXmlFiles = getVariantXmlFiles(
+            flavor, flavorResDirs,
+            mapOf(
+                "values" to mapOf(
+                    "res" to listOf("strings.xml")
+                )
+            )
+        )
+        val baseLibsValuesStrings = getLibValuesStringsMock("values", null)
+        val baseValuesStrings = getValuesStringsMock(
+            "values", baseLibsValuesStrings,
+            mainVariantXmlFiles, flavorVariantXmlFiles
+        )
+        val langLibsValuesStrings = getLibValuesStringsMock(
+            "values-es",
+            baseValuesStrings
+        )
+        val langValuesStrings = getValuesStringsMock(
+            "values-es", langLibsValuesStrings,
+            mainVariantXmlFiles, flavorVariantXmlFiles
         )
 
-        val clientBaseValuesStrings = ValuesStrings(
-            "client",
-            "values",
-            ValuesStringFiles(
-                setOf(
-                    File(flavorResDirs.getValue("res"), "values/strings.xml")
-                )
-            ),
-            mainBaseValuesStrings
-        )
+        val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
 
         Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
-            clientBaseValuesStrings,
-            ValuesStrings(
-                "main",
-                "values-es",
-                ValuesStringFiles(
-                    setOf(
-                        File(mainResDirs.getValue("resMultilingual"), "values-es/strings_es.xml")
-                    )
-                ),
-                clientBaseValuesStrings
-            )
+            baseValuesStrings,
+            langValuesStrings
         )
     }
 
@@ -203,43 +234,45 @@ class VariantRawStringsTest {
             )
         )
 
-        val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
-
-        val mainBaseValuesStrings = ValuesStrings(
-            "main",
-            "values",
-            ValuesStringFiles(
-                setOf(
-                    File(mainResDirs.getValue("res"), "values/strings.xml")
+        val mainVariantXmlFiles = getVariantXmlFiles(
+            mainVariant,
+            mainResDirs, mapOf(
+                "values" to mapOf(
+                    "res" to listOf("strings.xml")
                 )
-            ),
-            null
+            )
+        )
+        val flavorVariantXmlFiles = getVariantXmlFiles(
+            flavor, flavorResDirs,
+            mapOf(
+                "values" to mapOf(
+                    "res" to listOf("strings.xml"),
+                    "resMulti" to listOf("strings.xml")
+                ),
+                "values-es" to mapOf(
+                    "resMulti" to listOf("strings_es.xml")
+                )
+            )
+        )
+        val baseLibsValuesStrings = getLibValuesStringsMock("values", null)
+        val baseValuesStrings = getValuesStringsMock(
+            "values", baseLibsValuesStrings,
+            mainVariantXmlFiles, flavorVariantXmlFiles
+        )
+        val langLibsValuesStrings = getLibValuesStringsMock(
+            "values-es",
+            baseValuesStrings
+        )
+        val langValuesStrings = getValuesStringsMock(
+            "values-es", langLibsValuesStrings,
+            mainVariantXmlFiles, flavorVariantXmlFiles
         )
 
-        val clientBaseValuesStrings = ValuesStrings(
-            "client",
-            "values",
-            ValuesStringFiles(
-                setOf(
-                    File(flavorResDirs.getValue("res"), "values/strings.xml"),
-                    File(flavorResDirs.getValue("resMulti"), "values/strings.xml")
-                )
-            ),
-            mainBaseValuesStrings
-        )
+        val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
 
         Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
-            clientBaseValuesStrings,
-            ValuesStrings(
-                "client",
-                "values-es",
-                ValuesStringFiles(
-                    setOf(
-                        File(flavorResDirs.getValue("resMulti"), "values-es/strings_es.xml")
-                    )
-                ),
-                clientBaseValuesStrings
-            )
+            baseValuesStrings,
+            langValuesStrings
         )
     }
 
@@ -256,55 +289,49 @@ class VariantRawStringsTest {
             )
         )
 
-        val variantRawStrings = VariantRawStrings(variantDirsPathFinder)
-
-        val mainBaseValuesStrings = ValuesStrings(
-            "main",
-            "values",
-            ValuesStringFiles(
-                setOf(
-                    File(mainResDirs.getValue("res"), "values/strings.xml"),
-                    File(mainResDirs.getValue("resMultilingual"), "values/strings.xml")
+        val mainVariantXmlFiles = getVariantXmlFiles(
+            mainVariant,
+            mainResDirs, mapOf(
+                "values" to mapOf(
+                    "res" to listOf("strings.xml"),
+                    "resMultilingual" to listOf("strings.xml")
+                ),
+                "values-es" to mapOf(
+                    "resMultilingual" to listOf("strings_es.xml")
                 )
-            ),
-            null
+            )
         )
-
-        val clientBaseValuesStrings = ValuesStrings(
-            "client",
-            "values",
-            ValuesStringFiles(
-                setOf(
-                    File(flavorResDirs.getValue("res"), "values/strings.xml"),
-                    File(flavorResDirs.getValue("resMulti"), "values/strings.xml")
+        val flavorVariantXmlFiles = getVariantXmlFiles(
+            flavor, flavorResDirs,
+            mapOf(
+                "values" to mapOf(
+                    "res" to listOf("strings.xml"),
+                    "resMulti" to listOf("strings.xml")
+                ),
+                "values-es" to mapOf(
+                    "resMulti" to listOf("strings_es.xml")
                 )
-            ),
-            mainBaseValuesStrings
+            )
         )
-
-        val mainEsBaseValuesStrings = ValuesStrings(
-            "main",
+        val baseLibsValuesStrings = getLibValuesStringsMock("values", null)
+        val baseValuesStrings = getValuesStringsMock(
+            "values", baseLibsValuesStrings,
+            mainVariantXmlFiles, flavorVariantXmlFiles
+        )
+        val langLibsValuesStrings = getLibValuesStringsMock(
             "values-es",
-            ValuesStringFiles(
-                setOf(
-                    File(mainResDirs.getValue("resMultilingual"), "values-es/strings_es.xml")
-                )
-            ),
-            clientBaseValuesStrings
+            baseValuesStrings
         )
+        val langValuesStrings = getValuesStringsMock(
+            "values-es", langLibsValuesStrings,
+            mainVariantXmlFiles, flavorVariantXmlFiles
+        )
+
+        val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
 
         Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
-            clientBaseValuesStrings,
-            ValuesStrings(
-                "client",
-                "values-es",
-                ValuesStringFiles(
-                    setOf(
-                        File(flavorResDirs.getValue("resMulti"), "values-es/strings_es.xml")
-                    )
-                ),
-                mainEsBaseValuesStrings
-            )
+            baseValuesStrings,
+            langValuesStrings
         )
     }
 
@@ -324,6 +351,52 @@ class VariantRawStringsTest {
         return variantDirsPathFinder
     }
 
+    private fun getVariantXmlFiles(
+        variantName: String,
+        gatheredResDirs: Map<String, File>,
+        valuesToResFiles: Map<String, Map<String, List<String>>>
+    ): VariantXmlFiles {
+        val filesPerValuesFolder = valuesToResFiles.mapValues { valuesFolderMap ->
+            valuesFolderMap.value.map { resDirWithFileNames ->
+                resDirWithFileNames.value.map { fileName ->
+                    File(gatheredResDirs.getValue(resDirWithFileNames.key), "${valuesFolderMap.key}/$fileName")
+                }
+            }.flatten()
+        }
+        return VariantXmlFiles(
+            variantName, filesPerValuesFolder.mapValues {
+                ValuesXmlFiles(it.value.toSet())
+            }
+        )
+    }
+
+    private fun getLibValuesStringsMock(
+        folderName: String,
+        parent: ValuesStrings?
+    ): ValuesStrings {
+        val libValuesStrings = mockk<ValuesStrings>()
+        every { librariesValuesStringsProvider.getValuesStringsFor(folderName, parent) }
+            .returns(libValuesStrings)
+        return libValuesStrings
+    }
+
+    private fun getValuesStringsMock(
+        folderName: String,
+        parentValuesStrings: ValuesStrings,
+        vararg variantXmlFiles: VariantXmlFiles
+    ): ValuesStrings {
+        val valuesStrings = mockk<ValuesStrings>()
+        every {
+            valuesStringsProvider.getValuesStringsForFolderFromVariants(
+                folderName,
+                variantXmlFiles.toList(),
+                parentValuesStrings
+            )
+        }.returns(valuesStrings)
+
+        return valuesStrings
+    }
+
     private fun getVariantMapDir(variantName: String, vararg resDirsNames: String): Map<String, File> {
         val dirs = mutableMapOf<String, File>()
         for (resDirName in resDirsNames) {
@@ -331,5 +404,9 @@ class VariantRawStringsTest {
                 resourcesHandler.getResourceFile("raw/variantMock/$variantName/$resDirName")
         }
         return dirs
+    }
+
+    private fun createVariantRawStrings(variantDirsPathFinder: VariantDirsPathFinder): VariantRawStrings {
+        return VariantRawStrings(variantDirsPathFinder, valuesStringsProvider, librariesValuesStringsProvider)
     }
 }
