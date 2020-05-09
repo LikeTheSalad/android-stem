@@ -145,20 +145,40 @@ This plugin has a default configuration that will work just fine for most projec
 of it that you need to change based on the requirements and/or limitations on your project, you might find useful the following
 configuration params that are available for it.
 
-The configurations params available are:
+### 3.1- Available configuration parameters
 
-- **resolveOnBuild** (Boolean, added in version 1.0.0). When true, this plugin will automatically resolve your app's templates (only if it's needed to) during your app's build process. When false
+- **resolveOnBuild** (Boolean, default is `true`, added in version 1.0.0). When true, this plugin will automatically resolve your app's templates (only if it's needed to) during your app's build process. When false
 this plugin won't run automatically during your app's build process and instead you'd have to run it manually by calling the
 proper Gradle commands depending on the build variant you'd want to resolve the strings for. More info on this below under
-"Running it manually". The default value for flag is `true`.
+"Running it manually".
 
-- **keepResolvedFiles** (Boolean, added in version 1.1.0). When false, it will send all of the resolved strings to your app's build directory. Otherwise, when true,
+- **keepResolvedFiles** (Boolean, default is `false`, added in version 1.1.0). When false, it will send all of the resolved strings to your app's build directory. Otherwise, when true,
 it will send all of the resolved strings to your app's src dir, meaning that you will see them in your working directory.
-The default value for flag is `false`.
 
-- **useDependenciesRes** (Boolean, added in version 1.2.0). When false, it will only take your app's string resources into account
+- **useDependenciesRes** (Boolean, default is `false`, added in version 1.2.0). When false, it will only take your app's string resources into account
 for resolving your string's placeholders. When true, it will take both your app's strings as well as your app's dependencies strings
-for doing the resolving process. The default value for this flag is `false`.
+for doing the resolving process.
+
+### 3.2- How to change a configuration parameter?
+
+In order to set any of the configuration parameters available, you'll have to add to your app's `build.gradle` file
+the block **stringXmlReference**, and inside it you can add all of the params you'd want to change and make them
+equal to the values you'd like to set for them.
+
+Here's an example of how to change the params
+
+```groovy
+// App's build.gradle file
+android {
+  //...
+}
+
+// Example of how to change some config flags
+stringXmlReference {
+    keepResolvedFiles = true // It's default value is false.
+    useDependenciesRes = true // It's default value is false.
+}
+```
 
 Use case examples
 ---
