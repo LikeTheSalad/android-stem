@@ -57,7 +57,7 @@ How to use
 ### 1.- Templates
 All you have to do is to define string templates inside your XML string files,
 the file to add these templates to can be any file inside your values folders,
-not necesarily the "strings.xml" file but any other within the same directory will
+not necessarily the "strings.xml" file but any other within the same directory will
 work too.
 In order to create a template all you need to do is to set its name with the
 `template_` prefix. So for example, if you want your final "resolved" string name
@@ -126,11 +126,11 @@ The following cases are supported:
 - Flavor specific with multi-language strings.
 
 
-> Both **values and templates** can be overriden for a different **language** and
+> Both **values and templates** can be overridden for a different **language** and
 > also for a different **flavor**. So if for example you have templates in your
 > project which contain the app name placeholder (e.g. ${app_name}) then if you
 > need to create a flavor with a different app name value, you just have
-> to override the '*app_name*' string inside the flavor's 'values' foler 
+> to override the '*app_name*' string inside the flavor's 'values' folder
 > and that's it, now for this flavor you'll get all of the old strings but with
 > the new app_name.
 
@@ -341,7 +341,7 @@ you can turn it off by adding the following into your `App's build.gradle` file,
 ```groovy
 // Optional
 stringXmlReference {
-  resolveOnBuild = false // By defult it is true.
+  resolveOnBuild = false // By default it is true.
   // If true: The templates resolver task will run automatically during your project's build.
   // If false: The templates resolver task won't run automatically, you'll have to run it by explicitly calling
   // it as explained below.

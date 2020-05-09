@@ -10,10 +10,6 @@ class AndroidVariantHelper(
 
     val tasksNames = TasksNamesModel(buildVariant)
 
-    val generateResValuesTask: Task? by lazy {
-        projectHelper.project.tasks.findByName(tasksNames.generateResValuesName)
-    }
-
     val mergeResourcesTask: Task by lazy {
         projectHelper.project.tasks.findByName(tasksNames.mergeResourcesName)!!
     }
