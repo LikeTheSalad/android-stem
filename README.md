@@ -180,8 +180,8 @@ android {
 
 // Example of how to change some config flags
 stringXmlReference {
-    keepResolvedFiles = true // It's default value is false.
-    useDependenciesRes = true // It's default value is false.
+    keepResolvedFiles = true // Its default value is false.
+    useDependenciesRes = true // Its default value is false.
 }
 ```
 
