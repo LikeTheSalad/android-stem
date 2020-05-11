@@ -162,7 +162,7 @@ it will send all of the resolved strings to your app's src dir, meaning that you
 
 - **useDependenciesRes** (Boolean, default is `false`, added in version 1.2.0). When false, it will only take your app's string resources into account
 for resolving your string's placeholders. When true, it will take both your app's strings as well as your app's dependencies strings
-for doing the resolving process.
+for doing the resolving process. It will take all strings from your dependencies, even templates (if any) which will be resolved too.
 
 ### 3.2- How to change a configuration parameter?
 
