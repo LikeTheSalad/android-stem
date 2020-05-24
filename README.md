@@ -1,5 +1,6 @@
 [ ![Download](https://api.bintray.com/packages/likethesalad/public-repo/string-reference/images/download.svg) ](https://bintray.com/likethesalad/public-repo/string-reference/_latestVersion)
 [![Android Arsenal]( https://img.shields.io/badge/Android%20Arsenal-Android%20String%20XML%20Reference-green.svg?style=flat )]( https://android-arsenal.com/details/1/7967 )
+<a href='https://ko-fi.com/N4N31QU53' target='_blank'><img height='26' style='border:0px;height:36px;' src='https://cdn.ko-fi.com/cdn/kofi2.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 # Android String XML Reference
 
 Table of Contents
