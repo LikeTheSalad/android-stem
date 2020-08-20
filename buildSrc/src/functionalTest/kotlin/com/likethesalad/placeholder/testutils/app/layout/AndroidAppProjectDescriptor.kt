@@ -1,8 +1,8 @@
-package com.likethesalad.placeholder.testutils
+package com.likethesalad.placeholder.testutils.app.layout
 
-import com.likethesalad.placeholder.testutils.base.ProjectDefinition
+import com.likethesalad.placeholder.testutils.base.layout.ProjectDescriptor
 
-class AndroidAppProjectDefinition(private val name: String) : ProjectDefinition {
+class AndroidAppProjectDescriptor(private val name: String) : ProjectDescriptor() {
 
     override fun getBuildGradleContents(): String {
         return """
@@ -15,5 +15,5 @@ class AndroidAppProjectDefinition(private val name: String) : ProjectDefinition 
         """.trimIndent()
     }
 
-    override fun projectName(): String = name
+    override fun getProjectName(): String = name
 }

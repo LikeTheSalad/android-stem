@@ -1,5 +1,6 @@
 package com.likethesalad.placeholder.testutils.base
 
+import com.likethesalad.placeholder.testutils.base.layout.ProjectDescriptor
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.Before
@@ -17,6 +18,9 @@ abstract class BaseAndroidProjectTest {
         @JvmStatic
         @get:ClassRule
         val testProjectDir = TemporaryFolder()
+
+        private const val BUILD_GRADLE_FILE_NAME = "build.gradle"
+        private const val SETTINGS_GRADLE_FILE_NAME = "settings.gradle"
     }
 
     @Before
@@ -24,11 +28,13 @@ abstract class BaseAndroidProjectTest {
         setupRootProject()
     }
 
-    protected fun createAppAndRun(projectDefinition: ProjectDefinition, commands: List<String>): BuildResult {
-        val name = projectDefinition.projectName()
+    protected fun createProjectAndRun(projectDescriptor: ProjectDescriptor, commands: List<String>): BuildResult {
+        val name = projectDescriptor.getProjectName()
         val projectDir = testProjectDir.newFolder(name)
 
-        createAppBuildGradle(projectDefinition, projectDir)
+        createProjectBuildGradle(projectDescriptor.getBuildGradleContents(), projectDir)
+        projectDescriptor.projectDirectoryBuilder.buildDirectory(projectDir)
+
         settingsFile!!.appendText(
             """
             
@@ -42,19 +48,28 @@ abstract class BaseAndroidProjectTest {
             .build()
     }
 
-    private fun createAppBuildGradle(projectDefinition: ProjectDefinition, parentDir: File) {
-        val buildGradle = File(parentDir, "build.gradle")
-        buildGradle.writeText(projectDefinition.getBuildGradleContents())
+    protected fun getProjectDir(projectName: String): File {
+        val dir = File(testProjectDir.root, projectName)
+        if (!dir.exists()) {
+            throw IllegalStateException("Directory for $projectName doesn't exist")
+        }
+
+        return dir
+    }
+
+    private fun createProjectBuildGradle(buildGradleContent: String, parentDir: File) {
+        val buildGradle = File(parentDir, BUILD_GRADLE_FILE_NAME)
+        buildGradle.writeText(buildGradleContent)
     }
 
     private fun setupRootProject() {
-        rootGradleFile = File(testProjectDir.root, "build.gradle")
-        settingsFile = File(testProjectDir.root, "settings.gradle")
+        rootGradleFile = File(testProjectDir.root, BUILD_GRADLE_FILE_NAME)
+        settingsFile = File(testProjectDir.root, SETTINGS_GRADLE_FILE_NAME)
         if (rootGradleFile?.exists() == true) {
             return
         }
 
-        rootGradleFile = testProjectDir.newFile("build.gradle")
+        rootGradleFile = testProjectDir.newFile(BUILD_GRADLE_FILE_NAME)
 
         val libsDir = Paths.get("build", "libs").toFile().absolutePath
         val pluginJarPath = "$libsDir/buildSrc-1.2.0.jar"
@@ -74,7 +89,7 @@ abstract class BaseAndroidProjectTest {
         """.trimIndent()
         )
 
-        settingsFile = testProjectDir.newFile("settings.gradle")
+        settingsFile = testProjectDir.newFile(SETTINGS_GRADLE_FILE_NAME)
 
         settingsFile!!.writeText(
             """
