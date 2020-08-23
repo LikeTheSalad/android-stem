@@ -27,10 +27,33 @@ class CheckOutputsTest : BaseAndroidProjectTest() {
         )
     }
 
+    @Test
+    fun `verify flavored app outputs`() {
+        val inOutDirName = "flavored-app"
+        val flavors = mutableListOf<AndroidAppProjectDescriptor.FlavorDescriptor>()
+        val modeFlavors = listOf("demo", "full")
+        val environmentFlavors = listOf("stable", "prod")
+        flavors.add(AndroidAppProjectDescriptor.FlavorDescriptor("mode", modeFlavors))
+        flavors.add(AndroidAppProjectDescriptor.FlavorDescriptor("environment", environmentFlavors))
+        val flavoredDescriptor = AndroidAppProjectDescriptor(inOutDirName, flavors)
+
+        runInputOutputComparisonTest(
+            inOutDirName,
+            listOf(
+                "fullStableDebug",
+                "demoStableDebug",
+                "fullProdDebug",
+                "demoProdDebug"
+            ),
+            flavoredDescriptor
+        )
+    }
+
     private fun runInputOutputComparisonTest(
-        inOutDirName: String, variantNames: List<String>
+        inOutDirName: String,
+        variantNames: List<String>,
+        descriptor: AndroidAppProjectDescriptor = AndroidAppProjectDescriptor(inOutDirName)
     ) {
-        val descriptor = AndroidAppProjectDescriptor(inOutDirName)
         val inputDir = getInputTestAsset(inOutDirName)
         descriptor.projectDirectoryBuilder.register(ValuesResFoldersPlacer(inputDir))
 
