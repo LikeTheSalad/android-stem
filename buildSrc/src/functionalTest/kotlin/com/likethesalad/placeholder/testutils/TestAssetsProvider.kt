@@ -3,10 +3,10 @@ package com.likethesalad.placeholder.testutils
 import java.io.File
 import java.nio.file.Paths
 
-class TestAssetsProvider(val assetsFolderName: String) {
+class TestAssetsProvider(private val assetsFolderName: String) {
 
     private val functionalAssetsDir: File by lazy {
-        Paths.get("src", "functionalTest", "assets").toFile()
+        Paths.get("src", "functionalTest", "assets", assetsFolderName).toFile()
     }
 
     fun getAssetFile(relativePath: String): File {
