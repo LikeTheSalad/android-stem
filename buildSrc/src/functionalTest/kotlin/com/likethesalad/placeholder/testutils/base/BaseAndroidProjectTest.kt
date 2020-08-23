@@ -30,9 +30,20 @@ abstract class BaseAndroidProjectTest {
 
     protected fun createProjectAndRun(projectDescriptor: ProjectDescriptor, commands: List<String>): BuildResult {
         val name = projectDescriptor.getProjectName()
+
+        createProject(projectDescriptor)
+
+        return GradleRunner.create()
+            .withProjectDir(testProjectDir.root)
+            .withArguments(commands.map { ":$name:$it" })
+            .build()
+    }
+
+    protected fun createProject(projectDescriptor: ProjectDescriptor) {
+        val name = projectDescriptor.getProjectName()
         val projectDir = testProjectDir.newFolder(name)
 
-        createProjectBuildGradle(projectDescriptor.getBuildGradleContents(), projectDir)
+        createProjectBuildGradleFile(projectDescriptor.getBuildGradleContents(), projectDir)
         projectDescriptor.projectDirectoryBuilder.buildDirectory(projectDir)
 
         settingsFile!!.appendText(
@@ -41,11 +52,6 @@ abstract class BaseAndroidProjectTest {
             include '$name'
         """.trimIndent()
         )
-
-        return GradleRunner.create()
-            .withProjectDir(testProjectDir.root)
-            .withArguments(commands.map { ":$name:$it" })
-            .build()
     }
 
     protected fun getProjectDir(projectName: String): File {
@@ -57,7 +63,7 @@ abstract class BaseAndroidProjectTest {
         return dir
     }
 
-    private fun createProjectBuildGradle(buildGradleContent: String, parentDir: File) {
+    private fun createProjectBuildGradleFile(buildGradleContent: String, parentDir: File) {
         val buildGradle = File(parentDir, BUILD_GRADLE_FILE_NAME)
         buildGradle.writeText(buildGradleContent)
     }
@@ -84,6 +90,13 @@ abstract class BaseAndroidProjectTest {
                 dependencies {
                     classpath 'com.android.tools.build:gradle:${getAndroidBuildPluginVersion()}'
                     classpath files("$pluginJarPath")
+                }
+            }
+            
+            subprojects {
+                repositories {
+                    google()
+                    jcenter()
                 }
             }
         """.trimIndent()

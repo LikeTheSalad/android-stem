@@ -6,6 +6,8 @@ import com.likethesalad.placeholder.testutils.app.content.ValuesResFoldersPlacer
 import com.likethesalad.placeholder.testutils.app.layout.AndroidAppProjectDescriptor
 import com.likethesalad.placeholder.testutils.base.BaseAndroidProjectTest
 import com.likethesalad.placeholder.testutils.base.layout.ProjectDescriptor
+import com.likethesalad.placeholder.testutils.data.ResolverPluginConfig
+import com.likethesalad.placeholder.testutils.lib.layout.AndroidLibProjectDescriptor
 import org.gradle.testkit.runner.BuildResult
 import org.junit.Test
 import java.io.File
@@ -47,6 +49,27 @@ class CheckOutputsTest : BaseAndroidProjectTest() {
             ),
             flavoredDescriptor
         )
+    }
+
+    @Test
+    fun `verify app that takes resources from libraries`() {
+        // Create library
+        val libName = "mylibrary"
+        val libDescriptor = AndroidLibProjectDescriptor(libName)
+        libDescriptor.projectDirectoryBuilder
+            .register(ValuesResFoldersPlacer(getInputTestAsset(libName)))
+        createProject(libDescriptor)
+
+        // Set up app
+        val appName = "with-library"
+        val appConfig = ResolverPluginConfig(useDependenciesRes = true)
+        val appDescriptor = AndroidAppProjectDescriptor(
+            appName,
+            dependencies = listOf("implementation project(':$libName')"),
+            resolverPluginConfig = appConfig
+        )
+
+        runInputOutputComparisonTest(appName, listOf("debug"), appDescriptor)
     }
 
     private fun runInputOutputComparisonTest(

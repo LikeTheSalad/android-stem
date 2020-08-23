@@ -1,10 +1,13 @@
 package com.likethesalad.placeholder.testutils.app.layout
 
 import com.likethesalad.placeholder.testutils.base.layout.ProjectDescriptor
+import com.likethesalad.placeholder.testutils.data.ResolverPluginConfig
 
 class AndroidAppProjectDescriptor(
     private val name: String,
-    private val flavors: List<FlavorDescriptor> = emptyList()
+    private val flavors: List<FlavorDescriptor> = emptyList(),
+    private val dependencies: List<String> = emptyList(),
+    private val resolverPluginConfig: ResolverPluginConfig = ResolverPluginConfig()
 ) : ProjectDescriptor() {
 
     override fun getBuildGradleContents(): String {
@@ -17,6 +20,14 @@ class AndroidAppProjectDescriptor(
                 
                 ${getFlavorsConfigText()}
             }
+            
+            stringXmlReference {
+                resolveOnBuild = ${resolverPluginConfig.resolveOnBuild}
+                keepResolvedFiles = ${resolverPluginConfig.keepResolvedFiles}
+                useDependenciesRes = ${resolverPluginConfig.useDependenciesRes}
+            }
+            
+            ${getDependenciesBlock()}
         """.trimIndent()
     }
 
@@ -58,6 +69,24 @@ class AndroidAppProjectDescriptor(
                 dimension = "$dimension"
             }
         """.trimIndent()
+    }
+
+    private fun getDependenciesBlock(): String {
+        if (dependencies.isEmpty()) {
+            return ""
+        }
+
+        return """
+            dependencies {
+                ${getDependenciesListed()}
+            }
+        """.trimIndent()
+    }
+
+    private fun getDependenciesListed(): String {
+        return dependencies.fold("") { accumulated, current ->
+            "$accumulated\n$current"
+        }
     }
 
     override fun getProjectName(): String = name
