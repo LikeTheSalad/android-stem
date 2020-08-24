@@ -4,6 +4,7 @@ import com.google.common.truth.Truth
 import com.likethesalad.placeholder.testutils.TestAssetsProvider
 import com.likethesalad.placeholder.testutils.app.content.ValuesResFoldersPlacer
 import com.likethesalad.placeholder.testutils.app.layout.AndroidAppProjectDescriptor
+import com.likethesalad.placeholder.testutils.app.layout.items.FlavorAndroidBlockItem
 import com.likethesalad.placeholder.testutils.base.BaseAndroidProjectTest
 import com.likethesalad.placeholder.testutils.base.layout.ProjectDescriptor
 import com.likethesalad.placeholder.testutils.data.ResolverPluginConfig
@@ -32,12 +33,15 @@ class CheckOutputsTest : BaseAndroidProjectTest() {
     @Test
     fun `verify flavored app outputs`() {
         val inOutDirName = "flavored-app"
-        val flavors = mutableListOf<AndroidAppProjectDescriptor.FlavorDescriptor>()
+        val flavors = mutableListOf<FlavorAndroidBlockItem.FlavorDescriptor>()
         val modeFlavors = listOf("demo", "full")
         val environmentFlavors = listOf("stable", "prod")
-        flavors.add(AndroidAppProjectDescriptor.FlavorDescriptor("mode", modeFlavors))
-        flavors.add(AndroidAppProjectDescriptor.FlavorDescriptor("environment", environmentFlavors))
-        val flavoredDescriptor = AndroidAppProjectDescriptor(inOutDirName, flavors)
+        flavors.add(FlavorAndroidBlockItem.FlavorDescriptor("mode", modeFlavors))
+        flavors.add(FlavorAndroidBlockItem.FlavorDescriptor("environment", environmentFlavors))
+        val flavoredDescriptor = AndroidAppProjectDescriptor(
+            inOutDirName,
+            listOf(FlavorAndroidBlockItem(flavors))
+        )
 
         runInputOutputComparisonTest(
             inOutDirName,
