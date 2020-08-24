@@ -78,7 +78,7 @@ abstract class BaseAndroidProjectTest {
         rootGradleFile = testProjectDir.newFile(BUILD_GRADLE_FILE_NAME)
 
         val libsDir = Paths.get("build", "libs").toFile().absolutePath
-        val pluginJarPath = "$libsDir/buildSrc-1.2.0.jar"
+        val pluginJarPath = "$libsDir/buildSrc-1.2.1.jar"
 
         rootGradleFile!!.writeText(
             """

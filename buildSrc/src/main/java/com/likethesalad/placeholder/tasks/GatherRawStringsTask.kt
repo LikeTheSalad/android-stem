@@ -13,6 +13,9 @@ open class GatherRawStringsTask : DefaultTask() {
     @InputFiles
     lateinit var dependenciesRes: FileCollection
 
+    @InputFiles
+    lateinit var gradleGeneratedStrings: FileCollection
+
     @TaskAction
-    fun gatherStrings() = gatherRawStringsAction.gatherStrings()
+    fun gatherStrings() = gatherRawStringsAction.gatherStrings(gradleGeneratedStrings.files)
 }
