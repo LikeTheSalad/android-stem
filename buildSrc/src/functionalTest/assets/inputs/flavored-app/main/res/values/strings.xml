@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">My Flavored app</string>
+    <string name="template_welcome_message">Welcome to ${app_name} on main variant</string>
+</resources>

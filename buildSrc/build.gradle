@@ -23,6 +23,26 @@ dependencies {
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 }
 
+sourceSets {
+    functionalTest {
+        java {
+            srcDir file('src/functionalTest/java')
+        }
+        resources {
+            srcDir file('src/functionalTest/resources')
+        }
+        compileClasspath += sourceSets.main.output + configurations.testRuntimeClasspath
+        runtimeClasspath += output + compileClasspath
+    }
+}
+
+task functionalTest(type: Test) {
+    testClassesDirs = sourceSets.functionalTest.output.classesDirs
+    classpath = sourceSets.functionalTest.runtimeClasspath
+}
+
+check.dependsOn functionalTest
+
 gradlePlugin {
     plugins {
         placeholderPlugin {
@@ -30,6 +50,8 @@ gradlePlugin {
             implementationClass = 'com.likethesalad.placeholder.ResolvePlaceholdersPlugin'
         }
     }
+
+    testSourceSets sourceSets.functionalTest
 }
 
 task sourcesJar(type: Jar) {
