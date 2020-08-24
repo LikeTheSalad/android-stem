@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">With Gradle strings</string>
+    <string name="template_welcome_message">Welcome to ${app_name}, which id is: ${my_app_id}</string>
+</resources>

@@ -4,6 +4,7 @@ import com.google.common.truth.Truth
 import com.likethesalad.placeholder.testutils.TestAssetsProvider
 import com.likethesalad.placeholder.testutils.app.content.ValuesResFoldersPlacer
 import com.likethesalad.placeholder.testutils.app.layout.AndroidAppProjectDescriptor
+import com.likethesalad.placeholder.testutils.app.layout.items.DefaultConfigAndroidBlockItem
 import com.likethesalad.placeholder.testutils.app.layout.items.FlavorAndroidBlockItem
 import com.likethesalad.placeholder.testutils.base.BaseAndroidProjectTest
 import com.likethesalad.placeholder.testutils.base.layout.ProjectDescriptor
@@ -28,6 +29,18 @@ class CheckOutputsTest : BaseAndroidProjectTest() {
         runInputOutputComparisonTest(
             "multi-languages", listOf("debug")
         )
+    }
+
+    @Test
+    fun `verify app with gradle-generated strings outputs`() {
+        val appName = "with-gradle-strings"
+        val gradleStrings = mapOf("my_app_id" to "APP ID")
+        val appDescriptor = AndroidAppProjectDescriptor(
+            appName,
+            listOf(DefaultConfigAndroidBlockItem(gradleStrings))
+        )
+
+        runInputOutputComparisonTest(appName, listOf("debug"), appDescriptor)
     }
 
     @Test
