@@ -18,7 +18,7 @@ class ResolvedDataCleaner(
     }
 
     private fun getVariantResPaths(): VariantResPaths? {
-        for (pathResDirs in variantDirsPathFinder.existingPathsResDirs) {
+        for (pathResDirs in variantDirsPathFinder.getExistingPathsResDirs()) {
             if (pathResDirs.variantName == variantName) {
                 return pathResDirs
             }

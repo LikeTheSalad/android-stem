@@ -165,7 +165,7 @@ class CheckOutputsTest : BaseAndroidProjectTest() {
 
     private fun checkIfFileIsInList(file: File, list: List<File>) {
         val fileWithSameName = list.first { it.name == file.name }
-        Truth.assertThat(file.readText()).isEqualTo(fileWithSameName.readText())
+        Truth.assertThat(fileWithSameName.readText()).isEqualTo(file.readText())
     }
 
     override fun getAndroidBuildPluginVersion(): String = "3.3.3"

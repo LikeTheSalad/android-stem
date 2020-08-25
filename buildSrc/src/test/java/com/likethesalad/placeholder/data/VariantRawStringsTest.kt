@@ -50,7 +50,7 @@ class VariantRawStringsTest {
 
         val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
 
-        Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
+        Truth.assertThat(variantRawStrings.getValuesStrings(emptySet())).containsExactly(
             mainValuesStrings
         )
     }
@@ -81,7 +81,7 @@ class VariantRawStringsTest {
 
         val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
 
-        Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
+        Truth.assertThat(variantRawStrings.getValuesStrings(emptySet())).containsExactly(
             mainValuesStrings
         )
     }
@@ -118,7 +118,7 @@ class VariantRawStringsTest {
 
         val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
 
-        Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
+        Truth.assertThat(variantRawStrings.getValuesStrings(emptySet())).containsExactly(
             baseValuesStrings,
             esValuesStrings
         )
@@ -162,7 +162,7 @@ class VariantRawStringsTest {
 
         val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
 
-        Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
+        Truth.assertThat(variantRawStrings.getValuesStrings(emptySet())).containsExactly(
             flavorValuesStrings
         )
     }
@@ -215,7 +215,7 @@ class VariantRawStringsTest {
 
         val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
 
-        Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
+        Truth.assertThat(variantRawStrings.getValuesStrings(emptySet())).containsExactly(
             baseValuesStrings,
             langValuesStrings
         )
@@ -270,7 +270,7 @@ class VariantRawStringsTest {
 
         val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
 
-        Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
+        Truth.assertThat(variantRawStrings.getValuesStrings(emptySet())).containsExactly(
             baseValuesStrings,
             langValuesStrings
         )
@@ -329,7 +329,7 @@ class VariantRawStringsTest {
 
         val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
 
-        Truth.assertThat(variantRawStrings.valuesStrings).containsExactly(
+        Truth.assertThat(variantRawStrings.getValuesStrings(emptySet())).containsExactly(
             baseValuesStrings,
             langValuesStrings
         )
@@ -346,7 +346,7 @@ class VariantRawStringsTest {
         }
 
         val variantDirsPathFinder = mockk<VariantDirsPathFinder>()
-        every { variantDirsPathFinder.existingPathsResDirs }.returns(variantResPaths)
+        every { variantDirsPathFinder.getExistingPathsResDirs() }.returns(variantResPaths)
 
         return variantDirsPathFinder
     }

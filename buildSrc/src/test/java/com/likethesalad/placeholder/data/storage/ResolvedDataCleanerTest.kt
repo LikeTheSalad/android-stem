@@ -47,7 +47,7 @@ class ResolvedDataCleanerTest {
         every { variantResPath.variantName }.returns(variantName)
         every { otherVariantResPath.paths }.returns(setOf(otherResDir))
         every { otherVariantResPath.variantName }.returns(otherVariantName)
-        every { variantDirsPathFinder.existingPathsResDirs }.returns(
+        every { variantDirsPathFinder.getExistingPathsResDirs() }.returns(
             listOf(
                 variantResPath,
                 otherVariantResPath

@@ -50,6 +50,25 @@ class AndroidVariantHelperTest {
     }
 
     @Test
+    fun check_generateResValuesTask() {
+        // Given:
+        val projectMock = mockk<Project>()
+        val taskContainerMock = mockk<TaskContainer>()
+        val taskMock = mockk<Task>()
+        every { projectMock.tasks }.returns(taskContainerMock)
+        every { projectHelper.project }.returns(projectMock)
+        val androidVariantHelper = getAndroidVariantHelper()
+        every { taskContainerMock.findByName(androidVariantHelper.tasksNames.generateResValuesName) }.returns(taskMock)
+
+        // When:
+        val result = androidVariantHelper.generateResValuesTask
+
+        // Then:
+        Truth.assertThat(result).isEqualTo(taskMock)
+        verify { taskContainerMock.findByName(androidVariantHelper.tasksNames.generateResValuesName) }
+    }
+
+    @Test
     fun check_incrementalDir() {
         // Given:
         val projectMock = mockk<Project>()

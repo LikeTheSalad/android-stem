@@ -20,6 +20,7 @@ abstract class BaseAndroidProjectTest {
         val testProjectDir = TemporaryFolder()
 
         private const val BUILD_GRADLE_FILE_NAME = "build.gradle"
+        private const val ANDROID_MANIFEST_FILE_NAME = "AndroidManifest.xml"
         private const val SETTINGS_GRADLE_FILE_NAME = "settings.gradle"
     }
 
@@ -44,6 +45,7 @@ abstract class BaseAndroidProjectTest {
         val projectDir = testProjectDir.newFolder(name)
 
         createProjectBuildGradleFile(projectDescriptor.getBuildGradleContents(), projectDir)
+        createProjectManifestFile("some.package.name.for.$name", projectDir)
         projectDescriptor.projectDirectoryBuilder.buildDirectory(projectDir)
 
         settingsFile!!.appendText(
@@ -68,6 +70,20 @@ abstract class BaseAndroidProjectTest {
         buildGradle.writeText(buildGradleContent)
     }
 
+    private fun createProjectManifestFile(packageName: String, parentDir: File) {
+        val mainDir = File(parentDir, "src/main")
+        if (!mainDir.exists()) {
+            mainDir.mkdirs()
+        }
+        val androidManifest = File(mainDir, ANDROID_MANIFEST_FILE_NAME)
+        androidManifest.writeText(
+            """
+            <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+                package="$packageName" />
+        """.trimIndent()
+        )
+    }
+
     private fun setupRootProject() {
         rootGradleFile = File(testProjectDir.root, BUILD_GRADLE_FILE_NAME)
         settingsFile = File(testProjectDir.root, SETTINGS_GRADLE_FILE_NAME)
@@ -78,7 +94,7 @@ abstract class BaseAndroidProjectTest {
         rootGradleFile = testProjectDir.newFile(BUILD_GRADLE_FILE_NAME)
 
         val libsDir = Paths.get("build", "libs").toFile().absolutePath
-        val pluginJarPath = "$libsDir/buildSrc-1.2.0.jar"
+        val pluginJarPath = "$libsDir/buildSrc-1.2.1.jar"
 
         rootGradleFile!!.writeText(
             """

@@ -5,6 +5,7 @@ import com.likethesalad.placeholder.data.storage.libraries.LibrariesValuesString
 import com.likethesalad.placeholder.data.storage.utils.ValuesStringsProvider
 import com.likethesalad.placeholder.models.ValuesStrings
 import com.likethesalad.placeholder.models.VariantXmlFiles
+import java.io.File
 
 class VariantRawStrings(
     private val variantDirsPathFinder: VariantDirsPathFinder,
@@ -16,8 +17,8 @@ class VariantRawStrings(
         private const val BASE_VALUES_FOLDER_NAME = "values"
     }
 
-    val valuesStrings: Collection<ValuesStrings> by lazy {
-        val variantStringFilesList = getVariantStringFilesList()
+    fun getValuesStrings(generatedResDirs: Set<File>): Collection<ValuesStrings> {
+        val variantStringFilesList = getVariantStringFilesList(generatedResDirs)
         val uniqueValuesFolderNames = getUniqueValuesFolderNames(variantStringFilesList.map {
             it.valuesXmlFiles.keys
         })
@@ -27,7 +28,7 @@ class VariantRawStrings(
             variantStringFilesList
         )
 
-        valuesStringsPerFolder.values
+        return valuesStringsPerFolder.values
     }
 
     private fun getValuesStringsMapPerFolder(
@@ -64,11 +65,24 @@ class VariantRawStrings(
         return valuesFolderNames.flatten().toSet()
     }
 
-    private fun getVariantStringFilesList(): List<VariantXmlFiles> {
-        val dirsPaths = variantDirsPathFinder.existingPathsResDirs
+    private fun getVariantStringFilesList(generatedResDir: Set<File>): List<VariantXmlFiles> {
+        val dirsPaths = variantDirsPathFinder
+            .getExistingPathsResDirs(getExtraMainResDirs(generatedResDir))
         val variantValuesFoldersList =
             dirsPaths.map { VariantValuesFolders(it.variantName, ValuesFoldersExtractor(it.paths)) }
         return variantValuesFoldersList.map { VariantXmlFiles(it.variantName, it.valuesXmlFiles) }
+    }
+
+    private fun getExtraMainResDirs(generatedResDirs: Set<File>): List<File>? {
+        val existingNotEmptyDirs = generatedResDirs.filter {
+            it.exists() && it.listFiles()?.isNotEmpty() == true
+        }
+
+        if (existingNotEmptyDirs.isNotEmpty()) {
+            return existingNotEmptyDirs
+        }
+
+        return null
     }
 
 }

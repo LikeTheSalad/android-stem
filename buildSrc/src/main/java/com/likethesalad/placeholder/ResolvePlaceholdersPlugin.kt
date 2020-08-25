@@ -55,6 +55,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project> {
             it.group = RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME
             it.gatherRawStringsAction = taskActionProvider.gatherRawStringsAction
             it.dependenciesRes = taskActionProvider.androidConfigHelper.librariesResDirs
+            it.gradleGeneratedStrings = androidVariantHelper.generateResValuesTask.outputs.files
         }
 
         val gatherTemplatesTask = project.tasks.create(

@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 1.2.1 *(25-08-2020)*
+---
+
+ * New: Added support for gradle generated strings.
+
 Version 1.2.0 *(09-05-2020)*
 ---
 

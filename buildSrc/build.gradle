@@ -8,7 +8,7 @@ plugins {
 
 group 'com.likethesalad.android'
 ext.artifact = 'string-reference'
-version '1.2.0'
+version '1.2.1'
 
 repositories {
     mavenCentral()
@@ -40,8 +40,6 @@ task functionalTest(type: Test) {
     testClassesDirs = sourceSets.functionalTest.output.classesDirs
     classpath = sourceSets.functionalTest.runtimeClasspath
 }
-
-check.dependsOn functionalTest
 
 gradlePlugin {
     plugins {

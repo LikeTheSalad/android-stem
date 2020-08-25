@@ -44,10 +44,10 @@ class GatherRawStringsActionTest {
             strings
         )
 
-        every { variantRawStrings.valuesStrings }.returns(listOf(valuesStrings))
+        every { variantRawStrings.getValuesStrings(emptySet()) }.returns(listOf(valuesStrings))
         val gatheredStringsCaptor = slot<StringsGatheredModel>()
 
-        gatherRawStringsAction.gatherStrings()
+        gatherRawStringsAction.gatherStrings(emptySet())
 
         verify { incrementalDataCleaner.clearRawStrings() }
         verify { resourcesHandler.saveGatheredStrings(capture(gatheredStringsCaptor)) }
@@ -69,9 +69,9 @@ class GatherRawStringsActionTest {
             strings
         )
 
-        every { variantRawStrings.valuesStrings }.returns(listOf(valuesStrings))
+        every { variantRawStrings.getValuesStrings(emptySet()) }.returns(listOf(valuesStrings))
 
-        gatherRawStringsAction.gatherStrings()
+        gatherRawStringsAction.gatherStrings(emptySet())
 
         verify { incrementalDataCleaner.clearRawStrings() }
         verify(exactly = 0) { resourcesHandler.saveGatheredStrings(any()) }
@@ -104,10 +104,10 @@ class GatherRawStringsActionTest {
             valuesEsStringsList
         )
 
-        every { variantRawStrings.valuesStrings }.returns(listOf(valuesStrings, valuesEsStrings))
+        every { variantRawStrings.getValuesStrings(emptySet()) }.returns(listOf(valuesStrings, valuesEsStrings))
         val gatheredStringsCaptor = mutableListOf<StringsGatheredModel>()
 
-        gatherRawStringsAction.gatherStrings()
+        gatherRawStringsAction.gatherStrings(emptySet())
 
         verify { incrementalDataCleaner.clearRawStrings() }
         verify(exactly = 2) { resourcesHandler.saveGatheredStrings(capture(gatheredStringsCaptor)) }

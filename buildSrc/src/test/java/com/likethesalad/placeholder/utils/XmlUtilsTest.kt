@@ -48,6 +48,29 @@ class XmlUtilsTest {
     }
 
     @Test
+    fun checkNodeToStringResourceModel_strip_quotes() {
+        // Given:
+        val document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument()
+        val node = document.createElement("something")
+        node.setAttribute("name", "the_name")
+        node.setAttribute("other_attr", "other attr value")
+        node.setAttribute("third_attr", "third value")
+        node.textContent = "\"The content\""
+
+        // When:
+        val result = XmlUtils.nodeToStringResourceModel(node)
+
+        // Then:
+        Truth.assertThat(result.content).isEqualTo("The content")
+        Truth.assertThat(result.name).isEqualTo("the_name")
+        Truth.assertThat(result.attributes).containsExactly(
+            "name", "the_name",
+            "other_attr", "other attr value",
+            "third_attr", "third value"
+        )
+    }
+
+    @Test
     fun `Check is valid xml file name to gather raw strings`() {
         assertValidXmlRawFileName("strings.xml", true)
         assertValidXmlRawFileName("something.xml", true)
