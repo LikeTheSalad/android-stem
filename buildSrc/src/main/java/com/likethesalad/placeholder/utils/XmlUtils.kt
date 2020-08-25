@@ -27,11 +27,15 @@ class XmlUtils {
                 val attr = attributesNodes.item(it)
                 attributesMap[attr.nodeName] = attr.textContent
             }
-            return StringResourceModel(attributesMap, node.textContent)
+            return StringResourceModel(attributesMap, trimQuotes(node.textContent))
         }
 
         fun isValidRawXmlFileName(name: String): Boolean {
             return RAW_VALUES_FILE_REGEX.matches(name)
+        }
+
+        private fun trimQuotes(text: String): String {
+            return text.replace(Regex("^\"|\"$"), "")
         }
     }
 }

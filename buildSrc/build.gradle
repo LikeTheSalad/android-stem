@@ -41,8 +41,6 @@ task functionalTest(type: Test) {
     classpath = sourceSets.functionalTest.runtimeClasspath
 }
 
-check.dependsOn functionalTest
-
 gradlePlugin {
     plugins {
         placeholderPlugin {

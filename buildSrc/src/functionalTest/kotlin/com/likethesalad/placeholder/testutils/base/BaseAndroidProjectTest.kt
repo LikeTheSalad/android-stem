@@ -20,6 +20,7 @@ abstract class BaseAndroidProjectTest {
         val testProjectDir = TemporaryFolder()
 
         private const val BUILD_GRADLE_FILE_NAME = "build.gradle"
+        private const val ANDROID_MANIFEST_FILE_NAME = "AndroidManifest.xml"
         private const val SETTINGS_GRADLE_FILE_NAME = "settings.gradle"
     }
 
@@ -44,6 +45,7 @@ abstract class BaseAndroidProjectTest {
         val projectDir = testProjectDir.newFolder(name)
 
         createProjectBuildGradleFile(projectDescriptor.getBuildGradleContents(), projectDir)
+        createProjectManifestFile("some.package.name.for.$name", projectDir)
         projectDescriptor.projectDirectoryBuilder.buildDirectory(projectDir)
 
         settingsFile!!.appendText(
@@ -66,6 +68,20 @@ abstract class BaseAndroidProjectTest {
     private fun createProjectBuildGradleFile(buildGradleContent: String, parentDir: File) {
         val buildGradle = File(parentDir, BUILD_GRADLE_FILE_NAME)
         buildGradle.writeText(buildGradleContent)
+    }
+
+    private fun createProjectManifestFile(packageName: String, parentDir: File) {
+        val mainDir = File(parentDir, "src/main")
+        if (!mainDir.exists()) {
+            mainDir.mkdirs()
+        }
+        val androidManifest = File(mainDir, ANDROID_MANIFEST_FILE_NAME)
+        androidManifest.writeText(
+            """
+            <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+                package="$packageName" />
+        """.trimIndent()
+        )
     }
 
     private fun setupRootProject() {
