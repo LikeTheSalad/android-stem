@@ -1,5 +1,6 @@
 [ ![Download](https://api.bintray.com/packages/likethesalad/public-repo/string-reference/images/download.svg) ](https://bintray.com/likethesalad/public-repo/string-reference/_latestVersion)
 [![Android Arsenal]( https://img.shields.io/badge/Android%20Arsenal-Android%20String%20XML%20Reference-green.svg?style=flat )]( https://android-arsenal.com/details/1/7967 )
+<a href='https://ko-fi.com/N4N31QU53' target='_blank'><img height='26' style='border:0px;height:36px;' src='https://cdn.ko-fi.com/cdn/kofi2.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 # Android String XML Reference
 
 Table of Contents
@@ -162,7 +163,7 @@ it will send all of the resolved strings to your app's src dir, meaning that you
 
 - **useDependenciesRes** (Boolean, default is `false`, added in version 1.2.0). When false, it will only take your app's string resources into account
 for resolving your string's placeholders. When true, it will take both your app's strings as well as your app's dependencies strings
-for doing the resolving process.
+for doing the resolving process. It will take all strings from your dependencies, even templates (if any) which will be resolved too.
 
 ### 3.2- How to change a configuration parameter?
 
@@ -180,8 +181,8 @@ android {
 
 // Example of how to change some config flags
 stringXmlReference {
-    keepResolvedFiles = true // It's default value is false.
-    useDependenciesRes = true // It's default value is false.
+    keepResolvedFiles = true // Its default value is false.
+    useDependenciesRes = true // Its default value is false.
 }
 ```
 
