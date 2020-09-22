@@ -19,6 +19,7 @@ import com.likethesalad.placeholder.tasks.actions.ResolvePlaceholdersAction
 import org.gradle.api.artifacts.Configuration
 import java.io.File
 
+@AutoFactory
 class TaskActionProvider(
     buildDir: File,
     configuration: Configuration,

@@ -3,8 +3,11 @@ package com.likethesalad.placeholder.resolver
 import com.likethesalad.placeholder.data.Constants
 import com.likethesalad.placeholder.models.StringResourceModel
 import com.likethesalad.placeholder.models.StringsTemplatesModel
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class TemplateResolver(private val recursiveLevelDetector: RecursiveLevelDetector) {
+@Singleton
+class TemplateResolver @Inject constructor(private val recursiveLevelDetector: RecursiveLevelDetector) {
 
     fun resolveTemplates(stringsTemplatesModel: StringsTemplatesModel): List<StringResourceModel> {
         return if (stringsTemplatesModel.templates.any { containsTemplateAsPlaceholder(it.content) }) {

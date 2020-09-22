@@ -2,8 +2,11 @@ package com.likethesalad.placeholder.resolver
 
 import com.likethesalad.placeholder.data.Constants
 import com.likethesalad.placeholder.models.StringResourceModel
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class RecursiveLevelDetector {
+@Singleton
+class RecursiveLevelDetector @Inject constructor() {
 
     fun orderTemplatesByRecursiveLevel(templates: List<StringResourceModel>)
             : List<List<StringResourceModel>> {

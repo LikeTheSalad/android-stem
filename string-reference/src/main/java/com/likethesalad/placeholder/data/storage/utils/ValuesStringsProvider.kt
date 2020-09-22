@@ -2,8 +2,11 @@ package com.likethesalad.placeholder.data.storage.utils
 
 import com.likethesalad.placeholder.models.ValuesStrings
 import com.likethesalad.placeholder.models.VariantXmlFiles
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ValuesStringsProvider {
+@Singleton
+class ValuesStringsProvider @Inject constructor() {
 
     fun getValuesStringsForFolderFromVariants(
         valuesFolderName: String,

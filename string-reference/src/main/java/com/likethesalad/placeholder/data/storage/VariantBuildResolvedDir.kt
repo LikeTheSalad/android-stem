@@ -1,19 +1,28 @@
 package com.likethesalad.placeholder.data.storage
 
 import com.likethesalad.placeholder.data.helpers.wrappers.AndroidExtensionWrapper
+import com.likethesalad.placeholder.providers.BuildDirProvider
+import com.likethesalad.placeholder.utils.AutoFactory
+import com.likethesalad.placeholder.utils.ConfigurationProvider
+import com.likethesalad.placeholder.utils.Provided
+import com.likethesalad.placeholder.utils.VariantDataExtractor
 import java.io.File
+import javax.inject.Inject
 
-class VariantBuildResolvedDir(
-    private val variantName: String,
-    buildDir: File,
-    private val androidExtensionWrapper: AndroidExtensionWrapper,
-    keepResolvedFiles: Boolean
+@AutoFactory
+class VariantBuildResolvedDir @Inject constructor(
+    private val variantDataExtractor: VariantDataExtractor,
+    @Provided buildDirProvider: BuildDirProvider,
+    @Provided private val androidExtensionWrapper: AndroidExtensionWrapper,
+    @Provided configurationProvider: ConfigurationProvider
 ) {
 
-    val resolvedDir: File = if (keepResolvedFiles) {
+    private val variantName by lazy { variantDataExtractor.getVariantName() }
+
+    val resolvedDir: File = if (configurationProvider.keepResolvedFiles()) {
         androidExtensionWrapper.getSourceSets().getValue(variantName).getRes().getSrcDirs().first()
     } else {
-        val dir = File(buildDir, "generated/resolved/$variantName")
+        val dir = File(buildDirProvider.getBuildDir(), "generated/resolved/$variantName")
         addResolvedDirToSourceSets(dir)
         dir
     }

@@ -11,8 +11,11 @@ version '1.2.1'
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'com.google.code.gson:gson:2.8.5'
+    implementation "com.google.auto.factory:$autoFactory_version"
     implementation "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    kapt "com.google.auto.factory:$autoFactory_version"
+    annotationProcessor "com.google.auto.factory:$autoFactory_version"
     annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
     testImplementation "io.mockk:mockk:1.9.3"
     testImplementation 'com.google.truth:truth:1.0'
