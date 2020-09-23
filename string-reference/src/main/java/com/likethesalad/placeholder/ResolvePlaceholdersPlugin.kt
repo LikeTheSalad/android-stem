@@ -6,7 +6,6 @@ import com.likethesalad.placeholder.tasks.GatherRawStringsTask
 import com.likethesalad.placeholder.tasks.GatherTemplatesTask
 import com.likethesalad.placeholder.tasks.ResolvePlaceholdersTask
 import com.likethesalad.placeholder.utils.TaskActionProvider
-import com.likethesalad.placeholder.utils.TaskActionProviderFactory
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 

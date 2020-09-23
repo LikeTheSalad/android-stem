@@ -1,20 +1,23 @@
 package com.likethesalad.placeholder.data
 
 import com.likethesalad.placeholder.data.VariantDirsPathHandler.Companion.BASE_DIR_PATH
-import com.likethesalad.placeholder.data.helpers.AndroidProjectHelper
 import com.likethesalad.placeholder.data.helpers.wrappers.AndroidSourceSetWrapper
 import com.likethesalad.placeholder.models.VariantResPaths
+import com.likethesalad.placeholder.utils.AndroidExtensionHelper
+import com.likethesalad.placeholder.utils.AutoFactory
+import com.likethesalad.placeholder.utils.Provided
 import java.io.File
 
+@AutoFactory
 class VariantDirsPathFinder(
     private val variantDirsPathResolver: VariantDirsPathResolver,
-    private val androidProjectHelper: AndroidProjectHelper
+    @Provided private val androidExtensionHelper: AndroidExtensionHelper
 ) {
 
     fun getExistingPathsResDirs(extraMainResDirs: List<File>? = null): List<VariantResPaths> {
         val existing = mutableListOf<VariantResPaths>()
         val pathResolved = variantDirsPathResolver.pathList
-        val sourceSets = androidProjectHelper.androidExtension.getSourceSets()
+        val sourceSets = androidExtensionHelper.getSourceSets()
 
         for (resolvedName in pathResolved) {
             getResPaths(

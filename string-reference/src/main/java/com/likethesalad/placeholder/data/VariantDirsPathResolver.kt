@@ -1,12 +1,26 @@
 package com.likethesalad.placeholder.data
 
 import com.likethesalad.placeholder.data.VariantDirsPathHandler.Companion.BASE_DIR_PATH
+import com.likethesalad.placeholder.utils.AutoFactory
+import com.likethesalad.placeholder.utils.VariantDataExtractor
+import javax.inject.Inject
 
-class VariantDirsPathResolver(
-    private val variantName: String,
-    private val flavors: List<String>,
-    val variantType: String
+@AutoFactory
+class VariantDirsPathResolver @Inject constructor(
+    private val variantDataExtractor: VariantDataExtractor
 ) {
+
+    private val flavors by lazy {
+        variantDataExtractor.getVariantFlavors()
+    }
+
+    private val variantName by lazy {
+        variantDataExtractor.getVariantName()
+    }
+
+    private val variantType by lazy {
+        variantDataExtractor.getVariantType()
+    }
 
     val pathList: List<String> by lazy {
         val pathList = mutableListOf<String>()

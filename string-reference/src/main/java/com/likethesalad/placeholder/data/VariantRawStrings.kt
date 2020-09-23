@@ -5,12 +5,15 @@ import com.likethesalad.placeholder.data.storage.libraries.LibrariesValuesString
 import com.likethesalad.placeholder.data.storage.utils.ValuesStringsProvider
 import com.likethesalad.placeholder.models.ValuesStrings
 import com.likethesalad.placeholder.models.VariantXmlFiles
+import com.likethesalad.placeholder.utils.AutoFactory
+import com.likethesalad.placeholder.utils.Provided
 import java.io.File
 
+@AutoFactory
 class VariantRawStrings(
     private val variantDirsPathFinder: VariantDirsPathFinder,
-    private val valuesStringsProvider: ValuesStringsProvider,
-    private val librariesValuesStringsProvider: LibrariesValuesStringsProvider
+    private val librariesValuesStringsProvider: LibrariesValuesStringsProvider,
+    @Provided private val valuesStringsProvider: ValuesStringsProvider
 ) {
 
     companion object {

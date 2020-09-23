@@ -3,9 +3,12 @@ package com.likethesalad.placeholder.data.helpers
 import org.gradle.api.Action
 import org.gradle.api.artifacts.ArtifactView
 import org.gradle.api.attributes.Attribute
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Suppress("UnstableApiUsage")
-class AndroidArtifactViewActionProvider {
+@Singleton
+class AndroidArtifactViewActionProvider @Inject constructor() {
 
     companion object {
         private val artifactTypeAttr = Attribute.of("artifactType", String::class.java)

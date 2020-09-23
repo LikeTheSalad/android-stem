@@ -5,17 +5,17 @@ apply plugin: 'maven-publish'
 apply plugin: "com.jfrog.bintray"
 
 group 'com.likethesalad.android'
-ext.artifact = 'string-reference'
 version '1.2.1'
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation "com.google.auto.factory:$autoFactory_version"
+    implementation "com.google.auto.factory:auto-factory:$autoFactory_version"
     implementation "com.google.dagger:dagger:$dagger_version"
+    implementation 'com.squareup.retrofit2:retrofit:2.1.0'
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
-    kapt "com.google.auto.factory:$autoFactory_version"
-    annotationProcessor "com.google.auto.factory:$autoFactory_version"
+    kapt "com.google.auto.factory:auto-factory:$autoFactory_version"
+    annotationProcessor "com.google.auto.factory:auto-factory:$autoFactory_version"
     annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
     testImplementation "io.mockk:mockk:1.9.3"
     testImplementation 'com.google.truth:truth:1.0'
@@ -70,7 +70,6 @@ publishing {
     publications {
         myPublication(MavenPublication) {
             groupId = project.group
-            artifactId = project.artifact
             version = project.version
 
             artifact sourcesJar
@@ -108,7 +107,7 @@ bintray {
     publications = ['myPublication']
     pkg {
         repo = 'public-repo'
-        name = project.artifact
+        name = project.name
         licenses = ['MIT']
         desc = 'This is a Gradle plugin for Android applications which resolves XML string references in other XML strings.'
         websiteUrl = 'https://github.com/LikeTheSalad/android-string-reference'
