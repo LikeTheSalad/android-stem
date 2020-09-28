@@ -1,6 +1,7 @@
 package com.likethesalad.placeholder
 
 import com.likethesalad.placeholder.data.helpers.AndroidProjectHelper
+import com.likethesalad.placeholder.di.AppInjector
 import com.likethesalad.placeholder.models.PlaceholderExtension
 import com.likethesalad.placeholder.tasks.GatherRawStringsTask
 import com.likethesalad.placeholder.tasks.GatherTemplatesTask
@@ -13,26 +14,21 @@ class ResolvePlaceholdersPlugin : Plugin<Project> {
 
     companion object {
         const val RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME = "resolver"
+        const val EXTENSION_NAME = "stringXmlReference"
     }
 
     override fun apply(project: Project) {
         project.plugins.withId("com.android.application") {
-            val extension = project.extensions.create("stringXmlReference", PlaceholderExtension::class.java)
+            val extension = project.extensions.create(EXTENSION_NAME, PlaceholderExtension::class.java)
             val projectHelper = AndroidProjectHelper(project)
             project.afterEvaluate {
-                val taskActionProviderFactory = TaskActionProviderFactory(
-                    project.buildDir, projectHelper, extension
-                )
+                val taskActionProviderFactory = AppInjector.getTaskActionProviderFactory()
+                val variantDataExtractorFactory = AppInjector.getVariantDataExtractorFactory()
 
                 projectHelper.androidExtension.getApplicationVariants().forEach {
                     createResolvePlaceholdersTaskForVariant(
                         project,
-                        taskActionProviderFactory.create(
-                            it.getName(),
-                            it.getBuildType().getName(),
-                            it.getProductFlavors().map { flavor -> flavor.getName() },
-                            it.getRuntimeConfiguration()
-                        ),
+                        taskActionProviderFactory.create(variantDataExtractorFactory.create(it)),
                         extension.resolveOnBuild
                     )
                 }

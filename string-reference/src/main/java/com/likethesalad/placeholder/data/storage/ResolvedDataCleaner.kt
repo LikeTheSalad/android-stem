@@ -1,9 +1,9 @@
 package com.likethesalad.placeholder.data.storage
 
+import com.google.auto.factory.AutoFactory
 import com.likethesalad.placeholder.data.Constants
 import com.likethesalad.placeholder.data.VariantDirsPathFinder
 import com.likethesalad.placeholder.models.VariantResPaths
-import com.likethesalad.placeholder.utils.AutoFactory
 import com.likethesalad.placeholder.utils.VariantDataExtractor
 import java.io.File
 

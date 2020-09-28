@@ -1,12 +1,12 @@
 package com.likethesalad.placeholder.data
 
+import com.google.auto.factory.AutoFactory
+import com.google.auto.factory.Provided
 import com.likethesalad.placeholder.data.storage.ValuesFoldersExtractor
 import com.likethesalad.placeholder.data.storage.libraries.LibrariesValuesStringsProvider
 import com.likethesalad.placeholder.data.storage.utils.ValuesStringsProvider
 import com.likethesalad.placeholder.models.ValuesStrings
 import com.likethesalad.placeholder.models.VariantXmlFiles
-import com.likethesalad.placeholder.utils.AutoFactory
-import com.likethesalad.placeholder.utils.Provided
 import java.io.File
 
 @AutoFactory

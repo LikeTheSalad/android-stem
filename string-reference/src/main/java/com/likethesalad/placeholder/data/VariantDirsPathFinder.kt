@@ -1,11 +1,11 @@
 package com.likethesalad.placeholder.data
 
+import com.google.auto.factory.AutoFactory
+import com.google.auto.factory.Provided
 import com.likethesalad.placeholder.data.VariantDirsPathHandler.Companion.BASE_DIR_PATH
 import com.likethesalad.placeholder.data.helpers.wrappers.AndroidSourceSetWrapper
 import com.likethesalad.placeholder.models.VariantResPaths
 import com.likethesalad.placeholder.utils.AndroidExtensionHelper
-import com.likethesalad.placeholder.utils.AutoFactory
-import com.likethesalad.placeholder.utils.Provided
 import java.io.File
 
 @AutoFactory

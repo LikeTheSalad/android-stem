@@ -1,5 +1,6 @@
 package com.likethesalad.placeholder.utils
 
+import com.google.auto.factory.AutoFactory
 import com.likethesalad.placeholder.data.helpers.wrappers.ApplicationVariantWrapper
 import org.gradle.api.artifacts.Configuration
 

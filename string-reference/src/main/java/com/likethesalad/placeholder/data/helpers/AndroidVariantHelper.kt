@@ -1,15 +1,15 @@
 package com.likethesalad.placeholder.data.helpers
 
+import com.google.auto.factory.AutoFactory
+import com.google.auto.factory.Provided
 import com.likethesalad.placeholder.models.TasksNamesModel
 import com.likethesalad.placeholder.providers.BuildDirProvider
 import com.likethesalad.placeholder.providers.TaskProvider
-import com.likethesalad.placeholder.utils.AutoFactory
-import com.likethesalad.placeholder.utils.Provided
 import org.gradle.api.Task
 
 @AutoFactory
 class AndroidVariantHelper(
-    private val tasksNames: TasksNamesModel,
+    val tasksNames: TasksNamesModel,
     @Provided private val taskProvider: TaskProvider,
     @Provided private val buildDirProvider: BuildDirProvider
 ) {

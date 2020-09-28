@@ -1,10 +1,10 @@
 package com.likethesalad.placeholder.data.storage
 
+import com.google.auto.factory.AutoFactory
+import com.google.auto.factory.Provided
 import com.likethesalad.placeholder.data.helpers.wrappers.AndroidExtensionWrapper
 import com.likethesalad.placeholder.providers.BuildDirProvider
-import com.likethesalad.placeholder.utils.AutoFactory
 import com.likethesalad.placeholder.utils.ConfigurationProvider
-import com.likethesalad.placeholder.utils.Provided
 import com.likethesalad.placeholder.utils.VariantDataExtractor
 import java.io.File
 import javax.inject.Inject

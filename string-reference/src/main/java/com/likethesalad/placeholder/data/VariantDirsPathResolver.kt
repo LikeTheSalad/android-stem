@@ -1,7 +1,7 @@
 package com.likethesalad.placeholder.data
 
+import com.google.auto.factory.AutoFactory
 import com.likethesalad.placeholder.data.VariantDirsPathHandler.Companion.BASE_DIR_PATH
-import com.likethesalad.placeholder.utils.AutoFactory
 import com.likethesalad.placeholder.utils.VariantDataExtractor
 import javax.inject.Inject
 

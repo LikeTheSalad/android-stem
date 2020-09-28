@@ -1,9 +1,9 @@
 package com.likethesalad.placeholder.data.storage.libraries
 
+import com.google.auto.factory.AutoFactory
+import com.google.auto.factory.Provided
 import com.likethesalad.placeholder.data.helpers.AndroidConfigHelper
-import com.likethesalad.placeholder.utils.AutoFactory
 import com.likethesalad.placeholder.utils.ConfigurationProvider
-import com.likethesalad.placeholder.utils.Provided
 import java.io.File
 
 @AutoFactory

@@ -1,7 +1,7 @@
 package com.likethesalad.placeholder.data.helpers
 
-import com.likethesalad.placeholder.utils.AutoFactory
-import com.likethesalad.placeholder.utils.Provided
+import com.google.auto.factory.AutoFactory
+import com.google.auto.factory.Provided
 import com.likethesalad.placeholder.utils.VariantDataExtractor
 import org.gradle.api.file.FileCollection
 
