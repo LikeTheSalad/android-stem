@@ -1,13 +1,19 @@
 package com.likethesalad.placeholder.utils
 
+import com.likethesalad.placeholder.providers.PlaceholderExtensionProvider
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ConfigurationProvider {
+@Singleton
+class ConfigurationProvider @Inject constructor(private val extensionProvider: PlaceholderExtensionProvider) {
+
+    private val extension by lazy { extensionProvider.getPlaceholderExtension() }
 
     fun keepResolvedFiles(): Boolean {
-        return false//todo get from extension
+        return extension.keepResolvedFiles
     }
 
     fun useDependenciesRes(): Boolean {
-        return false
+        return extension.useDependenciesRes
     }
 }

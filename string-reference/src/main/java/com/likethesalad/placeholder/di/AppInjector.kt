@@ -1,12 +1,17 @@
 package com.likethesalad.placeholder.di
 
+import com.likethesalad.placeholder.ResolvePlaceholdersPlugin
 import com.likethesalad.placeholder.utils.TaskActionProviderFactory
 import com.likethesalad.placeholder.utils.VariantDataExtractorFactory
 
 object AppInjector {
 
-    private val component: AppComponent by lazy {
-        DaggerAppComponent.builder().build()
+    private lateinit var component: AppComponent
+
+    fun init(resolvePlaceholdersPlugin: ResolvePlaceholdersPlugin) {
+        component = DaggerAppComponent.builder()
+            .appModule(AppModule(resolvePlaceholdersPlugin))
+            .build()
     }
 
     fun getTaskActionProviderFactory(): TaskActionProviderFactory {

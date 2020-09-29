@@ -1,26 +1,40 @@
 package com.likethesalad.placeholder
 
 import com.likethesalad.placeholder.data.helpers.AndroidProjectHelper
+import com.likethesalad.placeholder.data.helpers.wrappers.AndroidExtensionWrapper
 import com.likethesalad.placeholder.di.AppInjector
 import com.likethesalad.placeholder.models.PlaceholderExtension
+import com.likethesalad.placeholder.providers.AndroidExtensionProvider
+import com.likethesalad.placeholder.providers.BuildDirProvider
+import com.likethesalad.placeholder.providers.PlaceholderExtensionProvider
+import com.likethesalad.placeholder.providers.TaskProvider
 import com.likethesalad.placeholder.tasks.GatherRawStringsTask
 import com.likethesalad.placeholder.tasks.GatherTemplatesTask
 import com.likethesalad.placeholder.tasks.ResolvePlaceholdersTask
 import com.likethesalad.placeholder.utils.TaskActionProvider
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.Task
+import java.io.File
 
-class ResolvePlaceholdersPlugin : Plugin<Project> {
+class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, BuildDirProvider,
+    TaskProvider, PlaceholderExtensionProvider {
 
     companion object {
         const val RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME = "resolver"
         const val EXTENSION_NAME = "stringXmlReference"
     }
 
+    private lateinit var project: Project
+    private lateinit var projectHelper: AndroidProjectHelper
+    private lateinit var extension: PlaceholderExtension
+
     override fun apply(project: Project) {
         project.plugins.withId("com.android.application") {
-            val extension = project.extensions.create(EXTENSION_NAME, PlaceholderExtension::class.java)
-            val projectHelper = AndroidProjectHelper(project)
+            this.project = project
+            AppInjector.init(this)
+            extension = project.extensions.create(EXTENSION_NAME, PlaceholderExtension::class.java)
+            projectHelper = AndroidProjectHelper(project)
             project.afterEvaluate {
                 val taskActionProviderFactory = AppInjector.getTaskActionProviderFactory()
                 val variantDataExtractorFactory = AppInjector.getVariantDataExtractorFactory()
@@ -76,5 +90,22 @@ class ResolvePlaceholdersPlugin : Plugin<Project> {
         if (resolveOnBuild) {
             androidVariantHelper.mergeResourcesTask.dependsOn(resolvePlaceholdersTask)
         }
+    }
+
+    override fun getExtension(): AndroidExtensionWrapper {
+        return projectHelper.androidExtension
+    }
+
+    override fun getBuildDir(): File {
+        return project.buildDir
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : Task> findTaskByName(name: String): T {
+        return project.tasks.findByName(name) as T
+    }
+
+    override fun getPlaceholderExtension(): PlaceholderExtension {
+        return extension
     }
 }

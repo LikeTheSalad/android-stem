@@ -16,7 +16,7 @@ class AndroidAppProjectDescriptor(
             apply plugin: 'placeholder-resolver'
             
             android {
-                compileSdkVersion = 28
+                compileSdkVersion 28
                 
                 ${placeAndroidBlockItems()}
             }
