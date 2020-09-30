@@ -16,14 +16,13 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     kapt "com.google.auto.factory:auto-factory:$autoFactory_version"
     annotationProcessor "com.google.auto.factory:auto-factory:$autoFactory_version"
-    annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
     testImplementation "io.mockk:mockk:1.9.3"
     testImplementation 'com.google.truth:truth:1.0'
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 }
 
 kapt {
-    correctErrorTypes true
+    correctErrorTypes = true
 }
 
 sourceSets {

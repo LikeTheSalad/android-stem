@@ -105,6 +105,7 @@ abstract class BaseAndroidProjectTest {
                 }
                 dependencies {
                     classpath 'com.android.tools.build:gradle:${getAndroidBuildPluginVersion()}'
+                    classpath "com.google.dagger:dagger:2.29.1"
                     classpath files("$pluginJarPath")
                 }
             }
