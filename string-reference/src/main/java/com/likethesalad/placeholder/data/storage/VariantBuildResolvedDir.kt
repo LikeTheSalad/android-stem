@@ -2,29 +2,25 @@ package com.likethesalad.placeholder.data.storage
 
 import com.google.auto.factory.AutoFactory
 import com.google.auto.factory.Provided
-import com.likethesalad.placeholder.providers.AndroidExtensionProvider
 import com.likethesalad.placeholder.providers.BuildDirProvider
+import com.likethesalad.placeholder.utils.AndroidExtensionHelper
+import com.likethesalad.placeholder.utils.AppVariantHelper
 import com.likethesalad.placeholder.utils.ConfigurationProvider
-import com.likethesalad.placeholder.utils.VariantDataExtractor
 import java.io.File
 import javax.inject.Inject
 
 @AutoFactory
 class VariantBuildResolvedDir @Inject constructor(
-    private val variantDataExtractor: VariantDataExtractor,
+    private val appVariantHelper: AppVariantHelper,
     @Provided buildDirProvider: BuildDirProvider,
-    @Provided private val androidExtensionProvider: AndroidExtensionProvider,
+    @Provided private val androidExtensionHelper: AndroidExtensionHelper,
     @Provided configurationProvider: ConfigurationProvider
 ) {
 
-    private val variantName by lazy { variantDataExtractor.getVariantName() }
-
-    private val androidExtensionWrapper by lazy {
-        androidExtensionProvider.getExtension()
-    }
+    private val variantName by lazy { appVariantHelper.getVariantName() }
 
     val resolvedDir: File = if (configurationProvider.keepResolvedFiles()) {
-        androidExtensionWrapper.getSourceSets().getValue(variantName).getRes().getSrcDirs().first()
+        androidExtensionHelper.getVariantSrcDirs(variantName).first()
     } else {
         val dir = File(buildDirProvider.getBuildDir(), "generated/resolved/$variantName")
         addResolvedDirToSourceSets(dir)
@@ -33,8 +29,7 @@ class VariantBuildResolvedDir @Inject constructor(
 
 
     private fun addResolvedDirToSourceSets(resolvedDir: File) {
-        val variantSourceDirSets = androidExtensionWrapper.getSourceSets().getValue(variantName).getRes()
-        val srcDirs = variantSourceDirSets.getSrcDirs()
-        variantSourceDirSets.setSrcDirs(srcDirs + resolvedDir)
+        val variantSrcDirs = androidExtensionHelper.getVariantSrcDirs(variantName)
+        androidExtensionHelper.setVariantSrcDirs(variantName, variantSrcDirs + resolvedDir)
     }
 }

@@ -4,17 +4,17 @@ import com.google.auto.factory.AutoFactory
 import com.likethesalad.placeholder.data.Constants
 import com.likethesalad.placeholder.data.VariantDirsPathFinder
 import com.likethesalad.placeholder.models.VariantResPaths
-import com.likethesalad.placeholder.utils.VariantDataExtractor
+import com.likethesalad.placeholder.utils.AppVariantHelper
 import java.io.File
 
 @AutoFactory
 class ResolvedDataCleaner(
-    private val variantDataExtractor: VariantDataExtractor,
+    private val appVariantHelper: AppVariantHelper,
     private val variantDirsPathFinder: VariantDirsPathFinder
 ) {
 
     private val variantName by lazy {
-        variantDataExtractor.getVariantName()
+        appVariantHelper.getVariantName()
     }
 
     fun removeResolvedFiles() {

@@ -1,8 +1,8 @@
 package com.likethesalad.placeholder.providers
 
-import com.likethesalad.placeholder.data.helpers.wrappers.AndroidExtensionWrapper
+import com.android.build.gradle.AppExtension
 
 interface AndroidExtensionProvider {
 
-    fun getExtension(): AndroidExtensionWrapper
+    fun getExtension(): AppExtension
 }

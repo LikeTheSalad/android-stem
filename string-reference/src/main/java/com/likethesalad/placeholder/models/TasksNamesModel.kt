@@ -1,10 +1,10 @@
 package com.likethesalad.placeholder.models
 
 import com.google.auto.factory.AutoFactory
-import com.likethesalad.placeholder.utils.VariantDataExtractor
+import com.likethesalad.placeholder.utils.AppVariantHelper
 
 @AutoFactory
-class TasksNamesModel(variantDataExtractor: VariantDataExtractor) {
+class TasksNamesModel(appVariantHelper: AppVariantHelper) {
 
     companion object {
         private const val GATHER_RAW_STRINGS_NAME_FORMAT = "gather%sRawStrings"
@@ -14,7 +14,7 @@ class TasksNamesModel(variantDataExtractor: VariantDataExtractor) {
         private const val ANDROID_MERGE_RESOURCES_TASK_NAME_FORMAT = "merge%sResources"
     }
 
-    private val capitalizedBuildVariant = variantDataExtractor.getVariantName().capitalize()
+    private val capitalizedBuildVariant = appVariantHelper.getVariantName().capitalize()
 
     val gatherRawStringsName: String by lazy {
         GATHER_RAW_STRINGS_NAME_FORMAT.format(capitalizedBuildVariant)

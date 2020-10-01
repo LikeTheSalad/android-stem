@@ -1,13 +1,13 @@
 package com.likethesalad.placeholder.data
 
-import com.likethesalad.placeholder.utils.VariantDataExtractor
+import com.likethesalad.placeholder.utils.AppVariantHelper
 
 class VariantDirsPathHandler(
-    private val variantDataExtractor: VariantDataExtractor
+    private val appVariantHelper: AppVariantHelper
 ) {
 
     val variantDirsPathResolver: VariantDirsPathResolver by lazy {
-        VariantDirsPathResolver(variantDataExtractor)//todo use factory
+        VariantDirsPathResolver(appVariantHelper)//todo use factory
     }
 
     companion object {
@@ -19,7 +19,7 @@ class VariantDirsPathHandler(
     }
 
     fun isVariantType(dirPath: String): Boolean {
-        return dirPath == variantDataExtractor.getVariantType()
+        return dirPath == appVariantHelper.getVariantType()
     }
 
     fun getHighestFrom(dirPaths: Set<String>): String {

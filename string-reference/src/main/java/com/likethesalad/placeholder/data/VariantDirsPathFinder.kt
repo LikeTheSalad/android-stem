@@ -3,7 +3,6 @@ package com.likethesalad.placeholder.data
 import com.google.auto.factory.AutoFactory
 import com.google.auto.factory.Provided
 import com.likethesalad.placeholder.data.VariantDirsPathHandler.Companion.BASE_DIR_PATH
-import com.likethesalad.placeholder.data.helpers.wrappers.AndroidSourceSetWrapper
 import com.likethesalad.placeholder.models.VariantResPaths
 import com.likethesalad.placeholder.utils.AndroidExtensionHelper
 import java.io.File
@@ -17,11 +16,10 @@ class VariantDirsPathFinder(
     fun getExistingPathsResDirs(extraMainResDirs: List<File>? = null): List<VariantResPaths> {
         val existing = mutableListOf<VariantResPaths>()
         val pathResolved = variantDirsPathResolver.pathList
-        val sourceSets = androidExtensionHelper.getSourceSets()
 
         for (resolvedName in pathResolved) {
             getResPaths(
-                resolvedName, sourceSets, getExtraDirs(resolvedName, extraMainResDirs)
+                resolvedName, getExtraDirs(resolvedName, extraMainResDirs)
             )?.let {
                 existing.add(it)
             }
@@ -44,11 +42,9 @@ class VariantDirsPathFinder(
 
     private fun getResPaths(
         variantName: String,
-        sourceSets: Map<String, AndroidSourceSetWrapper>,
         extraDirs: List<File>
     ): VariantResPaths? {
-        val variantSourceSet = sourceSets.getValue(variantName)
-        val resolvedResDirs = getExistingResDirs(variantSourceSet)
+        val resolvedResDirs = getExistingResDirs(variantName)
         if (resolvedResDirs.isNotEmpty() || extraDirs.isNotEmpty()) {
             return VariantResPaths(
                 variantName,
@@ -59,7 +55,8 @@ class VariantDirsPathFinder(
         return null
     }
 
-    private fun getExistingResDirs(sourceSet: AndroidSourceSetWrapper): Set<File> {
-        return sourceSet.getRes().getSrcDirs().filter { it.exists() }.toSet()
+    private fun getExistingResDirs(variantName: String): Set<File> {
+        val dirs = androidExtensionHelper.getVariantSrcDirs(variantName)
+        return dirs.filter { it.exists() }.toSet()
     }
 }

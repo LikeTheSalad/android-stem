@@ -1,7 +1,6 @@
 package com.likethesalad.placeholder
 
-import com.likethesalad.placeholder.data.helpers.AndroidProjectHelper
-import com.likethesalad.placeholder.data.helpers.wrappers.AndroidExtensionWrapper
+import com.android.build.gradle.AppExtension
 import com.likethesalad.placeholder.di.AppInjector
 import com.likethesalad.placeholder.models.PlaceholderExtension
 import com.likethesalad.placeholder.providers.AndroidExtensionProvider
@@ -26,22 +25,21 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Bui
     }
 
     private lateinit var project: Project
-    private lateinit var projectHelper: AndroidProjectHelper
     private lateinit var extension: PlaceholderExtension
+    private lateinit var androidExtension: AppExtension
 
     override fun apply(project: Project) {
+        androidExtension = project.extensions.getByType(AppExtension::class.java)
         project.plugins.withId("com.android.application") {
             this.project = project
             AppInjector.init(this)
             extension = project.extensions.create(EXTENSION_NAME, PlaceholderExtension::class.java)
-            projectHelper = AndroidProjectHelper(project)
             project.afterEvaluate {
                 val taskActionProviderFactory = AppInjector.getTaskActionProviderFactory()
                 val variantDataExtractorFactory = AppInjector.getVariantDataExtractorFactory()
 
-                projectHelper.androidExtension.getApplicationVariants().forEach {
+                androidExtension.applicationVariants.forEach {
                     createResolvePlaceholdersTaskForVariant(
-                        project,
                         taskActionProviderFactory.create(variantDataExtractorFactory.create(it)),
                         extension.resolveOnBuild
                     )
@@ -51,7 +49,6 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Bui
     }
 
     private fun createResolvePlaceholdersTaskForVariant(
-        project: Project,
         taskActionProvider: TaskActionProvider,
         resolveOnBuild: Boolean
     ) {
@@ -92,8 +89,8 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Bui
         }
     }
 
-    override fun getExtension(): AndroidExtensionWrapper {
-        return projectHelper.androidExtension
+    override fun getExtension(): AppExtension {
+        return androidExtension
     }
 
     override fun getBuildDir(): File {

@@ -20,7 +20,7 @@ import com.likethesalad.placeholder.tasks.actions.ResolvePlaceholdersAction
 
 @AutoFactory
 class TaskActionProvider constructor(
-    private val variantDataExtractor: VariantDataExtractor,
+    private val appVariantHelper: AppVariantHelper,
     @Provided private val templateResolver: TemplateResolver,
     @Provided private val tasksNamesModelFactory: TasksNamesModelFactory,
     @Provided private val androidVariantHelperFactory: AndroidVariantHelperFactory,
@@ -32,20 +32,20 @@ class TaskActionProvider constructor(
     @Provided private val variantRawStringsFactory: VariantRawStringsFactory,
     @Provided private val resolvedDataCleanerFactory: ResolvedDataCleanerFactory
 ) {
-    private val tasksNamesModel by lazy { tasksNamesModelFactory.create(variantDataExtractor) }
+    private val tasksNamesModel by lazy { tasksNamesModelFactory.create(appVariantHelper) }
 
     val androidVariantHelper by lazy { androidVariantHelperFactory.create(tasksNamesModel) }
 
-    val androidConfigHelper by lazy { androidConfigHelperFactory.create(variantDataExtractor) }
+    val androidConfigHelper by lazy { androidConfigHelperFactory.create(appVariantHelper) }
 
     private val librariesFilesProvider by lazy { librariesFilesProviderFactory.create(androidConfigHelper) }
     private val librariesValuesStringsProvider = LibrariesValuesStringsProvider(librariesFilesProvider)
 
     private val incrementalDirsProvider = IncrementalDirsProvider(androidVariantHelper)
 
-    private val variantDirsPathResolver by lazy { variantDirsPathResolverFactory.create(variantDataExtractor) }
+    private val variantDirsPathResolver by lazy { variantDirsPathResolverFactory.create(appVariantHelper) }
     private val variantDirsPathFinder by lazy { variantDirsPathFinderFactory.create(variantDirsPathResolver) }
-    private val variantBuildResolvedDir by lazy { variantBuildResolvedDirFactory.create(variantDataExtractor) }
+    private val variantBuildResolvedDir by lazy { variantBuildResolvedDirFactory.create(appVariantHelper) }
     private val outputStringFileResolver = OutputStringFileResolver(
         variantBuildResolvedDir,
         incrementalDirsProvider
@@ -74,7 +74,7 @@ class TaskActionProvider constructor(
             filesProvider,
             androidResourcesHandler,
             templateResolver,
-            resolvedDataCleanerFactory.create(variantDataExtractor, variantDirsPathFinder)
+            resolvedDataCleanerFactory.create(appVariantHelper, variantDirsPathFinder)
         )
     }
 }

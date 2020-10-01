@@ -2,18 +2,18 @@ package com.likethesalad.placeholder.data.helpers
 
 import com.google.auto.factory.AutoFactory
 import com.google.auto.factory.Provided
-import com.likethesalad.placeholder.utils.VariantDataExtractor
+import com.likethesalad.placeholder.utils.AppVariantHelper
 import org.gradle.api.file.FileCollection
 
 @Suppress("UnstableApiUsage")
 @AutoFactory
 class AndroidConfigHelper(
-    private val variantDataExtractor: VariantDataExtractor,
+    private val appVariantHelper: AppVariantHelper,
     @Provided private val androidArtifactViewActionProvider: AndroidArtifactViewActionProvider
 ) {
 
     private val configuration by lazy {
-        variantDataExtractor.getRuntimeConfiguration()
+        appVariantHelper.getRuntimeConfiguration()
     }
 
     val librariesResDirs: FileCollection by lazy {
