@@ -1,8 +1,8 @@
 package com.likethesalad.placeholder.di
 
 import com.likethesalad.placeholder.ResolvePlaceholdersPlugin
+import com.likethesalad.placeholder.utils.AppVariantHelperFactory
 import com.likethesalad.placeholder.utils.TaskActionProviderFactory
-import com.likethesalad.placeholder.utils.VariantDataExtractorFactory
 
 object AppInjector {
 
@@ -18,7 +18,7 @@ object AppInjector {
         return component.taskActionProviderFactory()
     }
 
-    fun getVariantDataExtractorFactory(): VariantDataExtractorFactory {
-        return component.variantDataExtractorFactory()
+    fun getAppVariantHelperFactory(): AppVariantHelperFactory {
+        return component.appVariantHelperFactory()
     }
 }

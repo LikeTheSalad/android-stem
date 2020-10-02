@@ -36,11 +36,11 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Bui
             extension = project.extensions.create(EXTENSION_NAME, PlaceholderExtension::class.java)
             project.afterEvaluate {
                 val taskActionProviderFactory = AppInjector.getTaskActionProviderFactory()
-                val variantDataExtractorFactory = AppInjector.getVariantDataExtractorFactory()
+                val appVariantHelperFactory = AppInjector.getAppVariantHelperFactory()
 
                 androidExtension.applicationVariants.forEach {
                     createResolvePlaceholdersTaskForVariant(
-                        taskActionProviderFactory.create(variantDataExtractorFactory.create(it)),
+                        taskActionProviderFactory.create(appVariantHelperFactory.create(it)),
                         extension.resolveOnBuild
                     )
                 }
