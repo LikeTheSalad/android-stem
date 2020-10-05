@@ -1,6 +1,7 @@
 package com.likethesalad.placeholder.data.helpers
 
 import com.google.common.truth.Truth
+import com.likethesalad.placeholder.utils.AppVariantHelper
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -16,14 +17,16 @@ import org.junit.Test
 class AndroidConfigHelperTest {
 
     private lateinit var androidConfigHelper: AndroidConfigHelper
-    private lateinit var configuration: Configuration
+    private lateinit var runtimeConfiguration: Configuration
     private lateinit var androidArtifactViewActionProvider: AndroidArtifactViewActionProvider
 
     @Before
     fun setUp() {
-        configuration = mockk()
+        runtimeConfiguration = mockk()
         androidArtifactViewActionProvider = mockk()
-        androidConfigHelper = AndroidConfigHelper(configuration, androidArtifactViewActionProvider)
+        val appVariantHelper = mockk<AppVariantHelper>()
+        every { appVariantHelper.getRuntimeConfiguration() }.returns(runtimeConfiguration)
+        androidConfigHelper = AndroidConfigHelper(appVariantHelper, androidArtifactViewActionProvider)
     }
 
     @Suppress("UnstableApiUsage")
@@ -38,7 +41,7 @@ class AndroidConfigHelperTest {
         every { resolvableDependencies.artifactView(viewConfigAction) }.returns(artifactView)
         every { artifactView.artifacts }.returns(artifactCollection)
         every { artifactCollection.artifactFiles }.returns(fileCollection)
-        every { configuration.incoming }.returns(resolvableDependencies)
+        every { runtimeConfiguration.incoming }.returns(resolvableDependencies)
 
         val collection = androidConfigHelper.librariesResDirs
 

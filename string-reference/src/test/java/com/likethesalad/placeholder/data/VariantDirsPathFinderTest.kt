@@ -1,11 +1,8 @@
 package com.likethesalad.placeholder.data
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.data.helpers.AndroidProjectHelper
-import com.likethesalad.placeholder.data.helpers.wrappers.AndroidExtensionWrapper
-import com.likethesalad.placeholder.data.helpers.wrappers.AndroidSourceDirectorySetWrapper
-import com.likethesalad.placeholder.data.helpers.wrappers.AndroidSourceSetWrapper
 import com.likethesalad.placeholder.models.VariantResPaths
+import com.likethesalad.placeholder.utils.AndroidExtensionHelper
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Before
@@ -19,7 +16,7 @@ class VariantDirsPathFinderTest {
     @get:Rule
     val temporaryFolder = TemporaryFolder()
 
-    lateinit var androidExtensionWrapper: AndroidExtensionWrapper
+    lateinit var androidExtensionHelper: AndroidExtensionHelper
     lateinit var variantDirsPathResolver: VariantDirsPathResolver
     lateinit var variantDirsPathFinder: VariantDirsPathFinder
     lateinit var srcDir: File
@@ -29,11 +26,9 @@ class VariantDirsPathFinderTest {
     fun setUp() {
         srcDir = temporaryFolder.newFolder("src")
         srcPath = srcDir.absolutePath
-        androidExtensionWrapper = mockk()
-        val androidProjectHelper = mockk<AndroidProjectHelper>()
-        every { androidProjectHelper.androidExtension }.returns(androidExtensionWrapper)
+        androidExtensionHelper = mockk()
         variantDirsPathResolver = mockk()
-        variantDirsPathFinder = VariantDirsPathFinder(variantDirsPathResolver, androidProjectHelper)
+        variantDirsPathFinder = VariantDirsPathFinder(variantDirsPathResolver, androidExtensionHelper)
     }
 
     @Test
@@ -44,15 +39,13 @@ class VariantDirsPathFinderTest {
         val fullFolders = createResFolderFor("full", "res")
         val anotherFolders = createResFolderFor("another", "res", "res1")
         every { variantDirsPathResolver.pathList }.returns(resolvedPaths)
-        every { androidExtensionWrapper.getSourceSets() }.returns(
-            getSourceSetsMap(
-                mapOf(
-                    "main" to mainFolders,
-                    "demo" to emptyList(),
-                    "full" to fullFolders,
-                    "else" to emptyList(),
-                    "another" to anotherFolders
-                )
+        configureSourceSets(
+            mapOf(
+                "main" to mainFolders,
+                "demo" to emptyList(),
+                "full" to fullFolders,
+                "else" to emptyList(),
+                "another" to anotherFolders
             )
         )
 
@@ -88,15 +81,13 @@ class VariantDirsPathFinderTest {
         val fullFolders = createResFolderFor("full", "res")
         val anotherFolders = createResFolderFor("another", "res", "res1")
         every { variantDirsPathResolver.pathList }.returns(resolvedPaths)
-        every { androidExtensionWrapper.getSourceSets() }.returns(
-            getSourceSetsMap(
-                mapOf(
-                    "main" to mainFolders,
-                    "demo" to emptyList(),
-                    "full" to fullFolders,
-                    "else" to emptyList(),
-                    "another" to anotherFolders
-                )
+        configureSourceSets(
+            mapOf(
+                "main" to mainFolders,
+                "demo" to emptyList(),
+                "full" to fullFolders,
+                "else" to emptyList(),
+                "another" to anotherFolders
             )
         )
 
@@ -128,24 +119,11 @@ class VariantDirsPathFinderTest {
         return fileList
     }
 
-    private fun getSourceSetsMap(existingPaths: Map<String, List<File>>):
-            Map<String, AndroidSourceSetWrapper> {
-        val result = mutableMapOf<String, AndroidSourceSetWrapper>()
-        for ((k, v) in existingPaths) {
-            result[k] = getSourceSets(k, v.toSet())
+    private fun configureSourceSets(existingPaths: Map<String, List<File>>) {
+        for (entry in existingPaths) {
+            every {
+                androidExtensionHelper.getVariantSrcDirs(entry.key)
+            }.returns(entry.value.toSet())
         }
-        return result
-    }
-
-    private fun getSourceSets(
-        name: String,
-        dirs: Set<File>
-    ): AndroidSourceSetWrapper {
-        val sourceSet = mockk<AndroidSourceSetWrapper>()
-        val dirsWrapper = mockk<AndroidSourceDirectorySetWrapper>()
-        every { dirsWrapper.getSrcDirs() }.returns(dirs)
-        every { sourceSet.getName() }.returns(name)
-        every { sourceSet.getRes() }.returns(dirsWrapper)
-        return sourceSet
     }
 }

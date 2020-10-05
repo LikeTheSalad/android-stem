@@ -407,6 +407,6 @@ class VariantRawStringsTest {
     }
 
     private fun createVariantRawStrings(variantDirsPathFinder: VariantDirsPathFinder): VariantRawStrings {
-        return VariantRawStrings(variantDirsPathFinder, valuesStringsProvider, librariesValuesStringsProvider)
+        return VariantRawStrings(variantDirsPathFinder, librariesValuesStringsProvider, valuesStringsProvider)
     }
 }

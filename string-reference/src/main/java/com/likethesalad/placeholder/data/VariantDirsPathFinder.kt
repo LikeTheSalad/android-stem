@@ -2,7 +2,6 @@ package com.likethesalad.placeholder.data
 
 import com.google.auto.factory.AutoFactory
 import com.google.auto.factory.Provided
-import com.likethesalad.placeholder.data.VariantDirsPathHandler.Companion.BASE_DIR_PATH
 import com.likethesalad.placeholder.models.VariantResPaths
 import com.likethesalad.placeholder.utils.AndroidExtensionHelper
 import java.io.File
@@ -12,6 +11,10 @@ class VariantDirsPathFinder(
     private val variantDirsPathResolver: VariantDirsPathResolver,
     @Provided private val androidExtensionHelper: AndroidExtensionHelper
 ) {
+
+    companion object {
+        const val BASE_DIR_PATH = "main"
+    }
 
     fun getExistingPathsResDirs(extraMainResDirs: List<File>? = null): List<VariantResPaths> {
         val existing = mutableListOf<VariantResPaths>()

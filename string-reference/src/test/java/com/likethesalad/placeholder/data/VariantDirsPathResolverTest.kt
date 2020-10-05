@@ -1,6 +1,9 @@
 package com.likethesalad.placeholder.data
 
 import com.google.common.truth.Truth
+import com.likethesalad.placeholder.utils.AppVariantHelper
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.Test
 
 class VariantDirsPathResolverTest {
@@ -50,7 +53,11 @@ class VariantDirsPathResolverTest {
         suffix: String,
         vararg expectedPathItems: String
     ) {
-        val variantDirsPathResolver = VariantDirsPathResolver(variantName, flavors, suffix)
+        val variantHelper = mockk<AppVariantHelper>()
+        every { variantHelper.getVariantName() }.returns(variantName)
+        every { variantHelper.getVariantFlavors() }.returns(flavors)
+        every { variantHelper.getVariantType() }.returns(suffix)
+        val variantDirsPathResolver = VariantDirsPathResolver(variantHelper)
 
         Truth.assertThat(variantDirsPathResolver.pathList).containsExactlyElementsIn(expectedPathItems).inOrder()
     }
