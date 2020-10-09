@@ -15,6 +15,7 @@ buildscript {
 ext {
     dagger_version = '2.29.1'
     autoFactory_version = '1.0-beta8'
+    androidBuild_version = '3.3.3'
 }
 
 allprojects {

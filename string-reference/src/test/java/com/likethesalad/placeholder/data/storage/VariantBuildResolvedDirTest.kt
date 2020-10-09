@@ -5,9 +5,7 @@ import com.likethesalad.placeholder.providers.BuildDirProvider
 import com.likethesalad.placeholder.utils.AndroidExtensionHelper
 import com.likethesalad.placeholder.utils.AppVariantHelper
 import com.likethesalad.placeholder.utils.ConfigurationProvider
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
+import io.mockk.*
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -34,6 +32,7 @@ class VariantBuildResolvedDirTest {
         every { buildDirProvider.getBuildDir() }.returns(buildDir)
         every { appVariantHelper.getVariantName() }.returns(variantName)
         every { androidExtensionHelper.getVariantSrcDirs(variantName) }.returns(variantSourceSets)
+        every { androidExtensionHelper.setVariantSrcDirs(any(), any()) } just Runs
         val variantBuildResolvedDir = VariantBuildResolvedDir(
             appVariantHelper,
             buildDirProvider,

@@ -13,10 +13,11 @@ dependencies {
     implementation "com.google.auto.factory:auto-factory:$autoFactory_version"
     implementation "com.google.dagger:dagger:$dagger_version"
     implementation 'com.squareup.retrofit2:retrofit:2.1.0'
-    compileOnly 'com.android.tools.build:gradle:3.3.3'
+    compileOnly "com.android.tools.build:gradle:$androidBuild_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     kapt "com.google.auto.factory:auto-factory:$autoFactory_version"
     annotationProcessor "com.google.auto.factory:auto-factory:$autoFactory_version"
+    testImplementation "com.android.tools.build:gradle:$androidBuild_version"
     testImplementation "io.mockk:mockk:1.9.3"
     testImplementation 'com.google.truth:truth:1.0'
     testImplementation group: 'junit', name: 'junit', version: '4.12'

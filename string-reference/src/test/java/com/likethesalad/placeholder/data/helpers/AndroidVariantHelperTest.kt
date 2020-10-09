@@ -21,12 +21,17 @@ class AndroidVariantHelperTest {
 
     private val mergeResourcesName = "mergeResourcesTask"
     private val generateResValuesName = "generateResValuesTask"
+    private val resolvePlaceholdersName = "resolvePlaceholdersName"
     private val buildDirPath = "/some/dir"
 
     @Before
     fun setUp() {
+        tasksNames = mockk()
+        buildDirProvider = mockk()
+        taskProvider = mockk()
         every { tasksNames.mergeResourcesName }.returns(mergeResourcesName)
         every { tasksNames.generateResValuesName }.returns(generateResValuesName)
+        every { tasksNames.resolvePlaceholdersName }.returns(resolvePlaceholdersName)
 
         val buildDir = mockk<File>()
         every { buildDirProvider.getBuildDir() }.returns(buildDir)
@@ -69,6 +74,6 @@ class AndroidVariantHelperTest {
         val result = androidVariantHelper.incrementalDir
 
         // Then:
-        Truth.assertThat(result).isEqualTo("$buildDirPath/intermediates/incremental/resolveDemoDebugPlaceholders")
+        Truth.assertThat(result).isEqualTo("$buildDirPath/intermediates/incremental/$resolvePlaceholdersName")
     }
 }
