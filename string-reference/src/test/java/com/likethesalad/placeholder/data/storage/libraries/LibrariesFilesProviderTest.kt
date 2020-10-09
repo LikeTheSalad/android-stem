@@ -2,6 +2,7 @@ package com.likethesalad.placeholder.data.storage.libraries
 
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.data.helpers.AndroidConfigHelper
+import com.likethesalad.placeholder.utils.ConfigurationProvider
 import io.mockk.every
 import io.mockk.mockk
 import org.gradle.api.file.FileCollection
@@ -14,17 +15,22 @@ import java.io.File
 class LibrariesFilesProviderTest {
 
     private lateinit var androidConfigHelper: AndroidConfigHelper
+    private lateinit var configurationProvider: ConfigurationProvider
+
     @get:Rule
     val temporaryFolder = TemporaryFolder()
 
     @Before
     fun setUp() {
         androidConfigHelper = mockk()
+        configurationProvider = mockk()
     }
 
     @Test
     fun getXmlFilesForFolder_canUseDependencies_true() {
-        val librariesFilesProvider = LibrariesFilesProvider(androidConfigHelper, true)
+        every { configurationProvider.useDependenciesRes() }.returns(true)
+        val librariesFilesProvider = LibrariesFilesProvider(androidConfigHelper, configurationProvider)
+
         verifyXmlFilesForFolder("values", librariesFilesProvider, false)
         verifyXmlFilesForFolder("values-es", librariesFilesProvider, false)
         verifyXmlFilesForFolder("values-it", librariesFilesProvider, false)
@@ -32,7 +38,9 @@ class LibrariesFilesProviderTest {
 
     @Test
     fun getXmlFilesForFolder_canUseDependencies_false() {
-        val librariesFilesProvider = LibrariesFilesProvider(androidConfigHelper, false)
+        every { configurationProvider.useDependenciesRes() }.returns(false)
+        val librariesFilesProvider = LibrariesFilesProvider(androidConfigHelper, configurationProvider)
+
         verifyXmlFilesForFolder("values", librariesFilesProvider, true)
         verifyXmlFilesForFolder("values-es", librariesFilesProvider, true)
         verifyXmlFilesForFolder("values-it", librariesFilesProvider, true)

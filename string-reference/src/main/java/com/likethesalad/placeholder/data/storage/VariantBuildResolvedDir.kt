@@ -11,10 +11,10 @@ import javax.inject.Inject
 
 @AutoFactory
 class VariantBuildResolvedDir @Inject constructor(
-    private val appVariantHelper: AppVariantHelper,
+    appVariantHelper: AppVariantHelper,
     @Provided buildDirProvider: BuildDirProvider,
-    @Provided private val androidExtensionHelper: AndroidExtensionHelper,
-    @Provided configurationProvider: ConfigurationProvider
+    @Provided configurationProvider: ConfigurationProvider,
+    @Provided private val androidExtensionHelper: AndroidExtensionHelper
 ) {
 
     private val variantName by lazy { appVariantHelper.getVariantName() }

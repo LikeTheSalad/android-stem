@@ -3,6 +3,7 @@ package com.likethesalad.placeholder.data.storage
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.data.VariantDirsPathFinder
 import com.likethesalad.placeholder.models.VariantResPaths
+import com.likethesalad.placeholder.utils.AppVariantHelper
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Rule
@@ -23,6 +24,7 @@ class ResolvedDataCleanerTest {
         val otherVariantName = "client"
         val variantResPath = mockk<VariantResPaths>()
         val otherVariantResPath = mockk<VariantResPaths>()
+        val appVariantHelper = mockk<AppVariantHelper>()
         val resDir = getResDirWithXmlFiles(
             variantName, "res",
             mapOf(
@@ -43,6 +45,7 @@ class ResolvedDataCleanerTest {
                 "values-es" to listOf("resolved.xml")
             )
         )
+        every { appVariantHelper.getVariantName() }.returns(variantName)
         every { variantResPath.paths }.returns(setOf(resDir, resDir2))
         every { variantResPath.variantName }.returns(variantName)
         every { otherVariantResPath.paths }.returns(setOf(otherResDir))
@@ -63,7 +66,7 @@ class ResolvedDataCleanerTest {
         assertFileExist(otherResDir, "values-es/resolved.xml", true)
 
         // When
-        val resolvedDataCleaner = ResolvedDataCleaner(variantName, variantDirsPathFinder)
+        val resolvedDataCleaner = ResolvedDataCleaner(appVariantHelper, variantDirsPathFinder)
         resolvedDataCleaner.removeResolvedFiles()
 
         // Then

@@ -1,6 +1,9 @@
 package com.likethesalad.placeholder.models
 
 import com.google.common.truth.Truth
+import com.likethesalad.placeholder.utils.AppVariantHelper
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.Test
 
 class TasksNamesModelTest {
@@ -11,7 +14,7 @@ class TasksNamesModelTest {
         val variant = "theVariant"
 
         // When:
-        val tasksNamesModel = TasksNamesModel(variant)
+        val tasksNamesModel = getTasksNamesFor(variant)
 
         // Then:
         Truth.assertThat(tasksNamesModel.gatherRawStringsName).isEqualTo("gatherTheVariantRawStrings")
@@ -27,7 +30,7 @@ class TasksNamesModelTest {
         val variant = ""
 
         // When:
-        val tasksNamesModel = TasksNamesModel(variant)
+        val tasksNamesModel = getTasksNamesFor(variant)
 
         // Then:
         Truth.assertThat(tasksNamesModel.gatherRawStringsName).isEqualTo("gatherRawStrings")
@@ -35,5 +38,12 @@ class TasksNamesModelTest {
         Truth.assertThat(tasksNamesModel.resolvePlaceholdersName).isEqualTo("resolvePlaceholders")
         Truth.assertThat(tasksNamesModel.generateResValuesName).isEqualTo("generateResValues")
         Truth.assertThat(tasksNamesModel.mergeResourcesName).isEqualTo("mergeResources")
+    }
+
+    private fun getTasksNamesFor(variantName: String): TasksNamesModel {
+        val appVariantHelper = mockk<AppVariantHelper>()
+        every { appVariantHelper.getVariantName() }.returns(variantName)
+
+        return TasksNamesModel(appVariantHelper)
     }
 }
