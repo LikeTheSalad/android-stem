@@ -1,9 +1,10 @@
 package com.likethesalad.placeholder.data.storage.utils
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.data.ValuesXmlFiles
-import com.likethesalad.placeholder.models.ValuesStrings
-import com.likethesalad.placeholder.models.VariantXmlFiles
+import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.ValuesXmlFiles
+import com.likethesalad.placeholder.modules.rawStrings.models.ValuesStrings
+import com.likethesalad.placeholder.modules.rawStrings.models.VariantXmlFiles
+import com.likethesalad.placeholder.modules.rawStrings.data.ValuesStringsProvider
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Before
@@ -15,7 +16,8 @@ class ValuesStringsProviderTest {
 
     @Before
     fun setUp() {
-        valuesStringsProvider = ValuesStringsProvider()
+        valuesStringsProvider =
+            ValuesStringsProvider()
     }
 
     @Test

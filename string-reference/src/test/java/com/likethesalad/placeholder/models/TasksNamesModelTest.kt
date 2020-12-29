@@ -1,7 +1,8 @@
 package com.likethesalad.placeholder.models
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.utils.AppVariantHelper
+import com.likethesalad.placeholder.modules.common.models.TasksNamesModel
+import com.likethesalad.placeholder.modules.common.helpers.android.AppVariantHelper
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Test

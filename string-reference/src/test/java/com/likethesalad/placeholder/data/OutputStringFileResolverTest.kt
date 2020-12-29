@@ -1,10 +1,11 @@
 package com.likethesalad.placeholder.data
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.data.helpers.AndroidVariantHelper
-import com.likethesalad.placeholder.data.storage.IncrementalDirsProvider
-import com.likethesalad.placeholder.data.storage.VariantBuildResolvedDir
-import com.likethesalad.placeholder.models.PathIdentity
+import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantHelper
+import com.likethesalad.placeholder.modules.common.helpers.dirs.IncrementalDirsProvider
+import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantBuildResolvedDir
+import com.likethesalad.placeholder.modules.common.models.PathIdentity
+import com.likethesalad.placeholder.modules.common.helpers.files.OutputStringFileResolver
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Before
@@ -32,12 +33,16 @@ class OutputStringFileResolverTest {
         incrementalDir = temporaryFolder.newFolder("build", "incremental", "taskName")
         androidVariantHelper = mockk()
         every { androidVariantHelper.incrementalDir }.returns(incrementalDir.absolutePath)
-        incrementalDirsProvider = IncrementalDirsProvider(androidVariantHelper)
+        incrementalDirsProvider =
+            IncrementalDirsProvider(
+                androidVariantHelper
+            )
         variantBuildResolvedDir = mockk()
-        outputStringFileResolver = OutputStringFileResolver(
-            variantBuildResolvedDir,
-            incrementalDirsProvider
-        )
+        outputStringFileResolver =
+            OutputStringFileResolver(
+                variantBuildResolvedDir,
+                incrementalDirsProvider
+            )
     }
 
     @Test

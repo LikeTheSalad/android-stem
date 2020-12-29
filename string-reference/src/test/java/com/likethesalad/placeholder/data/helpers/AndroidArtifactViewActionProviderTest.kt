@@ -1,5 +1,6 @@
 package com.likethesalad.placeholder.data.helpers
 
+import com.likethesalad.placeholder.modules.common.helpers.android.AndroidArtifactViewActionProvider
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -18,7 +19,8 @@ class AndroidArtifactViewActionProviderTest {
 
     @Before
     fun setUp() {
-        androidArtifactViewActionProvider = AndroidArtifactViewActionProvider()
+        androidArtifactViewActionProvider =
+            AndroidArtifactViewActionProvider()
     }
 
     @Test

@@ -1,11 +1,14 @@
 package com.likethesalad.placeholder.data
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.data.storage.libraries.LibrariesValuesStringsProvider
-import com.likethesalad.placeholder.data.storage.utils.ValuesStringsProvider
-import com.likethesalad.placeholder.models.ValuesStrings
-import com.likethesalad.placeholder.models.VariantResPaths
-import com.likethesalad.placeholder.models.VariantXmlFiles
+import com.likethesalad.placeholder.modules.rawStrings.data.libraries.LibrariesValuesStringsProvider
+import com.likethesalad.placeholder.modules.rawStrings.data.ValuesStringsProvider
+import com.likethesalad.placeholder.modules.rawStrings.models.ValuesStrings
+import com.likethesalad.placeholder.modules.common.models.VariantResPaths
+import com.likethesalad.placeholder.modules.rawStrings.models.VariantXmlFiles
+import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantDirsPathFinder
+import com.likethesalad.placeholder.modules.rawStrings.data.VariantRawStrings
+import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.ValuesXmlFiles
 import com.likethesalad.placeholder.testutils.TestResourcesHandler
 import io.mockk.every
 import io.mockk.mockk
@@ -342,7 +345,12 @@ class VariantRawStringsTest {
             val setOfPaths = resMap.toList().map {
                 it.second
             }.toSet()
-            variantResPaths.add(VariantResPaths(variantName, setOfPaths))
+            variantResPaths.add(
+                VariantResPaths(
+                    variantName,
+                    setOfPaths
+                )
+            )
         }
 
         val variantDirsPathFinder = mockk<VariantDirsPathFinder>()
@@ -407,6 +415,10 @@ class VariantRawStringsTest {
     }
 
     private fun createVariantRawStrings(variantDirsPathFinder: VariantDirsPathFinder): VariantRawStrings {
-        return VariantRawStrings(variantDirsPathFinder, librariesValuesStringsProvider, valuesStringsProvider)
+        return VariantRawStrings(
+            variantDirsPathFinder,
+            librariesValuesStringsProvider,
+            valuesStringsProvider
+        )
     }
 }

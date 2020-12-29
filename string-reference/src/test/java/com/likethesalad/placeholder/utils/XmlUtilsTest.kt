@@ -1,7 +1,8 @@
 package com.likethesalad.placeholder.utils
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.models.StringResourceModel
+import com.likethesalad.placeholder.modules.common.helpers.resources.utils.XmlUtils
+import com.likethesalad.placeholder.modules.common.models.StringResourceModel
 import org.junit.Test
 import javax.xml.parsers.DocumentBuilderFactory
 
@@ -12,7 +13,12 @@ class XmlUtilsTest {
         // Given:
         val document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument()
         val stringResourceModel =
-            StringResourceModel(mapOf("name" to "some_name", "extra" to "some extra attr"), "some content")
+            StringResourceModel(
+                mapOf(
+                    "name" to "some_name",
+                    "extra" to "some extra attr"
+                ), "some content"
+            )
 
         // When:
         val result = XmlUtils.stringResourceModelToElement(document, stringResourceModel)

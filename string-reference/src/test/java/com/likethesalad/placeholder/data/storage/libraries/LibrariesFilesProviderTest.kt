@@ -1,7 +1,8 @@
 package com.likethesalad.placeholder.data.storage.libraries
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.data.helpers.AndroidConfigHelper
+import com.likethesalad.placeholder.modules.common.helpers.android.AndroidConfigHelper
+import com.likethesalad.placeholder.modules.rawStrings.data.libraries.LibrariesFilesProvider
 import com.likethesalad.placeholder.utils.ConfigurationProvider
 import io.mockk.every
 import io.mockk.mockk
@@ -29,7 +30,11 @@ class LibrariesFilesProviderTest {
     @Test
     fun getXmlFilesForFolder_canUseDependencies_true() {
         every { configurationProvider.useDependenciesRes() }.returns(true)
-        val librariesFilesProvider = LibrariesFilesProvider(androidConfigHelper, configurationProvider)
+        val librariesFilesProvider =
+            LibrariesFilesProvider(
+                androidConfigHelper,
+                configurationProvider
+            )
 
         verifyXmlFilesForFolder("values", librariesFilesProvider, false)
         verifyXmlFilesForFolder("values-es", librariesFilesProvider, false)
@@ -39,7 +44,11 @@ class LibrariesFilesProviderTest {
     @Test
     fun getXmlFilesForFolder_canUseDependencies_false() {
         every { configurationProvider.useDependenciesRes() }.returns(false)
-        val librariesFilesProvider = LibrariesFilesProvider(androidConfigHelper, configurationProvider)
+        val librariesFilesProvider =
+            LibrariesFilesProvider(
+                androidConfigHelper,
+                configurationProvider
+            )
 
         verifyXmlFilesForFolder("values", librariesFilesProvider, true)
         verifyXmlFilesForFolder("values-es", librariesFilesProvider, true)

@@ -1,7 +1,9 @@
 package com.likethesalad.placeholder.utils
 
-import com.likethesalad.placeholder.models.StringResourceModel
+import com.likethesalad.placeholder.modules.common.models.StringResourceModel
 import com.google.common.truth.Truth
+import com.likethesalad.placeholder.modules.common.helpers.resources.utils.XmlUtils
+import com.likethesalad.placeholder.modules.common.helpers.files.AndroidXmlResDocument
 import io.mockk.*
 import org.junit.Rule
 import org.junit.Test
@@ -18,7 +20,8 @@ class AndroidXmlResDocumentTest {
     @Test
     fun checkEmptyConstructor_should_create_resources() {
         // When
-        val androidXmlResDocument = AndroidXmlResDocument()
+        val androidXmlResDocument =
+            AndroidXmlResDocument()
 
         // Then
         val resourcesList = androidXmlResDocument.document.getElementsByTagName("resources")
@@ -34,7 +37,8 @@ class AndroidXmlResDocumentTest {
         document.appendChild(resources)
 
         // When
-        val androidXmlResDocument = AndroidXmlResDocument(document)
+        val androidXmlResDocument =
+            AndroidXmlResDocument(document)
 
         // Then
         Truth.assertThat(androidXmlResDocument.resources).isEqualTo(resources)
@@ -77,7 +81,10 @@ class AndroidXmlResDocumentTest {
         every { nodeListResourcesMock.item(0) }.returns(resourcesMock)
         every { documentMock.getElementsByTagName("resources") }.returns(nodeListResourcesMock)
 
-        val androidXmlResDocument = AndroidXmlResDocument(documentMock)
+        val androidXmlResDocument =
+            AndroidXmlResDocument(
+                documentMock
+            )
 
         // When
         androidXmlResDocument.append(itemMock)
@@ -101,7 +108,10 @@ class AndroidXmlResDocumentTest {
         every { documentMock.getElementsByTagName("resources") }.returns(nodeListResourcesMock)
         every { resourcesMock.appendChild(itemMock) } throws DOMException(0, "")
 
-        val androidXmlResDocument = AndroidXmlResDocument(documentMock)
+        val androidXmlResDocument =
+            AndroidXmlResDocument(
+                documentMock
+            )
 
         // When
         androidXmlResDocument.append(itemMock)
@@ -114,8 +124,14 @@ class AndroidXmlResDocumentTest {
     @Test
     fun checkAppendStringResource() {
         // Given
-        val stringResourceModel = StringResourceModel("some_name", "some content")
-        val androidXmlResDocumentSpy: AndroidXmlResDocument = spyk(AndroidXmlResDocument())
+        val stringResourceModel =
+            StringResourceModel(
+                "some_name",
+                "some content"
+            )
+        val androidXmlResDocumentSpy: AndroidXmlResDocument = spyk(
+            AndroidXmlResDocument()
+        )
         every { androidXmlResDocumentSpy.append(any()) } just Runs
 
         // When
@@ -128,7 +144,9 @@ class AndroidXmlResDocumentTest {
     @Test
     fun checkAppendAll() {
         // Given
-        val androidXmlResDocumentSpy: AndroidXmlResDocument = spyk(AndroidXmlResDocument())
+        val androidXmlResDocumentSpy: AndroidXmlResDocument = spyk(
+            AndroidXmlResDocument()
+        )
         val nodeList: NodeList = mockk()
         every { nodeList.length }.returns(4)
         every { nodeList.item(any()) }.returns(mockk())
@@ -144,7 +162,9 @@ class AndroidXmlResDocumentTest {
     @Test
     fun checkAppendAllStringResources() {
         // Given
-        val androidXmlResDocumentSpy: AndroidXmlResDocument = spyk(AndroidXmlResDocument())
+        val androidXmlResDocumentSpy: AndroidXmlResDocument = spyk(
+            AndroidXmlResDocument()
+        )
         val stringResources = listOf<StringResourceModel>(mockk(), mockk(), mockk(), mockk(), mockk())
         every { androidXmlResDocumentSpy.appendStringResource(any()) } just Runs
 
@@ -166,7 +186,8 @@ class AndroidXmlResDocumentTest {
             appendChild(createStringNode("some_name2", "some content2", document))
             appendChild(createStringNode("some_name3", "some content3", document))
         }
-        val androidXmlResDocument = AndroidXmlResDocument(document)
+        val androidXmlResDocument =
+            AndroidXmlResDocument(document)
 
         // When
         val result = androidXmlResDocument.getStringList()
@@ -185,7 +206,9 @@ class AndroidXmlResDocumentTest {
     fun checkGetStringResourceList() {
         // Given
         val document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument()
-        val androidXmlResDocumentSpy: AndroidXmlResDocument = spyk(AndroidXmlResDocument(document))
+        val androidXmlResDocumentSpy: AndroidXmlResDocument = spyk(
+            AndroidXmlResDocument(document)
+        )
         val nodeListMock: NodeList = mockk()
         every { nodeListMock.length }.returns(5)
         every { nodeListMock.item(any()) }.returns(createStringNode("some_name", "some content", document))
@@ -203,11 +226,27 @@ class AndroidXmlResDocumentTest {
     @Test
     fun checkSaveToFile() {
         // Given
-        val androidXmlResDocument = AndroidXmlResDocument()
+        val androidXmlResDocument =
+            AndroidXmlResDocument()
         val file = temporaryFolder.newFile()
-        androidXmlResDocument.appendStringResource(StringResourceModel("some_name1", "some content1"))
-        androidXmlResDocument.appendStringResource(StringResourceModel("some_name2", "some content2"))
-        androidXmlResDocument.appendStringResource(StringResourceModel("some_name3", "some content3"))
+        androidXmlResDocument.appendStringResource(
+            StringResourceModel(
+                "some_name1",
+                "some content1"
+            )
+        )
+        androidXmlResDocument.appendStringResource(
+            StringResourceModel(
+                "some_name2",
+                "some content2"
+            )
+        )
+        androidXmlResDocument.appendStringResource(
+            StringResourceModel(
+                "some_name3",
+                "some content3"
+            )
+        )
 
         // When
         androidXmlResDocument.saveToFile(file)
@@ -228,11 +267,27 @@ class AndroidXmlResDocumentTest {
     @Test
     fun checkSaveToFile_indent() {
         // Given
-        val androidXmlResDocument = AndroidXmlResDocument()
+        val androidXmlResDocument =
+            AndroidXmlResDocument()
         val file = temporaryFolder.newFile()
-        androidXmlResDocument.appendStringResource(StringResourceModel("some_name1", "some content1"))
-        androidXmlResDocument.appendStringResource(StringResourceModel("some_name2", "some content2"))
-        androidXmlResDocument.appendStringResource(StringResourceModel("some_name3", "some content3"))
+        androidXmlResDocument.appendStringResource(
+            StringResourceModel(
+                "some_name1",
+                "some content1"
+            )
+        )
+        androidXmlResDocument.appendStringResource(
+            StringResourceModel(
+                "some_name2",
+                "some content2"
+            )
+        )
+        androidXmlResDocument.appendStringResource(
+            StringResourceModel(
+                "some_name3",
+                "some content3"
+            )
+        )
 
         // When
         androidXmlResDocument.saveToFile(file, 2)

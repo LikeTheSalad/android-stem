@@ -1,9 +1,10 @@
 package com.likethesalad.placeholder.data.storage
 
 import com.google.common.truth.Truth
+import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantBuildResolvedDir
 import com.likethesalad.placeholder.providers.BuildDirProvider
-import com.likethesalad.placeholder.utils.AndroidExtensionHelper
-import com.likethesalad.placeholder.utils.AppVariantHelper
+import com.likethesalad.placeholder.modules.common.helpers.android.AndroidExtensionHelper
+import com.likethesalad.placeholder.modules.common.helpers.android.AppVariantHelper
 import com.likethesalad.placeholder.utils.ConfigurationProvider
 import io.mockk.*
 import org.junit.Rule
@@ -33,12 +34,13 @@ class VariantBuildResolvedDirTest {
         every { appVariantHelper.getVariantName() }.returns(variantName)
         every { androidExtensionHelper.getVariantSrcDirs(variantName) }.returns(variantSourceSets)
         every { androidExtensionHelper.setVariantSrcDirs(any(), any()) } just Runs
-        val variantBuildResolvedDir = VariantBuildResolvedDir(
-            appVariantHelper,
-            buildDirProvider,
-            configurationProvider,
-            androidExtensionHelper
-        )
+        val variantBuildResolvedDir =
+            VariantBuildResolvedDir(
+                appVariantHelper,
+                buildDirProvider,
+                configurationProvider,
+                androidExtensionHelper
+            )
 
         Truth.assertThat(variantBuildResolvedDir.resolvedDir).isEqualTo(
             newSrcDir
@@ -69,12 +71,13 @@ class VariantBuildResolvedDirTest {
             )
         )
 
-        val variantBuildResolvedDir = VariantBuildResolvedDir(
-            appVariantHelper,
-            buildDirProvider,
-            configurationProvider,
-            androidExtensionHelper
-        )
+        val variantBuildResolvedDir =
+            VariantBuildResolvedDir(
+                appVariantHelper,
+                buildDirProvider,
+                configurationProvider,
+                androidExtensionHelper
+            )
 
         Truth.assertThat(variantBuildResolvedDir.resolvedDir).isEqualTo(
             File(temporaryFolder.root, "src/$variantName/res/")

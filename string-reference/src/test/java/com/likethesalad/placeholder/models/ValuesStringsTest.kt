@@ -1,7 +1,9 @@
 package com.likethesalad.placeholder.models
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.data.ValuesXmlFiles
+import com.likethesalad.placeholder.modules.common.models.StringResourceModel
+import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.ValuesXmlFiles
+import com.likethesalad.placeholder.modules.rawStrings.models.ValuesStrings
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Test
@@ -14,8 +16,14 @@ class ValuesStringsTest {
             "values",
             getValuesStringFiles(
                 setOf(
-                    StringResourceModel("my_str_name", "The content"),
-                    StringResourceModel("my_str_name2", "The content2")
+                    StringResourceModel(
+                        "my_str_name",
+                        "The content"
+                    ),
+                    StringResourceModel(
+                        "my_str_name2",
+                        "The content2"
+                    )
                 )
             )
         )
@@ -23,8 +31,14 @@ class ValuesStringsTest {
         val listOfStrings = resStrings.mergedStrings
 
         Truth.assertThat(listOfStrings).containsExactly(
-            StringResourceModel("my_str_name", "The content"),
-            StringResourceModel("my_str_name2", "The content2")
+            StringResourceModel(
+                "my_str_name",
+                "The content"
+            ),
+            StringResourceModel(
+                "my_str_name2",
+                "The content2"
+            )
         )
     }
 
@@ -33,21 +47,37 @@ class ValuesStringsTest {
         val parentResStrings = ValuesStrings(
             "values",
             getValuesStringFiles(
-                setOf(StringResourceModel("the_parent_string", "Parent value"))
+                setOf(
+                    StringResourceModel(
+                        "the_parent_string",
+                        "Parent value"
+                    )
+                )
             )
         )
 
         val resStrings = ValuesStrings(
             "values",
             getValuesStringFiles(
-                setOf(StringResourceModel("child_string", "Child value"))
+                setOf(
+                    StringResourceModel(
+                        "child_string",
+                        "Child value"
+                    )
+                )
             ),
             parentResStrings
         )
 
         Truth.assertThat(resStrings.mergedStrings).containsExactly(
-            StringResourceModel("the_parent_string", "Parent value"),
-            StringResourceModel("child_string", "Child value")
+            StringResourceModel(
+                "the_parent_string",
+                "Parent value"
+            ),
+            StringResourceModel(
+                "child_string",
+                "Child value"
+            )
         )
     }
 
@@ -57,8 +87,14 @@ class ValuesStringsTest {
             "values",
             getValuesStringFiles(
                 setOf(
-                    StringResourceModel("the_parent_string", "Parent value"),
-                    StringResourceModel("common_string", "Parent common string")
+                    StringResourceModel(
+                        "the_parent_string",
+                        "Parent value"
+                    ),
+                    StringResourceModel(
+                        "common_string",
+                        "Parent common string"
+                    )
                 )
             )
         )
@@ -67,17 +103,32 @@ class ValuesStringsTest {
             "values",
             getValuesStringFiles(
                 setOf(
-                    StringResourceModel("child_string", "Child value"),
-                    StringResourceModel("common_string", "Child common string")
+                    StringResourceModel(
+                        "child_string",
+                        "Child value"
+                    ),
+                    StringResourceModel(
+                        "common_string",
+                        "Child common string"
+                    )
                 )
             ),
             parentResStrings
         )
 
         Truth.assertThat(resStrings.mergedStrings).containsExactly(
-            StringResourceModel("the_parent_string", "Parent value"),
-            StringResourceModel("child_string", "Child value"),
-            StringResourceModel("common_string", "Child common string")
+            StringResourceModel(
+                "the_parent_string",
+                "Parent value"
+            ),
+            StringResourceModel(
+                "child_string",
+                "Child value"
+            ),
+            StringResourceModel(
+                "common_string",
+                "Child common string"
+            )
         )
     }
 
@@ -85,19 +136,23 @@ class ValuesStringsTest {
     fun `Get child attributes for overridden string`() {
         // Given
         val commonStringName = "common_string"
-        val commonParentString = StringResourceModel(
-            mapOf(
-                "name" to commonStringName,
-                "other" to "something"
-            ),
-            "Parent string content"
-        )
+        val commonParentString =
+            StringResourceModel(
+                mapOf(
+                    "name" to commonStringName,
+                    "other" to "something"
+                ),
+                "Parent string content"
+            )
         val parentResStrings = ValuesStrings(
             "values",
             getValuesStringFiles(
                 setOf(
                     commonParentString,
-                    StringResourceModel("other_parent_string", "Some parent string")
+                    StringResourceModel(
+                        "other_parent_string",
+                        "Some parent string"
+                    )
                 )
             )
         )
@@ -126,7 +181,10 @@ class ValuesStringsTest {
                 ),
                 "Child parent string"
             ),
-            StringResourceModel("other_parent_string", "Some parent string")
+            StringResourceModel(
+                "other_parent_string",
+                "Some parent string"
+            )
         )
     }
 
@@ -136,7 +194,12 @@ class ValuesStringsTest {
         val parentResStrings = ValuesStrings(
             "values",
             getValuesStringFiles(
-                setOf(StringResourceModel("the_parent_string", "Parent value"))
+                setOf(
+                    StringResourceModel(
+                        "the_parent_string",
+                        "Parent value"
+                    )
+                )
             )
         )
 
@@ -144,8 +207,14 @@ class ValuesStringsTest {
             "values",
             getValuesStringFiles(
                 setOf(
-                    StringResourceModel("child_string", "Child value"),
-                    StringResourceModel("another_string", "Child another value")
+                    StringResourceModel(
+                        "child_string",
+                        "Child value"
+                    ),
+                    StringResourceModel(
+                        "another_string",
+                        "Child another value"
+                    )
                 )
             ),
             parentResStrings
@@ -153,9 +222,18 @@ class ValuesStringsTest {
 
         // Then
         Truth.assertThat(resStrings.mergedStrings).containsExactly(
-            StringResourceModel("another_string", "Child another value"),
-            StringResourceModel("child_string", "Child value"),
-            StringResourceModel("the_parent_string", "Parent value")
+            StringResourceModel(
+                "another_string",
+                "Child another value"
+            ),
+            StringResourceModel(
+                "child_string",
+                "Child value"
+            ),
+            StringResourceModel(
+                "the_parent_string",
+                "Parent value"
+            )
         ).inOrder()
     }
 
@@ -166,9 +244,18 @@ class ValuesStringsTest {
             "values",
             getValuesStringFiles(
                 setOf(
-                    StringResourceModel("string_name", "String value"),
-                    StringResourceModel("template_some_string", "String value \${string_name}"),
-                    StringResourceModel("template_other_string", "String value2")
+                    StringResourceModel(
+                        "string_name",
+                        "String value"
+                    ),
+                    StringResourceModel(
+                        "template_some_string",
+                        "String value \${string_name}"
+                    ),
+                    StringResourceModel(
+                        "template_other_string",
+                        "String value2"
+                    )
                 )
             )
         )
@@ -177,18 +264,36 @@ class ValuesStringsTest {
             "values",
             getValuesStringFiles(
                 setOf(
-                    StringResourceModel("child_string_name", "Child value"),
-                    StringResourceModel("template_child_string", "Child template"),
-                    StringResourceModel("template_some_string", "Child value common")
+                    StringResourceModel(
+                        "child_string_name",
+                        "Child value"
+                    ),
+                    StringResourceModel(
+                        "template_child_string",
+                        "Child template"
+                    ),
+                    StringResourceModel(
+                        "template_some_string",
+                        "Child value common"
+                    )
                 )
             ), parentStrings
         )
 
         // Then
         Truth.assertThat(resStrings.mergedTemplates).containsExactly(
-            StringResourceModel("template_child_string", "Child template"),
-            StringResourceModel("template_other_string", "String value2"),
-            StringResourceModel("template_some_string", "Child value common")
+            StringResourceModel(
+                "template_child_string",
+                "Child template"
+            ),
+            StringResourceModel(
+                "template_other_string",
+                "String value2"
+            ),
+            StringResourceModel(
+                "template_some_string",
+                "Child value common"
+            )
         )
     }
 
@@ -206,9 +311,18 @@ class ValuesStringsTest {
             "values",
             getValuesStringFiles(
                 setOf(
-                    StringResourceModel("string_name", "String value"),
-                    StringResourceModel("template_some_string", "String value \${string_name}"),
-                    StringResourceModel("template_other_string", "String value2")
+                    StringResourceModel(
+                        "string_name",
+                        "String value"
+                    ),
+                    StringResourceModel(
+                        "template_some_string",
+                        "String value \${string_name}"
+                    ),
+                    StringResourceModel(
+                        "template_other_string",
+                        "String value2"
+                    )
                 )
             )
         )
@@ -217,9 +331,18 @@ class ValuesStringsTest {
             "values",
             getValuesStringFiles(
                 setOf(
-                    StringResourceModel("child_string_name", "Child value"),
-                    StringResourceModel("template_child_string", "Child template"),
-                    StringResourceModel("template_some_string", "Child value common")
+                    StringResourceModel(
+                        "child_string_name",
+                        "Child value"
+                    ),
+                    StringResourceModel(
+                        "template_child_string",
+                        "Child template"
+                    ),
+                    StringResourceModel(
+                        "template_some_string",
+                        "Child value common"
+                    )
                 )
             ), parentStrings
         )
@@ -235,9 +358,18 @@ class ValuesStringsTest {
             "values",
             getValuesStringFiles(
                 setOf(
-                    StringResourceModel("string_name", "String value"),
-                    StringResourceModel("template_some_string", "String value \${string_name}"),
-                    StringResourceModel("template_other_string", "String value2")
+                    StringResourceModel(
+                        "string_name",
+                        "String value"
+                    ),
+                    StringResourceModel(
+                        "template_some_string",
+                        "String value \${string_name}"
+                    ),
+                    StringResourceModel(
+                        "template_other_string",
+                        "String value2"
+                    )
                 )
             )
         )
@@ -246,7 +378,10 @@ class ValuesStringsTest {
             "values",
             getValuesStringFiles(
                 setOf(
-                    StringResourceModel("string_name", "Child value")
+                    StringResourceModel(
+                        "string_name",
+                        "Child value"
+                    )
                 )
             ), parentStrings
         )
@@ -262,9 +397,18 @@ class ValuesStringsTest {
             "values",
             getValuesStringFiles(
                 setOf(
-                    StringResourceModel("string_name", "String value"),
-                    StringResourceModel("template_some_string", "String value \${string_name}"),
-                    StringResourceModel("template_other_string", "String value2")
+                    StringResourceModel(
+                        "string_name",
+                        "String value"
+                    ),
+                    StringResourceModel(
+                        "template_some_string",
+                        "String value \${string_name}"
+                    ),
+                    StringResourceModel(
+                        "template_other_string",
+                        "String value2"
+                    )
                 )
             )
         )
@@ -273,7 +417,10 @@ class ValuesStringsTest {
             "values",
             getValuesStringFiles(
                 setOf(
-                    StringResourceModel("some_string_name", "Child value")
+                    StringResourceModel(
+                        "some_string_name",
+                        "Child value"
+                    )
                 )
             ), parentStrings
         )
@@ -282,7 +429,10 @@ class ValuesStringsTest {
             "values",
             getValuesStringFiles(
                 setOf(
-                    StringResourceModel("string_name", "Environment value")
+                    StringResourceModel(
+                        "string_name",
+                        "Environment value"
+                    )
                 )
             ), resStrings
         )
@@ -298,9 +448,18 @@ class ValuesStringsTest {
             "values",
             getValuesStringFiles(
                 setOf(
-                    StringResourceModel("string_name", "String value"),
-                    StringResourceModel("template_some_string", "String value \${string_name}"),
-                    StringResourceModel("template_other_string", "String value2")
+                    StringResourceModel(
+                        "string_name",
+                        "String value"
+                    ),
+                    StringResourceModel(
+                        "template_some_string",
+                        "String value \${string_name}"
+                    ),
+                    StringResourceModel(
+                        "template_other_string",
+                        "String value2"
+                    )
                 )
             )
         )
@@ -309,7 +468,10 @@ class ValuesStringsTest {
             "values",
             getValuesStringFiles(
                 setOf(
-                    StringResourceModel("custom_client_string", "Child value")
+                    StringResourceModel(
+                        "custom_client_string",
+                        "Child value"
+                    )
                 )
             ), parentStrings
         )
@@ -325,9 +487,18 @@ class ValuesStringsTest {
             "values",
             getValuesStringFiles(
                 setOf(
-                    StringResourceModel("string_name", "String value"),
-                    StringResourceModel("some_string", "String value2"),
-                    StringResourceModel("other_string", "String value3")
+                    StringResourceModel(
+                        "string_name",
+                        "String value"
+                    ),
+                    StringResourceModel(
+                        "some_string",
+                        "String value2"
+                    ),
+                    StringResourceModel(
+                        "other_string",
+                        "String value3"
+                    )
                 )
             )
         )
@@ -336,7 +507,10 @@ class ValuesStringsTest {
             "values",
             getValuesStringFiles(
                 setOf(
-                    StringResourceModel("custom_client_string", "Child value")
+                    StringResourceModel(
+                        "custom_client_string",
+                        "Child value"
+                    )
                 )
             ), parentStrings
         )
@@ -358,8 +532,14 @@ class ValuesStringsTest {
             "values",
             getValuesStringFiles(
                 setOf(
-                    StringResourceModel("some_string", "Some content"),
-                    StringResourceModel("template_other_string", "Some content with \${another_string}")
+                    StringResourceModel(
+                        "some_string",
+                        "Some content"
+                    ),
+                    StringResourceModel(
+                        "template_other_string",
+                        "Some content with \${another_string}"
+                    )
                 )
             )
         )
@@ -370,8 +550,14 @@ class ValuesStringsTest {
             "values",
             getValuesStringFiles(
                 setOf(
-                    StringResourceModel("some_string", "Some content"),
-                    StringResourceModel("template_other_string", "Some content with \${some_string}")
+                    StringResourceModel(
+                        "some_string",
+                        "Some content"
+                    ),
+                    StringResourceModel(
+                        "template_other_string",
+                        "Some content with \${some_string}"
+                    )
                 )
             )
         )
@@ -382,7 +568,10 @@ class ValuesStringsTest {
             "values",
             getValuesStringFiles(
                 setOf(
-                    StringResourceModel("template_other_string", "Some content with \${some_string}")
+                    StringResourceModel(
+                        "template_other_string",
+                        "Some content with \${some_string}"
+                    )
                 )
             )
         )
@@ -390,7 +579,10 @@ class ValuesStringsTest {
             "values",
             getValuesStringFiles(
                 setOf(
-                    StringResourceModel("some_string", "Some content")
+                    StringResourceModel(
+                        "some_string",
+                        "Some content"
+                    )
                 )
             ), parentResStrings
         )
@@ -401,7 +593,10 @@ class ValuesStringsTest {
             "values",
             getValuesStringFiles(
                 setOf(
-                    StringResourceModel("template_other_string", "Some content with \${random_string}")
+                    StringResourceModel(
+                        "template_other_string",
+                        "Some content with \${random_string}"
+                    )
                 )
             )
         )
@@ -409,8 +604,14 @@ class ValuesStringsTest {
             "values",
             getValuesStringFiles(
                 setOf(
-                    StringResourceModel("template_other_string", "Some content with \${some_string}"),
-                    StringResourceModel("some_string", "Some content")
+                    StringResourceModel(
+                        "template_other_string",
+                        "Some content with \${some_string}"
+                    ),
+                    StringResourceModel(
+                        "some_string",
+                        "Some content"
+                    )
                 )
             ), parentResStrings
         )

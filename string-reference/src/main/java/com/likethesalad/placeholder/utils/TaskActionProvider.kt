@@ -2,21 +2,25 @@ package com.likethesalad.placeholder.utils
 
 import com.google.auto.factory.AutoFactory
 import com.google.auto.factory.Provided
-import com.likethesalad.placeholder.data.OutputStringFileResolver
+import com.likethesalad.placeholder.modules.common.helpers.files.OutputStringFileResolver
 import com.likethesalad.placeholder.data.VariantDirsPathFinderFactory
 import com.likethesalad.placeholder.data.VariantDirsPathResolverFactory
 import com.likethesalad.placeholder.data.VariantRawStringsFactory
 import com.likethesalad.placeholder.data.helpers.AndroidConfigHelperFactory
 import com.likethesalad.placeholder.data.helpers.AndroidVariantHelperFactory
-import com.likethesalad.placeholder.data.resources.AndroidResourcesHandler
+import com.likethesalad.placeholder.modules.common.helpers.resources.AndroidResourcesHandler
 import com.likethesalad.placeholder.data.storage.*
 import com.likethesalad.placeholder.data.storage.libraries.LibrariesFilesProviderFactory
-import com.likethesalad.placeholder.data.storage.libraries.LibrariesValuesStringsProvider
+import com.likethesalad.placeholder.modules.rawStrings.data.libraries.LibrariesValuesStringsProvider
 import com.likethesalad.placeholder.models.TasksNamesModelFactory
-import com.likethesalad.placeholder.resolver.TemplateResolver
-import com.likethesalad.placeholder.tasks.actions.GatherRawStringsAction
-import com.likethesalad.placeholder.tasks.actions.GatherTemplatesAction
-import com.likethesalad.placeholder.tasks.actions.ResolvePlaceholdersAction
+import com.likethesalad.placeholder.modules.common.helpers.android.AppVariantHelper
+import com.likethesalad.placeholder.modules.common.helpers.dirs.IncrementalDirsProvider
+import com.likethesalad.placeholder.modules.common.helpers.files.IncrementalDataCleaner
+import com.likethesalad.placeholder.modules.common.helpers.files.storage.AndroidFilesProvider
+import com.likethesalad.placeholder.modules.resolveStrings.resolver.TemplateResolver
+import com.likethesalad.placeholder.modules.rawStrings.GatherRawStringsAction
+import com.likethesalad.placeholder.modules.templateStrings.GatherTemplatesAction
+import com.likethesalad.placeholder.modules.resolveStrings.ResolvePlaceholdersAction
 
 @AutoFactory
 class TaskActionProvider constructor(
@@ -39,20 +43,37 @@ class TaskActionProvider constructor(
     val androidConfigHelper by lazy { androidConfigHelperFactory.create(appVariantHelper) }
 
     private val librariesFilesProvider by lazy { librariesFilesProviderFactory.create(androidConfigHelper) }
-    private val librariesValuesStringsProvider = LibrariesValuesStringsProvider(librariesFilesProvider)
+    private val librariesValuesStringsProvider =
+        LibrariesValuesStringsProvider(
+            librariesFilesProvider
+        )
 
-    private val incrementalDirsProvider = IncrementalDirsProvider(androidVariantHelper)
+    private val incrementalDirsProvider =
+        IncrementalDirsProvider(
+            androidVariantHelper
+        )
 
     private val variantDirsPathResolver by lazy { variantDirsPathResolverFactory.create(appVariantHelper) }
     private val variantDirsPathFinder by lazy { variantDirsPathFinderFactory.create(variantDirsPathResolver) }
     private val variantBuildResolvedDir by lazy { variantBuildResolvedDirFactory.create(appVariantHelper) }
-    private val outputStringFileResolver = OutputStringFileResolver(
-        variantBuildResolvedDir,
-        incrementalDirsProvider
-    )
-    private val filesProvider = AndroidFilesProvider(outputStringFileResolver, incrementalDirsProvider)
-    private val androidResourcesHandler = AndroidResourcesHandler(outputStringFileResolver)
-    private val incrementalDataCleaner = IncrementalDataCleaner(incrementalDirsProvider)
+    private val outputStringFileResolver =
+        OutputStringFileResolver(
+            variantBuildResolvedDir,
+            incrementalDirsProvider
+        )
+    private val filesProvider =
+        AndroidFilesProvider(
+            outputStringFileResolver,
+            incrementalDirsProvider
+        )
+    private val androidResourcesHandler =
+        AndroidResourcesHandler(
+            outputStringFileResolver
+        )
+    private val incrementalDataCleaner =
+        IncrementalDataCleaner(
+            incrementalDirsProvider
+        )
 
     val gatherRawStringsAction: GatherRawStringsAction by lazy {
         val variantRawStrings = variantRawStringsFactory.create(variantDirsPathFinder, librariesValuesStringsProvider)

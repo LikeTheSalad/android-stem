@@ -1,13 +1,14 @@
 package com.likethesalad.placeholder.tasks.actions
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.data.resources.ResourcesHandler
-import com.likethesalad.placeholder.data.storage.FilesProvider
-import com.likethesalad.placeholder.data.storage.IncrementalDataCleaner
-import com.likethesalad.placeholder.models.PathIdentity
-import com.likethesalad.placeholder.models.StringResourceModel
-import com.likethesalad.placeholder.models.StringsGatheredModel
-import com.likethesalad.placeholder.models.StringsTemplatesModel
+import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHandler
+import com.likethesalad.placeholder.modules.common.helpers.files.storage.FilesProvider
+import com.likethesalad.placeholder.modules.common.helpers.files.IncrementalDataCleaner
+import com.likethesalad.placeholder.modules.common.models.PathIdentity
+import com.likethesalad.placeholder.modules.common.models.StringResourceModel
+import com.likethesalad.placeholder.modules.rawStrings.models.StringsGatheredModel
+import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
+import com.likethesalad.placeholder.modules.templateStrings.GatherTemplatesAction
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -27,10 +28,11 @@ class GatherTemplatesActionTest {
         filesProvider = mockk()
         resourcesHandler = mockk(relaxUnitFun = true)
         incrementalDataCleaner = mockk(relaxUnitFun = true)
-        gatherTemplatesAction = GatherTemplatesAction(
-            filesProvider, resourcesHandler,
-            incrementalDataCleaner
-        )
+        gatherTemplatesAction =
+            GatherTemplatesAction(
+                filesProvider, resourcesHandler,
+                incrementalDataCleaner
+            )
     }
 
     @Test
@@ -93,44 +95,59 @@ class GatherTemplatesActionTest {
         valuesFolderName: String,
         suffix: String
     ): Pair<StringsGatheredModel, StringsTemplatesModel> {
-        val pathIdentity = PathIdentity(valuesFolderName, suffix)
-        val gatheredStrings = StringsGatheredModel(
-            pathIdentity,
-            listOf(
-                StringResourceModel("app_name", "TesT"),
-                StringResourceModel("other_string", "Random string"),
-                StringResourceModel("template_welcome", "The welcome message for \${app_name}"),
-                StringResourceModel(
-                    mapOf(
-                        "name" to "template_message_non_translatable",
-                        "translatable" to "false"
-                    ), "Non translatable \${app_name}"
-                ),
-                StringResourceModel(
-                    "template_this_contains_template",
-                    "This is the welcome: \${template_welcome}"
+        val pathIdentity =
+            PathIdentity(valuesFolderName, suffix)
+        val gatheredStrings =
+            StringsGatheredModel(
+                pathIdentity,
+                listOf(
+                    StringResourceModel(
+                        "app_name",
+                        "TesT"
+                    ),
+                    StringResourceModel(
+                        "other_string",
+                        "Random string"
+                    ),
+                    StringResourceModel(
+                        "template_welcome",
+                        "The welcome message for \${app_name}"
+                    ),
+                    StringResourceModel(
+                        mapOf(
+                            "name" to "template_message_non_translatable",
+                            "translatable" to "false"
+                        ), "Non translatable \${app_name}"
+                    ),
+                    StringResourceModel(
+                        "template_this_contains_template",
+                        "This is the welcome: \${template_welcome}"
+                    )
                 )
             )
-        )
-        val expectedGatheredTemplates = StringsTemplatesModel(
-            pathIdentity,
-            listOf(
-                StringResourceModel("template_welcome", "The welcome message for \${app_name}"),
-                StringResourceModel(
-                    mapOf(
-                        "name" to "template_message_non_translatable",
-                        "translatable" to "false"
-                    ), "Non translatable \${app_name}"
-                ),
-                StringResourceModel(
-                    "template_this_contains_template",
-                    "This is the welcome: \${template_welcome}"
+        val expectedGatheredTemplates =
+            StringsTemplatesModel(
+                pathIdentity,
+                listOf(
+                    StringResourceModel(
+                        "template_welcome",
+                        "The welcome message for \${app_name}"
+                    ),
+                    StringResourceModel(
+                        mapOf(
+                            "name" to "template_message_non_translatable",
+                            "translatable" to "false"
+                        ), "Non translatable \${app_name}"
+                    ),
+                    StringResourceModel(
+                        "template_this_contains_template",
+                        "This is the welcome: \${template_welcome}"
+                    )
+                ), mapOf(
+                    "app_name" to "TesT",
+                    "template_welcome" to "The welcome message for \${app_name}"
                 )
-            ), mapOf(
-                "app_name" to "TesT",
-                "template_welcome" to "The welcome message for \${app_name}"
             )
-        )
         return Pair(gatheredStrings, expectedGatheredTemplates)
     }
 }

@@ -1,9 +1,10 @@
 package com.likethesalad.placeholder.data.storage
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.data.VariantDirsPathFinder
-import com.likethesalad.placeholder.models.VariantResPaths
-import com.likethesalad.placeholder.utils.AppVariantHelper
+import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantDirsPathFinder
+import com.likethesalad.placeholder.modules.common.models.VariantResPaths
+import com.likethesalad.placeholder.modules.resolveStrings.data.helpers.files.ResolvedDataCleaner
+import com.likethesalad.placeholder.modules.common.helpers.android.AppVariantHelper
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Rule
@@ -66,7 +67,11 @@ class ResolvedDataCleanerTest {
         assertFileExist(otherResDir, "values-es/resolved.xml", true)
 
         // When
-        val resolvedDataCleaner = ResolvedDataCleaner(appVariantHelper, variantDirsPathFinder)
+        val resolvedDataCleaner =
+            ResolvedDataCleaner(
+                appVariantHelper,
+                variantDirsPathFinder
+            )
         resolvedDataCleaner.removeResolvedFiles()
 
         // Then

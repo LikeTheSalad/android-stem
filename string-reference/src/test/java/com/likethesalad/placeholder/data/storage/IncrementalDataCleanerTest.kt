@@ -1,6 +1,8 @@
 package com.likethesalad.placeholder.data.storage
 
 import com.google.common.truth.Truth
+import com.likethesalad.placeholder.modules.common.helpers.dirs.IncrementalDirsProvider
+import com.likethesalad.placeholder.modules.common.helpers.files.IncrementalDataCleaner
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Before
@@ -20,7 +22,10 @@ class IncrementalDataCleanerTest {
     @Before
     fun setup() {
         incrementalDirsProvider = mockk()
-        incrementalDataCleaner = IncrementalDataCleaner(incrementalDirsProvider)
+        incrementalDataCleaner =
+            IncrementalDataCleaner(
+                incrementalDirsProvider
+            )
     }
 
     @Test

@@ -1,8 +1,10 @@
 package com.likethesalad.placeholder.data
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.models.VariantResPaths
-import com.likethesalad.placeholder.utils.AndroidExtensionHelper
+import com.likethesalad.placeholder.modules.common.models.VariantResPaths
+import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantDirsPathFinder
+import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantDirsPathResolver
+import com.likethesalad.placeholder.modules.common.helpers.android.AndroidExtensionHelper
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Before
@@ -28,7 +30,11 @@ class VariantDirsPathFinderTest {
         srcPath = srcDir.absolutePath
         androidExtensionHelper = mockk()
         variantDirsPathResolver = mockk()
-        variantDirsPathFinder = VariantDirsPathFinder(variantDirsPathResolver, androidExtensionHelper)
+        variantDirsPathFinder =
+            VariantDirsPathFinder(
+                variantDirsPathResolver,
+                androidExtensionHelper
+            )
     }
 
     @Test

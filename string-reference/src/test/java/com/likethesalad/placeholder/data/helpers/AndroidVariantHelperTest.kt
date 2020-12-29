@@ -1,7 +1,8 @@
 package com.likethesalad.placeholder.data.helpers
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.models.TasksNamesModel
+import com.likethesalad.placeholder.modules.common.models.TasksNamesModel
+import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantHelper
 import com.likethesalad.placeholder.providers.BuildDirProvider
 import com.likethesalad.placeholder.providers.TaskProvider
 import io.mockk.every
@@ -37,7 +38,12 @@ class AndroidVariantHelperTest {
         every { buildDirProvider.getBuildDir() }.returns(buildDir)
         every { buildDir.absolutePath }.returns(buildDirPath)
 
-        androidVariantHelper = AndroidVariantHelper(tasksNames, taskProvider, buildDirProvider)
+        androidVariantHelper =
+            AndroidVariantHelper(
+                tasksNames,
+                taskProvider,
+                buildDirProvider
+            )
     }
 
     @Test

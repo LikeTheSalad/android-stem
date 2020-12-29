@@ -1,13 +1,14 @@
 package com.likethesalad.placeholder.tasks.actions
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.data.VariantRawStrings
-import com.likethesalad.placeholder.data.resources.ResourcesHandler
-import com.likethesalad.placeholder.data.storage.IncrementalDataCleaner
-import com.likethesalad.placeholder.models.PathIdentity
-import com.likethesalad.placeholder.models.StringResourceModel
-import com.likethesalad.placeholder.models.StringsGatheredModel
-import com.likethesalad.placeholder.models.ValuesStrings
+import com.likethesalad.placeholder.modules.rawStrings.data.VariantRawStrings
+import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHandler
+import com.likethesalad.placeholder.modules.common.helpers.files.IncrementalDataCleaner
+import com.likethesalad.placeholder.modules.common.models.PathIdentity
+import com.likethesalad.placeholder.modules.common.models.StringResourceModel
+import com.likethesalad.placeholder.modules.rawStrings.models.StringsGatheredModel
+import com.likethesalad.placeholder.modules.rawStrings.models.ValuesStrings
+import com.likethesalad.placeholder.modules.rawStrings.GatherRawStringsAction
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -27,16 +28,22 @@ class GatherRawStringsActionTest {
         variantRawStrings = mockk()
         resourcesHandler = mockk(relaxUnitFun = true)
         incrementalDataCleaner = mockk(relaxUnitFun = true)
-        gatherRawStringsAction = GatherRawStringsAction(
-            variantRawStrings,
-            resourcesHandler,
-            incrementalDataCleaner
-        )
+        gatherRawStringsAction =
+            GatherRawStringsAction(
+                variantRawStrings,
+                resourcesHandler,
+                incrementalDataCleaner
+            )
     }
 
     @Test
     fun `Check saved gathered strings`() {
-        val strings = listOf(StringResourceModel("the_string_name", "the string content"))
+        val strings = listOf(
+            StringResourceModel(
+                "the_string_name",
+                "the string content"
+            )
+        )
         val valuesStrings = getValuesStrings(
             "values",
             "",
@@ -61,7 +68,12 @@ class GatherRawStringsActionTest {
 
     @Test
     fun `Check don't save values strings with no templates nor values for templates`() {
-        val strings = listOf(StringResourceModel("the_string_name", "the string content"))
+        val strings = listOf(
+            StringResourceModel(
+                "the_string_name",
+                "the string content"
+            )
+        )
         val valuesStrings = getValuesStrings(
             "values",
             "",

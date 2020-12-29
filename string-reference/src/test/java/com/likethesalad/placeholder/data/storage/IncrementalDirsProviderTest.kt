@@ -1,7 +1,8 @@
 package com.likethesalad.placeholder.data.storage
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.data.helpers.AndroidVariantHelper
+import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantHelper
+import com.likethesalad.placeholder.modules.common.helpers.dirs.IncrementalDirsProvider
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Before
@@ -25,7 +26,10 @@ class IncrementalDirsProviderTest {
         androidVariantHelper = mockk()
         every { androidVariantHelper.incrementalDir }.returns(incrementalDir.absolutePath)
 
-        dirsProvider = IncrementalDirsProvider(androidVariantHelper)
+        dirsProvider =
+            IncrementalDirsProvider(
+                androidVariantHelper
+            )
     }
 
     @Test

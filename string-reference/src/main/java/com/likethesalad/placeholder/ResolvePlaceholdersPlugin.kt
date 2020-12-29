@@ -2,14 +2,13 @@ package com.likethesalad.placeholder
 
 import com.android.build.gradle.AppExtension
 import com.likethesalad.placeholder.di.AppInjector
-import com.likethesalad.placeholder.models.PlaceholderExtension
 import com.likethesalad.placeholder.providers.AndroidExtensionProvider
 import com.likethesalad.placeholder.providers.BuildDirProvider
 import com.likethesalad.placeholder.providers.PlaceholderExtensionProvider
 import com.likethesalad.placeholder.providers.TaskProvider
-import com.likethesalad.placeholder.tasks.GatherRawStringsTask
-import com.likethesalad.placeholder.tasks.GatherTemplatesTask
-import com.likethesalad.placeholder.tasks.ResolvePlaceholdersTask
+import com.likethesalad.placeholder.modules.rawStrings.GatherRawStringsTask
+import com.likethesalad.placeholder.modules.templateStrings.GatherTemplatesTask
+import com.likethesalad.placeholder.modules.resolveStrings.ResolvePlaceholdersTask
 import com.likethesalad.placeholder.utils.TaskActionProvider
 import org.gradle.api.Plugin
 import org.gradle.api.Project

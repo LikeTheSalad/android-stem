@@ -1,7 +1,8 @@
 package com.likethesalad.placeholder.data
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.models.StringResourceModel
+import com.likethesalad.placeholder.modules.common.models.StringResourceModel
+import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.ValuesXmlFiles
 import org.junit.Test
 import java.io.File
 
@@ -14,11 +15,20 @@ class ValuesXmlFilesTest {
             getResourceFile("strings_2.xml")
         )
 
-        val valuesFiles = ValuesXmlFiles(valuesFilesSet)
+        val valuesFiles =
+            ValuesXmlFiles(
+                valuesFilesSet
+            )
 
         Truth.assertThat(valuesFiles.stringResources).containsExactly(
-            StringResourceModel("welcome_1", "The welcome message for TesT1"),
-            StringResourceModel("welcome_3", "The welcome message for TesT3"),
+            StringResourceModel(
+                "welcome_1",
+                "The welcome message for TesT1"
+            ),
+            StringResourceModel(
+                "welcome_3",
+                "The welcome message for TesT3"
+            ),
             StringResourceModel(
                 mapOf(
                     "name" to "message_non_translatable_1",

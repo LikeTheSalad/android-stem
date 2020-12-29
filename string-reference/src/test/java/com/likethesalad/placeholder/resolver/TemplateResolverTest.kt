@@ -1,9 +1,11 @@
 package com.likethesalad.placeholder.resolver
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.models.PathIdentity
-import com.likethesalad.placeholder.models.StringResourceModel
-import com.likethesalad.placeholder.models.StringsTemplatesModel
+import com.likethesalad.placeholder.modules.common.models.PathIdentity
+import com.likethesalad.placeholder.modules.common.models.StringResourceModel
+import com.likethesalad.placeholder.modules.resolveStrings.resolver.RecursiveLevelDetector
+import com.likethesalad.placeholder.modules.resolveStrings.resolver.TemplateResolver
+import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.Before
@@ -17,25 +19,35 @@ class TemplateResolverTest {
     @Before
     fun setUp() {
         recursiveLevelDetectorSpy = spyk(RecursiveLevelDetector())
-        templateResolver = TemplateResolver(recursiveLevelDetectorSpy)
+        templateResolver =
+            TemplateResolver(
+                recursiveLevelDetectorSpy
+            )
     }
 
     @Test
     fun check_resolveTemplates_simple() {
         // Given:
         val templates = listOf(
-            StringResourceModel("template_welcome", "Welcome \${name}"),
-            StringResourceModel("template_address_input", "The address is \${address} for the \${name}")
+            StringResourceModel(
+                "template_welcome",
+                "Welcome \${name}"
+            ),
+            StringResourceModel(
+                "template_address_input",
+                "The address is \${address} for the \${name}"
+            )
         )
         val values = mapOf(
             "name" to "The name",
             "address" to "The address"
         )
-        val templatesModel = StringsTemplatesModel(
-            PathIdentity(
-                "values", ""
-            ), templates, values
-        )
+        val templatesModel =
+            StringsTemplatesModel(
+                PathIdentity(
+                    "values", ""
+                ), templates, values
+            )
 
         // When:
         val result = templateResolver.resolveTemplates(templatesModel)
@@ -60,16 +72,20 @@ class TemplateResolverTest {
             "name" to "template_the_name"
         )
         val templates = listOf(
-            StringResourceModel(attrs, "This is the name: \${name}")
+            StringResourceModel(
+                attrs,
+                "This is the name: \${name}"
+            )
         )
         val values = mapOf(
             "name" to "The name"
         )
-        val templatesModel = StringsTemplatesModel(
-            PathIdentity(
-                "values", ""
-            ), templates, values
-        )
+        val templatesModel =
+            StringsTemplatesModel(
+                PathIdentity(
+                    "values", ""
+                ), templates, values
+            )
 
         // When:
         val result = templateResolver.resolveTemplates(templatesModel)
@@ -90,20 +106,30 @@ class TemplateResolverTest {
     fun check_resolveTemplates_recursive() {
         // Given:
         val templates = listOf(
-            StringResourceModel("template_welcome", "Welcome \${name}"),
-            StringResourceModel("template_address_input", "The address is \${address} for the \${name}"),
-            StringResourceModel("template_using_other_template", "Reused: \${template_welcome}")
+            StringResourceModel(
+                "template_welcome",
+                "Welcome \${name}"
+            ),
+            StringResourceModel(
+                "template_address_input",
+                "The address is \${address} for the \${name}"
+            ),
+            StringResourceModel(
+                "template_using_other_template",
+                "Reused: \${template_welcome}"
+            )
         )
         val values = mapOf(
             "name" to "The name",
             "address" to "The address",
             "template_welcome" to "Welcome \${name}"
         )
-        val templatesModel = StringsTemplatesModel(
-            PathIdentity(
-                "values", ""
-            ), templates, values
-        )
+        val templatesModel =
+            StringsTemplatesModel(
+                PathIdentity(
+                    "values", ""
+                ), templates, values
+            )
 
         // When:
         val result = templateResolver.resolveTemplates(templatesModel)

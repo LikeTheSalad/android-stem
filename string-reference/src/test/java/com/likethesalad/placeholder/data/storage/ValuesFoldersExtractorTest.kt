@@ -1,6 +1,7 @@
 package com.likethesalad.placeholder.data.storage
 
 import com.google.common.truth.Truth
+import com.likethesalad.placeholder.modules.common.helpers.dirs.ValuesFoldersExtractor
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -24,7 +25,8 @@ class ValuesFoldersExtractorTest {
                 "values-fr"
             )
         )
-        val extractor = ValuesFoldersExtractor(resDirs)
+        val extractor =
+            ValuesFoldersExtractor(resDirs)
 
         assertContainsExactlyValuesFolder(
             extractor.getValuesFolders(),

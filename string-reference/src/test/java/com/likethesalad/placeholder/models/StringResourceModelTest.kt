@@ -1,6 +1,7 @@
 package com.likethesalad.placeholder.models
 
 import com.google.common.truth.Truth
+import com.likethesalad.placeholder.modules.common.models.StringResourceModel
 import org.junit.Test
 
 class StringResourceModelTest {
@@ -12,7 +13,8 @@ class StringResourceModelTest {
         val content = "some content"
 
         // When
-        val stringResourceModel = StringResourceModel(map, content)
+        val stringResourceModel =
+            StringResourceModel(map, content)
 
         // Then
         Truth.assertThat(stringResourceModel.name).isEqualTo("some_name")
@@ -23,10 +25,22 @@ class StringResourceModelTest {
     fun checkComparability_based_on_name() {
         // Given
         val srmList = mutableListOf(
-            StringResourceModel("my_name", "random content"),
-            StringResourceModel("my_other_name", "random content"),
-            StringResourceModel("my_name_2", "content for smr3"),
-            StringResourceModel("aaa", "content for smr4")
+            StringResourceModel(
+                "my_name",
+                "random content"
+            ),
+            StringResourceModel(
+                "my_other_name",
+                "random content"
+            ),
+            StringResourceModel(
+                "my_name_2",
+                "content for smr3"
+            ),
+            StringResourceModel(
+                "aaa",
+                "content for smr4"
+            )
         )
 
         // When
@@ -34,10 +48,22 @@ class StringResourceModelTest {
 
         // Then
         Truth.assertThat(srmList).containsExactly(
-            StringResourceModel("aaa", "content for smr4"),
-            StringResourceModel("my_name", "random content"),
-            StringResourceModel("my_name_2", "content for smr3"),
-            StringResourceModel("my_other_name", "random content")
+            StringResourceModel(
+                "aaa",
+                "content for smr4"
+            ),
+            StringResourceModel(
+                "my_name",
+                "random content"
+            ),
+            StringResourceModel(
+                "my_name_2",
+                "content for smr3"
+            ),
+            StringResourceModel(
+                "my_other_name",
+                "random content"
+            )
         ).inOrder()
     }
 }

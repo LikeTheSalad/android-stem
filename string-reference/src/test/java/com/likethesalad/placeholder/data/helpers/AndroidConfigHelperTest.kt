@@ -1,7 +1,9 @@
 package com.likethesalad.placeholder.data.helpers
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.utils.AppVariantHelper
+import com.likethesalad.placeholder.modules.common.helpers.android.AndroidArtifactViewActionProvider
+import com.likethesalad.placeholder.modules.common.helpers.android.AndroidConfigHelper
+import com.likethesalad.placeholder.modules.common.helpers.android.AppVariantHelper
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -26,7 +28,11 @@ class AndroidConfigHelperTest {
         androidArtifactViewActionProvider = mockk()
         val appVariantHelper = mockk<AppVariantHelper>()
         every { appVariantHelper.getRuntimeConfiguration() }.returns(runtimeConfiguration)
-        androidConfigHelper = AndroidConfigHelper(appVariantHelper, androidArtifactViewActionProvider)
+        androidConfigHelper =
+            AndroidConfigHelper(
+                appVariantHelper,
+                androidArtifactViewActionProvider
+            )
     }
 
     @Suppress("UnstableApiUsage")

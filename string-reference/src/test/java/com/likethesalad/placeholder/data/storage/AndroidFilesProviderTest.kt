@@ -1,7 +1,9 @@
 package com.likethesalad.placeholder.data.storage
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.data.OutputStringFileResolver
+import com.likethesalad.placeholder.modules.common.helpers.dirs.IncrementalDirsProvider
+import com.likethesalad.placeholder.modules.common.helpers.files.OutputStringFileResolver
+import com.likethesalad.placeholder.modules.common.helpers.files.storage.AndroidFilesProvider
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -37,7 +39,11 @@ class AndroidFilesProviderTest {
         stringsDir = temporaryFolder.newFolder(INCREMENTAL_FOLDER_NAME, MERGED_STRINGS_FOLDER_NAME)
         every { incrementalDirsProvider.getTemplateStringsDir() }.returns(templatesDir)
         every { incrementalDirsProvider.getRawStringsDir() }.returns(stringsDir)
-        androidFilesProvider = AndroidFilesProvider(outputStringFileResolver, incrementalDirsProvider)
+        androidFilesProvider =
+            AndroidFilesProvider(
+                outputStringFileResolver,
+                incrementalDirsProvider
+            )
     }
 
     @Test

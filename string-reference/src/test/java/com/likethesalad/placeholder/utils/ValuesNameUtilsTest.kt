@@ -1,6 +1,7 @@
 package com.likethesalad.placeholder.utils
 
 import com.google.common.truth.Truth
+import com.likethesalad.placeholder.modules.common.helpers.dirs.utils.ValuesNameUtils
 import org.junit.Test
 
 class ValuesNameUtilsTest {

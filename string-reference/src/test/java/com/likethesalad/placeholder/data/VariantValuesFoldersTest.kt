@@ -1,7 +1,9 @@
 package com.likethesalad.placeholder.data
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.data.storage.ValuesFoldersExtractor
+import com.likethesalad.placeholder.modules.common.helpers.dirs.ValuesFoldersExtractor
+import com.likethesalad.placeholder.modules.rawStrings.data.helpers.dirs.VariantValuesFolders
+import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.ValuesXmlFiles
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -29,7 +31,13 @@ class VariantValuesFoldersTest {
             )
         )
         val resDirs = setOf(res1, res2)
-        val resValuesFiles = VariantValuesFolders(variantName, ValuesFoldersExtractor(resDirs))
+        val resValuesFiles =
+            VariantValuesFolders(
+                variantName,
+                ValuesFoldersExtractor(
+                    resDirs
+                )
+            )
 
         val valuesFiles = resValuesFiles.valuesXmlFiles
         Truth.assertThat(valuesFiles.size).isEqualTo(3)
@@ -62,7 +70,13 @@ class VariantValuesFoldersTest {
             )
         )
         val resDirs = setOf(res1)
-        val resValuesFiles = VariantValuesFolders(variantName, ValuesFoldersExtractor(resDirs))
+        val resValuesFiles =
+            VariantValuesFolders(
+                variantName,
+                ValuesFoldersExtractor(
+                    resDirs
+                )
+            )
 
         val valuesFiles = resValuesFiles.valuesXmlFiles
         Truth.assertThat(valuesFiles.size).isEqualTo(2)

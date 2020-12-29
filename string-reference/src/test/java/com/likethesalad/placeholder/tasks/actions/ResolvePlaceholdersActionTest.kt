@@ -1,13 +1,14 @@
 package com.likethesalad.placeholder.tasks.actions
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.data.resources.ResourcesHandler
-import com.likethesalad.placeholder.data.storage.FilesProvider
-import com.likethesalad.placeholder.data.storage.ResolvedDataCleaner
-import com.likethesalad.placeholder.models.PathIdentity
-import com.likethesalad.placeholder.models.StringResourceModel
-import com.likethesalad.placeholder.models.StringsTemplatesModel
-import com.likethesalad.placeholder.resolver.TemplateResolver
+import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHandler
+import com.likethesalad.placeholder.modules.common.helpers.files.storage.FilesProvider
+import com.likethesalad.placeholder.modules.resolveStrings.data.helpers.files.ResolvedDataCleaner
+import com.likethesalad.placeholder.modules.common.models.PathIdentity
+import com.likethesalad.placeholder.modules.common.models.StringResourceModel
+import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
+import com.likethesalad.placeholder.modules.resolveStrings.ResolvePlaceholdersAction
+import com.likethesalad.placeholder.modules.resolveStrings.resolver.TemplateResolver
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -30,10 +31,11 @@ class ResolvePlaceholdersActionTest {
         resourcesHandler = mockk(relaxUnitFun = true)
         templateResolver = mockk(relaxUnitFun = true)
         resolvedDataCleaner = mockk(relaxUnitFun = true)
-        resolvePlaceholdersAction = ResolvePlaceholdersAction(
-            filesProvider, resourcesHandler,
-            templateResolver, resolvedDataCleaner
-        )
+        resolvePlaceholdersAction =
+            ResolvePlaceholdersAction(
+                filesProvider, resourcesHandler,
+                templateResolver, resolvedDataCleaner
+            )
     }
 
     @Test

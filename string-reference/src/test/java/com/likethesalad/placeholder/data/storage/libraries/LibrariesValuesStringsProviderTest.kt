@@ -1,8 +1,10 @@
 package com.likethesalad.placeholder.data.storage.libraries
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.data.ValuesXmlFiles
-import com.likethesalad.placeholder.models.ValuesStrings
+import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.ValuesXmlFiles
+import com.likethesalad.placeholder.modules.rawStrings.models.ValuesStrings
+import com.likethesalad.placeholder.modules.rawStrings.data.libraries.LibrariesFilesProvider
+import com.likethesalad.placeholder.modules.rawStrings.data.libraries.LibrariesValuesStringsProvider
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Before
@@ -17,7 +19,10 @@ class LibrariesValuesStringsProviderTest {
     @Before
     fun setUp() {
         librariesFilesProvider = mockk()
-        librariesValuesStringsProvider = LibrariesValuesStringsProvider(librariesFilesProvider)
+        librariesValuesStringsProvider =
+            LibrariesValuesStringsProvider(
+                librariesFilesProvider
+            )
     }
 
     @Test
@@ -32,13 +37,20 @@ class LibrariesValuesStringsProviderTest {
         parent: ValuesStrings?
     ) {
         val xmlFiles = setOf<File>(mockk(), mockk())
-        val expectedValuesXmlFiles = ValuesXmlFiles(xmlFiles)
+        val expectedValuesXmlFiles =
+            ValuesXmlFiles(
+                xmlFiles
+            )
         every { librariesFilesProvider.getXmlFilesForFolder(folderName) }.returns(xmlFiles)
 
         val result = librariesValuesStringsProvider.getValuesStringsFor(folderName, parent)
 
         Truth.assertThat(result).isEqualTo(
-            ValuesStrings(folderName, expectedValuesXmlFiles, parent)
+            ValuesStrings(
+                folderName,
+                expectedValuesXmlFiles,
+                parent
+            )
         )
     }
 }
