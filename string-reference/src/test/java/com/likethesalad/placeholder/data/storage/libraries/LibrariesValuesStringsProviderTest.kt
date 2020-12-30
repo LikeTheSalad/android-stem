@@ -1,7 +1,7 @@
 package com.likethesalad.placeholder.data.storage.libraries
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.ValuesXmlFiles
+import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.ValuesFolderXmlFiles
 import com.likethesalad.placeholder.modules.rawStrings.models.ValuesFolderStrings
 import com.likethesalad.placeholder.modules.rawStrings.data.libraries.LibrariesFilesProvider
 import com.likethesalad.placeholder.modules.rawStrings.data.libraries.LibrariesValuesStringsProvider
@@ -38,7 +38,7 @@ class LibrariesValuesStringsProviderTest {
     ) {
         val xmlFiles = setOf<File>(mockk(), mockk())
         val expectedValuesXmlFiles =
-            ValuesXmlFiles(
+            ValuesFolderXmlFiles(
                 xmlFiles
             )
         every { librariesFilesProvider.getXmlFilesForFolder(folderName) }.returns(xmlFiles)

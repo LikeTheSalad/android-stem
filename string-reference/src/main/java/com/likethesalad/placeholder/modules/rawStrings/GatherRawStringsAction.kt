@@ -16,7 +16,7 @@ class GatherRawStringsAction(
 
     fun gatherStrings(gradleGeneratedResDirs: Set<File>) {
         incrementalDataCleaner.clearRawStrings()
-        for (valuesStrings in variantRawStrings.getValuesStrings(gradleGeneratedResDirs)) {
+        for (valuesStrings in variantRawStrings.getValuesFolderStrings(gradleGeneratedResDirs)) {
             if (valuesStrings.hasTemplatesOrValues) {
                 resourcesHandler.saveGatheredStrings(valuesStringsToStringsGathered(valuesStrings))
             }

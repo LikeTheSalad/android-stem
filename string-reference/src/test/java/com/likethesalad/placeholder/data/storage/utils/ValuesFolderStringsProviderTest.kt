@@ -1,10 +1,11 @@
 package com.likethesalad.placeholder.data.storage.utils
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.ValuesXmlFiles
+import com.likethesalad.placeholder.modules.common.models.StringResourceModel
+import com.likethesalad.placeholder.modules.rawStrings.data.ValuesFolderStringsProvider
+import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.ValuesFolderXmlFiles
 import com.likethesalad.placeholder.modules.rawStrings.models.ValuesFolderStrings
 import com.likethesalad.placeholder.modules.rawStrings.models.VariantXmlFiles
-import com.likethesalad.placeholder.modules.rawStrings.data.ValuesFolderStringsProvider
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Before
@@ -22,18 +23,18 @@ class ValuesFolderStringsProviderTest {
 
     @Test
     fun `Get values strings for folder with null parent`() {
-        val valuesXmlFilesMainMock = mockk<ValuesXmlFiles>()
-        val valuesXmlFilesDebugMock = mockk<ValuesXmlFiles>()
-        val valuesXmlFilesDemoMock = mockk<ValuesXmlFiles>()
+        val valuesXmlFilesMainMock = mockk<ValuesFolderXmlFiles>()
+        val valuesXmlFilesDebugMock = mockk<ValuesFolderXmlFiles>()
+        val valuesXmlFilesDemoMock = mockk<ValuesFolderXmlFiles>()
         every { valuesXmlFilesMainMock.stringResources }.returns(emptySet())
         every { valuesXmlFilesDebugMock.stringResources }.returns(emptySet())
         every { valuesXmlFilesDemoMock.stringResources }.returns(emptySet())
         val valuesFolderName = "values"
         val variantXmlFilesList = listOf(
             VariantXmlFiles(
-                "debug", mapOf(
-                    "values" to valuesXmlFilesDebugMock,
-                    "values-es" to valuesXmlFilesDebugMock
+                "debug", listOf(
+                    valuesXmlFilesDebugMock,
+                    valuesXmlFilesDebugMock
                 )
             ),
             VariantXmlFiles(
@@ -54,7 +55,7 @@ class ValuesFolderStringsProviderTest {
             null
         )
 
-        Truth.assertThat(result?.valuesXmlFiles).isEqualTo(valuesXmlFilesMainMock)
+        Truth.assertThat(result?.valuesFolderXmlFiles).isEqualTo(valuesXmlFilesMainMock)
         Truth.assertThat(result?.valuesFolderName).isEqualTo(valuesFolderName)
         Truth.assertThat(result?.parentValuesFolderStrings).isEqualTo(
             ValuesFolderStrings(
@@ -67,9 +68,9 @@ class ValuesFolderStringsProviderTest {
 
     @Test
     fun `Get values strings for folder with non null parent`() {
-        val valuesXmlFilesMainMock = mockk<ValuesXmlFiles>()
-        val valuesXmlFilesDebugMock = mockk<ValuesXmlFiles>()
-        val valuesXmlFilesDemoMock = mockk<ValuesXmlFiles>()
+        val valuesXmlFilesMainMock = mockk<ValuesFolderXmlFiles>()
+        val valuesXmlFilesDebugMock = mockk<ValuesFolderXmlFiles>()
+        val valuesXmlFilesDemoMock = mockk<ValuesFolderXmlFiles>()
         every { valuesXmlFilesMainMock.stringResources }.returns(emptySet())
         every { valuesXmlFilesDebugMock.stringResources }.returns(emptySet())
         every { valuesXmlFilesDemoMock.stringResources }.returns(emptySet())
@@ -100,7 +101,7 @@ class ValuesFolderStringsProviderTest {
             parent
         )
 
-        Truth.assertThat(result?.valuesXmlFiles).isEqualTo(valuesXmlFilesMainMock)
+        Truth.assertThat(result?.valuesFolderXmlFiles).isEqualTo(valuesXmlFilesMainMock)
         Truth.assertThat(result?.valuesFolderName).isEqualTo(valuesFolderName)
         Truth.assertThat(result?.parentValuesFolderStrings).isEqualTo(
             ValuesFolderStrings(
@@ -113,9 +114,9 @@ class ValuesFolderStringsProviderTest {
 
     @Test
     fun `Get values strings for folder that does not exist in any variant`() {
-        val valuesXmlFilesMainMock = mockk<ValuesXmlFiles>()
-        val valuesXmlFilesDebugMock = mockk<ValuesXmlFiles>()
-        val valuesXmlFilesDemoMock = mockk<ValuesXmlFiles>()
+        val valuesXmlFilesMainMock = mockk<ValuesFolderXmlFiles>()
+        val valuesXmlFilesDebugMock = mockk<ValuesFolderXmlFiles>()
+        val valuesXmlFilesDemoMock = mockk<ValuesFolderXmlFiles>()
         every { valuesXmlFilesMainMock.stringResources }.returns(emptySet())
         every { valuesXmlFilesDebugMock.stringResources }.returns(emptySet())
         every { valuesXmlFilesDemoMock.stringResources }.returns(emptySet())
@@ -147,5 +148,16 @@ class ValuesFolderStringsProviderTest {
         )
 
         Truth.assertThat(result).isNull()
+    }
+
+    private fun createValuesXmlFilesMock(
+        folderName: String,
+        stringResources: Set<StringResourceModel> = emptySet()
+    ): ValuesFolderXmlFiles {
+        val mock = mockk<ValuesFolderXmlFiles>()
+        every { mock.valuesFolderName }.returns(folderName)
+        every { mock.stringResources }.returns(stringResources)
+
+        return mock
     }
 }

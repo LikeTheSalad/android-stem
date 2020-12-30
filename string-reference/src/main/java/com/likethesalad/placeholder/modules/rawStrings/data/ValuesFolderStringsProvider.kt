@@ -14,9 +14,9 @@ class ValuesFolderStringsProvider @Inject constructor() {
         parentFolderStrings: ValuesFolderStrings?
     ): ValuesFolderStrings? {
         var lastValuesFolderStrings: ValuesFolderStrings? = parentFolderStrings
-        for (valuesStringFiles in variantXmlFilesList) {
+        for (variantXmlFiles in variantXmlFilesList) {
 
-            val valuesXmlFiles = valuesStringFiles.valuesXmlFiles[valuesFolderName] ?: continue
+            val valuesXmlFiles = variantXmlFiles.findValuesFolderXmlFilesByName(valuesFolderName) ?: continue
 
             val valuesStrings = ValuesFolderStrings(
                 valuesFolderName,

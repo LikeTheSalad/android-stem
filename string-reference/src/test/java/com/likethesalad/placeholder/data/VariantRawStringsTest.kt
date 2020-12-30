@@ -1,14 +1,14 @@
 package com.likethesalad.placeholder.data
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.modules.rawStrings.data.libraries.LibrariesValuesStringsProvider
-import com.likethesalad.placeholder.modules.rawStrings.data.ValuesFolderStringsProvider
-import com.likethesalad.placeholder.modules.rawStrings.models.ValuesFolderStrings
-import com.likethesalad.placeholder.modules.common.models.VariantResPaths
-import com.likethesalad.placeholder.modules.rawStrings.models.VariantXmlFiles
 import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantDirsPathFinder
+import com.likethesalad.placeholder.modules.common.models.VariantResPaths
+import com.likethesalad.placeholder.modules.rawStrings.data.ValuesFolderStringsProvider
 import com.likethesalad.placeholder.modules.rawStrings.data.VariantRawStrings
-import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.ValuesXmlFiles
+import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.ValuesFolderXmlFiles
+import com.likethesalad.placeholder.modules.rawStrings.data.libraries.LibrariesValuesStringsProvider
+import com.likethesalad.placeholder.modules.rawStrings.models.ValuesFolderStrings
+import com.likethesalad.placeholder.modules.rawStrings.models.VariantXmlFiles
 import com.likethesalad.placeholder.testutils.TestResourcesHandler
 import io.mockk.every
 import io.mockk.mockk
@@ -53,7 +53,7 @@ class VariantRawStringsTest {
 
         val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
 
-        Truth.assertThat(variantRawStrings.getValuesStrings(emptySet())).containsExactly(
+        Truth.assertThat(variantRawStrings.getValuesFolderStrings(emptySet())).containsExactly(
             mainValuesStrings
         )
     }
@@ -84,7 +84,7 @@ class VariantRawStringsTest {
 
         val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
 
-        Truth.assertThat(variantRawStrings.getValuesStrings(emptySet())).containsExactly(
+        Truth.assertThat(variantRawStrings.getValuesFolderStrings(emptySet())).containsExactly(
             mainValuesStrings
         )
     }
@@ -121,7 +121,7 @@ class VariantRawStringsTest {
 
         val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
 
-        Truth.assertThat(variantRawStrings.getValuesStrings(emptySet())).containsExactly(
+        Truth.assertThat(variantRawStrings.getValuesFolderStrings(emptySet())).containsExactly(
             baseValuesStrings,
             esValuesStrings
         )
@@ -165,7 +165,7 @@ class VariantRawStringsTest {
 
         val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
 
-        Truth.assertThat(variantRawStrings.getValuesStrings(emptySet())).containsExactly(
+        Truth.assertThat(variantRawStrings.getValuesFolderStrings(emptySet())).containsExactly(
             flavorValuesStrings
         )
     }
@@ -218,7 +218,7 @@ class VariantRawStringsTest {
 
         val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
 
-        Truth.assertThat(variantRawStrings.getValuesStrings(emptySet())).containsExactly(
+        Truth.assertThat(variantRawStrings.getValuesFolderStrings(emptySet())).containsExactly(
             baseValuesStrings,
             langValuesStrings
         )
@@ -273,7 +273,7 @@ class VariantRawStringsTest {
 
         val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
 
-        Truth.assertThat(variantRawStrings.getValuesStrings(emptySet())).containsExactly(
+        Truth.assertThat(variantRawStrings.getValuesFolderStrings(emptySet())).containsExactly(
             baseValuesStrings,
             langValuesStrings
         )
@@ -332,7 +332,7 @@ class VariantRawStringsTest {
 
         val variantRawStrings = createVariantRawStrings(variantDirsPathFinder)
 
-        Truth.assertThat(variantRawStrings.getValuesStrings(emptySet())).containsExactly(
+        Truth.assertThat(variantRawStrings.getValuesFolderStrings(emptySet())).containsExactly(
             baseValuesStrings,
             langValuesStrings
         )
@@ -372,8 +372,8 @@ class VariantRawStringsTest {
             }.flatten()
         }
         return VariantXmlFiles(
-            variantName, filesPerValuesFolder.mapValues {
-                ValuesXmlFiles(it.value.toSet())
+            variantName, filesPerValuesFolder.map {
+                ValuesFolderXmlFiles(it.key, it.value.toSet())
             }
         )
     }

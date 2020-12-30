@@ -2,7 +2,7 @@ package com.likethesalad.placeholder.models
 
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.modules.common.models.StringResourceModel
-import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.ValuesXmlFiles
+import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.ValuesFolderXmlFiles
 import com.likethesalad.placeholder.modules.rawStrings.models.ValuesFolderStrings
 import io.mockk.every
 import io.mockk.mockk
@@ -617,8 +617,8 @@ class ValuesFolderStringsTest {
         )
     }
 
-    private fun getValuesStringFiles(stringResources: Set<StringResourceModel>): ValuesXmlFiles {
-        val valuesStringFilesMock = mockk<ValuesXmlFiles>()
+    private fun getValuesStringFiles(stringResources: Set<StringResourceModel>): ValuesFolderXmlFiles {
+        val valuesStringFilesMock = mockk<ValuesFolderXmlFiles>()
         every { valuesStringFilesMock.stringResources }.returns(stringResources)
         return valuesStringFilesMock
     }

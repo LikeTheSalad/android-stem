@@ -51,7 +51,7 @@ class GatherRawStringsActionTest {
             strings
         )
 
-        every { variantRawStrings.getValuesStrings(emptySet()) }.returns(listOf(valuesStrings))
+        every { variantRawStrings.getValuesFolderStrings(emptySet()) }.returns(listOf(valuesStrings))
         val gatheredStringsCaptor = slot<StringsGatheredModel>()
 
         gatherRawStringsAction.gatherStrings(emptySet())
@@ -81,7 +81,7 @@ class GatherRawStringsActionTest {
             strings
         )
 
-        every { variantRawStrings.getValuesStrings(emptySet()) }.returns(listOf(valuesStrings))
+        every { variantRawStrings.getValuesFolderStrings(emptySet()) }.returns(listOf(valuesStrings))
 
         gatherRawStringsAction.gatherStrings(emptySet())
 
@@ -116,7 +116,7 @@ class GatherRawStringsActionTest {
             valuesEsStringsList
         )
 
-        every { variantRawStrings.getValuesStrings(emptySet()) }.returns(listOf(valuesStrings, valuesEsStrings))
+        every { variantRawStrings.getValuesFolderStrings(emptySet()) }.returns(listOf(valuesStrings, valuesEsStrings))
         val gatheredStringsCaptor = mutableListOf<StringsGatheredModel>()
 
         gatherRawStringsAction.gatherStrings(emptySet())

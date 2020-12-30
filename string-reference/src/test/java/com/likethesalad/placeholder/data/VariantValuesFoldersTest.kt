@@ -3,7 +3,7 @@ package com.likethesalad.placeholder.data
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.modules.common.helpers.dirs.ValuesFoldersExtractor
 import com.likethesalad.placeholder.modules.rawStrings.data.helpers.dirs.VariantValuesFolders
-import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.ValuesXmlFiles
+import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.ValuesFolderXmlFiles
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -39,21 +39,20 @@ class VariantValuesFoldersTest {
                 )
             )
 
-        val valuesFiles = resValuesFiles.valuesXmlFiles
-        Truth.assertThat(valuesFiles.size).isEqualTo(3)
+        Truth.assertThat(resValuesFiles.valuesXmlFiles.size).isEqualTo(3)
         assertThatValuesFilesContainsFiles(
-            valuesFiles.getValue("values"),
+            resValuesFiles.findValuesXmlFilesByFolderName("values")!!,
             "${res1.absolutePath}/values/strings.xml",
             "${res1.absolutePath}/values/strings2.xml",
             "${res2.absolutePath}/values/strings.xml",
             "${res2.absolutePath}/values/strings3.xml"
         )
         assertThatValuesFilesContainsFiles(
-            valuesFiles.getValue("values-es"),
+            resValuesFiles.findValuesXmlFilesByFolderName("values-es")!!,
             "${res1.absolutePath}/values-es/strings_es1.xml"
         )
         assertThatValuesFilesContainsFiles(
-            valuesFiles.getValue("values-it"),
+            resValuesFiles.findValuesXmlFilesByFolderName("values-it")!!,
             "${res2.absolutePath}/values-it/strings_it.xml",
             "${res2.absolutePath}/values-it/strings_it2.xml"
         )
@@ -78,22 +77,21 @@ class VariantValuesFoldersTest {
                 )
             )
 
-        val valuesFiles = resValuesFiles.valuesXmlFiles
-        Truth.assertThat(valuesFiles.size).isEqualTo(2)
+        Truth.assertThat(resValuesFiles.valuesXmlFiles.size).isEqualTo(2)
 
         assertThatValuesFilesContainsFiles(
-            valuesFiles.getValue("values"),
+            resValuesFiles.findValuesXmlFilesByFolderName("values")!!,
             "${res1.absolutePath}/values/strings.xml",
             "${res1.absolutePath}/values/strings2.xml"
         )
         assertThatValuesFilesContainsFiles(
-            valuesFiles.getValue("values-es"),
+            resValuesFiles.findValuesXmlFilesByFolderName("values-es")!!,
             "${res1.absolutePath}/values-es/strings_es1.xml"
         )
     }
 
-    private fun assertThatValuesFilesContainsFiles(valuesXmlFiles: ValuesXmlFiles, vararg filePaths: String) {
-        Truth.assertThat(valuesXmlFiles.filesSet.map { it.absolutePath }).containsExactlyElementsIn(filePaths)
+    private fun assertThatValuesFilesContainsFiles(valuesFolderXmlFiles: ValuesFolderXmlFiles, vararg filePaths: String) {
+        Truth.assertThat(valuesFolderXmlFiles.xmlFiles.map { it.absolutePath }).containsExactlyElementsIn(filePaths)
     }
 
     private fun getResDirWithFolders(resDirName: String, valuesFolders: Map<String, List<String>>): File {

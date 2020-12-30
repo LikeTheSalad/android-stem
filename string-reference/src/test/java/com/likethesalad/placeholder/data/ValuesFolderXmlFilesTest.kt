@@ -2,11 +2,11 @@ package com.likethesalad.placeholder.data
 
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.modules.common.models.StringResourceModel
-import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.ValuesXmlFiles
+import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.ValuesFolderXmlFiles
 import org.junit.Test
 import java.io.File
 
-class ValuesXmlFilesTest {
+class ValuesFolderXmlFilesTest {
 
     @Test
     fun `Get string resources from files`() {
@@ -16,10 +16,12 @@ class ValuesXmlFilesTest {
         )
 
         val valuesFiles =
-            ValuesXmlFiles(
+            ValuesFolderXmlFiles(
+                "values",
                 valuesFilesSet
             )
 
+        Truth.assertThat(valuesFiles.valuesFolderName).isEqualTo("values")
         Truth.assertThat(valuesFiles.stringResources).containsExactly(
             StringResourceModel(
                 "welcome_1",

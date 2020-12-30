@@ -1,13 +1,14 @@
 package com.likethesalad.placeholder.modules.rawStrings.models
 
 import com.likethesalad.placeholder.modules.common.Constants
-import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.ValuesXmlFiles
-import com.likethesalad.placeholder.modules.common.models.StringResourceModel
 import com.likethesalad.placeholder.modules.common.helpers.dirs.utils.ValuesNameUtils
+import com.likethesalad.placeholder.modules.common.helpers.files.AndroidXmlResDocument
+import com.likethesalad.placeholder.modules.common.models.StringResourceModel
+import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.ValuesFolderXmlFiles
 
 data class ValuesFolderStrings(
     val valuesFolderName: String,
-    val valuesXmlFiles: ValuesXmlFiles,
+    val valuesFolderXmlFiles: ValuesFolderXmlFiles,
     val parentValuesFolderStrings: ValuesFolderStrings? = null
 ) {
 
@@ -16,7 +17,7 @@ data class ValuesFolderStrings(
     }
     private val stringsMap: Map<String, StringResourceModel> by lazy {
         mutableMapOf<String, StringResourceModel>().also {
-            addStringsToMap(valuesXmlFiles.stringResources, it)
+            addStringsToMap(getStringResources(valuesFolderXmlFiles), it)
         }
     }
     private val hasLocalTemplates: Boolean by lazy {
@@ -72,5 +73,11 @@ data class ValuesFolderStrings(
         for (it in strings) {
             map[it.name] = it
         }
+    }
+
+    private fun getStringResources(valuesFolderXmlFiles: ValuesFolderXmlFiles): Set<StringResourceModel> {
+        return valuesFolderXmlFiles.xmlFiles.map {
+            AndroidXmlResDocument.readFromFile(it).getStringResourceList()
+        }.flatten().toSet()
     }
 }
