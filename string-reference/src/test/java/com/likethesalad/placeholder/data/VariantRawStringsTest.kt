@@ -2,8 +2,8 @@ package com.likethesalad.placeholder.data
 
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.modules.rawStrings.data.libraries.LibrariesValuesStringsProvider
-import com.likethesalad.placeholder.modules.rawStrings.data.ValuesStringsProvider
-import com.likethesalad.placeholder.modules.rawStrings.models.ValuesStrings
+import com.likethesalad.placeholder.modules.rawStrings.data.ValuesFolderStringsProvider
+import com.likethesalad.placeholder.modules.rawStrings.models.ValuesFolderStrings
 import com.likethesalad.placeholder.modules.common.models.VariantResPaths
 import com.likethesalad.placeholder.modules.rawStrings.models.VariantXmlFiles
 import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantDirsPathFinder
@@ -19,12 +19,12 @@ import java.io.File
 class VariantRawStringsTest {
 
     private val resourcesHandler = TestResourcesHandler(javaClass)
-    private lateinit var valuesStringsProvider: ValuesStringsProvider
+    private lateinit var valuesFolderStringsProvider: ValuesFolderStringsProvider
     private lateinit var librariesValuesStringsProvider: LibrariesValuesStringsProvider
 
     @Before
     fun setUp() {
-        valuesStringsProvider = mockk()
+        valuesFolderStringsProvider = mockk()
         librariesValuesStringsProvider = mockk()
     }
 
@@ -380,9 +380,9 @@ class VariantRawStringsTest {
 
     private fun getLibValuesStringsMock(
         folderName: String,
-        parent: ValuesStrings?
-    ): ValuesStrings {
-        val libValuesStrings = mockk<ValuesStrings>()
+        parent: ValuesFolderStrings?
+    ): ValuesFolderStrings {
+        val libValuesStrings = mockk<ValuesFolderStrings>()
         every { librariesValuesStringsProvider.getValuesStringsFor(folderName, parent) }
             .returns(libValuesStrings)
         return libValuesStrings
@@ -390,15 +390,15 @@ class VariantRawStringsTest {
 
     private fun getValuesStringsMock(
         folderName: String,
-        parentValuesStrings: ValuesStrings,
+        parentValuesFolderStrings: ValuesFolderStrings,
         vararg variantXmlFiles: VariantXmlFiles
-    ): ValuesStrings {
-        val valuesStrings = mockk<ValuesStrings>()
+    ): ValuesFolderStrings {
+        val valuesStrings = mockk<ValuesFolderStrings>()
         every {
-            valuesStringsProvider.getValuesStringsForFolderFromVariants(
+            valuesFolderStringsProvider.getValuesStringsForFolderFromVariants(
                 folderName,
                 variantXmlFiles.toList(),
-                parentValuesStrings
+                parentValuesFolderStrings
             )
         }.returns(valuesStrings)
 
@@ -418,7 +418,7 @@ class VariantRawStringsTest {
         return VariantRawStrings(
             variantDirsPathFinder,
             librariesValuesStringsProvider,
-            valuesStringsProvider
+            valuesFolderStringsProvider
         )
     }
 }

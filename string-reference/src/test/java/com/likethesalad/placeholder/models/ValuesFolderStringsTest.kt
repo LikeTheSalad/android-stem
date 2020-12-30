@@ -3,16 +3,16 @@ package com.likethesalad.placeholder.models
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.modules.common.models.StringResourceModel
 import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.ValuesXmlFiles
-import com.likethesalad.placeholder.modules.rawStrings.models.ValuesStrings
+import com.likethesalad.placeholder.modules.rawStrings.models.ValuesFolderStrings
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Test
 
-class ValuesStringsTest {
+class ValuesFolderStringsTest {
 
     @Test
     fun `Get strings previously set`() {
-        val resStrings = ValuesStrings(
+        val resStrings = ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(
@@ -44,7 +44,7 @@ class ValuesStringsTest {
 
     @Test
     fun `Get strings from parent`() {
-        val parentResStrings = ValuesStrings(
+        val parentResStrings = ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(
@@ -56,7 +56,7 @@ class ValuesStringsTest {
             )
         )
 
-        val resStrings = ValuesStrings(
+        val resStrings = ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(
@@ -83,7 +83,7 @@ class ValuesStringsTest {
 
     @Test
     fun `Override parent strings content with the same name`() {
-        val parentResStrings = ValuesStrings(
+        val parentResStrings = ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(
@@ -99,7 +99,7 @@ class ValuesStringsTest {
             )
         )
 
-        val resStrings = ValuesStrings(
+        val resStrings = ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(
@@ -144,7 +144,7 @@ class ValuesStringsTest {
                 ),
                 "Parent string content"
             )
-        val parentResStrings = ValuesStrings(
+        val parentResStrings = ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(
@@ -157,7 +157,7 @@ class ValuesStringsTest {
             )
         )
 
-        val resStrings = ValuesStrings(
+        val resStrings = ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(
@@ -191,7 +191,7 @@ class ValuesStringsTest {
     @Test
     fun `Get strings sorted alphabetically by name`() {
         // Given
-        val parentResStrings = ValuesStrings(
+        val parentResStrings = ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(
@@ -203,7 +203,7 @@ class ValuesStringsTest {
             )
         )
 
-        val resStrings = ValuesStrings(
+        val resStrings = ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(
@@ -240,7 +240,7 @@ class ValuesStringsTest {
     @Test
     fun `Get merged templates sorted by name`() {
         // Given
-        val parentStrings = ValuesStrings(
+        val parentStrings = ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(
@@ -260,7 +260,7 @@ class ValuesStringsTest {
             )
         )
 
-        val resStrings = ValuesStrings(
+        val resStrings = ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(
@@ -307,7 +307,7 @@ class ValuesStringsTest {
     @Test
     fun `Get true when client has templates`() {
         // Given
-        val parentStrings = ValuesStrings(
+        val parentStrings = ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(
@@ -327,7 +327,7 @@ class ValuesStringsTest {
             )
         )
 
-        val resStrings = ValuesStrings(
+        val resStrings = ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(
@@ -354,7 +354,7 @@ class ValuesStringsTest {
     @Test
     fun `Get true when client has values`() {
         // Given
-        val parentStrings = ValuesStrings(
+        val parentStrings = ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(
@@ -374,7 +374,7 @@ class ValuesStringsTest {
             )
         )
 
-        val resStrings = ValuesStrings(
+        val resStrings = ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(
@@ -393,7 +393,7 @@ class ValuesStringsTest {
     @Test
     fun `Get true when client has values from grand parent templates`() {
         // Given
-        val parentStrings = ValuesStrings(
+        val parentStrings = ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(
@@ -413,7 +413,7 @@ class ValuesStringsTest {
             )
         )
 
-        val resStrings = ValuesStrings(
+        val resStrings = ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(
@@ -425,7 +425,7 @@ class ValuesStringsTest {
             ), parentStrings
         )
 
-        val resStrings2 = ValuesStrings(
+        val resStrings2 = ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(
@@ -444,7 +444,7 @@ class ValuesStringsTest {
     @Test
     fun `Get true when child has neither values nor templates but parent does`() {
         // Given
-        val parentStrings = ValuesStrings(
+        val parentStrings = ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(
@@ -464,7 +464,7 @@ class ValuesStringsTest {
             )
         )
 
-        val resStrings = ValuesStrings(
+        val resStrings = ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(
@@ -483,7 +483,7 @@ class ValuesStringsTest {
     @Test
     fun `Get false when child and parent have neither values nor templates`() {
         // Given
-        val parentStrings = ValuesStrings(
+        val parentStrings = ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(
@@ -503,7 +503,7 @@ class ValuesStringsTest {
             )
         )
 
-        val resStrings = ValuesStrings(
+        val resStrings = ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(
@@ -520,15 +520,15 @@ class ValuesStringsTest {
     }
 
     private fun assertValuesFolderNameSuffix(valuesFolderName: String, expectedSuffix: String) {
-        val resStrings = ValuesStrings(
+        val resStrings = ValuesFolderStrings(
             valuesFolderName,
             getValuesStringFiles(emptySet())
         )
         Truth.assertThat(resStrings.valuesSuffix).isEqualTo(expectedSuffix)
     }
 
-    private fun getResStringsWithNoValuesForTemplates(): ValuesStrings {
-        return ValuesStrings(
+    private fun getResStringsWithNoValuesForTemplates(): ValuesFolderStrings {
+        return ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(
@@ -545,8 +545,8 @@ class ValuesStringsTest {
         )
     }
 
-    private fun getResStringsWithValuesForLocalTemplates(): ValuesStrings {
-        return ValuesStrings(
+    private fun getResStringsWithValuesForLocalTemplates(): ValuesFolderStrings {
+        return ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(
@@ -563,8 +563,8 @@ class ValuesStringsTest {
         )
     }
 
-    private fun getResStringsWithValuesForParentTemplates(): ValuesStrings {
-        val parentResStrings = ValuesStrings(
+    private fun getResStringsWithValuesForParentTemplates(): ValuesFolderStrings {
+        val parentResStrings = ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(
@@ -575,7 +575,7 @@ class ValuesStringsTest {
                 )
             )
         )
-        return ValuesStrings(
+        return ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(
@@ -588,8 +588,8 @@ class ValuesStringsTest {
         )
     }
 
-    private fun getResStringsWithValuesForMergedTemplates(): ValuesStrings {
-        val parentResStrings = ValuesStrings(
+    private fun getResStringsWithValuesForMergedTemplates(): ValuesFolderStrings {
+        val parentResStrings = ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(
@@ -600,7 +600,7 @@ class ValuesStringsTest {
                 )
             )
         )
-        return ValuesStrings(
+        return ValuesFolderStrings(
             "values",
             getValuesStringFiles(
                 setOf(

@@ -2,7 +2,7 @@ package com.likethesalad.placeholder.data.storage.libraries
 
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.ValuesXmlFiles
-import com.likethesalad.placeholder.modules.rawStrings.models.ValuesStrings
+import com.likethesalad.placeholder.modules.rawStrings.models.ValuesFolderStrings
 import com.likethesalad.placeholder.modules.rawStrings.data.libraries.LibrariesFilesProvider
 import com.likethesalad.placeholder.modules.rawStrings.data.libraries.LibrariesValuesStringsProvider
 import io.mockk.every
@@ -34,7 +34,7 @@ class LibrariesValuesStringsProviderTest {
 
     private fun verifyValuesStringsForFolder(
         folderName: String,
-        parent: ValuesStrings?
+        parent: ValuesFolderStrings?
     ) {
         val xmlFiles = setOf<File>(mockk(), mockk())
         val expectedValuesXmlFiles =
@@ -46,7 +46,7 @@ class LibrariesValuesStringsProviderTest {
         val result = librariesValuesStringsProvider.getValuesStringsFor(folderName, parent)
 
         Truth.assertThat(result).isEqualTo(
-            ValuesStrings(
+            ValuesFolderStrings(
                 folderName,
                 expectedValuesXmlFiles,
                 parent

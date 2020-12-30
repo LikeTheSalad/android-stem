@@ -2,22 +2,22 @@ package com.likethesalad.placeholder.data.storage.utils
 
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.ValuesXmlFiles
-import com.likethesalad.placeholder.modules.rawStrings.models.ValuesStrings
+import com.likethesalad.placeholder.modules.rawStrings.models.ValuesFolderStrings
 import com.likethesalad.placeholder.modules.rawStrings.models.VariantXmlFiles
-import com.likethesalad.placeholder.modules.rawStrings.data.ValuesStringsProvider
+import com.likethesalad.placeholder.modules.rawStrings.data.ValuesFolderStringsProvider
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Before
 import org.junit.Test
 
-class ValuesStringsProviderTest {
+class ValuesFolderStringsProviderTest {
 
-    private lateinit var valuesStringsProvider: ValuesStringsProvider
+    private lateinit var valuesFolderStringsProvider: ValuesFolderStringsProvider
 
     @Before
     fun setUp() {
-        valuesStringsProvider =
-            ValuesStringsProvider()
+        valuesFolderStringsProvider =
+            ValuesFolderStringsProvider()
     }
 
     @Test
@@ -48,7 +48,7 @@ class ValuesStringsProviderTest {
             )
         )
 
-        val result = valuesStringsProvider.getValuesStringsForFolderFromVariants(
+        val result = valuesFolderStringsProvider.getValuesStringsForFolderFromVariants(
             valuesFolderName,
             variantXmlFilesList,
             null
@@ -56,8 +56,8 @@ class ValuesStringsProviderTest {
 
         Truth.assertThat(result?.valuesXmlFiles).isEqualTo(valuesXmlFilesMainMock)
         Truth.assertThat(result?.valuesFolderName).isEqualTo(valuesFolderName)
-        Truth.assertThat(result?.parentValuesStrings).isEqualTo(
-            ValuesStrings(
+        Truth.assertThat(result?.parentValuesFolderStrings).isEqualTo(
+            ValuesFolderStrings(
                 valuesFolderName,
                 valuesXmlFilesDebugMock,
                 null
@@ -92,9 +92,9 @@ class ValuesStringsProviderTest {
                 )
             )
         )
-        val parent = mockk<ValuesStrings>()
+        val parent = mockk<ValuesFolderStrings>()
 
-        val result = valuesStringsProvider.getValuesStringsForFolderFromVariants(
+        val result = valuesFolderStringsProvider.getValuesStringsForFolderFromVariants(
             valuesFolderName,
             variantXmlFilesList,
             parent
@@ -102,8 +102,8 @@ class ValuesStringsProviderTest {
 
         Truth.assertThat(result?.valuesXmlFiles).isEqualTo(valuesXmlFilesMainMock)
         Truth.assertThat(result?.valuesFolderName).isEqualTo(valuesFolderName)
-        Truth.assertThat(result?.parentValuesStrings).isEqualTo(
-            ValuesStrings(
+        Truth.assertThat(result?.parentValuesFolderStrings).isEqualTo(
+            ValuesFolderStrings(
                 valuesFolderName,
                 valuesXmlFilesDebugMock,
                 parent
@@ -138,9 +138,9 @@ class ValuesStringsProviderTest {
                 )
             )
         )
-        val parent = mockk<ValuesStrings>()
+        val parent = mockk<ValuesFolderStrings>()
 
-        val result = valuesStringsProvider.getValuesStringsForFolderFromVariants(
+        val result = valuesFolderStringsProvider.getValuesStringsForFolderFromVariants(
             valuesFolderName,
             variantXmlFilesList,
             parent

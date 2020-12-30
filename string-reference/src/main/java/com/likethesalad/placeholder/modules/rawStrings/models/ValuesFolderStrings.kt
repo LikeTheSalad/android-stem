@@ -5,10 +5,10 @@ import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.Values
 import com.likethesalad.placeholder.modules.common.models.StringResourceModel
 import com.likethesalad.placeholder.modules.common.helpers.dirs.utils.ValuesNameUtils
 
-data class ValuesStrings(
+data class ValuesFolderStrings(
     val valuesFolderName: String,
     val valuesXmlFiles: ValuesXmlFiles,
-    val parentValuesStrings: ValuesStrings? = null
+    val parentValuesFolderStrings: ValuesFolderStrings? = null
 ) {
 
     val valuesSuffix: String by lazy {
@@ -30,8 +30,8 @@ data class ValuesStrings(
 
     val mergedStrings: List<StringResourceModel> by lazy {
         val mergedMap = mutableMapOf<String, StringResourceModel>()
-        if (parentValuesStrings != null) {
-            addStringsToMap(parentValuesStrings.mergedStrings, mergedMap)
+        if (parentValuesFolderStrings != null) {
+            addStringsToMap(parentValuesFolderStrings.mergedStrings, mergedMap)
         }
 
         addStringsToMap(stringsMap.values, mergedMap)
@@ -39,8 +39,8 @@ data class ValuesStrings(
     }
     val mergedTemplates: List<StringResourceModel> by lazy {
         val mergedMap = mutableMapOf<String, StringResourceModel>()
-        if (parentValuesStrings != null) {
-            val templates = parentValuesStrings.mergedTemplates
+        if (parentValuesFolderStrings != null) {
+            val templates = parentValuesFolderStrings.mergedTemplates
             for (it in templates) {
                 mergedMap[it.name] = it
             }
@@ -54,7 +54,7 @@ data class ValuesStrings(
         mergedMap.values.sorted()
     }
     val hasTemplatesOrValues: Boolean by lazy {
-        hasLocalTemplates || hasLocalValuesForTemplates || parentValuesStrings?.hasTemplatesOrValues == true
+        hasLocalTemplates || hasLocalValuesForTemplates || parentValuesFolderStrings?.hasTemplatesOrValues == true
     }
 
     private fun getLocalNonTemplatesNames(): List<String> {

@@ -6,7 +6,7 @@ import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantDirsPathF
 import com.likethesalad.placeholder.modules.rawStrings.data.helpers.dirs.VariantValuesFolders
 import com.likethesalad.placeholder.modules.common.helpers.dirs.ValuesFoldersExtractor
 import com.likethesalad.placeholder.modules.rawStrings.data.libraries.LibrariesValuesStringsProvider
-import com.likethesalad.placeholder.modules.rawStrings.models.ValuesStrings
+import com.likethesalad.placeholder.modules.rawStrings.models.ValuesFolderStrings
 import com.likethesalad.placeholder.modules.rawStrings.models.VariantXmlFiles
 import java.io.File
 
@@ -14,14 +14,14 @@ import java.io.File
 class VariantRawStrings(
     private val variantDirsPathFinder: VariantDirsPathFinder,
     private val librariesValuesStringsProvider: LibrariesValuesStringsProvider,
-    @Provided private val valuesStringsProvider: ValuesStringsProvider
+    @Provided private val valuesFolderStringsProvider: ValuesFolderStringsProvider
 ) {
 
     companion object {
         private const val BASE_VALUES_FOLDER_NAME = "values"
     }
 
-    fun getValuesStrings(generatedResDirs: Set<File>): Collection<ValuesStrings> {
+    fun getValuesStrings(generatedResDirs: Set<File>): Collection<ValuesFolderStrings> {
         val variantStringFilesList = getVariantStringFilesList(generatedResDirs)
         val uniqueValuesFolderNames = getUniqueValuesFolderNames(variantStringFilesList.map {
             it.valuesXmlFiles.keys
@@ -38,10 +38,10 @@ class VariantRawStrings(
     private fun getValuesStringsMapPerFolder(
         uniqueValuesFolderNames: List<String>,
         variantXmlFilesList: List<VariantXmlFiles>
-    ): Map<String, ValuesStrings> {
-        val valuesStringsPerFolder = mutableMapOf<String, ValuesStrings>()
+    ): Map<String, ValuesFolderStrings> {
+        val valuesStringsPerFolder = mutableMapOf<String, ValuesFolderStrings>()
 
-        val baseValuesStrings = valuesStringsProvider.getValuesStringsForFolderFromVariants(
+        val baseValuesStrings = valuesFolderStringsProvider.getValuesStringsForFolderFromVariants(
             BASE_VALUES_FOLDER_NAME,
             variantXmlFilesList,
             librariesValuesStringsProvider.getValuesStringsFor(BASE_VALUES_FOLDER_NAME, null)
@@ -51,14 +51,14 @@ class VariantRawStrings(
         }
 
         for (valuesFolderName in uniqueValuesFolderNames) {
-            val valuesStrings: ValuesStrings? = valuesStringsProvider.getValuesStringsForFolderFromVariants(
+            val valuesFolderStrings: ValuesFolderStrings? = valuesFolderStringsProvider.getValuesStringsForFolderFromVariants(
                 valuesFolderName,
                 variantXmlFilesList,
                 librariesValuesStringsProvider.getValuesStringsFor(valuesFolderName, baseValuesStrings)
             )
 
-            if (valuesStrings != null) {
-                valuesStringsPerFolder[valuesFolderName] = valuesStrings
+            if (valuesFolderStrings != null) {
+                valuesStringsPerFolder[valuesFolderName] = valuesFolderStrings
             }
         }
 

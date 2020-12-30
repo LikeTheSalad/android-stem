@@ -7,7 +7,7 @@ import com.likethesalad.placeholder.modules.common.helpers.files.IncrementalData
 import com.likethesalad.placeholder.modules.common.models.PathIdentity
 import com.likethesalad.placeholder.modules.common.models.StringResourceModel
 import com.likethesalad.placeholder.modules.rawStrings.models.StringsGatheredModel
-import com.likethesalad.placeholder.modules.rawStrings.models.ValuesStrings
+import com.likethesalad.placeholder.modules.rawStrings.models.ValuesFolderStrings
 import com.likethesalad.placeholder.modules.rawStrings.GatherRawStringsAction
 import io.mockk.every
 import io.mockk.mockk
@@ -143,8 +143,8 @@ class GatherRawStringsActionTest {
         valuesSuffix: String,
         hasValuesOrTemplates: Boolean,
         strings: List<StringResourceModel>
-    ): ValuesStrings {
-        val valuesStrings = mockk<ValuesStrings>()
+    ): ValuesFolderStrings {
+        val valuesStrings = mockk<ValuesFolderStrings>()
         every { valuesStrings.valuesFolderName }.returns(valuesFolderName)
         every { valuesStrings.valuesSuffix }.returns(valuesSuffix)
         every { valuesStrings.mergedStrings }.returns(strings)

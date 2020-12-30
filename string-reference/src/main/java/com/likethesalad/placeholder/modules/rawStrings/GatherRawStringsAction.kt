@@ -5,7 +5,7 @@ import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHa
 import com.likethesalad.placeholder.modules.common.helpers.files.IncrementalDataCleaner
 import com.likethesalad.placeholder.modules.common.models.PathIdentity
 import com.likethesalad.placeholder.modules.rawStrings.models.StringsGatheredModel
-import com.likethesalad.placeholder.modules.rawStrings.models.ValuesStrings
+import com.likethesalad.placeholder.modules.rawStrings.models.ValuesFolderStrings
 import java.io.File
 
 class GatherRawStringsAction(
@@ -23,13 +23,13 @@ class GatherRawStringsAction(
         }
     }
 
-    private fun valuesStringsToStringsGathered(valuesStrings: ValuesStrings): StringsGatheredModel {
+    private fun valuesStringsToStringsGathered(valuesFolderStrings: ValuesFolderStrings): StringsGatheredModel {
         return StringsGatheredModel(
             PathIdentity(
-                valuesStrings.valuesFolderName,
-                valuesStrings.valuesSuffix
+                valuesFolderStrings.valuesFolderName,
+                valuesFolderStrings.valuesSuffix
             ),
-            valuesStrings.mergedStrings
+            valuesFolderStrings.mergedStrings
         )
     }
 }
