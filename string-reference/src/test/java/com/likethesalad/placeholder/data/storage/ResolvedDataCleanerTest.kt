@@ -1,10 +1,12 @@
 package com.likethesalad.placeholder.data.storage
 
 import com.google.common.truth.Truth
+import com.likethesalad.placeholder.modules.common.helpers.android.AppVariantHelper
 import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantDirsPathFinder
 import com.likethesalad.placeholder.modules.common.models.VariantResPaths
+import com.likethesalad.placeholder.modules.rawStrings.data.helpers.dirs.VariantValuesFolders
+import com.likethesalad.placeholder.modules.rawStrings.data.helpers.dirs.VariantValuesFoldersFactory
 import com.likethesalad.placeholder.modules.resolveStrings.data.helpers.files.ResolvedDataCleaner
-import com.likethesalad.placeholder.modules.common.helpers.android.AppVariantHelper
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Rule
@@ -21,6 +23,7 @@ class ResolvedDataCleanerTest {
     fun `Remove all resolved xml files from all res dirs of the buildVariant folder`() {
         // Given
         val variantDirsPathFinder = mockk<VariantDirsPathFinder>()
+        val variantValuesFoldersFactory = VariantValuesFoldersFactory()
         val variantName = "clientDebug"
         val otherVariantName = "client"
         val variantResPath = mockk<VariantResPaths>()
@@ -57,35 +60,35 @@ class ResolvedDataCleanerTest {
                 otherVariantResPath
             )
         )
-        assertFileExist(resDir, "values/resolved.xml", true)
-        assertFileExist(resDir, "values/something.xml", true)
-        assertFileExist(resDir, "values-es/resolved.xml", true)
-        assertFileExist(resDir2, "values-it/res2valueFile.xml", true)
-        assertFileExist(resDir2, "values-it/resolved.xml", true)
-        assertFileExist(otherResDir, "values/resolved.xml", true)
-        assertFileExist(otherResDir, "values/something.xml", true)
-        assertFileExist(otherResDir, "values-es/resolved.xml", true)
+        assertFileExists(resDir, "values/resolved.xml", true)
+        assertFileExists(resDir, "values/something.xml", true)
+        assertFileExists(resDir, "values-es/resolved.xml", true)
+        assertFileExists(resDir2, "values-it/res2valueFile.xml", true)
+        assertFileExists(resDir2, "values-it/resolved.xml", true)
+        assertFileExists(otherResDir, "values/resolved.xml", true)
+        assertFileExists(otherResDir, "values/something.xml", true)
+        assertFileExists(otherResDir, "values-es/resolved.xml", true)
 
         // When
-        val resolvedDataCleaner =
-            ResolvedDataCleaner(
-                appVariantHelper,
-                variantDirsPathFinder
-            )
+        val resolvedDataCleaner = ResolvedDataCleaner(
+            appVariantHelper,
+            variantDirsPathFinder,
+            variantValuesFoldersFactory
+        )
         resolvedDataCleaner.removeResolvedFiles()
 
         // Then
-        assertFileExist(resDir, "values/resolved.xml", false)
-        assertFileExist(resDir, "values/something.xml", true)
-        assertFileExist(resDir, "values-es/resolved.xml", false)
-        assertFileExist(resDir2, "values-it/res2valueFile.xml", true)
-        assertFileExist(resDir2, "values-it/resolved.xml", false)
-        assertFileExist(otherResDir, "values/resolved.xml", true)
-        assertFileExist(otherResDir, "values/something.xml", true)
-        assertFileExist(otherResDir, "values-es/resolved.xml", true)
+        assertFileExists(resDir, "values/resolved.xml", false)
+        assertFileExists(resDir, "values/something.xml", true)
+        assertFileExists(resDir, "values-es/resolved.xml", false)
+        assertFileExists(resDir2, "values-it/res2valueFile.xml", true)
+        assertFileExists(resDir2, "values-it/resolved.xml", false)
+        assertFileExists(otherResDir, "values/resolved.xml", true)
+        assertFileExists(otherResDir, "values/something.xml", true)
+        assertFileExists(otherResDir, "values-es/resolved.xml", true)
     }
 
-    private fun assertFileExist(resDir: File, fileRelativePath: String, fileExist: Boolean) {
+    private fun assertFileExists(resDir: File, fileRelativePath: String, fileExist: Boolean) {
         Truth.assertThat(File(resDir, fileRelativePath).exists()).isEqualTo(fileExist)
     }
 

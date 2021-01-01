@@ -22,23 +22,24 @@ class ValuesFolderXmlFilesTest {
             )
 
         Truth.assertThat(valuesFiles.valuesFolderName).isEqualTo("values")
-        Truth.assertThat(valuesFiles.stringResources).containsExactly(
-            StringResourceModel(
-                "welcome_1",
-                "The welcome message for TesT1"
-            ),
-            StringResourceModel(
-                "welcome_3",
-                "The welcome message for TesT3"
-            ),
-            StringResourceModel(
-                mapOf(
-                    "name" to "message_non_translatable_1",
-                    "translatable" to "false"
-                ),
-                "Non translatable TesT2"
-            )
-        )
+        Truth.assertThat(valuesFiles.xmlFiles).containsExactlyElementsIn(valuesFilesSet)
+//        Truth.assertThat(valuesFiles.stringResources).containsExactly( todo for other test
+//            StringResourceModel(
+//                "welcome_1",
+//                "The welcome message for TesT1"
+//            ),
+//            StringResourceModel(
+//                "welcome_3",
+//                "The welcome message for TesT3"
+//            ),
+//            StringResourceModel(
+//                mapOf(
+//                    "name" to "message_non_translatable_1",
+//                    "translatable" to "false"
+//                ),
+//                "Non translatable TesT2"
+//            )
+//        )
     }
 
     private fun getResourceFile(fileName: String): File {

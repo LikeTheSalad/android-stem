@@ -9,7 +9,8 @@ import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.Values
 data class ValuesFolderStrings(
     val valuesFolderName: String,
     val valuesFolderXmlFiles: ValuesFolderXmlFiles,
-    val parentValuesFolderStrings: ValuesFolderStrings? = null
+    val parentValuesFolderStrings: ValuesFolderStrings? = null,
+    val stringResourcesProvider: ((ValuesFolderXmlFiles) -> Set<StringResourceModel>)? = null
 ) {
 
     val valuesSuffix: String by lazy {
@@ -17,7 +18,9 @@ data class ValuesFolderStrings(
     }
     private val stringsMap: Map<String, StringResourceModel> by lazy {
         mutableMapOf<String, StringResourceModel>().also {
-            addStringsToMap(getStringResources(valuesFolderXmlFiles), it)
+            val strings =
+                stringResourcesProvider?.invoke(valuesFolderXmlFiles) ?: getStringResources(valuesFolderXmlFiles)
+            addStringsToMap(strings, it)
         }
     }
     private val hasLocalTemplates: Boolean by lazy {

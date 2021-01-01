@@ -38,9 +38,7 @@ class LibrariesValuesStringsProviderTest {
     ) {
         val xmlFiles = setOf<File>(mockk(), mockk())
         val expectedValuesXmlFiles =
-            ValuesFolderXmlFiles(
-                xmlFiles
-            )
+            ValuesFolderXmlFiles(folderName, xmlFiles)
         every { librariesFilesProvider.getXmlFilesForFolder(folderName) }.returns(xmlFiles)
 
         val result = librariesValuesStringsProvider.getValuesStringsFor(folderName, parent)

@@ -1,7 +1,6 @@
 package com.likethesalad.placeholder.data.storage.utils
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.modules.common.models.StringResourceModel
 import com.likethesalad.placeholder.modules.rawStrings.data.ValuesFolderStringsProvider
 import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.ValuesFolderXmlFiles
 import com.likethesalad.placeholder.modules.rawStrings.models.ValuesFolderStrings
@@ -17,35 +16,25 @@ class ValuesFolderStringsProviderTest {
 
     @Before
     fun setUp() {
-        valuesFolderStringsProvider =
-            ValuesFolderStringsProvider()
+        valuesFolderStringsProvider = ValuesFolderStringsProvider()
     }
 
     @Test
     fun `Get values strings for folder with null parent`() {
-        val valuesXmlFilesMainMock = mockk<ValuesFolderXmlFiles>()
-        val valuesXmlFilesDebugMock = mockk<ValuesFolderXmlFiles>()
-        val valuesXmlFilesDemoMock = mockk<ValuesFolderXmlFiles>()
-        every { valuesXmlFilesMainMock.stringResources }.returns(emptySet())
-        every { valuesXmlFilesDebugMock.stringResources }.returns(emptySet())
-        every { valuesXmlFilesDemoMock.stringResources }.returns(emptySet())
+        val valuesXmlFilesDebugMock = createValuesFolderXmlFiles("values")
+        val valuesEsXmlFilesDebugMock = createValuesFolderXmlFiles("values-es")
+        val valuesXmlFilesMainMock = createValuesFolderXmlFiles("values")
+        val valuesEsXmlFilesDemoMock = createValuesFolderXmlFiles("values-es")
         val valuesFolderName = "values"
         val variantXmlFilesList = listOf(
-            VariantXmlFiles(
-                "debug", listOf(
-                    valuesXmlFilesDebugMock,
-                    valuesXmlFilesDebugMock
-                )
+            createVariantXmlFiles(
+                "debug", valuesXmlFilesDebugMock, valuesEsXmlFilesDebugMock
             ),
-            VariantXmlFiles(
-                "main", mapOf(
-                    "values" to valuesXmlFilesMainMock
-                )
+            createVariantXmlFiles(
+                "main", valuesXmlFilesMainMock
             ),
-            VariantXmlFiles(
-                "demo", mapOf(
-                    "values-es" to valuesXmlFilesDemoMock
-                )
+            createVariantXmlFiles(
+                "demo", valuesEsXmlFilesDemoMock
             )
         )
 
@@ -68,29 +57,20 @@ class ValuesFolderStringsProviderTest {
 
     @Test
     fun `Get values strings for folder with non null parent`() {
-        val valuesXmlFilesMainMock = mockk<ValuesFolderXmlFiles>()
-        val valuesXmlFilesDebugMock = mockk<ValuesFolderXmlFiles>()
-        val valuesXmlFilesDemoMock = mockk<ValuesFolderXmlFiles>()
-        every { valuesXmlFilesMainMock.stringResources }.returns(emptySet())
-        every { valuesXmlFilesDebugMock.stringResources }.returns(emptySet())
-        every { valuesXmlFilesDemoMock.stringResources }.returns(emptySet())
+        val valuesXmlFilesMainMock = createValuesFolderXmlFiles("values")
+        val valuesXmlFilesDebugMock = createValuesFolderXmlFiles("values")
+        val valuesEsXmlFilesDebugMock = createValuesFolderXmlFiles("values-es")
+        val valuesEsXmlFilesDemoMock = createValuesFolderXmlFiles("values-es")
         val valuesFolderName = "values"
         val variantXmlFilesList = listOf(
-            VariantXmlFiles(
-                "debug", mapOf(
-                    "values" to valuesXmlFilesDebugMock,
-                    "values-es" to valuesXmlFilesDebugMock
-                )
+            createVariantXmlFiles(
+                "debug", valuesXmlFilesDebugMock, valuesEsXmlFilesDebugMock
             ),
-            VariantXmlFiles(
-                "main", mapOf(
-                    "values" to valuesXmlFilesMainMock
-                )
+            createVariantXmlFiles(
+                "main", valuesXmlFilesMainMock
             ),
-            VariantXmlFiles(
-                "demo", mapOf(
-                    "values-es" to valuesXmlFilesDemoMock
-                )
+            createVariantXmlFiles(
+                "demo", valuesEsXmlFilesDemoMock
             )
         )
         val parent = mockk<ValuesFolderStrings>()
@@ -114,29 +94,20 @@ class ValuesFolderStringsProviderTest {
 
     @Test
     fun `Get values strings for folder that does not exist in any variant`() {
-        val valuesXmlFilesMainMock = mockk<ValuesFolderXmlFiles>()
-        val valuesXmlFilesDebugMock = mockk<ValuesFolderXmlFiles>()
-        val valuesXmlFilesDemoMock = mockk<ValuesFolderXmlFiles>()
-        every { valuesXmlFilesMainMock.stringResources }.returns(emptySet())
-        every { valuesXmlFilesDebugMock.stringResources }.returns(emptySet())
-        every { valuesXmlFilesDemoMock.stringResources }.returns(emptySet())
+        val valuesXmlFilesMainMock = createValuesFolderXmlFiles("values")
+        val valuesXmlFilesDebugMock = createValuesFolderXmlFiles("values")
+        val valuesItXmlFilesDebugMock = createValuesFolderXmlFiles("values-it")
+        val valuesItXmlFilesDemoMock = createValuesFolderXmlFiles("values-it")
         val valuesFolderName = "values-es"
         val variantXmlFilesList = listOf(
-            VariantXmlFiles(
-                "debug", mapOf(
-                    "values" to valuesXmlFilesDebugMock,
-                    "values-it" to valuesXmlFilesDebugMock
-                )
+            createVariantXmlFiles(
+                "debug", valuesXmlFilesDebugMock, valuesItXmlFilesDebugMock
             ),
-            VariantXmlFiles(
-                "main", mapOf(
-                    "values" to valuesXmlFilesMainMock
-                )
+            createVariantXmlFiles(
+                "main", valuesXmlFilesMainMock
             ),
-            VariantXmlFiles(
-                "demo", mapOf(
-                    "values-it" to valuesXmlFilesDemoMock
-                )
+            createVariantXmlFiles(
+                "demo", valuesItXmlFilesDemoMock
             )
         )
         val parent = mockk<ValuesFolderStrings>()
@@ -150,14 +121,21 @@ class ValuesFolderStringsProviderTest {
         Truth.assertThat(result).isNull()
     }
 
-    private fun createValuesXmlFilesMock(
-        folderName: String,
-        stringResources: Set<StringResourceModel> = emptySet()
-    ): ValuesFolderXmlFiles {
-        val mock = mockk<ValuesFolderXmlFiles>()
-        every { mock.valuesFolderName }.returns(folderName)
-        every { mock.stringResources }.returns(stringResources)
+    private fun createVariantXmlFiles(
+        variantName: String,
+        vararg valuesFolderXmlFiles: ValuesFolderXmlFiles
+    ): VariantXmlFiles {
+        val mock = mockk<VariantXmlFiles>()
+        every { mock.variantName }.returns(variantName)
+        every { mock.valuesFolderXmlFiles }.returns(valuesFolderXmlFiles.toList())
+        every { mock.findValuesFolderXmlFilesByName(any()) } answers { callOriginal() }
 
         return mock
+    }
+
+    private fun createValuesFolderXmlFiles(folderName: String): ValuesFolderXmlFiles {
+        return mockk<ValuesFolderXmlFiles>().also {
+            every { it.valuesFolderName }.returns(folderName)
+        }
     }
 }

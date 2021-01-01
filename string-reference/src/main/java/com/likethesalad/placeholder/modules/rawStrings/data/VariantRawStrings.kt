@@ -22,14 +22,14 @@ class VariantRawStrings(
     }
 
     fun getValuesFolderStrings(generatedResDirs: Set<File>): Collection<ValuesFolderStrings> {
-        val variantStringFilesList = getVariantStringFilesList(generatedResDirs)
-        val uniqueValuesFolderNames = variantStringFilesList.map {
+        val variantXmlFilesList = getVariantXmlFilesList(generatedResDirs)
+        val uniqueValuesFolderNames = variantXmlFilesList.map {
             it.valuesFolderXmlFiles.map { valuesXmlFiles -> valuesXmlFiles.valuesFolderName }
         }.flatten().toSet()
 
         val valuesStringsPerFolder = getValuesStringsMapPerFolder(
             uniqueValuesFolderNames.filter { it != BASE_VALUES_FOLDER_NAME },
-            variantStringFilesList
+            variantXmlFilesList
         )
 
         return valuesStringsPerFolder.values
@@ -66,17 +66,13 @@ class VariantRawStrings(
         return valuesStringsPerFolder
     }
 
-    private fun getVariantStringFilesList(generatedResDirs: Set<File>): List<VariantXmlFiles> {
-        val dirsPaths = variantDirsPathFinder
-            .getExistingPathsResDirs(getExtraMainResDirs(generatedResDirs))
-        val variantValuesFoldersList =
-            dirsPaths.map { resPaths ->
-                variantValuesFoldersFactory.create(resPaths)
-            }
+    private fun getVariantXmlFilesList(generatedResDirs: Set<File>): List<VariantXmlFiles> {
+        val dirsPaths = variantDirsPathFinder.getExistingPathsResDirs(getExtraMainResDirs(generatedResDirs))
+        val variantValuesFoldersList = dirsPaths.map { resPaths ->
+            variantValuesFoldersFactory.create(resPaths)
+        }
         return variantValuesFoldersList.map {
-            VariantXmlFiles(
-                it
-            )
+            VariantXmlFiles(it)
         }
     }
 

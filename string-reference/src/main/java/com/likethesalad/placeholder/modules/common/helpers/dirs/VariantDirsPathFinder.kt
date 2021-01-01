@@ -20,10 +20,8 @@ class VariantDirsPathFinder(
         val existing = mutableListOf<VariantResPaths>()
         val pathResolved = variantDirsPathResolver.pathList
 
-        for (resolvedName in pathResolved) {
-            getResPaths(
-                resolvedName, getExtraDirs(resolvedName, extraMainResDirs)
-            )?.let {
+        for (variantName in pathResolved) {
+            getResPaths(variantName, getExtraDirs(variantName, extraMainResDirs))?.let {
                 existing.add(it)
             }
         }

@@ -5,6 +5,8 @@ import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantDirsPathF
 import com.likethesalad.placeholder.modules.common.models.VariantResPaths
 import com.likethesalad.placeholder.modules.rawStrings.data.ValuesFolderStringsProvider
 import com.likethesalad.placeholder.modules.rawStrings.data.VariantRawStrings
+import com.likethesalad.placeholder.modules.rawStrings.data.helpers.dirs.VariantValuesFolders
+import com.likethesalad.placeholder.modules.rawStrings.data.helpers.dirs.VariantValuesFoldersFactory
 import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.ValuesFolderXmlFiles
 import com.likethesalad.placeholder.modules.rawStrings.data.libraries.LibrariesValuesStringsProvider
 import com.likethesalad.placeholder.modules.rawStrings.models.ValuesFolderStrings
@@ -21,11 +23,13 @@ class VariantRawStringsTest {
     private val resourcesHandler = TestResourcesHandler(javaClass)
     private lateinit var valuesFolderStringsProvider: ValuesFolderStringsProvider
     private lateinit var librariesValuesStringsProvider: LibrariesValuesStringsProvider
+    private lateinit var variantValuesFoldersFactory: VariantValuesFoldersFactory
 
     @Before
     fun setUp() {
         valuesFolderStringsProvider = mockk()
         librariesValuesStringsProvider = mockk()
+        variantValuesFoldersFactory = mockk()
     }
 
     @Test
@@ -345,12 +349,9 @@ class VariantRawStringsTest {
             val setOfPaths = resMap.toList().map {
                 it.second
             }.toSet()
-            variantResPaths.add(
-                VariantResPaths(
-                    variantName,
-                    setOfPaths
-                )
-            )
+            val resPaths = VariantResPaths(variantName, setOfPaths)
+            setExpectedVariantValuesFolders(resPaths)
+            variantResPaths.add(resPaths)
         }
 
         val variantDirsPathFinder = mockk<VariantDirsPathFinder>()
@@ -364,6 +365,7 @@ class VariantRawStringsTest {
         gatheredResDirs: Map<String, File>,
         valuesToResFiles: Map<String, Map<String, List<String>>>
     ): VariantXmlFiles {
+        val valuesFolderXmlFilesList = mutableListOf<ValuesFolderXmlFiles>()
         val filesPerValuesFolder = valuesToResFiles.mapValues { valuesFolderMap ->
             valuesFolderMap.value.map { resDirWithFileNames ->
                 resDirWithFileNames.value.map { fileName ->
@@ -371,11 +373,16 @@ class VariantRawStringsTest {
                 }
             }.flatten()
         }
-        return VariantXmlFiles(
-            variantName, filesPerValuesFolder.map {
-                ValuesFolderXmlFiles(it.key, it.value.toSet())
-            }
-        )
+        for ((valueFolderName, filesList) in filesPerValuesFolder) {
+            valuesFolderXmlFilesList.add(ValuesFolderXmlFiles(valueFolderName, filesList.toSet()))
+        }
+
+        val variantXmlFiles = mockk<VariantXmlFiles>()
+
+        every { variantXmlFiles.variantName }.returns(variantName)
+        every { variantXmlFiles.valuesFolderXmlFiles }.returns(valuesFolderXmlFilesList)
+
+        return variantXmlFiles
     }
 
     private fun getLibValuesStringsMock(
@@ -397,12 +404,27 @@ class VariantRawStringsTest {
         every {
             valuesFolderStringsProvider.getValuesStringsForFolderFromVariants(
                 folderName,
-                variantXmlFiles.toList(),
+                any(),
                 parentValuesFolderStrings
             )
         }.returns(valuesStrings)
 
         return valuesStrings
+    }
+
+    private fun setExpectedVariantValuesFolders(resPaths: VariantResPaths) {
+        val variantValuesFolders = mockk<VariantValuesFolders>()
+        val valuesFolders = mutableSetOf<File>()
+
+        for (resPath in resPaths.paths) {
+            val folders: List<File> = resPath.listFiles()?.toList() ?: emptyList()
+            valuesFolders.addAll(folders)
+        }
+
+        every { variantValuesFolders.variantName }.returns(resPaths.variantName)
+        every { variantValuesFolders.valuesFolders }.returns(valuesFolders.toList())
+
+        every { variantValuesFoldersFactory.create(resPaths) }.returns(variantValuesFolders)
     }
 
     private fun getVariantMapDir(variantName: String, vararg resDirsNames: String): Map<String, File> {
@@ -418,7 +440,8 @@ class VariantRawStringsTest {
         return VariantRawStrings(
             variantDirsPathFinder,
             librariesValuesStringsProvider,
-            valuesFolderStringsProvider
+            valuesFolderStringsProvider,
+            variantValuesFoldersFactory
         )
     }
 }

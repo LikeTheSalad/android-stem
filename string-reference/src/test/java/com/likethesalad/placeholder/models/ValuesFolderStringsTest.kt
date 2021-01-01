@@ -12,18 +12,16 @@ class ValuesFolderStringsTest {
 
     @Test
     fun `Get strings previously set`() {
-        val resStrings = ValuesFolderStrings(
+        val resStrings = createValuesFolderStrings(
             "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel(
-                        "my_str_name",
-                        "The content"
-                    ),
-                    StringResourceModel(
-                        "my_str_name2",
-                        "The content2"
-                    )
+            setOf(
+                StringResourceModel(
+                    "my_str_name",
+                    "The content"
+                ),
+                StringResourceModel(
+                    "my_str_name2",
+                    "The content2"
                 )
             )
         )
@@ -44,26 +42,22 @@ class ValuesFolderStringsTest {
 
     @Test
     fun `Get strings from parent`() {
-        val parentResStrings = ValuesFolderStrings(
+        val parentResStrings = createValuesFolderStrings(
             "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel(
-                        "the_parent_string",
-                        "Parent value"
-                    )
+            setOf(
+                StringResourceModel(
+                    "the_parent_string",
+                    "Parent value"
                 )
             )
         )
 
-        val resStrings = ValuesFolderStrings(
+        val resStrings = createValuesFolderStrings(
             "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel(
-                        "child_string",
-                        "Child value"
-                    )
+            setOf(
+                StringResourceModel(
+                    "child_string",
+                    "Child value"
                 )
             ),
             parentResStrings
@@ -83,34 +77,30 @@ class ValuesFolderStringsTest {
 
     @Test
     fun `Override parent strings content with the same name`() {
-        val parentResStrings = ValuesFolderStrings(
+        val parentResStrings = createValuesFolderStrings(
             "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel(
-                        "the_parent_string",
-                        "Parent value"
-                    ),
-                    StringResourceModel(
-                        "common_string",
-                        "Parent common string"
-                    )
+            setOf(
+                StringResourceModel(
+                    "the_parent_string",
+                    "Parent value"
+                ),
+                StringResourceModel(
+                    "common_string",
+                    "Parent common string"
                 )
             )
         )
 
-        val resStrings = ValuesFolderStrings(
+        val resStrings = createValuesFolderStrings(
             "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel(
-                        "child_string",
-                        "Child value"
-                    ),
-                    StringResourceModel(
-                        "common_string",
-                        "Child common string"
-                    )
+            setOf(
+                StringResourceModel(
+                    "child_string",
+                    "Child value"
+                ),
+                StringResourceModel(
+                    "common_string",
+                    "Child common string"
                 )
             ),
             parentResStrings
@@ -144,30 +134,26 @@ class ValuesFolderStringsTest {
                 ),
                 "Parent string content"
             )
-        val parentResStrings = ValuesFolderStrings(
+        val parentResStrings = createValuesFolderStrings(
             "values",
-            getValuesStringFiles(
-                setOf(
-                    commonParentString,
-                    StringResourceModel(
-                        "other_parent_string",
-                        "Some parent string"
-                    )
+            setOf(
+                commonParentString,
+                StringResourceModel(
+                    "other_parent_string",
+                    "Some parent string"
                 )
             )
         )
 
-        val resStrings = ValuesFolderStrings(
+        val resStrings = createValuesFolderStrings(
             "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel(
-                        mapOf(
-                            "name" to commonStringName,
-                            "child_attr" to "Other child attribute"
-                        ),
-                        "Child parent string"
-                    )
+            setOf(
+                StringResourceModel(
+                    mapOf(
+                        "name" to commonStringName,
+                        "child_attr" to "Other child attribute"
+                    ),
+                    "Child parent string"
                 )
             ), parentResStrings
         )
@@ -191,30 +177,26 @@ class ValuesFolderStringsTest {
     @Test
     fun `Get strings sorted alphabetically by name`() {
         // Given
-        val parentResStrings = ValuesFolderStrings(
+        val parentResStrings = createValuesFolderStrings(
             "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel(
-                        "the_parent_string",
-                        "Parent value"
-                    )
+            setOf(
+                StringResourceModel(
+                    "the_parent_string",
+                    "Parent value"
                 )
             )
         )
 
-        val resStrings = ValuesFolderStrings(
+        val resStrings = createValuesFolderStrings(
             "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel(
-                        "child_string",
-                        "Child value"
-                    ),
-                    StringResourceModel(
-                        "another_string",
-                        "Child another value"
-                    )
+            setOf(
+                StringResourceModel(
+                    "child_string",
+                    "Child value"
+                ),
+                StringResourceModel(
+                    "another_string",
+                    "Child another value"
                 )
             ),
             parentResStrings
@@ -240,42 +222,38 @@ class ValuesFolderStringsTest {
     @Test
     fun `Get merged templates sorted by name`() {
         // Given
-        val parentStrings = ValuesFolderStrings(
+        val parentStrings = createValuesFolderStrings(
             "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel(
-                        "string_name",
-                        "String value"
-                    ),
-                    StringResourceModel(
-                        "template_some_string",
-                        "String value \${string_name}"
-                    ),
-                    StringResourceModel(
-                        "template_other_string",
-                        "String value2"
-                    )
+            setOf(
+                StringResourceModel(
+                    "string_name",
+                    "String value"
+                ),
+                StringResourceModel(
+                    "template_some_string",
+                    "String value \${string_name}"
+                ),
+                StringResourceModel(
+                    "template_other_string",
+                    "String value2"
                 )
             )
         )
 
-        val resStrings = ValuesFolderStrings(
+        val resStrings = createValuesFolderStrings(
             "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel(
-                        "child_string_name",
-                        "Child value"
-                    ),
-                    StringResourceModel(
-                        "template_child_string",
-                        "Child template"
-                    ),
-                    StringResourceModel(
-                        "template_some_string",
-                        "Child value common"
-                    )
+            setOf(
+                StringResourceModel(
+                    "child_string_name",
+                    "Child value"
+                ),
+                StringResourceModel(
+                    "template_child_string",
+                    "Child template"
+                ),
+                StringResourceModel(
+                    "template_some_string",
+                    "Child value common"
                 )
             ), parentStrings
         )
@@ -307,42 +285,38 @@ class ValuesFolderStringsTest {
     @Test
     fun `Get true when client has templates`() {
         // Given
-        val parentStrings = ValuesFolderStrings(
+        val parentStrings = createValuesFolderStrings(
             "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel(
-                        "string_name",
-                        "String value"
-                    ),
-                    StringResourceModel(
-                        "template_some_string",
-                        "String value \${string_name}"
-                    ),
-                    StringResourceModel(
-                        "template_other_string",
-                        "String value2"
-                    )
+            setOf(
+                StringResourceModel(
+                    "string_name",
+                    "String value"
+                ),
+                StringResourceModel(
+                    "template_some_string",
+                    "String value \${string_name}"
+                ),
+                StringResourceModel(
+                    "template_other_string",
+                    "String value2"
                 )
             )
         )
 
-        val resStrings = ValuesFolderStrings(
+        val resStrings = createValuesFolderStrings(
             "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel(
-                        "child_string_name",
-                        "Child value"
-                    ),
-                    StringResourceModel(
-                        "template_child_string",
-                        "Child template"
-                    ),
-                    StringResourceModel(
-                        "template_some_string",
-                        "Child value common"
-                    )
+            setOf(
+                StringResourceModel(
+                    "child_string_name",
+                    "Child value"
+                ),
+                StringResourceModel(
+                    "template_child_string",
+                    "Child template"
+                ),
+                StringResourceModel(
+                    "template_some_string",
+                    "Child value common"
                 )
             ), parentStrings
         )
@@ -354,34 +328,30 @@ class ValuesFolderStringsTest {
     @Test
     fun `Get true when client has values`() {
         // Given
-        val parentStrings = ValuesFolderStrings(
+        val parentStrings = createValuesFolderStrings(
             "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel(
-                        "string_name",
-                        "String value"
-                    ),
-                    StringResourceModel(
-                        "template_some_string",
-                        "String value \${string_name}"
-                    ),
-                    StringResourceModel(
-                        "template_other_string",
-                        "String value2"
-                    )
+            setOf(
+                StringResourceModel(
+                    "string_name",
+                    "String value"
+                ),
+                StringResourceModel(
+                    "template_some_string",
+                    "String value \${string_name}"
+                ),
+                StringResourceModel(
+                    "template_other_string",
+                    "String value2"
                 )
             )
         )
 
-        val resStrings = ValuesFolderStrings(
+        val resStrings = createValuesFolderStrings(
             "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel(
-                        "string_name",
-                        "Child value"
-                    )
+            setOf(
+                StringResourceModel(
+                    "string_name",
+                    "Child value"
                 )
             ), parentStrings
         )
@@ -393,46 +363,40 @@ class ValuesFolderStringsTest {
     @Test
     fun `Get true when client has values from grand parent templates`() {
         // Given
-        val parentStrings = ValuesFolderStrings(
+        val parentStrings = createValuesFolderStrings(
             "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel(
-                        "string_name",
-                        "String value"
-                    ),
-                    StringResourceModel(
-                        "template_some_string",
-                        "String value \${string_name}"
-                    ),
-                    StringResourceModel(
-                        "template_other_string",
-                        "String value2"
-                    )
+            setOf(
+                StringResourceModel(
+                    "string_name",
+                    "String value"
+                ),
+                StringResourceModel(
+                    "template_some_string",
+                    "String value \${string_name}"
+                ),
+                StringResourceModel(
+                    "template_other_string",
+                    "String value2"
                 )
             )
         )
 
-        val resStrings = ValuesFolderStrings(
+        val resStrings = createValuesFolderStrings(
             "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel(
-                        "some_string_name",
-                        "Child value"
-                    )
+            setOf(
+                StringResourceModel(
+                    "some_string_name",
+                    "Child value"
                 )
             ), parentStrings
         )
 
-        val resStrings2 = ValuesFolderStrings(
+        val resStrings2 = createValuesFolderStrings(
             "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel(
-                        "string_name",
-                        "Environment value"
-                    )
+            setOf(
+                StringResourceModel(
+                    "string_name",
+                    "Environment value"
                 )
             ), resStrings
         )
@@ -444,36 +408,33 @@ class ValuesFolderStringsTest {
     @Test
     fun `Get true when child has neither values nor templates but parent does`() {
         // Given
-        val parentStrings = ValuesFolderStrings(
+        val parentStrings = createValuesFolderStrings(
             "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel(
-                        "string_name",
-                        "String value"
-                    ),
-                    StringResourceModel(
-                        "template_some_string",
-                        "String value \${string_name}"
-                    ),
-                    StringResourceModel(
-                        "template_other_string",
-                        "String value2"
-                    )
+            setOf(
+                StringResourceModel(
+                    "string_name",
+                    "String value"
+                ),
+                StringResourceModel(
+                    "template_some_string",
+                    "String value \${string_name}"
+                ),
+                StringResourceModel(
+                    "template_other_string",
+                    "String value2"
                 )
             )
         )
 
-        val resStrings = ValuesFolderStrings(
+        val resStrings = createValuesFolderStrings(
             "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel(
-                        "custom_client_string",
-                        "Child value"
-                    )
+            setOf(
+                StringResourceModel(
+                    "custom_client_string",
+                    "Child value"
                 )
-            ), parentStrings
+            )
+            , parentStrings
         )
 
         // Then
@@ -483,36 +444,34 @@ class ValuesFolderStringsTest {
     @Test
     fun `Get false when child and parent have neither values nor templates`() {
         // Given
-        val parentStrings = ValuesFolderStrings(
+        val parentStrings = createValuesFolderStrings(
             "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel(
-                        "string_name",
-                        "String value"
-                    ),
-                    StringResourceModel(
-                        "some_string",
-                        "String value2"
-                    ),
-                    StringResourceModel(
-                        "other_string",
-                        "String value3"
-                    )
+            setOf(
+                StringResourceModel(
+                    "string_name",
+                    "String value"
+                ),
+                StringResourceModel(
+                    "some_string",
+                    "String value2"
+                ),
+                StringResourceModel(
+                    "other_string",
+                    "String value3"
                 )
             )
+
         )
 
-        val resStrings = ValuesFolderStrings(
+        val resStrings = createValuesFolderStrings(
             "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel(
-                        "custom_client_string",
-                        "Child value"
-                    )
+            setOf(
+                StringResourceModel(
+                    "custom_client_string",
+                    "Child value"
                 )
-            ), parentStrings
+            )
+            , parentStrings
         )
 
         // Then
@@ -520,106 +479,21 @@ class ValuesFolderStringsTest {
     }
 
     private fun assertValuesFolderNameSuffix(valuesFolderName: String, expectedSuffix: String) {
-        val resStrings = ValuesFolderStrings(
+        val resStrings = createValuesFolderStrings(
             valuesFolderName,
-            getValuesStringFiles(emptySet())
+            emptySet()
         )
         Truth.assertThat(resStrings.valuesSuffix).isEqualTo(expectedSuffix)
     }
 
-    private fun getResStringsWithNoValuesForTemplates(): ValuesFolderStrings {
-        return ValuesFolderStrings(
-            "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel(
-                        "some_string",
-                        "Some content"
-                    ),
-                    StringResourceModel(
-                        "template_other_string",
-                        "Some content with \${another_string}"
-                    )
-                )
-            )
-        )
-    }
-
-    private fun getResStringsWithValuesForLocalTemplates(): ValuesFolderStrings {
-        return ValuesFolderStrings(
-            "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel(
-                        "some_string",
-                        "Some content"
-                    ),
-                    StringResourceModel(
-                        "template_other_string",
-                        "Some content with \${some_string}"
-                    )
-                )
-            )
-        )
-    }
-
-    private fun getResStringsWithValuesForParentTemplates(): ValuesFolderStrings {
-        val parentResStrings = ValuesFolderStrings(
-            "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel(
-                        "template_other_string",
-                        "Some content with \${some_string}"
-                    )
-                )
-            )
-        )
-        return ValuesFolderStrings(
-            "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel(
-                        "some_string",
-                        "Some content"
-                    )
-                )
-            ), parentResStrings
-        )
-    }
-
-    private fun getResStringsWithValuesForMergedTemplates(): ValuesFolderStrings {
-        val parentResStrings = ValuesFolderStrings(
-            "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel(
-                        "template_other_string",
-                        "Some content with \${random_string}"
-                    )
-                )
-            )
-        )
-        return ValuesFolderStrings(
-            "values",
-            getValuesStringFiles(
-                setOf(
-                    StringResourceModel(
-                        "template_other_string",
-                        "Some content with \${some_string}"
-                    ),
-                    StringResourceModel(
-                        "some_string",
-                        "Some content"
-                    )
-                )
-            ), parentResStrings
-        )
-    }
-
-    private fun getValuesStringFiles(stringResources: Set<StringResourceModel>): ValuesFolderXmlFiles {
-        val valuesStringFilesMock = mockk<ValuesFolderXmlFiles>()
-        every { valuesStringFilesMock.stringResources }.returns(stringResources)
-        return valuesStringFilesMock
+    private fun createValuesFolderStrings(
+        valuesFolderName: String,
+        stringResources: Set<StringResourceModel>,
+        parentValuesFolderStrings: ValuesFolderStrings? = null
+    ): ValuesFolderStrings {
+        val valuesFolderXmlFiles = mockk<ValuesFolderXmlFiles>()
+        val mockProvider = mockk<((ValuesFolderXmlFiles) -> Set<StringResourceModel>)>()
+        every { mockProvider.invoke(valuesFolderXmlFiles) }.returns(stringResources)
+        return ValuesFolderStrings(valuesFolderName, valuesFolderXmlFiles, parentValuesFolderStrings, mockProvider)
     }
 }
