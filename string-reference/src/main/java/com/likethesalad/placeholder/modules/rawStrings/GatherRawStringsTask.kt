@@ -1,6 +1,5 @@
 package com.likethesalad.placeholder.modules.rawStrings
 
-import com.likethesalad.placeholder.modules.rawStrings.GatherRawStringsAction
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.InputFiles
