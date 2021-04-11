@@ -1,4 +1,4 @@
-apply plugin: 'java-gradle-plugin'
+apply plugin: 'java-library'
 apply plugin: 'kotlin'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'maven-publish'
@@ -8,6 +8,7 @@ group 'com.likethesalad.android'
 version '1.2.1'
 
 dependencies {
+    api gradleApi()
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation "com.google.auto.factory:auto-factory:$autoFactory_version"
@@ -17,6 +18,7 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     kapt "com.google.auto.factory:auto-factory:$autoFactory_version"
     annotationProcessor "com.google.auto.factory:auto-factory:$autoFactory_version"
+    testImplementation gradleTestKit()
     testImplementation "com.android.tools.build:gradle:$androidBuild_version"
     testImplementation "io.mockk:mockk:1.9.3"
     testImplementation 'com.google.truth:truth:1.0'
@@ -43,17 +45,6 @@ sourceSets {
 task functionalTest(type: Test) {
     testClassesDirs = sourceSets.functionalTest.output.classesDirs
     classpath = sourceSets.functionalTest.runtimeClasspath
-}
-
-gradlePlugin {
-    plugins {
-        placeholderPlugin {
-            id = 'placeholder-resolver'
-            implementationClass = 'com.likethesalad.placeholder.ResolvePlaceholdersPlugin'
-        }
-    }
-
-    testSourceSets sourceSets.functionalTest
 }
 
 task sourcesJar(type: Jar) {
