@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+Version 1.2.2 *(11-04-2021)*
+---
+
+* New: Reorganizing modules.
+* Fix: Injecting tasks' dependencies to avoid compatibility issues with Gradle 7.
+
 Version 1.2.1 *(25-08-2020)*
 ---
 

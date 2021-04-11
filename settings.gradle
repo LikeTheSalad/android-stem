@@ -1,2 +1,2 @@
-include 'buildSrc'
+include ':string-reference'
 rootProject.name = 'placeholder'

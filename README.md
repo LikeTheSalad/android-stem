@@ -1,4 +1,4 @@
-[ ![Download](https://api.bintray.com/packages/likethesalad/public-repo/string-reference/images/download.svg) ](https://bintray.com/likethesalad/public-repo/string-reference/_latestVersion)
+![version](https://img.shields.io/maven-central/v/com.likethesalad.android/string-reference)
 [![Android Arsenal]( https://img.shields.io/badge/Android%20Arsenal-Android%20String%20XML%20Reference-green.svg?style=flat )]( https://android-arsenal.com/details/1/7967 )
 
 # Android String XML Reference
@@ -328,7 +328,7 @@ First, in your `Root's build.gradle` file, you'll need to add this
 line into your `buildscript` dependencies block:
 
 ```groovy
-classpath "com.likethesalad.android:string-reference:1.2.1"
+classpath "com.likethesalad.android:string-reference:1.2.2"
 ```
 Example:
 
@@ -336,20 +336,18 @@ Example:
 // Root's build.gradle file
 buildscript {
     repositories {
-        jcenter()
-        //or
         mavenCentral()
     }
     dependencies {
         //...
-        classpath "com.likethesalad.android:string-reference:1.2.1"
+        classpath "com.likethesalad.android:string-reference:1.2.2"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
 ```
-> Please note that you must also add (if not there already) either `jcenter()` or `mavenCentral()`
+> Please note that you must also add (if not there already) `mavenCentral()`
 > to your buildscript's repositories block as shown above.
 
 ### 2.2- Changes to your App's build.gradle file
