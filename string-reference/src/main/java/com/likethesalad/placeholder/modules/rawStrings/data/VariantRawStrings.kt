@@ -2,20 +2,24 @@ package com.likethesalad.placeholder.modules.rawStrings.data
 
 import com.google.auto.factory.AutoFactory
 import com.google.auto.factory.Provided
-import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantDirsPathFinder
+import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.placeholder.modules.rawStrings.data.helpers.dirs.VariantValuesFoldersFactory
-import com.likethesalad.placeholder.modules.rawStrings.data.libraries.LibrariesValuesStringsProvider
+import com.likethesalad.placeholder.modules.rawStrings.data.libraries.LibrariesValuesStringsProviderFactory
 import com.likethesalad.placeholder.modules.rawStrings.models.ValuesFolderStrings
 import com.likethesalad.placeholder.modules.rawStrings.models.VariantXmlFiles
 import java.io.File
 
 @AutoFactory
 class VariantRawStrings(
-    private val variantDirsPathFinder: VariantDirsPathFinder,
-    private val librariesValuesStringsProvider: LibrariesValuesStringsProvider,
+    androidVariantContext: AndroidVariantContext,
     @Provided private val valuesFolderStringsProvider: ValuesFolderStringsProvider,
+    @Provided private val librariesValuesStringsProviderFactory: LibrariesValuesStringsProviderFactory,
     @Provided private val variantValuesFoldersFactory: VariantValuesFoldersFactory
 ) {
+
+    private val librariesValuesStringsProvider = librariesValuesStringsProviderFactory
+        .create(androidVariantContext.androidConfigHelper)
+    private val variantDirsPathFinder = androidVariantContext.variantDirsPathFinder
 
     companion object {
         private const val BASE_VALUES_FOLDER_NAME = "values"

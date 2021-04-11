@@ -3,32 +3,24 @@ package com.likethesalad.placeholder.utils
 import com.google.auto.factory.AutoFactory
 import com.google.auto.factory.Provided
 import com.likethesalad.placeholder.modules.common.helpers.android.AndroidConfigHelperFactory
-import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantHelperFactory
-import com.likethesalad.placeholder.modules.common.helpers.files.OutputStringFileResolver
-import com.likethesalad.placeholder.modules.common.helpers.resources.AndroidResourcesHandler
-import com.likethesalad.placeholder.modules.rawStrings.data.libraries.LibrariesValuesStringsProvider
+import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContextFactory
 import com.likethesalad.placeholder.modules.common.helpers.android.AppVariantHelper
-import com.likethesalad.placeholder.modules.common.helpers.dirs.IncrementalDirsProvider
 import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantBuildResolvedDirFactory
 import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantDirsPathFinderFactory
 import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantDirsPathResolverFactory
-import com.likethesalad.placeholder.modules.common.helpers.files.IncrementalDataCleaner
-import com.likethesalad.placeholder.modules.common.helpers.files.storage.AndroidFilesProvider
-import com.likethesalad.placeholder.modules.common.models.TasksNamesModelFactory
-import com.likethesalad.placeholder.modules.resolveStrings.resolver.TemplateResolver
 import com.likethesalad.placeholder.modules.rawStrings.GatherRawStringsAction
 import com.likethesalad.placeholder.modules.rawStrings.data.VariantRawStringsFactory
 import com.likethesalad.placeholder.modules.rawStrings.data.libraries.LibrariesFilesProviderFactory
-import com.likethesalad.placeholder.modules.templateStrings.GatherTemplatesAction
 import com.likethesalad.placeholder.modules.resolveStrings.ResolvePlaceholdersAction
 import com.likethesalad.placeholder.modules.resolveStrings.data.helpers.files.ResolvedDataCleanerFactory
+import com.likethesalad.placeholder.modules.resolveStrings.resolver.TemplateResolver
+import com.likethesalad.placeholder.modules.templateStrings.GatherTemplatesAction
 
 @AutoFactory
 class TaskActionProvider constructor(
     private val appVariantHelper: AppVariantHelper,
     @Provided private val templateResolver: TemplateResolver,
-    @Provided private val tasksNamesModelFactory: TasksNamesModelFactory,
-    @Provided private val androidVariantHelperFactory: AndroidVariantHelperFactory,
+    @Provided private val androidVariantContextFactory: AndroidVariantContextFactory,
     @Provided private val androidConfigHelperFactory: AndroidConfigHelperFactory,
     @Provided private val librariesFilesProviderFactory: LibrariesFilesProviderFactory,
     @Provided private val variantDirsPathResolverFactory: VariantDirsPathResolverFactory,
@@ -37,44 +29,6 @@ class TaskActionProvider constructor(
     @Provided private val variantRawStringsFactory: VariantRawStringsFactory,
     @Provided private val resolvedDataCleanerFactory: ResolvedDataCleanerFactory
 ) {
-    private val tasksNamesModel by lazy { tasksNamesModelFactory.create(appVariantHelper) }
-
-    val androidVariantHelper by lazy { androidVariantHelperFactory.create(tasksNamesModel) }
-
-    val androidConfigHelper by lazy { androidConfigHelperFactory.create(appVariantHelper) }
-
-    private val librariesFilesProvider by lazy { librariesFilesProviderFactory.create(androidConfigHelper) }
-    private val librariesValuesStringsProvider =
-        LibrariesValuesStringsProvider(
-            librariesFilesProvider
-        )
-
-    private val incrementalDirsProvider =
-        IncrementalDirsProvider(
-            androidVariantHelper
-        )
-
-    private val variantDirsPathResolver by lazy { variantDirsPathResolverFactory.create(appVariantHelper) }
-    private val variantDirsPathFinder by lazy { variantDirsPathFinderFactory.create(variantDirsPathResolver) }
-    private val variantBuildResolvedDir by lazy { variantBuildResolvedDirFactory.create(appVariantHelper) }
-    private val outputStringFileResolver =
-        OutputStringFileResolver(
-            variantBuildResolvedDir,
-            incrementalDirsProvider
-        )
-    private val filesProvider =
-        AndroidFilesProvider(
-            outputStringFileResolver,
-            incrementalDirsProvider
-        )
-    private val androidResourcesHandler =
-        AndroidResourcesHandler(
-            outputStringFileResolver
-        )
-    private val incrementalDataCleaner =
-        IncrementalDataCleaner(
-            incrementalDirsProvider
-        )
 
     val gatherRawStringsAction: GatherRawStringsAction by lazy {
         val variantRawStrings = variantRawStringsFactory.create(variantDirsPathFinder, librariesValuesStringsProvider)

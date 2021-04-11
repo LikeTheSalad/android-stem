@@ -1,9 +1,10 @@
 package com.likethesalad.placeholder.modules.templateStrings
 
+import com.likethesalad.placeholder.base.TaskAction
 import com.likethesalad.placeholder.modules.common.Constants
-import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHandler
-import com.likethesalad.placeholder.modules.common.helpers.files.storage.FilesProvider
 import com.likethesalad.placeholder.modules.common.helpers.files.IncrementalDataCleaner
+import com.likethesalad.placeholder.modules.common.helpers.files.storage.FilesProvider
+import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHandler
 import com.likethesalad.placeholder.modules.common.models.StringResourceModel
 import com.likethesalad.placeholder.modules.rawStrings.models.StringsGatheredModel
 import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
@@ -13,7 +14,7 @@ class GatherTemplatesAction(
     private val filesProvider: FilesProvider,
     private val resourcesHandler: ResourcesHandler,
     private val incrementalDataCleaner: IncrementalDataCleaner
-) {
+):TaskAction {
     fun getStringFiles(): List<File> {
         return filesProvider.getAllGatheredStringsFiles()
     }
@@ -68,5 +69,9 @@ class GatherTemplatesAction(
             map[it.name] = it.content
         }
         return map
+    }
+
+    override fun execute() {
+        TODO("Not yet implemented")
     }
 }

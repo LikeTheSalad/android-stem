@@ -2,7 +2,7 @@ package com.likethesalad.placeholder.data.helpers
 
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.modules.common.models.TasksNamesModel
-import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantHelper
+import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.placeholder.providers.BuildDirProvider
 import com.likethesalad.placeholder.providers.TaskProvider
 import io.mockk.every
@@ -13,12 +13,12 @@ import org.junit.Before
 import org.junit.Test
 import java.io.File
 
-class AndroidVariantHelperTest {
+class AndroidVariantContextTest {
 
     private lateinit var tasksNames: TasksNamesModel
     private lateinit var taskProvider: TaskProvider
     private lateinit var buildDirProvider: BuildDirProvider
-    private lateinit var androidVariantHelper: AndroidVariantHelper
+    private lateinit var androidVariantContext: AndroidVariantContext
 
     private val mergeResourcesName = "mergeResourcesTask"
     private val generateResValuesName = "generateResValuesTask"
@@ -38,8 +38,8 @@ class AndroidVariantHelperTest {
         every { buildDirProvider.getBuildDir() }.returns(buildDir)
         every { buildDir.absolutePath }.returns(buildDirPath)
 
-        androidVariantHelper =
-            AndroidVariantHelper(
+        androidVariantContext =
+            AndroidVariantContext(
                 tasksNames,
                 taskProvider,
                 buildDirProvider
@@ -53,7 +53,7 @@ class AndroidVariantHelperTest {
         every { taskProvider.findTaskByName<Task>(mergeResourcesName) }.returns(taskMock)
 
         // When:
-        val result = androidVariantHelper.mergeResourcesTask
+        val result = androidVariantContext.mergeResourcesTask
 
         // Then:
         Truth.assertThat(result).isEqualTo(taskMock)
@@ -67,7 +67,7 @@ class AndroidVariantHelperTest {
         every { taskProvider.findTaskByName<Task>(generateResValuesName) }.returns(taskMock)
 
         // When:
-        val result = androidVariantHelper.generateResValuesTask
+        val result = androidVariantContext.generateResValuesTask
 
         // Then:
         Truth.assertThat(result).isEqualTo(taskMock)
@@ -77,7 +77,7 @@ class AndroidVariantHelperTest {
     @Test
     fun check_incrementalDir() {
         // When:
-        val result = androidVariantHelper.incrementalDir
+        val result = androidVariantContext.incrementalDir
 
         // Then:
         Truth.assertThat(result).isEqualTo("$buildDirPath/intermediates/incremental/$resolvePlaceholdersName")

@@ -1,5 +1,6 @@
 package com.likethesalad.placeholder.modules.resolveStrings
 
+import com.likethesalad.placeholder.base.TaskAction
 import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHandler
 import com.likethesalad.placeholder.modules.common.helpers.files.storage.FilesProvider
 import com.likethesalad.placeholder.modules.resolveStrings.data.helpers.files.ResolvedDataCleaner
@@ -12,7 +13,7 @@ class ResolvePlaceholdersAction(
     private val resourcesHandler: ResourcesHandler,
     private val templateResolver: TemplateResolver,
     private val resolvedDataCleaner: ResolvedDataCleaner
-) {
+) : TaskAction {
 
     fun getTemplatesFiles(): List<File> {
         return filesProvider.getAllTemplatesFiles()
@@ -47,5 +48,9 @@ class ResolvePlaceholdersAction(
             return resolvedStrings.filter { it.translatable }
         }
         return resolvedStrings
+    }
+
+    override fun execute() {
+        TODO("Not yet implemented")
     }
 }

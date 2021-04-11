@@ -1,7 +1,7 @@
 package com.likethesalad.placeholder.data
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantHelper
+import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.placeholder.modules.common.helpers.dirs.IncrementalDirsProvider
 import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantBuildResolvedDir
 import com.likethesalad.placeholder.modules.common.models.PathIdentity
@@ -22,7 +22,7 @@ class OutputStringFileResolverTest {
     private val srcDirName = "src"
     private lateinit var srcDir: File
     private lateinit var incrementalDir: File
-    private lateinit var androidVariantHelper: AndroidVariantHelper
+    private lateinit var androidVariantContext: AndroidVariantContext
     private lateinit var incrementalDirsProvider: IncrementalDirsProvider
     private lateinit var variantBuildResolvedDir: VariantBuildResolvedDir
     private lateinit var outputStringFileResolver: OutputStringFileResolver
@@ -31,11 +31,11 @@ class OutputStringFileResolverTest {
     fun setup() {
         srcDir = temporaryFolder.newFolder(srcDirName)
         incrementalDir = temporaryFolder.newFolder("build", "incremental", "taskName")
-        androidVariantHelper = mockk()
-        every { androidVariantHelper.incrementalDir }.returns(incrementalDir.absolutePath)
+        androidVariantContext = mockk()
+        every { androidVariantContext.incrementalDir }.returns(incrementalDir.absolutePath)
         incrementalDirsProvider =
             IncrementalDirsProvider(
-                androidVariantHelper
+                androidVariantContext
             )
         variantBuildResolvedDir = mockk()
         outputStringFileResolver =

@@ -51,7 +51,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Bui
         taskActionProvider: TaskActionProvider,
         resolveOnBuild: Boolean
     ) {
-        val androidVariantHelper = taskActionProvider.androidVariantHelper
+        val androidVariantHelper = taskActionProvider.androidVariantContext
 
         val gatherStringsTask = project.tasks.create(
             androidVariantHelper.tasksNames.gatherRawStringsName,

@@ -1,18 +1,27 @@
 package com.likethesalad.placeholder.modules.rawStrings
 
-import com.likethesalad.placeholder.modules.rawStrings.data.VariantRawStrings
-import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHandler
-import com.likethesalad.placeholder.modules.common.helpers.files.IncrementalDataCleaner
+import com.google.auto.factory.AutoFactory
+import com.google.auto.factory.Provided
+import com.likethesalad.placeholder.base.TaskAction
+import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.placeholder.modules.common.models.PathIdentity
+import com.likethesalad.placeholder.modules.rawStrings.data.VariantRawStringsFactory
 import com.likethesalad.placeholder.modules.rawStrings.models.StringsGatheredModel
 import com.likethesalad.placeholder.modules.rawStrings.models.ValuesFolderStrings
 import java.io.File
 
+@AutoFactory
 class GatherRawStringsAction(
-    private val variantRawStrings: VariantRawStrings,
-    private val resourcesHandler: ResourcesHandler,
-    private val incrementalDataCleaner: IncrementalDataCleaner
-) {
+    private val androidVariantContext: AndroidVariantContext,
+    @Provided private val variantRawStringsFactory: VariantRawStringsFactory
+) : TaskAction {
+
+    private val incrementalDataCleaner = androidVariantContext.incrementalDataCleaner
+    private val resourcesHandler = androidVariantContext.androidResourcesHandler
+
+    private val variantRawStrings by lazy {
+        variantRawStringsFactory.create(androidVariantContext)
+    }
 
     fun gatherStrings(gradleGeneratedResDirs: Set<File>) {
         incrementalDataCleaner.clearRawStrings()
@@ -31,5 +40,9 @@ class GatherRawStringsAction(
             ),
             valuesFolderStrings.mergedStrings
         )
+    }
+
+    override fun execute() {
+        TODO("Not yet implemented")
     }
 }

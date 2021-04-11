@@ -1,10 +1,8 @@
 package com.likethesalad.placeholder.modules.common.helpers.dirs
 
-import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantHelper
 import java.io.File
 
-class IncrementalDirsProvider(androidVariantHelper: AndroidVariantHelper) {
-    private val incrementalDir = File(androidVariantHelper.incrementalDir)
+class IncrementalDirsProvider(private val incrementalDir: File) {
 
     fun getRawStringsDir(): File {
         return getIncrementalDirAndCreateIfNotExists("strings")
