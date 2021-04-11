@@ -9,7 +9,6 @@ import com.likethesalad.placeholder.providers.TaskProvider
 import com.likethesalad.placeholder.modules.rawStrings.GatherRawStringsTask
 import com.likethesalad.placeholder.modules.templateStrings.GatherTemplatesTask
 import com.likethesalad.placeholder.modules.resolveStrings.ResolvePlaceholdersTask
-import com.likethesalad.placeholder.utils.TaskActionProvider
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task

@@ -1,7 +1,9 @@
 package com.likethesalad.placeholder.modules.templateStrings
 
+import com.google.auto.factory.AutoFactory
 import com.likethesalad.placeholder.base.TaskAction
 import com.likethesalad.placeholder.modules.common.Constants
+import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.placeholder.modules.common.helpers.files.IncrementalDataCleaner
 import com.likethesalad.placeholder.modules.common.helpers.files.storage.FilesProvider
 import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHandler
@@ -10,11 +12,15 @@ import com.likethesalad.placeholder.modules.rawStrings.models.StringsGatheredMod
 import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
 import java.io.File
 
+@AutoFactory
 class GatherTemplatesAction(
-    private val filesProvider: FilesProvider,
-    private val resourcesHandler: ResourcesHandler,
-    private val incrementalDataCleaner: IncrementalDataCleaner
-):TaskAction {
+    androidVariantContext: AndroidVariantContext
+) : TaskAction {
+
+    private val filesProvider = androidVariantContext.filesProvider
+    private val incrementalDataCleaner = androidVariantContext.incrementalDataCleaner
+    private val resourcesHandler = androidVariantContext.androidResourcesHandler
+
     fun getStringFiles(): List<File> {
         return filesProvider.getAllGatheredStringsFiles()
     }

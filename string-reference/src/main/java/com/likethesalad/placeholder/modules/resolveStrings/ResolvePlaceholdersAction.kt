@@ -1,19 +1,24 @@
 package com.likethesalad.placeholder.modules.resolveStrings
 
+import com.google.auto.factory.AutoFactory
+import com.google.auto.factory.Provided
 import com.likethesalad.placeholder.base.TaskAction
-import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHandler
-import com.likethesalad.placeholder.modules.common.helpers.files.storage.FilesProvider
-import com.likethesalad.placeholder.modules.resolveStrings.data.helpers.files.ResolvedDataCleaner
+import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.placeholder.modules.common.models.StringResourceModel
+import com.likethesalad.placeholder.modules.resolveStrings.data.helpers.files.ResolvedDataCleanerFactory
 import com.likethesalad.placeholder.modules.resolveStrings.resolver.TemplateResolver
 import java.io.File
 
+@AutoFactory
 class ResolvePlaceholdersAction(
-    private val filesProvider: FilesProvider,
-    private val resourcesHandler: ResourcesHandler,
-    private val templateResolver: TemplateResolver,
-    private val resolvedDataCleaner: ResolvedDataCleaner
+    androidVariantContext: AndroidVariantContext,
+    @Provided resolvedDataCleanerFactory: ResolvedDataCleanerFactory,
+    @Provided private val templateResolver: TemplateResolver
 ) : TaskAction {
+
+    private val filesProvider = androidVariantContext.filesProvider
+    private val resourcesHandler = androidVariantContext.androidResourcesHandler
+    private val resolvedDataCleaner = resolvedDataCleanerFactory.create(androidVariantContext)
 
     fun getTemplatesFiles(): List<File> {
         return filesProvider.getAllTemplatesFiles()

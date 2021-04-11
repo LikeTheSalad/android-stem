@@ -46,22 +46,18 @@ class AndroidVariantContext(
     val variantDirsPathFinder by lazy { variantDirsPathFinderFactory.create(appVariantHelper) }
 
     private val variantBuildResolvedDir by lazy { variantBuildResolvedDirFactory.create(appVariantHelper) }
-    private val outputStringFileResolver =
-        OutputStringFileResolver(
-            variantBuildResolvedDir,
-            incrementalDirsProvider
-        )
-    val filesProvider =
-        AndroidFilesProvider(
-            outputStringFileResolver,
-            incrementalDirsProvider
-        )
-    val androidResourcesHandler =
-        AndroidResourcesHandler(
-            outputStringFileResolver
-        )
-    val incrementalDataCleaner =
-        IncrementalDataCleaner(
-            incrementalDirsProvider
-        )
+    private val outputStringFileResolver = OutputStringFileResolver(
+        variantBuildResolvedDir,
+        incrementalDirsProvider
+    )
+    val filesProvider = AndroidFilesProvider(
+        outputStringFileResolver,
+        incrementalDirsProvider
+    )
+    val androidResourcesHandler = AndroidResourcesHandler(
+        outputStringFileResolver
+    )
+    val incrementalDataCleaner = IncrementalDataCleaner(
+        incrementalDirsProvider
+    )
 }
