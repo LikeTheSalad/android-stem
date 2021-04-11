@@ -28,7 +28,7 @@ allprojects {
 }
 
 group 'com.likethesalad.android'
-version '1.2.2-SNAPSHOT8'
+version '1.2.2'
 
 nexusPublishing {
     repositories {
