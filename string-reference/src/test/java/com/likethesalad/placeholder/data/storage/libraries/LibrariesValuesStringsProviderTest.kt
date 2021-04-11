@@ -1,10 +1,12 @@
 package com.likethesalad.placeholder.data.storage.libraries
 
 import com.google.common.truth.Truth
+import com.likethesalad.placeholder.modules.common.helpers.android.AndroidConfigHelper
 import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.ValuesFolderXmlFiles
-import com.likethesalad.placeholder.modules.rawStrings.models.ValuesFolderStrings
 import com.likethesalad.placeholder.modules.rawStrings.data.libraries.LibrariesFilesProvider
+import com.likethesalad.placeholder.modules.rawStrings.data.libraries.LibrariesFilesProviderFactory
 import com.likethesalad.placeholder.modules.rawStrings.data.libraries.LibrariesValuesStringsProvider
+import com.likethesalad.placeholder.modules.rawStrings.models.ValuesFolderStrings
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Before
@@ -18,11 +20,14 @@ class LibrariesValuesStringsProviderTest {
 
     @Before
     fun setUp() {
+        val librariesFilesProviderFactory = mockk<LibrariesFilesProviderFactory>()
+        val androidConfigHelper = mockk<AndroidConfigHelper>()
         librariesFilesProvider = mockk()
-        librariesValuesStringsProvider =
-            LibrariesValuesStringsProvider(
-                librariesFilesProvider
-            )
+        every { librariesFilesProviderFactory.create(androidConfigHelper) }.returns(librariesFilesProvider)
+
+        librariesValuesStringsProvider = LibrariesValuesStringsProvider(
+            androidConfigHelper, librariesFilesProviderFactory
+        )
     }
 
     @Test

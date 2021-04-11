@@ -8,7 +8,9 @@ import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantDirsPathF
 import com.likethesalad.placeholder.modules.common.helpers.files.IncrementalDataCleaner
 import com.likethesalad.placeholder.modules.common.helpers.files.OutputStringFileResolver
 import com.likethesalad.placeholder.modules.common.helpers.files.storage.AndroidFilesProvider
+import com.likethesalad.placeholder.modules.common.helpers.files.storage.FilesProvider
 import com.likethesalad.placeholder.modules.common.helpers.resources.AndroidResourcesHandler
+import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHandler
 import com.likethesalad.placeholder.modules.common.models.TasksNamesModelFactory
 import com.likethesalad.placeholder.providers.BuildDirProvider
 import com.likethesalad.placeholder.providers.TaskProvider
@@ -50,11 +52,11 @@ class AndroidVariantContext(
         variantBuildResolvedDir,
         incrementalDirsProvider
     )
-    val filesProvider = AndroidFilesProvider(
+    val filesProvider: FilesProvider = AndroidFilesProvider(
         outputStringFileResolver,
         incrementalDirsProvider
     )
-    val androidResourcesHandler = AndroidResourcesHandler(
+    val androidResourcesHandler: ResourcesHandler = AndroidResourcesHandler(
         outputStringFileResolver
     )
     val incrementalDataCleaner = IncrementalDataCleaner(

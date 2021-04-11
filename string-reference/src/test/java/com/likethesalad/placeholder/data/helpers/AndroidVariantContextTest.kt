@@ -1,8 +1,14 @@
 package com.likethesalad.placeholder.data.helpers
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.modules.common.models.TasksNamesModel
+import com.likethesalad.placeholder.modules.common.helpers.android.AndroidConfigHelperFactory
 import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
+import com.likethesalad.placeholder.modules.common.helpers.android.AppVariantHelper
+import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantBuildResolvedDir
+import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantBuildResolvedDirFactory
+import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantDirsPathFinderFactory
+import com.likethesalad.placeholder.modules.common.models.TasksNamesModel
+import com.likethesalad.placeholder.modules.common.models.TasksNamesModelFactory
 import com.likethesalad.placeholder.providers.BuildDirProvider
 import com.likethesalad.placeholder.providers.TaskProvider
 import io.mockk.every
@@ -18,6 +24,13 @@ class AndroidVariantContextTest {
     private lateinit var tasksNames: TasksNamesModel
     private lateinit var taskProvider: TaskProvider
     private lateinit var buildDirProvider: BuildDirProvider
+    private lateinit var variantBuildResolvedDir: VariantBuildResolvedDir
+    private lateinit var appVariantHelper: AppVariantHelper
+    private lateinit var androidConfigHelperFactory: AndroidConfigHelperFactory
+    private lateinit var tasksNamesModelFactory: TasksNamesModelFactory
+    private lateinit var variantBuildResolvedDirFactory: VariantBuildResolvedDirFactory
+    private lateinit var variantDirsPathFinderFactory: VariantDirsPathFinderFactory
+
     private lateinit var androidVariantContext: AndroidVariantContext
 
     private val mergeResourcesName = "mergeResourcesTask"
@@ -30,20 +43,32 @@ class AndroidVariantContextTest {
         tasksNames = mockk()
         buildDirProvider = mockk()
         taskProvider = mockk()
+        appVariantHelper = mockk()
+        androidConfigHelperFactory = mockk()
+        tasksNamesModelFactory = mockk()
+        variantBuildResolvedDirFactory = mockk()
+        variantDirsPathFinderFactory = mockk()
+        variantBuildResolvedDir = mockk()
+
+        every { tasksNamesModelFactory.create(appVariantHelper) }.returns(tasksNames)
         every { tasksNames.mergeResourcesName }.returns(mergeResourcesName)
         every { tasksNames.generateResValuesName }.returns(generateResValuesName)
         every { tasksNames.resolvePlaceholdersName }.returns(resolvePlaceholdersName)
+        every { variantBuildResolvedDirFactory.create(appVariantHelper) }.returns(variantBuildResolvedDir)
 
         val buildDir = mockk<File>()
         every { buildDirProvider.getBuildDir() }.returns(buildDir)
         every { buildDir.absolutePath }.returns(buildDirPath)
 
-        androidVariantContext =
-            AndroidVariantContext(
-                tasksNames,
-                taskProvider,
-                buildDirProvider
-            )
+        androidVariantContext = AndroidVariantContext(
+            appVariantHelper,
+            taskProvider,
+            androidConfigHelperFactory,
+            tasksNamesModelFactory,
+            variantBuildResolvedDirFactory,
+            variantDirsPathFinderFactory,
+            buildDirProvider
+        )
     }
 
     @Test

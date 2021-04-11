@@ -1,14 +1,15 @@
 package com.likethesalad.placeholder.data.storage
 
 import com.google.common.truth.Truth
+import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.placeholder.modules.common.helpers.android.AppVariantHelper
 import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantDirsPathFinder
 import com.likethesalad.placeholder.modules.common.models.VariantResPaths
-import com.likethesalad.placeholder.modules.rawStrings.data.helpers.dirs.VariantValuesFolders
 import com.likethesalad.placeholder.modules.rawStrings.data.helpers.dirs.VariantValuesFoldersFactory
 import com.likethesalad.placeholder.modules.resolveStrings.data.helpers.files.ResolvedDataCleaner
 import io.mockk.every
 import io.mockk.mockk
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -16,8 +17,17 @@ import java.io.File
 
 class ResolvedDataCleanerTest {
 
+    private lateinit var androidVariantContext: AndroidVariantContext
+    private lateinit var variantValuesFoldersFactory: VariantValuesFoldersFactory
+
     @get:Rule
     val temporaryFolder = TemporaryFolder()
+
+    @Before
+    fun setUp() {
+        androidVariantContext = mockk()
+        variantValuesFoldersFactory = mockk()
+    }
 
     @Test
     fun `Remove all resolved xml files from all res dirs of the buildVariant folder`() {
@@ -54,6 +64,8 @@ class ResolvedDataCleanerTest {
         every { variantResPath.variantName }.returns(variantName)
         every { otherVariantResPath.paths }.returns(setOf(otherResDir))
         every { otherVariantResPath.variantName }.returns(otherVariantName)
+        every { androidVariantContext.variantDirsPathFinder }.returns(variantDirsPathFinder)
+        every { androidVariantContext.appVariantHelper }.returns(appVariantHelper)
         every { variantDirsPathFinder.getExistingPathsResDirs() }.returns(
             listOf(
                 variantResPath,
@@ -71,9 +83,7 @@ class ResolvedDataCleanerTest {
 
         // When
         val resolvedDataCleaner = ResolvedDataCleaner(
-            appVariantHelper,
-            variantDirsPathFinder,
-            variantValuesFoldersFactory
+            androidVariantContext, variantValuesFoldersFactory
         )
         resolvedDataCleaner.removeResolvedFiles()
 

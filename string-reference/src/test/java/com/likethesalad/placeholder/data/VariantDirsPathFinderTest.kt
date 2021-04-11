@@ -1,10 +1,12 @@
 package com.likethesalad.placeholder.data
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.modules.common.models.VariantResPaths
+import com.likethesalad.placeholder.modules.common.helpers.android.AndroidExtensionHelper
+import com.likethesalad.placeholder.modules.common.helpers.android.AppVariantHelper
 import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantDirsPathFinder
 import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantDirsPathResolver
-import com.likethesalad.placeholder.modules.common.helpers.android.AndroidExtensionHelper
+import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantDirsPathResolverFactory
+import com.likethesalad.placeholder.modules.common.models.VariantResPaths
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Before
@@ -21,6 +23,8 @@ class VariantDirsPathFinderTest {
     lateinit var androidExtensionHelper: AndroidExtensionHelper
     lateinit var variantDirsPathResolver: VariantDirsPathResolver
     lateinit var variantDirsPathFinder: VariantDirsPathFinder
+    lateinit var appVariantHelper: AppVariantHelper
+    lateinit var variantDirsPathResolverFactory: VariantDirsPathResolverFactory
     lateinit var srcDir: File
     lateinit var srcPath: String
 
@@ -28,13 +32,14 @@ class VariantDirsPathFinderTest {
     fun setUp() {
         srcDir = temporaryFolder.newFolder("src")
         srcPath = srcDir.absolutePath
+        appVariantHelper = mockk()
+        variantDirsPathResolverFactory = mockk()
         androidExtensionHelper = mockk()
         variantDirsPathResolver = mockk()
-        variantDirsPathFinder =
-            VariantDirsPathFinder(
-                variantDirsPathResolver,
-                androidExtensionHelper
-            )
+        every { variantDirsPathResolverFactory.create(appVariantHelper) }.returns(variantDirsPathResolver)
+        variantDirsPathFinder = VariantDirsPathFinder(
+            appVariantHelper, variantDirsPathResolverFactory, androidExtensionHelper
+        )
     }
 
     @Test

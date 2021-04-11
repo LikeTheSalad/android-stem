@@ -1,6 +1,8 @@
 package com.likethesalad.placeholder.data
 
 import com.google.common.truth.Truth
+import com.likethesalad.placeholder.modules.common.helpers.android.AndroidConfigHelper
+import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantDirsPathFinder
 import com.likethesalad.placeholder.modules.common.models.VariantResPaths
 import com.likethesalad.placeholder.modules.rawStrings.data.ValuesFolderStringsProvider
@@ -9,6 +11,7 @@ import com.likethesalad.placeholder.modules.rawStrings.data.helpers.dirs.Variant
 import com.likethesalad.placeholder.modules.rawStrings.data.helpers.dirs.VariantValuesFoldersFactory
 import com.likethesalad.placeholder.modules.rawStrings.data.helpers.files.ValuesFolderXmlFiles
 import com.likethesalad.placeholder.modules.rawStrings.data.libraries.LibrariesValuesStringsProvider
+import com.likethesalad.placeholder.modules.rawStrings.data.libraries.LibrariesValuesStringsProviderFactory
 import com.likethesalad.placeholder.modules.rawStrings.models.ValuesFolderStrings
 import com.likethesalad.placeholder.modules.rawStrings.models.VariantXmlFiles
 import com.likethesalad.placeholder.testutils.TestResourcesHandler
@@ -22,14 +25,24 @@ class VariantRawStringsTest {
 
     private val resourcesHandler = TestResourcesHandler(javaClass)
     private lateinit var valuesFolderStringsProvider: ValuesFolderStringsProvider
+    private lateinit var librariesValuesStringsProviderFactory: LibrariesValuesStringsProviderFactory
     private lateinit var librariesValuesStringsProvider: LibrariesValuesStringsProvider
     private lateinit var variantValuesFoldersFactory: VariantValuesFoldersFactory
+    private lateinit var androidVariantContext: AndroidVariantContext
 
     @Before
     fun setUp() {
+        val androidConfigHelper = mockk<AndroidConfigHelper>()
         valuesFolderStringsProvider = mockk()
         librariesValuesStringsProvider = mockk()
         variantValuesFoldersFactory = mockk()
+        librariesValuesStringsProviderFactory = mockk()
+        androidVariantContext = mockk()
+
+        every { androidVariantContext.androidConfigHelper }.returns(androidConfigHelper)
+        every { librariesValuesStringsProviderFactory.create(androidConfigHelper) }.returns(
+            librariesValuesStringsProvider
+        )
     }
 
     @Test
@@ -437,10 +450,11 @@ class VariantRawStringsTest {
     }
 
     private fun createVariantRawStrings(variantDirsPathFinder: VariantDirsPathFinder): VariantRawStrings {
+        every { androidVariantContext.variantDirsPathFinder }.returns(variantDirsPathFinder)
         return VariantRawStrings(
-            variantDirsPathFinder,
-            librariesValuesStringsProvider,
+            androidVariantContext,
             valuesFolderStringsProvider,
+            librariesValuesStringsProviderFactory,
             variantValuesFoldersFactory
         )
     }

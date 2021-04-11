@@ -12,7 +12,7 @@ import java.io.File
 
 @AutoFactory
 class GatherRawStringsAction(
-    private val androidVariantContext: AndroidVariantContext,
+    androidVariantContext: AndroidVariantContext,
     @Provided private val variantRawStringsFactory: VariantRawStringsFactory
 ) : TaskAction {
 

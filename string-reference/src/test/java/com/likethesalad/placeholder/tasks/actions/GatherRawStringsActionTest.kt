@@ -1,14 +1,16 @@
 package com.likethesalad.placeholder.tasks.actions
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.modules.rawStrings.data.VariantRawStrings
-import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHandler
+import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.placeholder.modules.common.helpers.files.IncrementalDataCleaner
+import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHandler
 import com.likethesalad.placeholder.modules.common.models.PathIdentity
 import com.likethesalad.placeholder.modules.common.models.StringResourceModel
+import com.likethesalad.placeholder.modules.rawStrings.GatherRawStringsAction
+import com.likethesalad.placeholder.modules.rawStrings.data.VariantRawStrings
+import com.likethesalad.placeholder.modules.rawStrings.data.VariantRawStringsFactory
 import com.likethesalad.placeholder.modules.rawStrings.models.StringsGatheredModel
 import com.likethesalad.placeholder.modules.rawStrings.models.ValuesFolderStrings
-import com.likethesalad.placeholder.modules.rawStrings.GatherRawStringsAction
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -25,15 +27,19 @@ class GatherRawStringsActionTest {
 
     @Before
     fun setUp() {
+        val androidVariantContext = mockk<AndroidVariantContext>()
+        val variantRawStringsFactory = mockk<VariantRawStringsFactory>()
         variantRawStrings = mockk()
         resourcesHandler = mockk(relaxUnitFun = true)
         incrementalDataCleaner = mockk(relaxUnitFun = true)
-        gatherRawStringsAction =
-            GatherRawStringsAction(
-                variantRawStrings,
-                resourcesHandler,
-                incrementalDataCleaner
-            )
+
+        every { androidVariantContext.incrementalDataCleaner }.returns(incrementalDataCleaner)
+        every { androidVariantContext.androidResourcesHandler }.returns(resourcesHandler)
+        every { variantRawStringsFactory.create(androidVariantContext) }.returns(variantRawStrings)
+
+        gatherRawStringsAction = GatherRawStringsAction(
+            androidVariantContext, variantRawStringsFactory
+        )
     }
 
     @Test

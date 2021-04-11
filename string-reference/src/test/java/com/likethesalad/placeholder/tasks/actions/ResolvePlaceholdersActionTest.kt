@@ -1,6 +1,7 @@
 package com.likethesalad.placeholder.tasks.actions
 
 import com.google.common.truth.Truth
+import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHandler
 import com.likethesalad.placeholder.modules.common.helpers.files.storage.FilesProvider
 import com.likethesalad.placeholder.modules.resolveStrings.data.helpers.files.ResolvedDataCleaner
@@ -8,6 +9,7 @@ import com.likethesalad.placeholder.modules.common.models.PathIdentity
 import com.likethesalad.placeholder.modules.common.models.StringResourceModel
 import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
 import com.likethesalad.placeholder.modules.resolveStrings.ResolvePlaceholdersAction
+import com.likethesalad.placeholder.modules.resolveStrings.data.helpers.files.ResolvedDataCleanerFactory
 import com.likethesalad.placeholder.modules.resolveStrings.resolver.TemplateResolver
 import io.mockk.every
 import io.mockk.mockk
@@ -27,15 +29,20 @@ class ResolvePlaceholdersActionTest {
 
     @Before
     fun setUp() {
+        val androidVariantContext = mockk<AndroidVariantContext>()
+        val resolvedDataCleanerFactory = mockk<ResolvedDataCleanerFactory>()
         filesProvider = mockk()
         resourcesHandler = mockk(relaxUnitFun = true)
         templateResolver = mockk(relaxUnitFun = true)
         resolvedDataCleaner = mockk(relaxUnitFun = true)
-        resolvePlaceholdersAction =
-            ResolvePlaceholdersAction(
-                filesProvider, resourcesHandler,
-                templateResolver, resolvedDataCleaner
-            )
+
+        every { androidVariantContext.filesProvider }.returns(filesProvider)
+        every { androidVariantContext.androidResourcesHandler }.returns(resourcesHandler)
+        every { resolvedDataCleanerFactory.create(androidVariantContext) }.returns(resolvedDataCleaner)
+
+        resolvePlaceholdersAction = ResolvePlaceholdersAction(
+            androidVariantContext, resolvedDataCleanerFactory, templateResolver
+        )
     }
 
     @Test

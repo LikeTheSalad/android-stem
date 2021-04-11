@@ -1,6 +1,7 @@
 package com.likethesalad.placeholder.tasks.actions
 
 import com.google.common.truth.Truth
+import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHandler
 import com.likethesalad.placeholder.modules.common.helpers.files.storage.FilesProvider
 import com.likethesalad.placeholder.modules.common.helpers.files.IncrementalDataCleaner
@@ -25,14 +26,18 @@ class GatherTemplatesActionTest {
 
     @Before
     fun setUp() {
+        val androidVariantContext = mockk<AndroidVariantContext>()
         filesProvider = mockk()
         resourcesHandler = mockk(relaxUnitFun = true)
         incrementalDataCleaner = mockk(relaxUnitFun = true)
-        gatherTemplatesAction =
-            GatherTemplatesAction(
-                filesProvider, resourcesHandler,
-                incrementalDataCleaner
-            )
+
+        every { androidVariantContext.filesProvider }.returns(filesProvider)
+        every { androidVariantContext.incrementalDataCleaner }.returns(incrementalDataCleaner)
+        every { androidVariantContext.androidResourcesHandler }.returns(resourcesHandler)
+
+        gatherTemplatesAction = GatherTemplatesAction(
+            androidVariantContext
+        )
     }
 
     @Test
