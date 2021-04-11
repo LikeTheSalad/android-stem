@@ -1,11 +1,7 @@
 apply plugin: 'java-library'
 apply plugin: 'kotlin'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'maven-publish'
-apply plugin: "com.jfrog.bintray"
-
-group 'com.likethesalad.android'
-version '1.2.1'
+apply from: '../javaUpload.gradle'
 
 dependencies {
     api gradleApi()
@@ -45,80 +41,6 @@ sourceSets {
 task functionalTest(type: Test) {
     testClassesDirs = sourceSets.functionalTest.output.classesDirs
     classpath = sourceSets.functionalTest.runtimeClasspath
-}
-
-task sourcesJar(type: Jar) {
-    from sourceSets.main.allSource
-    classifier = 'sources'
-}
-
-task javadocJar(type: Jar) {
-    from javadoc.destinationDir
-    classifier = 'javadoc'
-}
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
-}
-
-publishing {
-    publications {
-        myPublication(MavenPublication) {
-            groupId = project.group
-            version = project.version
-
-            artifact sourcesJar
-            artifact javadocJar
-            from components.java
-
-            pom {
-                name = 'Android String XML Reference'
-                description = 'This is a Gradle plugin for Android applications which resolves XML string references in other XML strings.'
-                url = 'https://github.com/LikeTheSalad/android-string-reference'
-                licenses {
-                    license {
-                        name = 'MIT License'
-                        url = 'https://opensource.org/licenses/MIT'
-                    }
-                }
-                developers {
-                    developer {
-                        id = 'LikeTheSalad'
-                        name = 'Cesar Munoz'
-                        email = 'likethesalad@gmail.com'
-                    }
-                }
-                scm {
-                    url = 'https://github.com/LikeTheSalad/android-string-reference'
-                }
-            }
-        }
-    }
-}
-
-bintray {
-    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
-    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
-    publications = ['myPublication']
-    pkg {
-        repo = 'public-repo'
-        name = project.name
-        licenses = ['MIT']
-        desc = 'This is a Gradle plugin for Android applications which resolves XML string references in other XML strings.'
-        websiteUrl = 'https://github.com/LikeTheSalad/android-string-reference'
-        issueTrackerUrl = 'https://github.com/LikeTheSalad/android-string-reference/issues'
-        vcsUrl = 'https://github.com/LikeTheSalad/android-string-reference.git'
-        labels = ['android', 'gradle', 'plugin', 'string']
-        publicDownloadNumbers = true
-        version {
-            name = project.version
-            gpg {
-                sign = true
-                passphrase = project.hasProperty('passphrase') ? project.property('passphrase') : System.getenv('PASSPHRASE')
-            }
-        }
-    }
 }
 
 compileKotlin {
