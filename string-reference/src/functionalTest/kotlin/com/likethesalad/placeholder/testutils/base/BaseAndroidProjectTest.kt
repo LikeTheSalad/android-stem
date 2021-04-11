@@ -36,6 +36,7 @@ abstract class BaseAndroidProjectTest {
 
         return GradleRunner.create()
             .withProjectDir(testProjectDir.root)
+            .withGradleVersion("4.10.3")
             .withArguments(commands.map { ":$name:$it" }.plus("--stacktrace"))
             .build()
     }
@@ -94,7 +95,7 @@ abstract class BaseAndroidProjectTest {
         rootGradleFile = testProjectDir.newFile(BUILD_GRADLE_FILE_NAME)
 
         val libsDir = Paths.get("build", "libs").toFile().absolutePath
-        val pluginJarPath = "$libsDir/string-reference-1.2.2-SNAPSHOT8.jar"
+        val pluginJarPath = "$libsDir/string-reference-1.2.2.jar"
 
         rootGradleFile!!.writeText(
             """
