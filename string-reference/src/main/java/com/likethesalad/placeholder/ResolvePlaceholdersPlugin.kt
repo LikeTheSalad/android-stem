@@ -60,34 +60,38 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Bui
         val gatherTemplatesActionProvider = taskActionProviderHolder.gatherTemplatesActionProvider
         val resolvePlaceholdersActionProvider = taskActionProviderHolder.resolvePlaceholdersActionProvider
 
-        val gatherStringsTask = project.tasks.create(
+        val gatherStringsTask = project.tasks.register(
             androidVariantContext.tasksNames.gatherRawStringsName,
-            GatherRawStringsTask::class.java
-        ) {
+            GatherRawStringsTask::class.java,
+            gatherRawStringsActionProvider.provide(androidVariantContext)
+        )
+
+        gatherStringsTask.configure {
             it.group = RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME
-            it.gatherRawStringsAction = gatherRawStringsActionProvider.provide(androidVariantContext)
             it.dependenciesRes = androidVariantContext.androidConfigHelper.librariesResDirs
             it.gradleGeneratedStrings = androidVariantContext.generateResValuesTask.outputs.files
         }
 
-        val gatherTemplatesTask = project.tasks.create(
+        val gatherTemplatesTask = project.tasks.register(
             androidVariantContext.tasksNames.gatherStringTemplatesName,
-            GatherTemplatesTask::class.java
-        ) {
+            GatherTemplatesTask::class.java,
+            gatherTemplatesActionProvider.provide(androidVariantContext)
+        )
+
+        gatherTemplatesTask.configure {
             it.group = RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME
             it.dependsOn(gatherStringsTask)
-
-            it.gatherTemplatesAction = gatherTemplatesActionProvider.provide(androidVariantContext)
         }
 
-        val resolvePlaceholdersTask = project.tasks.create(
+        val resolvePlaceholdersTask = project.tasks.register(
             androidVariantContext.tasksNames.resolvePlaceholdersName,
-            ResolvePlaceholdersTask::class.java
-        ) {
+            ResolvePlaceholdersTask::class.java,
+            resolvePlaceholdersActionProvider.provide(androidVariantContext)
+        )
+
+        resolvePlaceholdersTask.configure {
             it.group = RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME
             it.dependsOn(gatherTemplatesTask)
-
-            it.resolvePlaceholdersAction = resolvePlaceholdersActionProvider.provide(androidVariantContext)
         }
 
         if (resolveOnBuild) {

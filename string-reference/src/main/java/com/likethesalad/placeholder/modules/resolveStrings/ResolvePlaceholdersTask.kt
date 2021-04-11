@@ -5,10 +5,10 @@ import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputFiles
 import org.gradle.api.tasks.TaskAction
 import java.io.File
+import javax.inject.Inject
 
-open class ResolvePlaceholdersTask : DefaultTask() {
-
-    lateinit var resolvePlaceholdersAction: ResolvePlaceholdersAction
+open class ResolvePlaceholdersTask
+@Inject constructor(private val resolvePlaceholdersAction: ResolvePlaceholdersAction) : DefaultTask() {
 
     @InputFiles
     fun getTemplatesFiles(): List<File> = resolvePlaceholdersAction.getTemplatesFiles()
