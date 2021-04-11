@@ -1,8 +1,9 @@
 package com.likethesalad.placeholder.di
 
 import com.likethesalad.placeholder.ResolvePlaceholdersPlugin
+import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContextFactory
 import com.likethesalad.placeholder.modules.common.helpers.android.AppVariantHelperFactory
-import com.likethesalad.placeholder.utils.TaskActionProviderFactory
+import com.likethesalad.placeholder.utils.TaskActionProviderHolder
 
 object AppInjector {
 
@@ -14,11 +15,15 @@ object AppInjector {
             .build()
     }
 
-    fun getTaskActionProviderFactory(): TaskActionProviderFactory {
-        return component.taskActionProviderFactory()
+    fun getTaskActionProviderHolder(): TaskActionProviderHolder {
+        return component.taskActionProviderHolder()
     }
 
     fun getAppVariantHelperFactory(): AppVariantHelperFactory {
         return component.appVariantHelperFactory()
+    }
+
+    fun getAndroidVariantContextFactory(): AndroidVariantContextFactory {
+        return component.androidVariantContextFactory()
     }
 }
