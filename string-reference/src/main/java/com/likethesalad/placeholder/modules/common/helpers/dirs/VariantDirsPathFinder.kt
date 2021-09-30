@@ -2,18 +2,18 @@ package com.likethesalad.placeholder.modules.common.helpers.dirs
 
 import com.google.auto.factory.AutoFactory
 import com.google.auto.factory.Provided
-import com.likethesalad.placeholder.modules.common.helpers.android.AndroidExtensionHelper
-import com.likethesalad.placeholder.modules.common.helpers.android.AppVariantHelper
 import com.likethesalad.placeholder.modules.common.models.VariantResPaths
+import com.likethesalad.tools.android.plugin.AndroidExtension
+import com.likethesalad.tools.android.plugin.AndroidVariantData
 import java.io.File
 
 @AutoFactory
 class VariantDirsPathFinder(
-    private val appVariantHelper: AppVariantHelper,
+    private val androidVariantData: AndroidVariantData,
     @Provided private val variantDirsPathResolverFactory: VariantDirsPathResolverFactory,
-    @Provided private val androidExtensionHelper: AndroidExtensionHelper
+    @Provided private val androidExtension: AndroidExtension
 ) {
-    private val variantDirsPathResolver by lazy { variantDirsPathResolverFactory.create(appVariantHelper) }
+    private val variantDirsPathResolver by lazy { variantDirsPathResolverFactory.create(androidVariantData) }
 
     companion object {
         const val BASE_DIR_PATH = "main"
@@ -60,7 +60,7 @@ class VariantDirsPathFinder(
     }
 
     private fun getExistingResDirs(variantName: String): Set<File> {
-        val dirs = androidExtensionHelper.getVariantSrcDirs(variantName)
+        val dirs = androidExtension.getVariantSrcDirs(variantName)
         return dirs.filter { it.exists() }.toSet()
     }
 }

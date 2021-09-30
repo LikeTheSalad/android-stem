@@ -15,7 +15,7 @@ class ResolvedDataCleaner(
 ) {
     private val variantDirsPathFinder = androidVariantContext.variantDirsPathFinder
     private val variantName by lazy {
-        androidVariantContext.appVariantHelper.getVariantName()
+        androidVariantContext.androidVariantData.getVariantName()
     }
 
     fun removeResolvedFiles() {

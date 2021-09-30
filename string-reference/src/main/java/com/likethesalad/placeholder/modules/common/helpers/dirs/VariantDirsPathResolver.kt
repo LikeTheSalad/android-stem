@@ -2,24 +2,24 @@ package com.likethesalad.placeholder.modules.common.helpers.dirs
 
 import com.google.auto.factory.AutoFactory
 import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantDirsPathFinder.Companion.BASE_DIR_PATH
-import com.likethesalad.placeholder.modules.common.helpers.android.AppVariantHelper
+import com.likethesalad.tools.android.plugin.AndroidVariantData
 import javax.inject.Inject
 
 @AutoFactory
 class VariantDirsPathResolver @Inject constructor(
-    private val appVariantHelper: AppVariantHelper
+    private val androidVariantData: AndroidVariantData
 ) {
 
     private val flavors by lazy {
-        appVariantHelper.getVariantFlavors()
+        androidVariantData.getVariantFlavors()
     }
 
     private val variantName by lazy {
-        appVariantHelper.getVariantName()
+        androidVariantData.getVariantName()
     }
 
     private val variantType by lazy {
-        appVariantHelper.getVariantType()
+        androidVariantData.getVariantType()
     }
 
     val pathList: List<String> by lazy {

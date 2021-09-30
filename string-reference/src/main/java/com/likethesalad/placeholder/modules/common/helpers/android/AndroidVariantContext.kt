@@ -14,12 +14,13 @@ import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHa
 import com.likethesalad.placeholder.modules.common.models.TasksNamesModelFactory
 import com.likethesalad.placeholder.providers.BuildDirProvider
 import com.likethesalad.placeholder.providers.TaskProvider
+import com.likethesalad.tools.android.plugin.AndroidVariantData
 import org.gradle.api.Task
 import java.io.File
 
 @AutoFactory
 class AndroidVariantContext(
-    val appVariantHelper: AppVariantHelper,
+    val androidVariantData: AndroidVariantData,
     @Provided private val taskProvider: TaskProvider,
     @Provided private val androidConfigHelperFactory: AndroidConfigHelperFactory,
     @Provided private val tasksNamesModelFactory: TasksNamesModelFactory,
@@ -28,10 +29,10 @@ class AndroidVariantContext(
     @Provided private val buildDirProvider: BuildDirProvider
 ) {
     val tasksNames by lazy {
-        tasksNamesModelFactory.create(appVariantHelper)
+        tasksNamesModelFactory.create(androidVariantData)
     }
     val androidConfigHelper by lazy {
-        androidConfigHelperFactory.create(appVariantHelper)
+        androidConfigHelperFactory.create(androidVariantData)
     }
     val incrementalDirsProvider by lazy {
         IncrementalDirsProvider(File(incrementalDir))
@@ -45,9 +46,9 @@ class AndroidVariantContext(
     val incrementalDir: String by lazy {
         buildDirProvider.getBuildDir().absolutePath + "/intermediates/incremental/" + tasksNames.resolvePlaceholdersName
     }
-    val variantDirsPathFinder by lazy { variantDirsPathFinderFactory.create(appVariantHelper) }
+    val variantDirsPathFinder by lazy { variantDirsPathFinderFactory.create(androidVariantData) }
 
-    private val variantBuildResolvedDir by lazy { variantBuildResolvedDirFactory.create(appVariantHelper) }
+    private val variantBuildResolvedDir by lazy { variantBuildResolvedDirFactory.create(androidVariantData) }
     private val outputStringFileResolver = OutputStringFileResolver(
         variantBuildResolvedDir,
         incrementalDirsProvider

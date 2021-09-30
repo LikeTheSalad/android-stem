@@ -4,9 +4,6 @@ import com.google.auto.factory.AutoFactory
 import com.likethesalad.placeholder.base.TaskAction
 import com.likethesalad.placeholder.modules.common.Constants
 import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
-import com.likethesalad.placeholder.modules.common.helpers.files.IncrementalDataCleaner
-import com.likethesalad.placeholder.modules.common.helpers.files.storage.FilesProvider
-import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHandler
 import com.likethesalad.placeholder.modules.common.models.StringResourceModel
 import com.likethesalad.placeholder.modules.rawStrings.models.StringsGatheredModel
 import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
