@@ -17,7 +17,7 @@ class GatherTemplatesAction @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(androidVariantContext: AndroidVariantContext): TaskAction
+        fun create(androidVariantContext: AndroidVariantContext): GatherTemplatesAction
     }
 
     private val filesProvider = androidVariantContext.filesProvider
