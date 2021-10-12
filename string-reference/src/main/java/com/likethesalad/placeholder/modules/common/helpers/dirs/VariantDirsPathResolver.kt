@@ -1,14 +1,19 @@
 package com.likethesalad.placeholder.modules.common.helpers.dirs
 
-import com.google.auto.factory.AutoFactory
 import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantDirsPathFinder.Companion.BASE_DIR_PATH
-import com.likethesalad.tools.android.plugin.AndroidVariantData
-import javax.inject.Inject
+import com.likethesalad.tools.android.plugin.data.AndroidVariantData
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
-@AutoFactory
-class VariantDirsPathResolver @Inject constructor(
-    private val androidVariantData: AndroidVariantData
+class VariantDirsPathResolver @AssistedInject constructor(
+    @Assisted androidVariantData: AndroidVariantData
 ) {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(androidVariantData: AndroidVariantData): VariantDirsPathResolver
+    }
 
     private val flavors by lazy {
         androidVariantData.getVariantFlavors()

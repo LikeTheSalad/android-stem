@@ -1,18 +1,24 @@
 package com.likethesalad.placeholder.modules.templateStrings
 
-import com.google.auto.factory.AutoFactory
 import com.likethesalad.placeholder.base.TaskAction
 import com.likethesalad.placeholder.modules.common.Constants
 import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.placeholder.modules.common.models.StringResourceModel
 import com.likethesalad.placeholder.modules.rawStrings.models.StringsGatheredModel
 import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import java.io.File
 
-@AutoFactory
-class GatherTemplatesAction(
-    androidVariantContext: AndroidVariantContext
+class GatherTemplatesAction @AssistedInject constructor(
+    @Assisted androidVariantContext: AndroidVariantContext
 ) : TaskAction {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(androidVariantContext: AndroidVariantContext): TaskAction
+    }
 
     private val filesProvider = androidVariantContext.filesProvider
     private val incrementalDataCleaner = androidVariantContext.incrementalDataCleaner

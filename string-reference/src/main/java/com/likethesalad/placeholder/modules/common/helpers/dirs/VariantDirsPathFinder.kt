@@ -1,18 +1,24 @@
 package com.likethesalad.placeholder.modules.common.helpers.dirs
 
-import com.google.auto.factory.AutoFactory
-import com.google.auto.factory.Provided
 import com.likethesalad.placeholder.modules.common.models.VariantResPaths
-import com.likethesalad.tools.android.plugin.AndroidExtension
-import com.likethesalad.tools.android.plugin.AndroidVariantData
+import com.likethesalad.tools.android.plugin.data.AndroidExtension
+import com.likethesalad.tools.android.plugin.data.AndroidVariantData
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import java.io.File
 
-@AutoFactory
-class VariantDirsPathFinder(
-    private val androidVariantData: AndroidVariantData,
-    @Provided private val variantDirsPathResolverFactory: VariantDirsPathResolverFactory,
-    @Provided private val androidExtension: AndroidExtension
+class VariantDirsPathFinder @AssistedInject constructor(
+    @Assisted androidVariantData: AndroidVariantData,
+    private val variantDirsPathResolverFactory: VariantDirsPathResolver.Factory,
+    private val androidExtension: AndroidExtension
 ) {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(androidVariantData: AndroidVariantData): VariantDirsPathFinder
+    }
+
     private val variantDirsPathResolver by lazy { variantDirsPathResolverFactory.create(androidVariantData) }
 
     companion object {

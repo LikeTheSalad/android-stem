@@ -1,21 +1,25 @@
 package com.likethesalad.placeholder.modules.common.helpers.dirs
 
-import com.google.auto.factory.AutoFactory
-import com.google.auto.factory.Provided
 import com.likethesalad.placeholder.providers.BuildDirProvider
 import com.likethesalad.placeholder.utils.ConfigurationProvider
-import com.likethesalad.tools.android.plugin.AndroidExtension
-import com.likethesalad.tools.android.plugin.AndroidVariantData
+import com.likethesalad.tools.android.plugin.data.AndroidExtension
+import com.likethesalad.tools.android.plugin.data.AndroidVariantData
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import java.io.File
-import javax.inject.Inject
 
-@AutoFactory
-class VariantBuildResolvedDir @Inject constructor(
-    androidVariantData: AndroidVariantData,
-    @Provided buildDirProvider: BuildDirProvider,
-    @Provided configurationProvider: ConfigurationProvider,
-    @Provided private val androidExtension: AndroidExtension
+class VariantBuildResolvedDir @AssistedInject constructor(
+    buildDirProvider: BuildDirProvider,
+    configurationProvider: ConfigurationProvider,
+    private val androidExtension: AndroidExtension,
+    @Assisted androidVariantData: AndroidVariantData
 ) {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(androidVariantData: AndroidVariantData): VariantBuildResolvedDir
+    }
 
     private val variantName by lazy { androidVariantData.getVariantName() }
 

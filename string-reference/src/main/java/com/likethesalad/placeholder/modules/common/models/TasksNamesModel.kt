@@ -1,10 +1,16 @@
 package com.likethesalad.placeholder.modules.common.models
 
-import com.google.auto.factory.AutoFactory
-import com.likethesalad.tools.android.plugin.AndroidVariantData
+import com.likethesalad.tools.android.plugin.data.AndroidVariantData
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
-@AutoFactory
-class TasksNamesModel(androidVariantData: AndroidVariantData) {
+class TasksNamesModel @AssistedInject constructor(@Assisted androidVariantData: AndroidVariantData) {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(androidVariantData: AndroidVariantData): TasksNamesModel
+    }
 
     companion object {
         private const val GATHER_RAW_STRINGS_NAME_FORMAT = "gather%sRawStrings"

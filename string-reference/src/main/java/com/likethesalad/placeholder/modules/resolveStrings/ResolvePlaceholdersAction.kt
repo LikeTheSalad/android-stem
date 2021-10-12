@@ -1,19 +1,18 @@
 package com.likethesalad.placeholder.modules.resolveStrings
 
-import com.google.auto.factory.AutoFactory
-import com.google.auto.factory.Provided
 import com.likethesalad.placeholder.base.TaskAction
 import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.placeholder.modules.common.models.StringResourceModel
-import com.likethesalad.placeholder.modules.resolveStrings.data.helpers.files.ResolvedDataCleanerFactory
+import com.likethesalad.placeholder.modules.resolveStrings.data.helpers.files.ResolvedDataCleaner
 import com.likethesalad.placeholder.modules.resolveStrings.resolver.TemplateResolver
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import java.io.File
 
-@AutoFactory
-class ResolvePlaceholdersAction(
-    androidVariantContext: AndroidVariantContext,
-    @Provided resolvedDataCleanerFactory: ResolvedDataCleanerFactory,
-    @Provided private val templateResolver: TemplateResolver
+class ResolvePlaceholdersAction @AssistedInject constructor(
+    @Assisted androidVariantContext: AndroidVariantContext,
+    resolvedDataCleanerFactory: ResolvedDataCleaner.Factory,
+    private val templateResolver: TemplateResolver
 ) : TaskAction {
 
     private val filesProvider = androidVariantContext.filesProvider

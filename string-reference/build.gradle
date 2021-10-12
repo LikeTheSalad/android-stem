@@ -7,14 +7,11 @@ dependencies {
     api gradleApi()
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation "com.google.auto.factory:auto-factory:$autoFactory_version"
     implementation "com.google.dagger:dagger:$dagger_version"
     implementation 'com.squareup.retrofit2:retrofit:2.1.0'
-    implementation "com.likethesalad.tools:string-android-resource-locator:1.0.0-SNAPSHOT1"
+    implementation "com.likethesalad.tools:string-android-resource-locator:1.0.0-SNAPSHOT3"
     compileOnly "com.android.tools.build:gradle:$androidBuild_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
-    kapt "com.google.auto.factory:auto-factory:$autoFactory_version"
-    annotationProcessor "com.google.auto.factory:auto-factory:$autoFactory_version"
     testImplementation gradleTestKit()
     testImplementation "com.android.tools.build:gradle:$androidBuild_version"
     testImplementation "io.mockk:mockk:1.9.3"
