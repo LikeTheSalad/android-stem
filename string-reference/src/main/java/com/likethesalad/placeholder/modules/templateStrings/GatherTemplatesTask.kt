@@ -1,5 +1,6 @@
 package com.likethesalad.placeholder.modules.templateStrings
 
+import com.likethesalad.tools.resource.locator.android.extension.LanguageResourceFinder
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.InputFiles
@@ -21,5 +22,7 @@ open class GatherTemplatesTask
     fun getTemplatesFiles(): List<File> = gatherTemplatesAction.getTemplatesFiles()
 
     @TaskAction
-    fun gatherTemplateStrings() = gatherTemplatesAction.gatherTemplateStrings()
+    fun gatherTemplateStrings(languageResourceFinder: LanguageResourceFinder) {
+        gatherTemplatesAction.gatherTemplateStrings(languageResourceFinder)
+    }
 }

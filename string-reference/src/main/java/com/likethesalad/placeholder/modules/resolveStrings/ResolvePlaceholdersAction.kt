@@ -2,22 +2,26 @@ package com.likethesalad.placeholder.modules.resolveStrings
 
 import com.likethesalad.placeholder.base.TaskAction
 import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
-import com.likethesalad.placeholder.modules.common.models.StringResourceModel
-import com.likethesalad.placeholder.modules.resolveStrings.data.helpers.files.ResolvedDataCleaner
 import com.likethesalad.placeholder.modules.resolveStrings.resolver.TemplateResolver
+import com.likethesalad.tools.resource.api.android.environment.Language
+import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
 import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import java.io.File
 
 class ResolvePlaceholdersAction @AssistedInject constructor(
     @Assisted androidVariantContext: AndroidVariantContext,
-    resolvedDataCleanerFactory: ResolvedDataCleaner.Factory,
     private val templateResolver: TemplateResolver
 ) : TaskAction {
 
+    @AssistedFactory
+    interface Factory {
+        fun create(androidVariantContext: AndroidVariantContext): ResolvePlaceholdersAction
+    }
+
     private val filesProvider = androidVariantContext.filesProvider
     private val resourcesHandler = androidVariantContext.androidResourcesHandler
-    private val resolvedDataCleaner = resolvedDataCleanerFactory.create(androidVariantContext)
 
     fun getTemplatesFiles(): List<File> {
         return filesProvider.getAllTemplatesFiles()
@@ -28,30 +32,34 @@ class ResolvePlaceholdersAction @AssistedInject constructor(
     }
 
     fun resolve() {
-        resolvedDataCleaner.removeResolvedFiles()
         for (templateFile in filesProvider.getAllTemplatesFiles()) {
             val templatesModel = resourcesHandler.getTemplatesFromFile(templateFile)
             val resolvedTemplates = templateResolver.resolveTemplates(templatesModel)
             val curatedTemplates =
-                filterNonTranslatableStringsForLanguage(templatesModel.pathIdentity.suffix, resolvedTemplates)
+                filterNonTranslatableStringsForLanguage(templatesModel.language, resolvedTemplates)
             if (curatedTemplates.isNotEmpty()) {
                 resourcesHandler.saveResolvedStringList(
                     curatedTemplates,
-                    templatesModel.pathIdentity
+                    templatesModel.language
                 )
             }
         }
     }
 
     private fun filterNonTranslatableStringsForLanguage(
-        suffix: String,
-        resolvedStrings: List<StringResourceModel>
-    ): List<StringResourceModel> {
-        if (suffix.isNotEmpty()) {
+        language: Language,
+        resolvedStrings: List<StringAndroidResource>
+    ): List<StringAndroidResource> {
+        if (language != Language.Default) {
             // It is a language specific file
-            return resolvedStrings.filter { it.translatable }
+            return resolvedStrings.filter { isTranslatable(it) }
         }
         return resolvedStrings
+    }
+
+    private fun isTranslatable(stringResource: StringAndroidResource): Boolean {
+        val translatable = stringResource.attributes().get("translatable") ?: return true
+        return translatable.toBoolean()
     }
 
     override fun execute() {

@@ -5,8 +5,10 @@ import com.likethesalad.placeholder.modules.common.Constants
 import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
 import com.likethesalad.tools.resource.api.android.data.AndroidResourceType
+import com.likethesalad.tools.resource.api.android.environment.Language
 import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
 import com.likethesalad.tools.resource.api.collection.ResourceCollection
+import com.likethesalad.tools.resource.locator.android.extension.LanguageResourceFinder
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -33,24 +35,26 @@ class GatherTemplatesAction @AssistedInject constructor(
         return filesProvider.getAllExpectedTemplatesFiles()
     }
 
-    fun gatherTemplateStrings() {
+    fun gatherTemplateStrings(languageResourceFinder: LanguageResourceFinder) {
         incrementalDataCleaner.clearTemplateStrings()
 
-        for (stringFile in filesProvider.getAllGatheredStringsFiles()) {
-            val gatheredString = resourcesHandler.getGatheredStringsFromFile(stringFile)
-            resourcesHandler.saveTemplates(gatheredStringsToTemplateStrings(gatheredString))
+        for (language in languageResourceFinder.listLanguages()) {
+            val resources = languageResourceFinder.getResourcesForLanguage(language)
+            resourcesHandler.saveTemplates(gatheredStringsToTemplateStrings(language, resources))
         }
     }
 
     private fun gatheredStringsToTemplateStrings(
-        gatheredStrings: ResourceCollection
+        language: Language,
+        resources: ResourceCollection
     ): StringsTemplatesModel {
-        val mergedStrings =
-            gatheredStrings.getResourcesByType(AndroidResourceType.StringType) as List<StringAndroidResource>
-        val stringTemplates = mergedStrings.filter { Constants.TEMPLATE_STRING_REGEX.containsMatchIn(it.name()) }
-        val placeholdersResolved = getPlaceholdersResolved(mergedStrings, stringTemplates)
+        val stringResources =
+            resources.getResourcesByType(AndroidResourceType.StringType) as List<StringAndroidResource>
+        val stringTemplates = stringResources.filter { Constants.TEMPLATE_STRING_REGEX.containsMatchIn(it.name()) }
+        val placeholdersResolved = getPlaceholdersResolved(stringResources, stringTemplates)
 
         return StringsTemplatesModel(
+            language,
             stringTemplates,
             placeholdersResolved
         )

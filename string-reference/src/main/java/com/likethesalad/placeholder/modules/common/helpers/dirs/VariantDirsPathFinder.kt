@@ -1,7 +1,7 @@
 package com.likethesalad.placeholder.modules.common.helpers.dirs
 
 import com.likethesalad.placeholder.modules.common.models.VariantResPaths
-import com.likethesalad.tools.android.plugin.data.AndroidExtension
+import com.likethesalad.placeholder.providers.AndroidExtensionProvider
 import com.likethesalad.tools.android.plugin.data.AndroidVariantData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -11,7 +11,7 @@ import java.io.File
 class VariantDirsPathFinder @AssistedInject constructor(
     @Assisted androidVariantData: AndroidVariantData,
     private val variantDirsPathResolverFactory: VariantDirsPathResolver.Factory,
-    private val androidExtension: AndroidExtension
+    androidExtensionProvider: AndroidExtensionProvider
 ) {
 
     @AssistedFactory
@@ -19,6 +19,7 @@ class VariantDirsPathFinder @AssistedInject constructor(
         fun create(androidVariantData: AndroidVariantData): VariantDirsPathFinder
     }
 
+    private val androidExtension by lazy { androidExtensionProvider.getExtension() }
     private val variantDirsPathResolver by lazy { variantDirsPathResolverFactory.create(androidVariantData) }
 
     companion object {

@@ -1,20 +1,19 @@
 package com.likethesalad.placeholder.modules.resolveStrings.resolver
 
 import com.likethesalad.placeholder.modules.common.Constants
-import com.likethesalad.placeholder.modules.common.models.StringResourceModel
+import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class RecursiveLevelDetector @Inject constructor() {
 
-    fun orderTemplatesByRecursiveLevel(templates: List<StringResourceModel>)
-            : List<List<StringResourceModel>> {
+    fun orderTemplatesByRecursiveLevel(templates: List<StringAndroidResource>)
+            : List<List<StringAndroidResource>> {
         // Wrap templates:
-        val templatesMap = templates.map { it.name to TemplateRecursiveLevel(
-            it
-        )
-        }.toMap()
+        val templatesMap = templates.associate {
+            it.name() to TemplateRecursiveLevel(it)
+        }
 
         // Get each's recursive level:
         for (it in templatesMap.values) {
@@ -28,7 +27,7 @@ class RecursiveLevelDetector @Inject constructor() {
             .mapValues { it.value.map { p -> p.stringResourceModel } }
 
         // Turn them into an ordered metaList of lists:
-        val templatesByLevel = mutableListOf<List<StringResourceModel>>()
+        val templatesByLevel = mutableListOf<List<StringAndroidResource>>()
         for (level in 0 until recursiveLevelGroups.size) {
             templatesByLevel.add(recursiveLevelGroups.getValue(level))
         }
@@ -43,7 +42,7 @@ class RecursiveLevelDetector @Inject constructor() {
     ): Int {
 
         val templatesAsPlaceholder = Constants.TEMPLATE_AS_PLACEHOLDER_REGEX
-            .findAll(template.stringResourceModel.content)
+            .findAll(template.stringResourceModel.stringValue())
 
         return if (templatesAsPlaceholder.any()) {
 
@@ -52,12 +51,12 @@ class RecursiveLevelDetector @Inject constructor() {
                 .map { allTemplates.getValue(it) }
 
             // Check for circular dependencies:
-            if (templatesPlaceholders.any { it.stringResourceModel.name in idPath }) {
+            if (templatesPlaceholders.any { it.stringResourceModel.name() in idPath }) {
                 throw IllegalArgumentException("Circular dependency on string templates")
             }
 
             // Add the current template id to the idPath metaList to avoid circular dependencies:
-            idPath.add(template.stringResourceModel.name)
+            idPath.add(template.stringResourceModel.name())
 
             // Check recursively for each template's level of dependencies
             val levels = templatesPlaceholders.map {
@@ -75,7 +74,7 @@ class RecursiveLevelDetector @Inject constructor() {
     }
 
     class TemplateRecursiveLevel(
-        val stringResourceModel: StringResourceModel
+        val stringResourceModel: StringAndroidResource
     ) {
         var hasLevelDefined = false
             private set

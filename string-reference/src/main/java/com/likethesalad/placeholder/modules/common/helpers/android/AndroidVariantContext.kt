@@ -14,6 +14,7 @@ import com.likethesalad.placeholder.providers.BuildDirProvider
 import com.likethesalad.placeholder.providers.TaskProvider
 import com.likethesalad.tools.android.plugin.data.AndroidVariantData
 import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.gradle.api.Task
 import java.io.File
@@ -27,6 +28,12 @@ class AndroidVariantContext @AssistedInject constructor(
     private val taskProvider: TaskProvider,
     private val buildDirProvider: BuildDirProvider
 ) {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(androidVariantData: AndroidVariantData): AndroidVariantContext
+    }
+
     val tasksNames by lazy {
         tasksNamesModelFactory.create(androidVariantData)
     }

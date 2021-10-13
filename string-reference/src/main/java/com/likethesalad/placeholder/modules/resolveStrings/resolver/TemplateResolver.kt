@@ -1,16 +1,16 @@
 package com.likethesalad.placeholder.modules.resolveStrings.resolver
 
 import com.likethesalad.placeholder.modules.common.Constants
-import com.likethesalad.placeholder.modules.common.models.StringResourceModel
 import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
+import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class TemplateResolver @Inject constructor(private val recursiveLevelDetector: RecursiveLevelDetector) {
 
-    fun resolveTemplates(stringsTemplatesModel: StringsTemplatesModel): List<StringResourceModel> {
-        return if (stringsTemplatesModel.templates.any { containsTemplateAsPlaceholder(it.content) }) {
+    fun resolveTemplates(stringsTemplatesModel: StringsTemplatesModel): List<StringAndroidResource> {
+        return if (stringsTemplatesModel.templates.any { containsTemplateAsPlaceholder(it.stringValue()) }) {
             // If there's recursive templates
             resolveRecursiveTemplates(stringsTemplatesModel.templates, stringsTemplatesModel.values)
         } else {
@@ -20,9 +20,9 @@ class TemplateResolver @Inject constructor(private val recursiveLevelDetector: R
     }
 
     private fun resolveRecursiveTemplates(
-        templates: List<StringResourceModel>,
+        templates: List<StringAndroidResource>,
         originalValues: Map<String, String>
-    ): List<StringResourceModel> {
+    ): List<StringAndroidResource> {
         // Get metaList of recursive level per template
         val recursiveLevelMetaList = recursiveLevelDetector.orderTemplatesByRecursiveLevel(templates)
 
@@ -30,7 +30,7 @@ class TemplateResolver @Inject constructor(private val recursiveLevelDetector: R
         val mutableValues = HashMap(originalValues)
 
         // The result:
-        val resolvedTemplateList = mutableListOf<StringResourceModel>()
+        val resolvedTemplateList = mutableListOf<StringAndroidResource>()
 
         for (lst in recursiveLevelMetaList) {
             // Resolve this lst templates:
@@ -42,7 +42,7 @@ class TemplateResolver @Inject constructor(private val recursiveLevelDetector: R
             // Add resolved templates to the values so that recursive templates can find them
             for (it in templatesResolved) {
                 // Have to add the prefix as it's removed when resolved
-                mutableValues[Constants.TEMPLATE_STRING_PREFIX + it.name] = it.content
+                mutableValues[Constants.TEMPLATE_STRING_PREFIX + it.name()] = it.stringValue()
             }
         }
 
@@ -50,23 +50,24 @@ class TemplateResolver @Inject constructor(private val recursiveLevelDetector: R
     }
 
     private fun resolveSimpleTemplates(
-        templateList: List<StringResourceModel>,
+        templateList: List<StringAndroidResource>,
         values: Map<String, String>
-    ): List<StringResourceModel> {
-        val resolvedTemplates = mutableListOf<StringResourceModel>()
+    ): List<StringAndroidResource> {
+        val resolvedTemplates = mutableListOf<StringAndroidResource>()
         for (it in templateList) {
             resolvedTemplates.add(getResolvedStringResourceModel(it, values))
         }
         return resolvedTemplates
     }
 
-    private fun getResolvedStringResourceModel(original: StringResourceModel, values: Map<String, String>)
-            : StringResourceModel {
-        val attrs = original.attributes.toMutableMap()
-        attrs[StringResourceModel.ATTR_NAME] = stripTemplatePrefix(original.name)
-        return StringResourceModel(
+    private fun getResolvedStringResourceModel(original: StringAndroidResource, values: Map<String, String>)
+            : StringAndroidResource {
+        val attrs = original.attributes().asMap().toMutableMap()
+        attrs["name"] = stripTemplatePrefix(original.name())
+        return StringAndroidResource(
             attrs,
-            resolve(original.content, values)
+            resolve(original.stringValue(), values),
+            original.getAndroidScope()
         )
     }
 

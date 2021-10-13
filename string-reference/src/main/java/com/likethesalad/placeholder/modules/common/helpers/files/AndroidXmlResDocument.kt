@@ -2,9 +2,13 @@ package com.likethesalad.placeholder.modules.common.helpers.files
 
 import com.likethesalad.placeholder.modules.common.Constants.Companion.XML_RESOURCES_TAG
 import com.likethesalad.placeholder.modules.common.Constants.Companion.XML_STRING_TAG
-import com.likethesalad.placeholder.modules.common.models.StringResourceModel
 import com.likethesalad.placeholder.modules.common.helpers.resources.utils.XmlUtils
-import org.w3c.dom.*
+import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
+import org.w3c.dom.DOMException
+import org.w3c.dom.Document
+import org.w3c.dom.Element
+import org.w3c.dom.Node
+import org.w3c.dom.NodeList
 import org.xml.sax.InputSource
 import java.io.File
 import java.io.StringReader
@@ -54,7 +58,7 @@ class AndroidXmlResDocument(
         }
     }
 
-    fun appendStringResource(stringResourceModel: StringResourceModel) {
+    fun appendStringResource(stringResourceModel: StringAndroidResource) {
         append(
             XmlUtils.stringResourceModelToElement(
                 document,
@@ -69,7 +73,7 @@ class AndroidXmlResDocument(
         }
     }
 
-    fun appendAllStringResources(list: Collection<StringResourceModel>) {
+    fun appendAllStringResources(list: Collection<StringAndroidResource>) {
         for (it in list) {
             appendStringResource(it)
         }
@@ -77,20 +81,6 @@ class AndroidXmlResDocument(
 
     fun getStringList(): NodeList {
         return resources.getElementsByTagName(XML_STRING_TAG)
-    }
-
-    fun getStringResourceList(): List<StringResourceModel> {
-        val strList = mutableListOf<StringResourceModel>()
-        val strings = getStringList()
-
-        for (it in 0 until strings.length) {
-            strList.add(
-                XmlUtils.nodeToStringResourceModel(
-                    strings.item(it)
-                )
-            )
-        }
-        return strList
     }
 
     private fun getOrCreateResources(): Element {
