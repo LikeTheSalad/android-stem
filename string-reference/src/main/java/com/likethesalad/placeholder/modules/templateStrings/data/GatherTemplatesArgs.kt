@@ -1,0 +1,5 @@
+package com.likethesalad.placeholder.modules.templateStrings.data
+
+import com.likethesalad.placeholder.modules.templateStrings.GatherTemplatesAction
+
+data class GatherTemplatesArgs(val gatherTemplatesAction: GatherTemplatesAction)

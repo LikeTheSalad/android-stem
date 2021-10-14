@@ -4,7 +4,9 @@ import com.likethesalad.android.string.resources.locator.StringResourceLocatorPl
 import com.likethesalad.placeholder.di.AppInjector
 import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.placeholder.modules.resolveStrings.ResolvePlaceholdersTask
+import com.likethesalad.placeholder.modules.resolveStrings.data.ResolvePlaceholdersArgs
 import com.likethesalad.placeholder.modules.templateStrings.GatherTemplatesTask
+import com.likethesalad.placeholder.modules.templateStrings.data.GatherTemplatesArgs
 import com.likethesalad.placeholder.providers.AndroidExtensionProvider
 import com.likethesalad.placeholder.providers.BuildDirProvider
 import com.likethesalad.placeholder.providers.PlaceholderExtensionProvider
@@ -62,7 +64,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Bui
         val gatherTemplatesTask = project.tasks.register(
             androidVariantContext.tasksNames.gatherStringTemplatesName,
             GatherTemplatesTask::class.java,
-            gatherTemplatesActionProvider.provide(androidVariantContext)
+            GatherTemplatesArgs(gatherTemplatesActionProvider.provide(androidVariantContext))
         )
 
         gatherTemplatesTask.configure {
@@ -73,7 +75,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Bui
         val resolvePlaceholdersTask = project.tasks.register(
             androidVariantContext.tasksNames.resolvePlaceholdersName,
             ResolvePlaceholdersTask::class.java,
-            resolvePlaceholdersActionProvider.provide(androidVariantContext)
+            ResolvePlaceholdersArgs(resolvePlaceholdersActionProvider.provide(androidVariantContext))
         )
 
         resolvePlaceholdersTask.configure {
