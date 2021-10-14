@@ -11,6 +11,7 @@ import com.likethesalad.placeholder.providers.PlaceholderExtensionProvider
 import com.likethesalad.placeholder.providers.TaskProvider
 import com.likethesalad.placeholder.utils.TaskActionProviderHolder
 import com.likethesalad.tools.android.plugin.data.AndroidExtension
+import com.likethesalad.tools.android.plugin.extension.AndroidToolsPluginExtension
 import com.likethesalad.tools.resource.locator.android.extension.ResourceLocatorExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -28,11 +29,14 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Bui
 
     private lateinit var project: Project
     private lateinit var extension: PlaceholderExtension
+    private lateinit var androidExtension: AndroidExtension
 
     override fun apply(project: Project) {
-        //androidExtension = project.extensions.getByType(AppExtension::class.java)
-
+        this.project = project
+        AppInjector.init(this)
         project.plugins.apply(StringResourceLocatorPlugin::class.java)
+        androidExtension = project.extensions.getByType(AndroidToolsPluginExtension::class.java).androidExtension
+        extension = project.extensions.create(EXTENSION_NAME, PlaceholderExtension::class.java)
         val stringsLocatorExtension = project.extensions.getByType(ResourceLocatorExtension::class.java)
         val taskActionProviderHolder = AppInjector.getTaskActionProviderHolder()
         val androidVariantContextFactory = AppInjector.getAndroidVariantContextFactory()
@@ -44,26 +48,6 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Bui
                 true
             )
         }
-
-//        project.plugins.withId("com.android.application") {
-//            this.project = project
-//            AppInjector.init(this)
-//            extension = project.extensions.create(EXTENSION_NAME, PlaceholderExtension::class.java)
-//            project.afterEvaluate {
-//                val taskActionProviderHolder = AppInjector.getTaskActionProviderHolder()
-//                val appVariantHelperFactory = AppInjector.getAppVariantHelperFactory()
-//                val androidVariantContextFactory = AppInjector.getAndroidVariantContextFactory()
-//
-//                androidExtension.applicationVariants.forEach {
-//                    val androidVariantContext = androidVariantContextFactory.create(appVariantHelperFactory.create(it))
-//                    createResolvePlaceholdersTaskForVariant(
-//                        androidVariantContext,
-//                        taskActionProviderHolder,
-//                        extension.resolveOnBuild
-//                    )
-//                }
-//            }
-//        }
     }
 
     private fun createResolvePlaceholdersTaskForVariant(
@@ -103,7 +87,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Bui
     }
 
     override fun getExtension(): AndroidExtension {
-        TODO()
+        return androidExtension
     }
 
     override fun getBuildDir(): File {
