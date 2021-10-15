@@ -32,6 +32,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Bui
     private lateinit var project: Project
     private lateinit var extension: PlaceholderExtension
     private lateinit var androidExtension: AndroidExtension
+    private lateinit var stringsLocatorExtension: ResourceLocatorExtension
 
     override fun apply(project: Project) {
         this.project = project
@@ -39,7 +40,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Bui
         project.plugins.apply(StringResourceLocatorPlugin::class.java)
         androidExtension = project.extensions.getByType(AndroidToolsPluginExtension::class.java).androidExtension
         extension = project.extensions.create(EXTENSION_NAME, PlaceholderExtension::class.java)
-        val stringsLocatorExtension = project.extensions.getByType(ResourceLocatorExtension::class.java)
+        stringsLocatorExtension = project.extensions.getByType(ResourceLocatorExtension::class.java)
         val taskActionProviderHolder = AppInjector.getTaskActionProviderHolder()
         val androidVariantContextFactory = AppInjector.getAndroidVariantContextFactory()
 
@@ -64,7 +65,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Bui
         val gatherTemplatesTask = project.tasks.register(
             androidVariantContext.tasksNames.gatherStringTemplatesName,
             GatherTemplatesTask::class.java,
-            GatherTemplatesArgs(gatherTemplatesActionProvider.provide(androidVariantContext))
+            GatherTemplatesArgs(gatherTemplatesActionProvider.provide(androidVariantContext), stringsLocatorExtension)
         )
 
         gatherTemplatesTask.configure {

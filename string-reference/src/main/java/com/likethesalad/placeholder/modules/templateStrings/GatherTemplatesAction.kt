@@ -44,6 +44,7 @@ class GatherTemplatesAction @AssistedInject constructor(
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun gatheredStringsToTemplateStrings(
         language: Language,
         resources: ResourceCollection
