@@ -3,6 +3,12 @@ apply plugin: 'kotlin'
 apply plugin: 'kotlin-kapt'
 apply from: '../javaUpload.gradle'
 
+configurations {
+    iTest {
+        transitive = true
+    }
+}
+
 dependencies {
     api gradleApi()
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -12,11 +18,23 @@ dependencies {
     implementation "com.likethesalad.tools:string-android-resource-locator:1.0.0-SNAPSHOT4"
     compileOnly "com.android.tools.build:gradle:$androidBuild_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    iTest "com.likethesalad.tools:string-android-resource-locator:1.0.0-SNAPSHOT4"
+    iTest "com.google.dagger:dagger:$dagger_version"
     testImplementation gradleTestKit()
     testImplementation "com.android.tools.build:gradle:$androidBuild_version"
     testImplementation "io.mockk:mockk:1.9.3"
     testImplementation 'com.google.truth:truth:1.0'
     testImplementation group: 'junit', name: 'junit', version: '4.12'
+}
+
+tasks.register('integrationTestJar', Jar) {
+    classifier 'integration'
+    from sourceSets.main.output
+
+    dependsOn configurations.iTest
+    from {
+        configurations.iTest.findAll().collect { zipTree(it) }
+    }
 }
 
 kapt {

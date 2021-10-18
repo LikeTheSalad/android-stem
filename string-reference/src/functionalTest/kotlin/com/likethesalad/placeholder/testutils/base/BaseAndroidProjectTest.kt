@@ -95,7 +95,7 @@ abstract class BaseAndroidProjectTest {
         rootGradleFile = testProjectDir.newFile(BUILD_GRADLE_FILE_NAME)
 
         val libsDir = Paths.get("build", "libs").toFile().absolutePath
-        val pluginJarPath = "$libsDir/string-reference-1.2.2.jar"
+        val pluginJarPath = "$libsDir/string-reference-1.2.2-integration.jar"
 
         rootGradleFile!!.writeText(
             """
@@ -106,7 +106,6 @@ abstract class BaseAndroidProjectTest {
                 }
                 dependencies {
                     classpath 'com.android.tools.build:gradle:${getAndroidBuildPluginVersion()}'
-                    classpath "com.google.dagger:dagger:2.29.1"
                     classpath files("$pluginJarPath")
                 }
             }
