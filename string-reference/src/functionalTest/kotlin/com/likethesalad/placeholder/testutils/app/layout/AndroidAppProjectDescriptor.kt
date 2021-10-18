@@ -12,8 +12,10 @@ class AndroidAppProjectDescriptor(
 
     override fun getBuildGradleContents(): String {
         return """
-            apply plugin: 'com.android.application'
-            apply plugin: 'placeholder-resolver'
+            plugins {
+                id 'com.android.application'
+                id 'placeholder-resolver'
+            }
             
             android {
                 compileSdkVersion 28
