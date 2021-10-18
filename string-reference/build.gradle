@@ -18,8 +18,8 @@ dependencies {
     implementation "com.likethesalad.tools:string-android-resource-locator:1.0.0-SNAPSHOT4"
     compileOnly "com.android.tools.build:gradle:$androidBuild_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
-    iTest "com.likethesalad.tools:string-android-resource-locator:1.0.0-SNAPSHOT4"
     iTest "com.google.dagger:dagger:$dagger_version"
+    iTest "com.likethesalad.tools:string-android-resource-locator:1.0.0-SNAPSHOT4"
     testImplementation gradleTestKit()
     testImplementation "com.android.tools.build:gradle:$androidBuild_version"
     testImplementation "io.mockk:mockk:1.9.3"

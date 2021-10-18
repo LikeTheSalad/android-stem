@@ -6,9 +6,10 @@ import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputFiles
 import org.gradle.api.tasks.TaskAction
 import java.io.File
+import javax.inject.Inject
 
 open class ResolvePlaceholdersTask
-constructor(private val args: ResolvePlaceholdersArgs) : DefaultTask() {
+@Inject constructor(private val args: ResolvePlaceholdersArgs) : DefaultTask() {
 
     @InputFiles
     fun getTemplatesFiles(): List<File> = args.resolvePlaceholdersAction.getTemplatesFiles()

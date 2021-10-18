@@ -101,8 +101,9 @@ abstract class BaseAndroidProjectTest {
             """
             buildscript {
                 repositories {
+                    mavenLocal()
+                    mavenCentral()
                     google()
-                    jcenter()
                 }
                 dependencies {
                     classpath 'com.android.tools.build:gradle:${getAndroidBuildPluginVersion()}'
@@ -112,8 +113,9 @@ abstract class BaseAndroidProjectTest {
             
             subprojects {
                 repositories {
+                    mavenLocal()
+                    mavenCentral()
                     google()
-                    jcenter()
                 }
             }
         """.trimIndent()
