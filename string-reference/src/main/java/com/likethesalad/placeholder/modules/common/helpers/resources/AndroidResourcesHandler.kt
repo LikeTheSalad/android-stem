@@ -1,10 +1,13 @@
 package com.likethesalad.placeholder.modules.common.helpers.resources
 
-import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.likethesalad.placeholder.modules.common.helpers.files.AndroidXmlResDocument
 import com.likethesalad.placeholder.modules.common.helpers.files.OutputStringFileResolver
+import com.likethesalad.placeholder.modules.common.helpers.resources.utils.LanguageTypeAdapter
+import com.likethesalad.placeholder.modules.common.helpers.resources.utils.VariantTypeAdapter
 import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
 import com.likethesalad.tools.resource.api.android.environment.Language
+import com.likethesalad.tools.resource.api.android.environment.Variant
 import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
 import java.io.File
 
@@ -13,7 +16,12 @@ class AndroidResourcesHandler(
     private val outputStringFileResolver: OutputStringFileResolver
 ) : ResourcesHandler {
 
-    private val gson = Gson()
+    private val gson by lazy {
+        GsonBuilder()
+            .registerTypeAdapter(Language::class.java, LanguageTypeAdapter())
+            .registerTypeAdapter(Variant::class.java, VariantTypeAdapter())
+            .create()
+    }
 
     override fun saveResolvedStringList(
         resolvedStrings: List<StringAndroidResource>,
