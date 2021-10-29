@@ -46,7 +46,10 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Bui
 
         stringsLocatorExtension.onResourceLocatorTaskCreated { taskContainer ->
             createResolvePlaceholdersTaskForVariant(
-                androidVariantContextFactory.create(taskContainer.taskContext.variantTree.androidVariantData),
+                androidVariantContextFactory.create(
+                    taskContainer.taskContext.variantTree.androidVariantData,
+                    stringsLocatorExtension.getResourceSerializer()
+                ),
                 taskActionProviderHolder, taskContainer.outputDir,
                 true
             )

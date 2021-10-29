@@ -4,22 +4,23 @@ import com.google.gson.GsonBuilder
 import com.likethesalad.placeholder.modules.common.helpers.files.AndroidXmlResDocument
 import com.likethesalad.placeholder.modules.common.helpers.files.OutputStringFileResolver
 import com.likethesalad.placeholder.modules.common.helpers.resources.utils.LanguageTypeAdapter
-import com.likethesalad.placeholder.modules.common.helpers.resources.utils.VariantTypeAdapter
+import com.likethesalad.placeholder.modules.common.helpers.resources.utils.StringResourceTypeAdapter
 import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
 import com.likethesalad.tools.resource.api.android.environment.Language
-import com.likethesalad.tools.resource.api.android.environment.Variant
 import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
+import com.likethesalad.tools.resource.serializer.ResourceSerializer
 import java.io.File
 
 
 class AndroidResourcesHandler(
-    private val outputStringFileResolver: OutputStringFileResolver
+    private val outputStringFileResolver: OutputStringFileResolver,
+    resourceSerializer: ResourceSerializer
 ) : ResourcesHandler {
 
     private val gson by lazy {
         GsonBuilder()
             .registerTypeAdapter(Language::class.java, LanguageTypeAdapter())
-            .registerTypeAdapter(Variant::class.java, VariantTypeAdapter())
+            .registerTypeAdapter(StringAndroidResource::class.java, StringResourceTypeAdapter(resourceSerializer))
             .create()
     }
 

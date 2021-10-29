@@ -13,6 +13,7 @@ import com.likethesalad.placeholder.modules.common.models.TasksNamesModel
 import com.likethesalad.placeholder.providers.BuildDirProvider
 import com.likethesalad.placeholder.providers.TaskProvider
 import com.likethesalad.tools.android.plugin.data.AndroidVariantData
+import com.likethesalad.tools.resource.serializer.ResourceSerializer
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -21,6 +22,7 @@ import java.io.File
 
 class AndroidVariantContext @AssistedInject constructor(
     @Assisted val androidVariantData: AndroidVariantData,
+    @Assisted val resourceSerializer: ResourceSerializer,
     androidConfigHelperFactory: AndroidConfigHelper.Factory,
     tasksNamesModelFactory: TasksNamesModel.Factory,
     variantBuildResolvedDirFactory: VariantBuildResolvedDir.Factory,
@@ -31,7 +33,10 @@ class AndroidVariantContext @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(androidVariantData: AndroidVariantData): AndroidVariantContext
+        fun create(
+            androidVariantData: AndroidVariantData,
+            resourceSerializer: ResourceSerializer
+        ): AndroidVariantContext
     }
 
     val tasksNames by lazy {
@@ -64,7 +69,8 @@ class AndroidVariantContext @AssistedInject constructor(
         incrementalDirsProvider
     )
     val androidResourcesHandler: ResourcesHandler = AndroidResourcesHandler(
-        outputStringFileResolver
+        outputStringFileResolver,
+        resourceSerializer
     )
     val incrementalDataCleaner = IncrementalDataCleaner(
         incrementalDirsProvider
