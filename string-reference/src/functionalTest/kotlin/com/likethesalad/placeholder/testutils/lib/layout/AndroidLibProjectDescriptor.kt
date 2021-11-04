@@ -7,7 +7,9 @@ class AndroidLibProjectDescriptor(private val name: String) : ProjectDescriptor(
 
     override fun getBuildGradleContents(): String {
         return """
-            apply plugin: 'com.android.library'
+            plugins {
+                id 'com.android.library'
+            }
             
             android {
                 compileSdkVersion = 28

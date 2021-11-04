@@ -39,7 +39,7 @@ class GatherTemplatesAction @AssistedInject constructor(
         incrementalDataCleaner.clearTemplateStrings()
 
         for (language in languageResourceFinder.listLanguages()) {
-            val resources = languageResourceFinder.getResourcesForLanguage(language)
+            val resources = languageResourceFinder.getMergedResourcesForLanguage(language)
             resourcesHandler.saveTemplates(gatheredStringsToTemplateStrings(language, resources))
         }
     }

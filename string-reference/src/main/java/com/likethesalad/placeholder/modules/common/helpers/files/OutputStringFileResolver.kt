@@ -13,7 +13,11 @@ class OutputStringFileResolver(
 ) {
 
     fun getResolvedStringsFile(valuesFolderName: String): File {
-        return File(variantBuildResolvedDir.resolvedDir, "$valuesFolderName/$RESOLVED_FILE_NAME")
+        val valuesFolder = File(variantBuildResolvedDir.resolvedDir, valuesFolderName)
+        if (!valuesFolder.exists()) {
+            valuesFolder.mkdirs()
+        }
+        return File(valuesFolder, RESOLVED_FILE_NAME)
     }
 
     fun getRawStringsFile(suffix: String): File {

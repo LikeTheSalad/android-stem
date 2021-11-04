@@ -27,6 +27,9 @@ class VariantBuildResolvedDir @AssistedInject constructor(
         androidExtension.getVariantSrcDirs(variantName).first()
     } else {
         val dir = File(buildDirProvider.getBuildDir(), "generated/resolved/$variantName")
+        if (!dir.exists()) {
+            dir.mkdirs()
+        }
         addResolvedDirToSourceSets(dir)
         dir
     }
