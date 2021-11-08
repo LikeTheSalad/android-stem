@@ -113,16 +113,7 @@ will be able to access to the new auto-generated resolved string: `my_message`, 
 same way as with any other string, e.g. This way for Java and Kotlin: `R.string.my_message` and this way for XML layouts: `@string/my_message`.
 
 ### 2.2- Where do resolved strings go to?
-By default the resolved strings go into your app's `build` folder, specifically under the `build/generated/resolved` path. That's where this plugin places them into when it is run. The build folder is usually ignored for a VCS repository, so the resolved strings won't go into your repo unless you want to change it by applying the following configuration into your app's `build.gradle` file:
-
-```groovy
-// Optional:
-stringXmlReference {
-    keepResolvedFiles = true // By default it is false.
-    // If false: Resolved strings will go into the 'app/build' dir (which is a hidden dir for your VCS).
-    // If true: Resolved string will go into the 'app/src' dir.
-}
-```
+The resolved strings go into your app's `build` folder, specifically under the `build/generated/resolved` path. That's where this plugin places them into when it is run.
 
 The following cases are supported:
 
@@ -158,9 +149,6 @@ this plugin won't run automatically during your app's build process and instead 
 proper Gradle commands depending on the build variant you'd want to resolve the strings for. More info on this below under
 "Running it manually".
 
-- **keepResolvedFiles** (Boolean, default is `false`, added in version 1.1.0). When false, it will send all of the resolved strings to your app's build directory. Otherwise, when true,
-it will send all of the resolved strings to your app's src dir, meaning that you will see them in your working directory.
-
 - **useDependenciesRes** (Boolean, default is `false`, added in version 1.2.0). When false, it will only take your app's string resources into account
 for resolving your string's placeholders. When true, it will take both your app's strings as well as your app's dependencies strings
 for doing the resolving process. It will take all strings from your dependencies, even templates (if any) which will be resolved too.
@@ -181,7 +169,6 @@ android {
 
 // Example of how to change some config flags
 stringXmlReference {
-    keepResolvedFiles = true // Its default value is false.
     useDependenciesRes = true // Its default value is false.
 }
 ```

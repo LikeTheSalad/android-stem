@@ -9,10 +9,6 @@ class ConfigurationProvider @Inject constructor(private val extensionProvider: P
 
     private val extension by lazy { extensionProvider.getPlaceholderExtension() }
 
-    fun keepResolvedFiles(): Boolean {
-        return extension.keepResolvedFiles
-    }
-
     fun useDependenciesRes(): Boolean {
         return extension.useDependenciesRes
     }

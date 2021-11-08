@@ -25,7 +25,6 @@ class AndroidAppProjectDescriptor(
             
             stringXmlReference {
                 resolveOnBuild = ${resolverPluginConfig.resolveOnBuild}
-                keepResolvedFiles = ${resolverPluginConfig.keepResolvedFiles}
                 useDependenciesRes = ${resolverPluginConfig.useDependenciesRes}
             }
             

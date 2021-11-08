@@ -51,7 +51,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Bui
                     stringsLocatorExtension.getResourceSerializer()
                 ),
                 taskActionProviderHolder, taskContainer.outputDir,
-                true
+                extension.resolveOnBuild
             )
         }
     }

@@ -23,9 +23,7 @@ class VariantBuildResolvedDir @AssistedInject constructor(
     private val androidExtension by lazy { androidExtensionProvider.getExtension() }
     private val variantName by lazy { androidVariantData.getVariantName() }
 
-    val resolvedDir: File = if (configurationProvider.keepResolvedFiles()) {
-        androidExtension.getVariantSrcDirs(variantName).first()
-    } else {
+    val resolvedDir: File by lazy {
         val dir = File(buildDirProvider.getBuildDir(), "generated/resolved/$variantName")
         if (!dir.exists()) {
             dir.mkdirs()
