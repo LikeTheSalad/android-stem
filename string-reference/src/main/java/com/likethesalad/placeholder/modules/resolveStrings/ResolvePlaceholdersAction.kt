@@ -52,9 +52,13 @@ class ResolvePlaceholdersAction @AssistedInject constructor(
     ): List<StringAndroidResource> {
         if (language != Language.Default) {
             // It is a language specific file
-            return resolvedStrings.filter { isTranslatable(it) }
+            return resolvedStrings.filter { isTranslatable(it) && belongsToLanguage(it, language) }
         }
         return resolvedStrings
+    }
+
+    private fun belongsToLanguage(stringAndroidResource: StringAndroidResource, language: Language): Boolean {
+        return stringAndroidResource.getAndroidScope().language == language
     }
 
     private fun isTranslatable(stringResource: StringAndroidResource): Boolean {
