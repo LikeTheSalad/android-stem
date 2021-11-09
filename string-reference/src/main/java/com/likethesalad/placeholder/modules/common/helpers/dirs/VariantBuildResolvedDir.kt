@@ -2,7 +2,6 @@ package com.likethesalad.placeholder.modules.common.helpers.dirs
 
 import com.likethesalad.placeholder.providers.AndroidExtensionProvider
 import com.likethesalad.placeholder.providers.BuildDirProvider
-import com.likethesalad.placeholder.utils.ConfigurationProvider
 import com.likethesalad.tools.android.plugin.data.AndroidVariantData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -11,7 +10,6 @@ import java.io.File
 
 class VariantBuildResolvedDir @AssistedInject constructor(
     buildDirProvider: BuildDirProvider,
-    configurationProvider: ConfigurationProvider,
     androidExtensionProvider: AndroidExtensionProvider,
     @Assisted androidVariantData: AndroidVariantData
 ) {

@@ -9,7 +9,6 @@ import com.likethesalad.placeholder.modules.templateStrings.GatherTemplatesTask
 import com.likethesalad.placeholder.modules.templateStrings.data.GatherTemplatesArgs
 import com.likethesalad.placeholder.providers.AndroidExtensionProvider
 import com.likethesalad.placeholder.providers.BuildDirProvider
-import com.likethesalad.placeholder.providers.PlaceholderExtensionProvider
 import com.likethesalad.placeholder.providers.TaskProvider
 import com.likethesalad.placeholder.utils.TaskActionProviderHolder
 import com.likethesalad.tools.android.plugin.data.AndroidExtension
@@ -22,7 +21,7 @@ import org.gradle.api.file.FileCollection
 import java.io.File
 
 class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, BuildDirProvider,
-    TaskProvider, PlaceholderExtensionProvider {
+    TaskProvider {
 
     companion object {
         const val RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME = "resolver"
@@ -103,9 +102,5 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Bui
     @Suppress("UNCHECKED_CAST")
     override fun <T : Task> findTaskByName(name: String): T {
         return project.tasks.findByName(name) as T
-    }
-
-    override fun getPlaceholderExtension(): PlaceholderExtension {
-        return extension
     }
 }

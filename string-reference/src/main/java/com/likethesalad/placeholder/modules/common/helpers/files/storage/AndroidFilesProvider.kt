@@ -37,7 +37,7 @@ class AndroidFilesProvider(
     override fun getAllExpectedTemplatesFiles(): List<File> {
         return getAllGatheredStringsFiles().map {
             outputStringFileResolver
-                .getTemplateStringsFile(STRINGS_SUFFIX_REGEX.find(it.name)!!.groupValues[1])
+                .getTemplateStringsFile(STRINGS_SUFFIX_REGEX.find(it.name)!!.groupValues[1]) // todo confirm
         }
     }
 }

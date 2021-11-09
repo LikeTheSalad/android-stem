@@ -2,7 +2,6 @@ package com.likethesalad.placeholder.modules.common.helpers.android
 
 import com.likethesalad.placeholder.modules.common.helpers.dirs.IncrementalDirsProvider
 import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantBuildResolvedDir
-import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantDirsPathFinder
 import com.likethesalad.placeholder.modules.common.helpers.files.IncrementalDataCleaner
 import com.likethesalad.placeholder.modules.common.helpers.files.OutputStringFileResolver
 import com.likethesalad.placeholder.modules.common.helpers.files.storage.AndroidFilesProvider
@@ -23,10 +22,8 @@ import java.io.File
 class AndroidVariantContext @AssistedInject constructor(
     @Assisted val androidVariantData: AndroidVariantData,
     @Assisted val resourceSerializer: ResourceSerializer,
-    androidConfigHelperFactory: AndroidConfigHelper.Factory,
     tasksNamesModelFactory: TasksNamesModel.Factory,
     variantBuildResolvedDirFactory: VariantBuildResolvedDir.Factory,
-    variantDirsPathFinderFactory: VariantDirsPathFinder.Factory,
     private val taskProvider: TaskProvider,
     private val buildDirProvider: BuildDirProvider
 ) {
@@ -39,14 +36,11 @@ class AndroidVariantContext @AssistedInject constructor(
         ): AndroidVariantContext
     }
 
+    private val incrementalDirsProvider by lazy {
+        IncrementalDirsProvider(File(incrementalDir))
+    }
     val tasksNames by lazy {
         tasksNamesModelFactory.create(androidVariantData)
-    }
-    val androidConfigHelper by lazy {
-        androidConfigHelperFactory.create(androidVariantData)
-    }
-    val incrementalDirsProvider by lazy {
-        IncrementalDirsProvider(File(incrementalDir))
     }
     val mergeResourcesTask: Task by lazy {
         taskProvider.findTaskByName(tasksNames.mergeResourcesName)
@@ -57,7 +51,6 @@ class AndroidVariantContext @AssistedInject constructor(
     val incrementalDir: String by lazy {
         buildDirProvider.getBuildDir().absolutePath + "/intermediates/incremental/" + tasksNames.resolvePlaceholdersName
     }
-    val variantDirsPathFinder by lazy { variantDirsPathFinderFactory.create(androidVariantData) }
 
     private val variantBuildResolvedDir by lazy { variantBuildResolvedDirFactory.create(androidVariantData) }
     private val outputStringFileResolver = OutputStringFileResolver(
