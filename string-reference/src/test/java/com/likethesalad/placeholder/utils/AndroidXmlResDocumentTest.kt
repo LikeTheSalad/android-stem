@@ -1,21 +1,32 @@
 package com.likethesalad.placeholder.utils
 
-import com.likethesalad.placeholder.modules.common.models.StringResourceModel
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.modules.common.helpers.resources.utils.XmlUtils
 import com.likethesalad.placeholder.modules.common.helpers.files.AndroidXmlResDocument
-import io.mockk.*
+import com.likethesalad.tools.resource.api.android.AndroidResourceScope
+import com.likethesalad.tools.resource.api.android.environment.Language
+import com.likethesalad.tools.resource.api.android.environment.Variant
+import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
+import io.mockk.Runs
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.spyk
+import io.mockk.verify
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
-import org.w3c.dom.*
-import java.io.File
+import org.w3c.dom.DOMException
+import org.w3c.dom.Document
+import org.w3c.dom.Element
+import org.w3c.dom.Node
+import org.w3c.dom.NodeList
 import javax.xml.parsers.DocumentBuilderFactory
 
 class AndroidXmlResDocumentTest {
 
     @get:Rule
     val temporaryFolder = TemporaryFolder()
+    private val scope = AndroidResourceScope(Variant.Default, Language.Default)
 
     @Test
     fun checkEmptyConstructor_should_create_resources() {
@@ -42,32 +53,6 @@ class AndroidXmlResDocumentTest {
 
         // Then
         Truth.assertThat(androidXmlResDocument.resources).isEqualTo(resources)
-    }
-
-    @Test
-    fun checkReadFromFile() {
-        // Given
-        val file: File = temporaryFolder.newFile()
-        file.writeText(
-            """
-            <resources>
-                <string name="application_name">Some name</string>
-                <string name="application_welcome">Welcome to the app</string>
-            </resources>
-        """
-        )
-
-        // When
-        val result = AndroidXmlResDocument.readFromFile(file)
-
-        // Then
-        val xmlStrings = result.resources.getElementsByTagName("string")
-        val stringList = mutableListOf<StringResourceModel>()
-        for (it in 0 until xmlStrings.length) {
-            stringList.add(XmlUtils.nodeToStringResourceModel(xmlStrings.item(it)))
-        }
-        Truth.assertThat(stringList.size).isEqualTo(2)
-        Truth.assertThat(stringList.map { it.name }).containsExactly("application_name", "application_welcome")
     }
 
     @Test
@@ -125,9 +110,10 @@ class AndroidXmlResDocumentTest {
     fun checkAppendStringResource() {
         // Given
         val stringResourceModel =
-            StringResourceModel(
+            StringAndroidResource(
                 "some_name",
-                "some content"
+                "some content",
+                scope
             )
         val androidXmlResDocumentSpy: AndroidXmlResDocument = spyk(
             AndroidXmlResDocument()
@@ -165,7 +151,7 @@ class AndroidXmlResDocumentTest {
         val androidXmlResDocumentSpy: AndroidXmlResDocument = spyk(
             AndroidXmlResDocument()
         )
-        val stringResources = listOf<StringResourceModel>(mockk(), mockk(), mockk(), mockk(), mockk())
+        val stringResources = listOf<StringAndroidResource>(mockk(), mockk(), mockk(), mockk(), mockk())
         every { androidXmlResDocumentSpy.appendStringResource(any()) } just Runs
 
         // When
@@ -203,48 +189,30 @@ class AndroidXmlResDocumentTest {
     }
 
     @Test
-    fun checkGetStringResourceList() {
-        // Given
-        val document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument()
-        val androidXmlResDocumentSpy: AndroidXmlResDocument = spyk(
-            AndroidXmlResDocument(document)
-        )
-        val nodeListMock: NodeList = mockk()
-        every { nodeListMock.length }.returns(5)
-        every { nodeListMock.item(any()) }.returns(createStringNode("some_name", "some content", document))
-        every { androidXmlResDocumentSpy.getStringList() }.returns(nodeListMock)
-
-        // When
-        val result = androidXmlResDocumentSpy.getStringResourceList()
-
-        // Then
-        Truth.assertThat(result.size).isEqualTo(5)
-        Truth.assertThat(result.map { it.name })
-            .containsExactly("some_name", "some_name", "some_name", "some_name", "some_name")
-    }
-
-    @Test
     fun checkSaveToFile() {
         // Given
         val androidXmlResDocument =
             AndroidXmlResDocument()
         val file = temporaryFolder.newFile()
         androidXmlResDocument.appendStringResource(
-            StringResourceModel(
+            StringAndroidResource(
                 "some_name1",
-                "some content1"
+                "some content1",
+                scope
             )
         )
         androidXmlResDocument.appendStringResource(
-            StringResourceModel(
+            StringAndroidResource(
                 "some_name2",
-                "some content2"
+                "some content2",
+                scope
             )
         )
         androidXmlResDocument.appendStringResource(
-            StringResourceModel(
+            StringAndroidResource(
                 "some_name3",
-                "some content3"
+                "some content3",
+                scope
             )
         )
 
@@ -271,21 +239,24 @@ class AndroidXmlResDocumentTest {
             AndroidXmlResDocument()
         val file = temporaryFolder.newFile()
         androidXmlResDocument.appendStringResource(
-            StringResourceModel(
+            StringAndroidResource(
                 "some_name1",
-                "some content1"
+                "some content1",
+                scope
             )
         )
         androidXmlResDocument.appendStringResource(
-            StringResourceModel(
+            StringAndroidResource(
                 "some_name2",
-                "some content2"
+                "some content2",
+                scope
             )
         )
         androidXmlResDocument.appendStringResource(
-            StringResourceModel(
+            StringAndroidResource(
                 "some_name3",
-                "some content3"
+                "some content3",
+                scope
             )
         )
 

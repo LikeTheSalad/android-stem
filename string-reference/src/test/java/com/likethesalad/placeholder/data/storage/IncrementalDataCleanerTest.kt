@@ -27,29 +27,7 @@ class IncrementalDataCleanerTest {
                 incrementalDirsProvider
             )
     }
-
-    @Test
-    fun `Clear all incremental raw string files`() {
-        val stringsDir = temporaryFolder.newFolder("strings")
-        val files = addFiles("strings", "strings.json", "strings-es.json")
-        every { incrementalDirsProvider.getRawStringsDir() }.returns(stringsDir)
-
-        incrementalDataCleaner.clearRawStrings()
-
-        assertDirWasEmptied(stringsDir, files)
-    }
-
-    @Test
-    fun `Clear all incremental raw string files when it's empty`() {
-        val stringsDir = temporaryFolder.newFolder("strings")
-        val files = emptyList<File>()
-        every { incrementalDirsProvider.getRawStringsDir() }.returns(stringsDir)
-
-        incrementalDataCleaner.clearRawStrings()
-
-        assertDirWasEmptied(stringsDir, files)
-    }
-
+   
     @Test
     fun `Clear all incremental template string files`() {
         val templatesDir = temporaryFolder.newFolder("templates")

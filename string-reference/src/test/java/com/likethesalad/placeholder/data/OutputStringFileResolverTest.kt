@@ -4,7 +4,7 @@ import com.google.common.truth.Truth
 import com.likethesalad.placeholder.modules.common.helpers.dirs.IncrementalDirsProvider
 import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantBuildResolvedDir
 import com.likethesalad.placeholder.modules.common.helpers.files.OutputStringFileResolver
-import com.likethesalad.placeholder.modules.common.models.PathIdentity
+import com.likethesalad.tools.resource.api.android.environment.Language
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Before
@@ -46,11 +46,11 @@ class OutputStringFileResolverTest {
         every { variantBuildResolvedDir.resolvedDir }.returns(File(srcDir, "clientDebug/res/"))
 
         assertResolvedStringsFilePath(
-            PathIdentity("values", ""),
+            Language.Default,
             "clientDebug/res/values/resolved.xml"
         )
         assertResolvedStringsFilePath(
-            PathIdentity("values-es", "-es"),
+            Language.Custom("es"),
             "clientDebug/res/values-es/resolved.xml"
         )
     }
@@ -60,11 +60,11 @@ class OutputStringFileResolverTest {
         every { variantBuildResolvedDir.resolvedDir }.returns(File(srcDir, "clientDebug/res1/"))
 
         assertResolvedStringsFilePath(
-            PathIdentity("values", ""),
+            Language.Default,
             "clientDebug/res1/values/resolved.xml"
         )
         assertResolvedStringsFilePath(
-            PathIdentity("values-es", "-es"),
+            Language.Custom("es"),
             "clientDebug/res1/values-es/resolved.xml"
         )
     }
@@ -72,11 +72,11 @@ class OutputStringFileResolverTest {
     @Test
     fun `Get raw gathered strings file`() {
         assertRawStringsFilePath(
-            PathIdentity("values", ""),
+            Language.Default,
             "strings/strings.json"
         )
         assertRawStringsFilePath(
-            PathIdentity("values-es", "-es"),
+            Language.Custom("es"),
             "strings/strings-es.json"
         )
     }
@@ -84,28 +84,28 @@ class OutputStringFileResolverTest {
     @Test
     fun `Get template strings file`() {
         assertTemplateStringsFilePath(
-            PathIdentity("values", ""),
+            Language.Default,
             "templates/templates.json"
         )
         assertTemplateStringsFilePath(
-            PathIdentity("values-es", "-es"),
+            Language.Custom("es"),
             "templates/templates-es.json"
         )
     }
 
-    private fun assertTemplateStringsFilePath(pathIdentity: PathIdentity, expectedRelativePath: String) {
-        Truth.assertThat(outputStringFileResolver.getTemplateStringsFile(pathIdentity.suffix).absolutePath)
+    private fun assertTemplateStringsFilePath(language: Language, expectedRelativePath: String) {
+        Truth.assertThat(outputStringFileResolver.getTemplateStringsFile(language.id).absolutePath)
             .isEqualTo(File(incrementalDir, expectedRelativePath).absolutePath)
     }
 
-    private fun assertRawStringsFilePath(pathIdentity: PathIdentity, expectedRelativePath: String) {
-        Truth.assertThat(outputStringFileResolver.getRawStringsFile(pathIdentity.suffix).absolutePath)
+    private fun assertRawStringsFilePath(language: Language, expectedRelativePath: String) {
+        Truth.assertThat(outputStringFileResolver.getRawStringsFile(language.id).absolutePath)
             .isEqualTo(File(incrementalDir, expectedRelativePath).absolutePath)
     }
 
-    private fun assertResolvedStringsFilePath(pathIdentity: PathIdentity, expectedRelativePath: String) {
+    private fun assertResolvedStringsFilePath(language: Language, expectedRelativePath: String) {
         Truth.assertThat(
-            outputStringFileResolver.getResolvedStringsFile(pathIdentity.valuesFolderName)
+            outputStringFileResolver.getResolvedStringsFile(language.id)
                 .absolutePath
         ).isEqualTo(File(srcDir, expectedRelativePath).absolutePath)
     }

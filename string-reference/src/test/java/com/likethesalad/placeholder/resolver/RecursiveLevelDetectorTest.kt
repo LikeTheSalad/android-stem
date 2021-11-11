@@ -1,50 +1,62 @@
 package com.likethesalad.placeholder.resolver
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.modules.common.models.StringResourceModel
 import com.likethesalad.placeholder.modules.resolveStrings.resolver.RecursiveLevelDetector
+import com.likethesalad.tools.resource.api.android.AndroidResourceScope
+import com.likethesalad.tools.resource.api.android.environment.Language
+import com.likethesalad.tools.resource.api.android.environment.Variant
+import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
 import junit.framework.TestCase.fail
 import org.junit.Test
 
 class RecursiveLevelDetectorTest {
 
+    private val scope = AndroidResourceScope(Variant.Default, Language.Default)
+
     @Test
     fun check_orderTemplatesByRecursiveLevel() {
         // Given:
         val levelOneTemplate =
-            StringResourceModel(
+            StringAndroidResource(
                 "template_name",
-                "The name"
+                "The name",
+                scope
             )
         val levelOneTemplate2 =
-            StringResourceModel(
+            StringAndroidResource(
                 "template_description",
-                "The description"
+                "The description",
+                scope
             )
         val levelTwoTemplate =
-            StringResourceModel(
+            StringAndroidResource(
                 "template_the_message",
-                "Hello \${template_name}"
+                "Hello \${template_name}",
+                scope
             )
         val levelThreeTemplate =
-            StringResourceModel(
+            StringAndroidResource(
                 "template_the_message_2",
-                "Hello2 \${template_the_message}"
+                "Hello2 \${template_the_message}",
+                scope
             )
         val levelThreeTemplate2 =
-            StringResourceModel(
+            StringAndroidResource(
                 "template_message_4",
-                "The message4 \${template_the_message}"
+                "The message4 \${template_the_message}",
+                scope
             )
         val levelFourTemplate =
-            StringResourceModel(
+            StringAndroidResource(
                 "template_message_3",
-                "The message3 \${template_the_message_2}"
+                "The message3 \${template_the_message_2}",
+                scope
             )
         val levelFourTemplate2 =
-            StringResourceModel(
+            StringAndroidResource(
                 "template_message_5",
-                "The message5 \${template_the_message} \${template_message_4}"
+                "The message5 \${template_the_message} \${template_message_4}",
+                scope
             )
         val templates = listOf(
             levelOneTemplate,
@@ -80,18 +92,21 @@ class RecursiveLevelDetectorTest {
     @Test
     fun check_orderTemplatesByRecursiveLevel_verify_circular_dependency() {
         // Given:
-        val template = StringResourceModel(
+        val template = StringAndroidResource(
             "template_name",
-            "The name"
+            "The name",
+            scope
         )
         val template2 =
-            StringResourceModel(
+            StringAndroidResource(
                 "template_description",
-                "The description and message \${template_the_message}"
+                "The description and message \${template_the_message}",
+                scope
             )
-        val template3 = StringResourceModel(
+        val template3 = StringAndroidResource(
             "template_the_message",
-            "Hello \${template_description}"
+            "Hello \${template_description}",
+            scope
         )
         val templates = listOf(
             template,

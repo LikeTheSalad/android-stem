@@ -1,16 +1,13 @@
 package com.likethesalad.placeholder.data.helpers
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.modules.common.helpers.android.AndroidConfigHelperFactory
 import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
-import com.likethesalad.placeholder.modules.common.helpers.android.AppVariantHelper
 import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantBuildResolvedDir
-import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantBuildResolvedDirFactory
-import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantDirsPathFinderFactory
 import com.likethesalad.placeholder.modules.common.models.TasksNamesModel
-import com.likethesalad.placeholder.modules.common.models.TasksNamesModelFactory
 import com.likethesalad.placeholder.providers.BuildDirProvider
 import com.likethesalad.placeholder.providers.TaskProvider
+import com.likethesalad.tools.android.plugin.data.AndroidVariantData
+import com.likethesalad.tools.resource.serializer.ResourceSerializer
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -25,11 +22,10 @@ class AndroidVariantContextTest {
     private lateinit var taskProvider: TaskProvider
     private lateinit var buildDirProvider: BuildDirProvider
     private lateinit var variantBuildResolvedDir: VariantBuildResolvedDir
-    private lateinit var appVariantHelper: AppVariantHelper
-    private lateinit var androidConfigHelperFactory: AndroidConfigHelperFactory
-    private lateinit var tasksNamesModelFactory: TasksNamesModelFactory
-    private lateinit var variantBuildResolvedDirFactory: VariantBuildResolvedDirFactory
-    private lateinit var variantDirsPathFinderFactory: VariantDirsPathFinderFactory
+    private lateinit var androidVariantData: AndroidVariantData
+    private lateinit var tasksNamesModelFactory: TasksNamesModel.Factory
+    private lateinit var variantBuildResolvedDirFactory: VariantBuildResolvedDir.Factory
+    private lateinit var resourceSerializer: ResourceSerializer
 
     private lateinit var androidVariantContext: AndroidVariantContext
 
@@ -43,30 +39,28 @@ class AndroidVariantContextTest {
         tasksNames = mockk()
         buildDirProvider = mockk()
         taskProvider = mockk()
-        appVariantHelper = mockk()
-        androidConfigHelperFactory = mockk()
+        androidVariantData = mockk()
         tasksNamesModelFactory = mockk()
         variantBuildResolvedDirFactory = mockk()
-        variantDirsPathFinderFactory = mockk()
         variantBuildResolvedDir = mockk()
+        resourceSerializer = mockk()
 
-        every { tasksNamesModelFactory.create(appVariantHelper) }.returns(tasksNames)
+        every { tasksNamesModelFactory.create(androidVariantData) }.returns(tasksNames)
         every { tasksNames.mergeResourcesName }.returns(mergeResourcesName)
         every { tasksNames.generateResValuesName }.returns(generateResValuesName)
         every { tasksNames.resolvePlaceholdersName }.returns(resolvePlaceholdersName)
-        every { variantBuildResolvedDirFactory.create(appVariantHelper) }.returns(variantBuildResolvedDir)
+        every { variantBuildResolvedDirFactory.create(androidVariantData) }.returns(variantBuildResolvedDir)
 
         val buildDir = mockk<File>()
         every { buildDirProvider.getBuildDir() }.returns(buildDir)
         every { buildDir.absolutePath }.returns(buildDirPath)
 
         androidVariantContext = AndroidVariantContext(
-            appVariantHelper,
-            taskProvider,
-            androidConfigHelperFactory,
+            androidVariantData,
+            resourceSerializer,
             tasksNamesModelFactory,
             variantBuildResolvedDirFactory,
-            variantDirsPathFinderFactory,
+            taskProvider,
             buildDirProvider
         )
     }

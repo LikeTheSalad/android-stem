@@ -2,14 +2,14 @@ package com.likethesalad.placeholder.tasks.actions
 
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
-import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHandler
-import com.likethesalad.placeholder.modules.common.helpers.files.storage.FilesProvider
 import com.likethesalad.placeholder.modules.common.helpers.files.IncrementalDataCleaner
+import com.likethesalad.placeholder.modules.common.helpers.files.storage.FilesProvider
+import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHandler
 import com.likethesalad.placeholder.modules.common.models.PathIdentity
 import com.likethesalad.placeholder.modules.common.models.StringResourceModel
 import com.likethesalad.placeholder.modules.rawStrings.models.StringsGatheredModel
-import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
 import com.likethesalad.placeholder.modules.templateStrings.GatherTemplatesAction
+import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
