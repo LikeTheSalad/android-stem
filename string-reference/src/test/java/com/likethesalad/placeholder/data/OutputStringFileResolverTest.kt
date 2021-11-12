@@ -70,18 +70,6 @@ class OutputStringFileResolverTest {
     }
 
     @Test
-    fun `Get raw gathered strings file`() {
-        assertRawStringsFilePath(
-            Language.Default,
-            "strings/strings.json"
-        )
-        assertRawStringsFilePath(
-            Language.Custom("es"),
-            "strings/strings-es.json"
-        )
-    }
-
-    @Test
     fun `Get template strings file`() {
         assertTemplateStringsFilePath(
             Language.Default,
@@ -95,11 +83,6 @@ class OutputStringFileResolverTest {
 
     private fun assertTemplateStringsFilePath(language: Language, expectedRelativePath: String) {
         Truth.assertThat(outputStringFileResolver.getTemplateStringsFile(language.id).absolutePath)
-            .isEqualTo(File(incrementalDir, expectedRelativePath).absolutePath)
-    }
-
-    private fun assertRawStringsFilePath(language: Language, expectedRelativePath: String) {
-        Truth.assertThat(outputStringFileResolver.getRawStringsFile(language.id).absolutePath)
             .isEqualTo(File(incrementalDir, expectedRelativePath).absolutePath)
     }
 

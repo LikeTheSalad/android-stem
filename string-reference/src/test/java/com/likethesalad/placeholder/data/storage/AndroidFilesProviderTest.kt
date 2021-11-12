@@ -4,6 +4,8 @@ import com.google.common.truth.Truth
 import com.likethesalad.placeholder.modules.common.helpers.dirs.IncrementalDirsProvider
 import com.likethesalad.placeholder.modules.common.helpers.files.OutputStringFileResolver
 import com.likethesalad.placeholder.modules.common.helpers.files.storage.AndroidFilesProvider
+import com.likethesalad.placeholder.providers.LanguageResourceFinderProvider
+import com.likethesalad.tools.resource.locator.android.extension.LanguageResourceFinder
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -18,12 +20,13 @@ class AndroidFilesProviderTest {
     private lateinit var outputStringFileResolver: OutputStringFileResolver
     private lateinit var incrementalDirsProvider: IncrementalDirsProvider
     private lateinit var androidFilesProvider: AndroidFilesProvider
+    private lateinit var languageResourceFinderProvider: LanguageResourceFinderProvider
+    private lateinit var languageResourceFinder: LanguageResourceFinder
 
     @get:Rule
     val temporaryFolder = TemporaryFolder()
 
     private lateinit var templatesDir: File
-    private lateinit var stringsDir: File
 
     companion object {
         private const val INCREMENTAL_FOLDER_NAME = "incremental"
@@ -35,14 +38,16 @@ class AndroidFilesProviderTest {
     fun setUp() {
         outputStringFileResolver = mockk()
         incrementalDirsProvider = mockk()
+        languageResourceFinderProvider = mockk()
+        languageResourceFinder = mockk()
         templatesDir = temporaryFolder.newFolder(INCREMENTAL_FOLDER_NAME, TEMPLATES_FOLDER_NAME)
-        stringsDir = temporaryFolder.newFolder(INCREMENTAL_FOLDER_NAME, MERGED_STRINGS_FOLDER_NAME)
         every { incrementalDirsProvider.getTemplateStringsDir() }.returns(templatesDir)
-        every { incrementalDirsProvider.getRawStringsDir() }.returns(stringsDir)
+        every { languageResourceFinderProvider.get() }.returns(languageResourceFinder)
         androidFilesProvider =
             AndroidFilesProvider(
                 outputStringFileResolver,
-                incrementalDirsProvider
+                incrementalDirsProvider,
+                languageResourceFinderProvider
             )
     }
 
@@ -69,29 +74,6 @@ class AndroidFilesProviderTest {
                 "/main/res/values-es/resolved.xml",
                 "/main/res/values-it/resolved.xml"
             )
-    }
-
-    @Test
-    fun check_getAllGatheredStringsFiles() {
-        // Given:
-        val stringFiles = listOf("strings.json", "strings-es.json", "strings-it.json")
-        addStringFilesToMergedStringsDir(stringFiles)
-
-        // When:
-        val result = androidFilesProvider.getAllGatheredStringsFiles()
-
-        // Then:
-        Truth.assertThat(result.size).isEqualTo(3)
-        Truth.assertThat(result.map { it.name }).containsExactlyElementsIn(stringFiles)
-    }
-
-    @Test
-    fun check_getAllGatheredStringsFiles_empty() {
-        // When:
-        val result = androidFilesProvider.getAllGatheredStringsFiles()
-
-        // Then:
-        Truth.assertThat(result).isEmpty()
     }
 
     @Test

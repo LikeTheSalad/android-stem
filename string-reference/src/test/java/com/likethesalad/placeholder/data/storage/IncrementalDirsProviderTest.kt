@@ -26,16 +26,6 @@ class IncrementalDirsProviderTest {
     }
 
     @Test
-    fun `Get raw strings incremental dir and create it if it doesn't exist`() {
-        val result = dirsProvider.getRawStringsDir()
-
-        Truth.assertThat(result.exists()).isTrue()
-        Truth.assertThat(result.absolutePath).isEqualTo(
-            "${incrementalDir.absolutePath}/strings"
-        )
-    }
-
-    @Test
     fun `Get template strings incremental dir and create it if it doesn't exist`() {
         val result = dirsProvider.getTemplateStringsDir()
 

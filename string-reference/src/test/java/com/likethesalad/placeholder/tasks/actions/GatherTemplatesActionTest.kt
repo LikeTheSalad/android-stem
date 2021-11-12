@@ -5,11 +5,15 @@ import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVarian
 import com.likethesalad.placeholder.modules.common.helpers.files.IncrementalDataCleaner
 import com.likethesalad.placeholder.modules.common.helpers.files.storage.FilesProvider
 import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHandler
-import com.likethesalad.placeholder.modules.common.models.PathIdentity
-import com.likethesalad.placeholder.modules.common.models.StringResourceModel
-import com.likethesalad.placeholder.modules.rawStrings.models.StringsGatheredModel
 import com.likethesalad.placeholder.modules.templateStrings.GatherTemplatesAction
 import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
+import com.likethesalad.tools.resource.api.android.AndroidResourceScope
+import com.likethesalad.tools.resource.api.android.environment.Language
+import com.likethesalad.tools.resource.api.android.environment.Variant
+import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
+import com.likethesalad.tools.resource.api.collection.BasicResourceCollection
+import com.likethesalad.tools.resource.api.collection.ResourceCollection
+import com.likethesalad.tools.resource.locator.android.extension.LanguageResourceFinder
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -23,6 +27,7 @@ class GatherTemplatesActionTest {
     private lateinit var resourcesHandler: ResourcesHandler
     private lateinit var incrementalDataCleaner: IncrementalDataCleaner
     private lateinit var gatherTemplatesAction: GatherTemplatesAction
+    private lateinit var languageResourceFinder: LanguageResourceFinder
 
     @Before
     fun setUp() {
@@ -30,6 +35,7 @@ class GatherTemplatesActionTest {
         filesProvider = mockk()
         resourcesHandler = mockk(relaxUnitFun = true)
         incrementalDataCleaner = mockk(relaxUnitFun = true)
+        languageResourceFinder = mockk()
 
         every { androidVariantContext.filesProvider }.returns(filesProvider)
         every { androidVariantContext.incrementalDataCleaner }.returns(incrementalDataCleaner)
@@ -38,20 +44,6 @@ class GatherTemplatesActionTest {
         gatherTemplatesAction = GatherTemplatesAction(
             androidVariantContext
         )
-    }
-
-    @Test
-    fun check_getStringFiles() {
-        // Given:
-        val files = listOf<File>(mockk())
-        every { filesProvider.getAllGatheredStringsFiles() } returns files
-
-        // When:
-        val result = gatherTemplatesAction.getStringFiles()
-
-        // Then:
-        verify { filesProvider.getAllGatheredStringsFiles() }
-        Truth.assertThat(result).isEqualTo(files)
     }
 
     @Test
@@ -71,24 +63,24 @@ class GatherTemplatesActionTest {
     @Test
     fun check_gatherTemplateStrings_single_file() {
 //        // Given:
-        val gatheredStringsFile = mockk<File>()
-        val gatheredStringsFileEs = mockk<File>()
+        val language1 = Language.Default
+        val language2 = Language.Custom("es")
         val (gatheredStrings, expectedGatheredTemplates) = getRawAndTemplatesPair(
-            "values", ""
+            language1
         )
         val (gatheredStringsEs, expectedGatheredTemplatesEs) = getRawAndTemplatesPair(
-            "values-es", "-es"
+            language2
         )
-
-        every { resourcesHandler.getGatheredStringsFromFile(gatheredStringsFile) }.returns(gatheredStrings)
-        every { resourcesHandler.getGatheredStringsFromFile(gatheredStringsFileEs) }.returns(gatheredStringsEs)
-        every { filesProvider.getAllGatheredStringsFiles() } returns listOf(
-            gatheredStringsFile,
-            gatheredStringsFileEs
-        )
+        every { languageResourceFinder.listLanguages() }.returns(listOf(language1, language2))
+        every {
+            languageResourceFinder.getMergedResourcesForLanguage(language1)
+        }.returns(gatheredStrings)
+        every {
+            languageResourceFinder.getMergedResourcesForLanguage(language2)
+        }.returns(gatheredStringsEs)
 
         // When:
-        gatherTemplatesAction.gatherTemplateStrings()
+        gatherTemplatesAction.gatherTemplateStrings(languageResourceFinder)
 
         // Then:
         verify { incrementalDataCleaner.clearTemplateStrings() }
@@ -97,56 +89,61 @@ class GatherTemplatesActionTest {
     }
 
     private fun getRawAndTemplatesPair(
-        valuesFolderName: String,
-        suffix: String
-    ): Pair<StringsGatheredModel, StringsTemplatesModel> {
-        val pathIdentity =
-            PathIdentity(valuesFolderName, suffix)
+        language: Language
+    ): Pair<ResourceCollection, StringsTemplatesModel> {
+        val scope = AndroidResourceScope(Variant.Default, language)
         val gatheredStrings =
-            StringsGatheredModel(
-                pathIdentity,
+            BasicResourceCollection(
                 listOf(
-                    StringResourceModel(
+                    StringAndroidResource(
                         "app_name",
-                        "TesT"
+                        "TesT",
+                        scope
                     ),
-                    StringResourceModel(
+                    StringAndroidResource(
                         "other_string",
-                        "Random string"
+                        "Random string",
+                        scope
                     ),
-                    StringResourceModel(
+                    StringAndroidResource(
                         "template_welcome",
-                        "The welcome message for \${app_name}"
+                        "The welcome message for \${app_name}",
+                        scope
                     ),
-                    StringResourceModel(
+                    StringAndroidResource(
                         mapOf(
                             "name" to "template_message_non_translatable",
                             "translatable" to "false"
-                        ), "Non translatable \${app_name}"
+                        ), "Non translatable \${app_name}",
+                        scope
                     ),
-                    StringResourceModel(
+                    StringAndroidResource(
                         "template_this_contains_template",
-                        "This is the welcome: \${template_welcome}"
+                        "This is the welcome: \${template_welcome}",
+                        scope
                     )
                 )
             )
         val expectedGatheredTemplates =
             StringsTemplatesModel(
-                pathIdentity,
+                language,
                 listOf(
-                    StringResourceModel(
+                    StringAndroidResource(
                         "template_welcome",
-                        "The welcome message for \${app_name}"
+                        "The welcome message for \${app_name}",
+                        scope
                     ),
-                    StringResourceModel(
+                    StringAndroidResource(
                         mapOf(
                             "name" to "template_message_non_translatable",
                             "translatable" to "false"
-                        ), "Non translatable \${app_name}"
+                        ), "Non translatable \${app_name}",
+                        scope
                     ),
-                    StringResourceModel(
+                    StringAndroidResource(
                         "template_this_contains_template",
-                        "This is the welcome: \${template_welcome}"
+                        "This is the welcome: \${template_welcome}",
+                        scope
                     )
                 ), mapOf(
                     "app_name" to "TesT",
