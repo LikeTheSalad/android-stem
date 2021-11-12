@@ -27,10 +27,6 @@ class GatherTemplatesAction @AssistedInject constructor(
     private val incrementalDataCleaner = androidVariantContext.incrementalDataCleaner
     private val resourcesHandler = androidVariantContext.androidResourcesHandler
 
-    fun getStringFiles(): List<File> {
-        return filesProvider.getAllGatheredStringsFiles()
-    }
-
     fun getTemplatesFiles(): List<File> {
         return filesProvider.getAllExpectedTemplatesFiles()
     }

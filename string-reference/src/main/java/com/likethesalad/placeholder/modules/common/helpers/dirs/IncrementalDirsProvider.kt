@@ -4,10 +4,6 @@ import java.io.File
 
 class IncrementalDirsProvider(private val incrementalDir: File) {
 
-    fun getRawStringsDir(): File {
-        return getIncrementalDirAndCreateIfNotExists("strings")
-    }
-
     fun getTemplateStringsDir(): File {
         return getIncrementalDirAndCreateIfNotExists("templates")
     }

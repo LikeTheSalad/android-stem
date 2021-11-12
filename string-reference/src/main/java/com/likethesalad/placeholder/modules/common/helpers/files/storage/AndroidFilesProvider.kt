@@ -2,11 +2,14 @@ package com.likethesalad.placeholder.modules.common.helpers.files.storage
 
 import com.likethesalad.placeholder.modules.common.helpers.dirs.IncrementalDirsProvider
 import com.likethesalad.placeholder.modules.common.helpers.files.OutputStringFileResolver
+import com.likethesalad.placeholder.providers.LanguageResourceFinderProvider
+import com.likethesalad.tools.resource.api.android.environment.Language
 import java.io.File
 
 class AndroidFilesProvider(
     private val outputStringFileResolver: OutputStringFileResolver,
-    private val incrementalDirsProvider: IncrementalDirsProvider
+    private val incrementalDirsProvider: IncrementalDirsProvider,
+    private val languageResourceFinderProvider: LanguageResourceFinderProvider
 ) : FilesProvider {
 
     companion object {
@@ -26,18 +29,20 @@ class AndroidFilesProvider(
         return resolvedFiles
     }
 
-    override fun getAllGatheredStringsFiles(): List<File> {
-        return incrementalDirsProvider.getRawStringsDir().listFiles()?.toList() ?: emptyList()
-    }
-
     override fun getAllTemplatesFiles(): List<File> {
         return incrementalDirsProvider.getTemplateStringsDir().listFiles()?.toList() ?: emptyList()
     }
 
     override fun getAllExpectedTemplatesFiles(): List<File> {
-        return getAllGatheredStringsFiles().map {
-            outputStringFileResolver
-                .getTemplateStringsFile(STRINGS_SUFFIX_REGEX.find(it.name)!!.groupValues[1]) // todo confirm
+        return languageResourceFinderProvider.get().listLanguages().map {
+            outputStringFileResolver.getTemplateStringsFile(getLanguageSuffix(it))
+        }
+    }
+
+    private fun getLanguageSuffix(language: Language): String {
+        return when (language) {
+            Language.Default -> ""
+            else -> "-${language.id}"
         }
     }
 }

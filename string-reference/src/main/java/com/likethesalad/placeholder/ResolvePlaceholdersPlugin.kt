@@ -9,6 +9,7 @@ import com.likethesalad.placeholder.modules.templateStrings.GatherTemplatesTask
 import com.likethesalad.placeholder.modules.templateStrings.data.GatherTemplatesArgs
 import com.likethesalad.placeholder.providers.AndroidExtensionProvider
 import com.likethesalad.placeholder.providers.BuildDirProvider
+import com.likethesalad.placeholder.providers.LanguageResourceFinderProvider
 import com.likethesalad.placeholder.providers.TaskProvider
 import com.likethesalad.placeholder.utils.TaskActionProviderHolder
 import com.likethesalad.tools.android.plugin.data.AndroidExtension
@@ -17,7 +18,6 @@ import com.likethesalad.tools.resource.locator.android.extension.ResourceLocator
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
-import org.gradle.api.file.FileCollection
 import java.io.File
 
 class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, BuildDirProvider,
@@ -44,12 +44,17 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Bui
         val androidVariantContextFactory = AppInjector.getAndroidVariantContextFactory()
 
         stringsLocatorExtension.onResourceLocatorTaskCreated { taskContainer ->
+            val languageResourceFinderProvider = LanguageResourceFinderProvider(
+                taskContainer.outputDir,
+                stringsLocatorExtension
+            )
             createResolvePlaceholdersTaskForVariant(
                 androidVariantContextFactory.create(
                     taskContainer.taskContext.variantTree.androidVariantData,
-                    stringsLocatorExtension.getResourceSerializer()
+                    stringsLocatorExtension.getResourceSerializer(),
+                    languageResourceFinderProvider
                 ),
-                taskActionProviderHolder, taskContainer.outputDir,
+                taskActionProviderHolder, languageResourceFinderProvider,
                 extension.resolveOnBuild
             )
         }
@@ -58,7 +63,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Bui
     private fun createResolvePlaceholdersTaskForVariant(
         androidVariantContext: AndroidVariantContext,
         taskActionProviderHolder: TaskActionProviderHolder,
-        collectedResourcesDir: FileCollection,
+        languageResourceFinderProvider: LanguageResourceFinderProvider,
         resolveOnBuild: Boolean
     ) {
         val gatherTemplatesActionProvider = taskActionProviderHolder.gatherTemplatesActionProvider
@@ -67,12 +72,14 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Bui
         val gatherTemplatesTask = project.tasks.register(
             androidVariantContext.tasksNames.gatherStringTemplatesName,
             GatherTemplatesTask::class.java,
-            GatherTemplatesArgs(gatherTemplatesActionProvider.provide(androidVariantContext), stringsLocatorExtension)
+            GatherTemplatesArgs(
+                gatherTemplatesActionProvider.provide(androidVariantContext),
+                languageResourceFinderProvider
+            )
         )
 
         gatherTemplatesTask.configure {
             it.group = RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME
-            it.inDir = collectedResourcesDir
         }
 
         val resolvePlaceholdersTask = project.tasks.register(

@@ -10,6 +10,7 @@ import com.likethesalad.placeholder.modules.common.helpers.resources.AndroidReso
 import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHandler
 import com.likethesalad.placeholder.modules.common.models.TasksNamesModel
 import com.likethesalad.placeholder.providers.BuildDirProvider
+import com.likethesalad.placeholder.providers.LanguageResourceFinderProvider
 import com.likethesalad.placeholder.providers.TaskProvider
 import com.likethesalad.tools.android.plugin.data.AndroidVariantData
 import com.likethesalad.tools.resource.serializer.ResourceSerializer
@@ -22,6 +23,7 @@ import java.io.File
 class AndroidVariantContext @AssistedInject constructor(
     @Assisted val androidVariantData: AndroidVariantData,
     @Assisted val resourceSerializer: ResourceSerializer,
+    @Assisted val languageResourceFinderProvider: LanguageResourceFinderProvider,
     tasksNamesModelFactory: TasksNamesModel.Factory,
     variantBuildResolvedDirFactory: VariantBuildResolvedDir.Factory,
     private val taskProvider: TaskProvider,
@@ -32,7 +34,8 @@ class AndroidVariantContext @AssistedInject constructor(
     interface Factory {
         fun create(
             androidVariantData: AndroidVariantData,
-            resourceSerializer: ResourceSerializer
+            resourceSerializer: ResourceSerializer,
+            languageResourceFinderProvider: LanguageResourceFinderProvider
         ): AndroidVariantContext
     }
 
@@ -59,7 +62,8 @@ class AndroidVariantContext @AssistedInject constructor(
     )
     val filesProvider: FilesProvider = AndroidFilesProvider(
         outputStringFileResolver,
-        incrementalDirsProvider
+        incrementalDirsProvider,
+        languageResourceFinderProvider
     )
     val androidResourcesHandler: ResourcesHandler = AndroidResourcesHandler(
         outputStringFileResolver,

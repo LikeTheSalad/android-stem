@@ -13,17 +13,14 @@ open class GatherTemplatesTask
 @Inject constructor(private val args: GatherTemplatesArgs) : DefaultTask() {
 
     @InputFiles
-    fun getStringFiles(): List<File> = args.gatherTemplatesAction.getStringFiles()
-
-    @InputFiles
-    lateinit var inDir: FileCollection
+    val inDir: FileCollection = args.languageResourceFinderProvider.directory
 
     @OutputFiles
     fun getTemplatesFiles(): List<File> = args.gatherTemplatesAction.getTemplatesFiles()
 
     @TaskAction
     fun gatherTemplateStrings() {
-        val languageResourceFinder = args.resourceLocatorExtension.getResourcesFromDir(inDir.singleFile)
+        val languageResourceFinder = args.languageResourceFinderProvider.get()
         args.gatherTemplatesAction.gatherTemplateStrings(languageResourceFinder)
     }
 }
