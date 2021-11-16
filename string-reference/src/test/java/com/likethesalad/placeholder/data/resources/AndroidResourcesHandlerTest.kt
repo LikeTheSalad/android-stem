@@ -4,6 +4,7 @@ import com.google.common.truth.Truth
 import com.likethesalad.placeholder.modules.common.helpers.files.OutputStringFileResolver
 import com.likethesalad.placeholder.modules.common.helpers.resources.AndroidResourcesHandler
 import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
+import com.likethesalad.resource.serializer.android.AndroidResourceSerializer
 import com.likethesalad.tools.resource.api.android.AndroidResourceScope
 import com.likethesalad.tools.resource.api.android.environment.Language
 import com.likethesalad.tools.resource.api.android.environment.Variant
@@ -31,7 +32,7 @@ class AndroidResourcesHandlerTest {
     @Before
     fun setUp() {
         outputStringFileResolver = mockk()
-        resourceSerializer = mockk()
+        resourceSerializer = AndroidResourceSerializer()
         androidResourcesHandler =
             AndroidResourcesHandler(
                 outputStringFileResolver,
@@ -81,7 +82,7 @@ class AndroidResourcesHandlerTest {
 
         // Then:
         Truth.assertThat(result.language).isEqualTo(
-            Language.Default
+            Language.Custom("es")
         )
         Truth.assertThat(result.templates.size).isEqualTo(2)
         Truth.assertThat(result.templates.map { it.name() }).containsExactly(
@@ -93,7 +94,7 @@ class AndroidResourcesHandlerTest {
             "template_welcome", "The welcome message for \${app_name}",
             "template_message_non_translatable", "Non translatable \${app_name}"
         )
-        val nameToAttrs = result.templates.associate { it.name() to it.attributes() }
+        val nameToAttrs = result.templates.associate { it.name() to it.attributes().asMap() }
         Truth.assertThat(nameToAttrs).containsExactly(
             "template_welcome", mapOf("name" to "template_welcome"),
             "template_message_non_translatable", mapOf(
@@ -109,6 +110,7 @@ class AndroidResourcesHandlerTest {
     @Test
     fun check_saveTemplatesToFile() {
         // Given:
+        val androidScope = AndroidResourceScope(Variant.Default, Language.Custom("es"))
         val template1 = StringAndroidResource(
             "template_welcome",
             "The welcome message for \${app_name}",
@@ -129,7 +131,7 @@ class AndroidResourcesHandlerTest {
                 mapOf("app_name" to "TesT")
             )
         val file = temporaryFolder.newFile()
-        every { outputStringFileResolver.getTemplateStringsFile("-es") }.returns(file)
+        every { outputStringFileResolver.getTemplateStringsFile("es") }.returns(file)
 
         // When:
         androidResourcesHandler.saveTemplates(templates)

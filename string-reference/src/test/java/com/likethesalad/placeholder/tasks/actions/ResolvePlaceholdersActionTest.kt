@@ -7,7 +7,9 @@ import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHa
 import com.likethesalad.placeholder.modules.resolveStrings.ResolvePlaceholdersAction
 import com.likethesalad.placeholder.modules.resolveStrings.resolver.TemplateResolver
 import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
+import com.likethesalad.tools.resource.api.android.AndroidResourceScope
 import com.likethesalad.tools.resource.api.android.environment.Language
+import com.likethesalad.tools.resource.api.android.environment.Variant
 import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
 import com.likethesalad.tools.resource.api.data.AttributeContainer
 import io.mockk.every
@@ -93,8 +95,8 @@ class ResolvePlaceholdersActionTest {
         val templatesFile = mockk<File>()
         val language = Language.Custom("es")
         val templates = mockk<StringsTemplatesModel>()
-        val translatableStrings = getStringsList(3, true)
-        val nonTranslatableStrings = getStringsList(2, false)
+        val translatableStrings = getStringsList(3, true, language)
+        val nonTranslatableStrings = getStringsList(2, false, language)
         val allStrings = translatableStrings + nonTranslatableStrings
         every { templates.language }.returns(language)
         every { filesProvider.getAllTemplatesFiles() } returns listOf(templatesFile)
@@ -129,13 +131,18 @@ class ResolvePlaceholdersActionTest {
         verify { resourcesHandler.saveResolvedStringList(allStrings, language) }
     }
 
-    private fun getStringsList(count: Int, translatable: Boolean): List<StringAndroidResource> {
+    private fun getStringsList(
+        count: Int, translatable: Boolean,
+        language: Language = Language.Default,
+        scope: AndroidResourceScope = AndroidResourceScope(Variant.Default, language)
+    ): List<StringAndroidResource> {
         val strings = mutableListOf<StringAndroidResource>()
         for (it in 0 until count) {
             val string = mockk<StringAndroidResource>()
             val attributes = mockk<AttributeContainer>()
             every { attributes.get("translatable") }.returns(translatable.toString())
             every { string.attributes() }.returns(attributes)
+            every { string.getAndroidScope() }.returns(scope)
             strings.add(string)
         }
 

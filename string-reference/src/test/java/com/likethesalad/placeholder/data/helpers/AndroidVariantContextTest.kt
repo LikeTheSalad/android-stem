@@ -46,6 +46,7 @@ class AndroidVariantContextTest {
         variantBuildResolvedDirFactory = mockk()
         variantBuildResolvedDir = mockk()
         resourceSerializer = mockk()
+        languageResourceFinderProvider = mockk()
 
         every { tasksNamesModelFactory.create(androidVariantData) }.returns(tasksNames)
         every { tasksNames.mergeResourcesName }.returns(mergeResourcesName)
