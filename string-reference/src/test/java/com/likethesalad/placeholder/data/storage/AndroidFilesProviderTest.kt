@@ -5,6 +5,7 @@ import com.likethesalad.placeholder.modules.common.helpers.dirs.IncrementalDirsP
 import com.likethesalad.placeholder.modules.common.helpers.files.OutputStringFileResolver
 import com.likethesalad.placeholder.modules.common.helpers.files.storage.AndroidFilesProvider
 import com.likethesalad.placeholder.providers.LanguageResourceFinderProvider
+import com.likethesalad.tools.resource.api.android.environment.Language
 import com.likethesalad.tools.resource.locator.android.extension.LanguageResourceFinder
 import io.mockk.every
 import io.mockk.mockk
@@ -101,9 +102,9 @@ class AndroidFilesProviderTest {
     @Test
     fun check_getAllExpectedTemplatesFiles() {
         // Given:
-        val stringFiles = listOf("strings.json", "strings-es.json", "strings-it.json")
-        addStringFilesToMergedStringsDir(stringFiles)
         val suffix = slot<String>()
+        val languages = listOf(Language.Default, Language.Custom("es"), Language.Custom("it"))
+        every { languageResourceFinder.listLanguages() }.returns(languages)
         every {
             outputStringFileResolver.getTemplateStringsFile(capture(suffix))
         }.answers {
@@ -124,6 +125,8 @@ class AndroidFilesProviderTest {
 
     @Test
     fun check_getAllExpectedTemplatesFiles_empty() {
+        every { languageResourceFinder.listLanguages() }.returns(emptyList())
+
         // When:
         val result = androidFilesProvider.getAllExpectedTemplatesFiles()
 
@@ -133,10 +136,6 @@ class AndroidFilesProviderTest {
 
     private fun addTemplateFilesToTemplatesDir(templateFileNames: List<String>) {
         addFilesToDir(templateFileNames, "$INCREMENTAL_FOLDER_NAME/$TEMPLATES_FOLDER_NAME")
-    }
-
-    private fun addStringFilesToMergedStringsDir(stringFileNames: List<String>) {
-        addFilesToDir(stringFileNames, "$INCREMENTAL_FOLDER_NAME/$MERGED_STRINGS_FOLDER_NAME")
     }
 
     private fun addFilesToDir(fileNames: List<String>, dirPath: String) {

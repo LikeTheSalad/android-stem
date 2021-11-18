@@ -14,7 +14,6 @@ class AndroidFilesProvider(
 
     companion object {
         const val VALUES_FOLDER_NAME = "values"
-        val STRINGS_SUFFIX_REGEX = Regex("strings(-[a-zA-Z-]+)*")
         val TEMPLATES_SUFFIX_REGEX = Regex("templates(-[a-zA-Z-]+)*")
     }
 

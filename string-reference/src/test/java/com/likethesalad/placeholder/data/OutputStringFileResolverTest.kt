@@ -4,7 +4,6 @@ import com.google.common.truth.Truth
 import com.likethesalad.placeholder.modules.common.helpers.dirs.IncrementalDirsProvider
 import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantBuildResolvedDir
 import com.likethesalad.placeholder.modules.common.helpers.files.OutputStringFileResolver
-import com.likethesalad.tools.resource.api.android.environment.Language
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Before
@@ -46,11 +45,11 @@ class OutputStringFileResolverTest {
         every { variantBuildResolvedDir.resolvedDir }.returns(File(srcDir, "clientDebug/res/"))
 
         assertResolvedStringsFilePath(
-            Language.Default,
+            "values",
             "clientDebug/res/values/resolved.xml"
         )
         assertResolvedStringsFilePath(
-            Language.Custom("es"),
+            "values-es",
             "clientDebug/res/values-es/resolved.xml"
         )
     }
@@ -60,11 +59,11 @@ class OutputStringFileResolverTest {
         every { variantBuildResolvedDir.resolvedDir }.returns(File(srcDir, "clientDebug/res1/"))
 
         assertResolvedStringsFilePath(
-            Language.Default,
+            "values",
             "clientDebug/res1/values/resolved.xml"
         )
         assertResolvedStringsFilePath(
-            Language.Custom("es"),
+            "values-es",
             "clientDebug/res1/values-es/resolved.xml"
         )
     }
@@ -72,23 +71,23 @@ class OutputStringFileResolverTest {
     @Test
     fun `Get template strings file`() {
         assertTemplateStringsFilePath(
-            Language.Default,
+            "",
             "templates/templates.json"
         )
         assertTemplateStringsFilePath(
-            Language.Custom("es"),
+            "-es",
             "templates/templates-es.json"
         )
     }
 
-    private fun assertTemplateStringsFilePath(language: Language, expectedRelativePath: String) {
-        Truth.assertThat(outputStringFileResolver.getTemplateStringsFile(language.id).absolutePath)
+    private fun assertTemplateStringsFilePath(suffix: String, expectedRelativePath: String) {
+        Truth.assertThat(outputStringFileResolver.getTemplateStringsFile(suffix).absolutePath)
             .isEqualTo(File(incrementalDir, expectedRelativePath).absolutePath)
     }
 
-    private fun assertResolvedStringsFilePath(language: Language, expectedRelativePath: String) {
+    private fun assertResolvedStringsFilePath(valuesFolderName: String, expectedRelativePath: String) {
         Truth.assertThat(
-            outputStringFileResolver.getResolvedStringsFile(language.id)
+            outputStringFileResolver.getResolvedStringsFile(valuesFolderName)
                 .absolutePath
         ).isEqualTo(File(srcDir, expectedRelativePath).absolutePath)
     }
