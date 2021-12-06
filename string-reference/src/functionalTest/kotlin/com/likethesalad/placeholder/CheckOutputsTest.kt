@@ -1,27 +1,55 @@
 package com.likethesalad.placeholder
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.testutils.TestAssetsProvider
-import com.likethesalad.placeholder.testutils.app.content.ValuesResFoldersPlacer
-import com.likethesalad.placeholder.testutils.app.layout.AndroidAppProjectDescriptor
-import com.likethesalad.placeholder.testutils.app.layout.items.DefaultConfigAndroidBlockItem
-import com.likethesalad.placeholder.testutils.app.layout.items.FlavorAndroidBlockItem
-import com.likethesalad.placeholder.testutils.base.BaseAndroidProjectTest
-import com.likethesalad.placeholder.testutils.base.layout.ProjectDescriptor
-import com.likethesalad.placeholder.testutils.data.ResolverPluginConfig
-import com.likethesalad.placeholder.testutils.lib.layout.AndroidLibProjectDescriptor
+import com.likethesalad.placeholder.data.ResolverPluginConfig
+import com.likethesalad.placeholder.data.ResolverPluginConfigBlock
+import com.likethesalad.tools.functional.testing.AndroidProjectTest
+import com.likethesalad.tools.functional.testing.app.content.ValuesResFoldersPlacer
+import com.likethesalad.tools.functional.testing.app.layout.AndroidAppProjectDescriptor
+import com.likethesalad.tools.functional.testing.app.layout.AndroidBlockItem
+import com.likethesalad.tools.functional.testing.app.layout.GradleBlockItem
+import com.likethesalad.tools.functional.testing.app.layout.items.DefaultConfigAndroidBlockItem
+import com.likethesalad.tools.functional.testing.app.layout.items.FlavorAndroidBlockItem
+import com.likethesalad.tools.functional.testing.layout.AndroidLibProjectDescriptor
+import com.likethesalad.tools.functional.testing.layout.ProjectDescriptor
+import com.likethesalad.tools.functional.testing.utils.TestAssetsProvider
 import org.gradle.testkit.runner.BuildResult
 import org.junit.Test
 import java.io.File
 
-class CheckOutputsTest : BaseAndroidProjectTest() {
+class CheckOutputsTest : AndroidProjectTest() {
 
-    private val inputAssetsProvider = TestAssetsProvider("inputs")
-    private val outputAssetsProvider = TestAssetsProvider("outputs")
+    companion object {
+        private const val PLUGIN_ID = "placeholder-resolver"
+    }
+
+    private val inputAssetsProvider = TestAssetsProvider("functionalTest", "inputs")
+    private val outputAssetsProvider = TestAssetsProvider("functionalTest", "outputs")
 
     @Test
     fun `verify basic app outputs`() {
         runInputOutputComparisonTest("basic", listOf("debug"))
+    }
+
+    @Test
+    fun `verify basic app outputs are generated only once if the inputs don't change`() {
+        val variantNames = listOf("debug")
+        val inOutDirName = "basic-repeated"
+        val descriptor = createAndroidAppProjectDescriptor(inOutDirName)
+        val inputDir = getInputTestAsset(inOutDirName)
+        descriptor.projectDirectoryBuilder.register(ValuesResFoldersPlacer(inputDir))
+        val commandList = variantNamesToResolveCommands(variantNames)
+
+        createProject(descriptor)
+        buildProject(commandList, inOutDirName)
+
+        verifyVariantResults(variantNames, inOutDirName)
+
+        // Second time
+
+        val result = buildProject(commandList, inOutDirName)
+
+        verifyVariantResults(variantNames, inOutDirName) //TODO finish
     }
 
     @Test
@@ -35,7 +63,7 @@ class CheckOutputsTest : BaseAndroidProjectTest() {
     fun `verify app with gradle-generated strings outputs`() {
         val appName = "with-gradle-strings"
         val gradleStrings = mapOf("my_app_id" to "APP ID")
-        val appDescriptor = AndroidAppProjectDescriptor(
+        val appDescriptor = createAndroidAppProjectDescriptor(
             appName,
             listOf(DefaultConfigAndroidBlockItem(gradleStrings))
         )
@@ -51,7 +79,7 @@ class CheckOutputsTest : BaseAndroidProjectTest() {
         val environmentFlavors = listOf("stable", "prod")
         flavors.add(FlavorAndroidBlockItem.FlavorDescriptor("mode", modeFlavors))
         flavors.add(FlavorAndroidBlockItem.FlavorDescriptor("environment", environmentFlavors))
-        val flavoredDescriptor = AndroidAppProjectDescriptor(
+        val flavoredDescriptor = createAndroidAppProjectDescriptor(
             inOutDirName,
             listOf(FlavorAndroidBlockItem(flavors))
         )
@@ -80,7 +108,7 @@ class CheckOutputsTest : BaseAndroidProjectTest() {
         // Set up app
         val appName = "with-library"
         val appConfig = ResolverPluginConfig(useDependenciesRes = true)
-        val appDescriptor = AndroidAppProjectDescriptor(
+        val appDescriptor = createAndroidAppProjectDescriptor(
             appName,
             dependencies = listOf("implementation project(':$libName')"),
             resolverPluginConfig = appConfig
@@ -92,13 +120,28 @@ class CheckOutputsTest : BaseAndroidProjectTest() {
     private fun runInputOutputComparisonTest(
         inOutDirName: String,
         variantNames: List<String>,
-        descriptor: AndroidAppProjectDescriptor = AndroidAppProjectDescriptor(inOutDirName)
+        descriptor: AndroidAppProjectDescriptor = createAndroidAppProjectDescriptor(inOutDirName)
     ) {
         val inputDir = getInputTestAsset(inOutDirName)
         descriptor.projectDirectoryBuilder.register(ValuesResFoldersPlacer(inputDir))
 
         createProjectAndRunStringResolver(descriptor, variantNames)
 
+        verifyVariantResults(variantNames, inOutDirName)
+    }
+
+    private fun createAndroidAppProjectDescriptor(
+        inOutDirName: String,
+        androidBlockItems: List<AndroidBlockItem> = emptyList(),
+        dependencies: List<String> = emptyList(),
+        resolverPluginConfig: ResolverPluginConfig = ResolverPluginConfig()
+    ): AndroidAppProjectDescriptor {
+        val blockItems = mutableListOf<GradleBlockItem>(ResolverPluginConfigBlock(resolverPluginConfig))
+        blockItems.addAll(androidBlockItems)
+        return AndroidAppProjectDescriptor(inOutDirName, PLUGIN_ID, blockItems, dependencies)
+    }
+
+    private fun verifyVariantResults(variantNames: List<String>, inOutDirName: String) {
         variantNames.forEach {
             verifyExpectedOutput(inOutDirName, it)
         }
@@ -108,9 +151,12 @@ class CheckOutputsTest : BaseAndroidProjectTest() {
         projectDescriptor: ProjectDescriptor,
         variantNames: List<String>
     ): BuildResult {
-        val commandList = variantNames.map { "resolve${it.capitalize()}Placeholders" }
-        return createProjectAndRun(projectDescriptor, commandList)
+        val commandList = variantNamesToResolveCommands(variantNames)
+        return createProjectAndBuild(projectDescriptor, commandList)
     }
+
+    private fun variantNamesToResolveCommands(variantNames: List<String>) =
+        variantNames.map { "resolve${it.capitalize()}Placeholders" }
 
     private fun getInputTestAsset(inputDirName: String): File {
         return inputAssetsProvider.getAssetFile(inputDirName)
@@ -168,5 +214,5 @@ class CheckOutputsTest : BaseAndroidProjectTest() {
         Truth.assertThat(fileWithSameName.readText()).isEqualTo(file.readText())
     }
 
-    override fun getAndroidBuildPluginVersion(): String = "3.3.3"
+    override fun getGradleVersion(): String = "5.6.4"
 }
