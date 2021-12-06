@@ -1,4 +1,4 @@
-package com.likethesalad.placeholder.testutils.data
+package com.likethesalad.placeholder.data
 
 data class ResolverPluginConfig(
     val resolveOnBuild: Boolean = true,
