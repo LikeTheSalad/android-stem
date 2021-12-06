@@ -7,7 +7,6 @@ import org.junit.Before
 import org.junit.ClassRule
 import org.junit.rules.TemporaryFolder
 import java.io.File
-import java.nio.file.Paths
 
 abstract class BaseAndroidProjectTest {
 
@@ -29,11 +28,16 @@ abstract class BaseAndroidProjectTest {
         setupRootProject()
     }
 
-    protected fun createProjectAndRun(projectDescriptor: ProjectDescriptor, commands: List<String>): BuildResult {
-        val name = projectDescriptor.getProjectName()
-
+    protected fun createProjectAndBuild(projectDescriptor: ProjectDescriptor, commands: List<String>): BuildResult {
         createProject(projectDescriptor)
 
+        return buildProject(projectDescriptor.getProjectName(), commands)
+    }
+
+    protected fun buildProject(
+        name: String,
+        commands: List<String>
+    ): BuildResult {
         return GradleRunner.create()
             .withProjectDir(testProjectDir.root)
             .withGradleVersion("4.10.3")

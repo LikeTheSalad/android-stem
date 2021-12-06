@@ -15,7 +15,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation "com.google.dagger:dagger:$dagger_version"
     implementation 'com.squareup.retrofit2:retrofit:2.1.0'
-    implementation "com.likethesalad.tools:string-android-resource-locator:1.0.0-SNAPSHOT16"
+    implementation "com.likethesalad.tools:string-android-resource-locator:1.0.0-SNAPSHOT17"
     compileOnly "com.android.tools.build:gradle:$androidBuild_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     iTest "com.google.dagger:dagger:$dagger_version"

@@ -2,7 +2,7 @@ package com.likethesalad.placeholder.modules.templateStrings
 
 import com.likethesalad.placeholder.modules.templateStrings.data.GatherTemplatesArgs
 import org.gradle.api.DefaultTask
-import org.gradle.api.file.FileCollection
+import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputFiles
 import org.gradle.api.tasks.TaskAction
@@ -13,7 +13,7 @@ open class GatherTemplatesTask
 @Inject constructor(private val args: GatherTemplatesArgs) : DefaultTask() {
 
     @InputFiles
-    val inDir: FileCollection = args.languageResourceFinderProvider.directory
+    val inDir: DirectoryProperty = args.languageResourceFinderProvider.directory
 
     @OutputFiles
     fun getTemplatesFiles(): List<File> = args.gatherTemplatesAction.getTemplatesFiles()
