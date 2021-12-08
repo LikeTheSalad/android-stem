@@ -41,15 +41,22 @@ class CheckOutputsTest : AndroidProjectTest() {
         val commandList = variantNamesToResolveCommands(variantNames)
 
         createProject(descriptor)
-        buildProject(commandList, inOutDirName)
+        val result1 = buildProject(commandList, inOutDirName)
+        verifyResultContainsText(result1, """
+            > Task :basic-repeated:gatherDebugStringTemplates
+            > Task :basic-repeated:resolveDebugPlaceholders
+        """.trimIndent())
 
         verifyVariantResults(variantNames, inOutDirName)
 
         // Second time
+        val result2 = buildProject(commandList, inOutDirName)
 
-        val result = buildProject(commandList, inOutDirName)
-
-        verifyVariantResults(variantNames, inOutDirName) //TODO finish
+        verifyVariantResults(variantNames, inOutDirName)
+        verifyResultContainsText(result2, """
+            > Task :basic-repeated:gatherDebugStringTemplates UP-TO-DATE
+            > Task :basic-repeated:resolveDebugPlaceholders UP-TO-DATE
+        """.trimIndent())
     }
 
     @Test

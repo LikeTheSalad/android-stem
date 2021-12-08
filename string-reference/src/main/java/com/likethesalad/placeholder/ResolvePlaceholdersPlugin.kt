@@ -45,7 +45,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Bui
 
         stringsLocatorExtension.onResourceLocatorTaskCreated { taskContainer ->
             val languageResourceFinderProvider = LanguageResourceFinderProvider(
-                taskContainer.outputDir,
+                taskContainer.outputDirProvider,
                 stringsLocatorExtension
             )
             createResolvePlaceholdersTaskForVariant(

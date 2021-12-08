@@ -2,15 +2,15 @@ package com.likethesalad.placeholder.providers
 
 import com.likethesalad.tools.resource.locator.android.extension.LanguageResourceFinder
 import com.likethesalad.tools.resource.locator.android.extension.ResourceLocatorExtension
-import org.gradle.api.file.DirectoryProperty
+import com.likethesalad.tools.resource.locator.android.extension.observer.data.OutputDirProvider
 
 class LanguageResourceFinderProvider(
-    val directory: DirectoryProperty,
+    val directoryProvider: OutputDirProvider,
     private val resourceLocatorExtension: ResourceLocatorExtension
 ) {
 
     private val languageResourceFinder by lazy {
-        resourceLocatorExtension.getResourcesFromDir(directory.get().asFile)
+        resourceLocatorExtension.getResourcesFromDir(directoryProvider.getOutputDirProperty().get().asFile)
     }
 
     fun get(): LanguageResourceFinder = languageResourceFinder

@@ -9,14 +9,19 @@ import org.gradle.api.tasks.TaskAction
 import java.io.File
 import javax.inject.Inject
 
+@Suppress("UnstableApiUsage")
 open class GatherTemplatesTask
 @Inject constructor(private val args: GatherTemplatesArgs) : DefaultTask() {
 
     @InputFiles
-    val inDir: DirectoryProperty = args.languageResourceFinderProvider.directory
+    val inDir: DirectoryProperty = project.objects.directoryProperty()
 
     @OutputFiles
     fun getTemplatesFiles(): List<File> = args.gatherTemplatesAction.getTemplatesFiles()
+
+    init {
+        inDir.set(args.languageResourceFinderProvider.directoryProvider.getOutputDirProperty())
+    }
 
     @TaskAction
     fun gatherTemplateStrings() {
