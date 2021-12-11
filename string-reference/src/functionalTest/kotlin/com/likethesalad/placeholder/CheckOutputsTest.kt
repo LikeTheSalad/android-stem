@@ -42,21 +42,66 @@ class CheckOutputsTest : AndroidProjectTest() {
 
         createProject(descriptor)
         val result1 = buildProject(commandList, inOutDirName)
-        verifyResultContainsText(result1, """
+        verifyResultContainsText(
+            result1, """
             > Task :basic-repeated:gatherDebugStringTemplates
             > Task :basic-repeated:resolveDebugPlaceholders
-        """.trimIndent())
+        """.trimIndent()
+        )
 
-        verifyVariantResults(variantNames, inOutDirName)
+        verifyVariantResults(variantNames, inOutDirName, inOutDirName)
 
         // Second time
         val result2 = buildProject(commandList, inOutDirName)
 
-        verifyVariantResults(variantNames, inOutDirName)
-        verifyResultContainsText(result2, """
+        verifyVariantResults(variantNames, inOutDirName, inOutDirName)
+        verifyResultContainsText(
+            result2, """
             > Task :basic-repeated:gatherDebugStringTemplates UP-TO-DATE
             > Task :basic-repeated:resolveDebugPlaceholders UP-TO-DATE
-        """.trimIndent())
+        """.trimIndent()
+        )
+    }
+
+    @Test
+    fun `verify multi languages clean up after changes`() {
+        val variantNames = listOf("debug")
+        val inOutDirName = "multi-languages-changed-before"
+        val descriptor = createAndroidAppProjectDescriptor(inOutDirName)
+        val inputDir = getInputTestAsset(inOutDirName)
+        val resFoldersPlacer = ValuesResFoldersPlacer(inputDir)
+        descriptor.projectDirectoryBuilder.register(resFoldersPlacer)
+        val commandList = variantNamesToResolveCommands(variantNames)
+
+        createProject(descriptor)
+        val result1 = buildProject(commandList, inOutDirName)
+        verifyResultContainsText(
+            result1, """
+            > Task :$inOutDirName:gatherDebugStringTemplates
+            > Task :$inOutDirName:resolveDebugPlaceholders
+        """.trimIndent()
+        )
+
+        verifyVariantResults(variantNames, inOutDirName, inOutDirName)
+
+        // Second time
+        val dirName2 = "multi-languages-changed-after"
+        val descriptor2 = createAndroidAppProjectDescriptor(inOutDirName)
+        val inputDir2 = getInputTestAsset(dirName2)
+        descriptor2.projectDirectoryBuilder.register(ValuesResFoldersPlacer(inputDir2))
+        val projectDir = getProjectDir(inOutDirName)
+        resFoldersPlacer.getFilesCreated().forEach { it.delete() }
+        descriptor2.projectDirectoryBuilder.buildDirectory(projectDir)
+
+        val result2 = buildProject(commandList, inOutDirName)
+
+        verifyVariantResults(variantNames, inOutDirName, dirName2)
+        verifyResultContainsText(
+            result2, """
+            > Task :$inOutDirName:gatherDebugStringTemplates
+            > Task :$inOutDirName:resolveDebugPlaceholders
+        """.trimIndent()
+        )
     }
 
     @Test
@@ -134,7 +179,7 @@ class CheckOutputsTest : AndroidProjectTest() {
 
         createProjectAndRunStringResolver(descriptor, variantNames)
 
-        verifyVariantResults(variantNames, inOutDirName)
+        verifyVariantResults(variantNames, inOutDirName, inOutDirName)
     }
 
     private fun createAndroidAppProjectDescriptor(
@@ -148,9 +193,9 @@ class CheckOutputsTest : AndroidProjectTest() {
         return AndroidAppProjectDescriptor(inOutDirName, PLUGIN_ID, blockItems, dependencies)
     }
 
-    private fun verifyVariantResults(variantNames: List<String>, inOutDirName: String) {
+    private fun verifyVariantResults(variantNames: List<String>, projectName: String, outputDirName: String) {
         variantNames.forEach {
-            verifyExpectedOutput(inOutDirName, it)
+            verifyExpectedOutput(projectName, outputDirName, it)
         }
     }
 
@@ -174,13 +219,14 @@ class CheckOutputsTest : AndroidProjectTest() {
     }
 
     private fun verifyExpectedOutput(
-        inOutDirName: String,
+        projectName: String,
+        outputDirName: String,
         variantName: String
     ) {
-        val projectDir = getProjectDir(inOutDirName)
+        val projectDir = getProjectDir(projectName)
         val resultDir = File(projectDir, "build/generated/resolved/$variantName")
         Truth.assertThat(resultDir.exists()).isTrue()
-        verifyDirsContentsAreEqual(getExpectedOutputDir(inOutDirName, variantName), resultDir)
+        verifyDirsContentsAreEqual(getExpectedOutputDir(outputDirName, variantName), resultDir)
     }
 
     private fun getExpectedOutputDir(inOutDirName: String, variantName: String): File {
@@ -213,7 +259,7 @@ class CheckOutputsTest : AndroidProjectTest() {
     private fun checkRootContentFileNames(dirFiles1: List<File>, dirFiles2: List<File>) {
         val dirFileNames1 = dirFiles1.map { it.name }
         val dirFileNames2 = dirFiles2.map { it.name }
-        Truth.assertThat(dirFileNames1).containsExactlyElementsIn(dirFileNames2)
+        Truth.assertThat(dirFileNames2).containsExactlyElementsIn(dirFileNames1)
     }
 
     private fun checkIfFileIsInList(file: File, list: List<File>) {
