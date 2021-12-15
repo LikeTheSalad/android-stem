@@ -1,11 +1,7 @@
 package com.likethesalad.placeholder.modules.common.helpers.android
 
-import com.likethesalad.placeholder.modules.common.helpers.dirs.IncrementalDirsProvider
 import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantBuildResolvedDir
-import com.likethesalad.placeholder.modules.common.helpers.files.IncrementalDataCleaner
 import com.likethesalad.placeholder.modules.common.helpers.files.OutputStringFileResolver
-import com.likethesalad.placeholder.modules.common.helpers.files.storage.AndroidFilesProvider
-import com.likethesalad.placeholder.modules.common.helpers.files.storage.FilesProvider
 import com.likethesalad.placeholder.modules.common.helpers.resources.AndroidResourcesHandler
 import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHandler
 import com.likethesalad.placeholder.modules.common.models.TasksNamesModel
@@ -18,7 +14,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.gradle.api.Task
-import java.io.File
 
 class AndroidVariantContext @AssistedInject constructor(
     @Assisted val androidVariantData: AndroidVariantData,
@@ -39,9 +34,6 @@ class AndroidVariantContext @AssistedInject constructor(
         ): AndroidVariantContext
     }
 
-    private val incrementalDirsProvider by lazy {
-        IncrementalDirsProvider(File(incrementalDir))
-    }
     val tasksNames by lazy {
         tasksNamesModelFactory.create(androidVariantData)
     }
@@ -54,22 +46,11 @@ class AndroidVariantContext @AssistedInject constructor(
     val incrementalDir: String by lazy {
         buildDirProvider.getBuildDir().absolutePath + "/intermediates/incremental/" + tasksNames.resolvePlaceholdersName
     }
+    val variantBuildResolvedDir by lazy { variantBuildResolvedDirFactory.create(androidVariantData) }
 
-    private val variantBuildResolvedDir by lazy { variantBuildResolvedDirFactory.create(androidVariantData) }
-    private val outputStringFileResolver = OutputStringFileResolver(
-        variantBuildResolvedDir,
-        incrementalDirsProvider
-    )
-    val filesProvider: FilesProvider = AndroidFilesProvider(
-        outputStringFileResolver,
-        incrementalDirsProvider,
-        languageResourceFinderProvider
-    )
+    private val outputStringFileResolver = OutputStringFileResolver()
     val androidResourcesHandler: ResourcesHandler = AndroidResourcesHandler(
         outputStringFileResolver,
         resourceSerializer
-    )
-    val incrementalDataCleaner = IncrementalDataCleaner(
-        incrementalDirsProvider
     )
 }

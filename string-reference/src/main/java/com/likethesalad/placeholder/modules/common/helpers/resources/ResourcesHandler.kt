@@ -9,7 +9,7 @@ interface ResourcesHandler {
 
     fun getTemplatesFromFile(templateFile: File): StringsTemplatesModel
 
-    fun saveResolvedStringList(resolvedStrings: List<StringAndroidResource>, language: Language)
+    fun saveResolvedStringList(outputDir: File, resolvedStrings: List<StringAndroidResource>, language: Language)
 
-    fun saveTemplates(templates: StringsTemplatesModel)
+    fun saveTemplates(outputDir: File, templates: StringsTemplatesModel)
 }

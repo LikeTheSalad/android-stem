@@ -23,9 +23,6 @@ class VariantBuildResolvedDir @AssistedInject constructor(
 
     val resolvedDir: File by lazy {
         val dir = File(buildDirProvider.getBuildDir(), "generated/resolved/$variantName")
-        if (!dir.exists()) {
-            dir.mkdirs()
-        }
         addResolvedDirToSourceSets(dir)
         dir
     }

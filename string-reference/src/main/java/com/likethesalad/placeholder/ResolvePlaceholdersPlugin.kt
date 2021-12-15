@@ -20,6 +20,7 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 import java.io.File
 
+@Suppress("UnstableApiUsage")
 class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, BuildDirProvider,
     TaskProvider {
 
@@ -90,7 +91,8 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Bui
 
         resolvePlaceholdersTask.configure {
             it.group = RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME
-            it.dependsOn(gatherTemplatesTask)
+            it.templatesDir.set(gatherTemplatesTask.flatMap { gatherTemplates -> gatherTemplates.outDir })
+            it.outputDir.set(androidVariantContext.variantBuildResolvedDir.resolvedDir)
         }
 
         if (resolveOnBuild) {

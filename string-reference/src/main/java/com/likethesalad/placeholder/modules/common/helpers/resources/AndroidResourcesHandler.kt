@@ -24,13 +24,20 @@ class AndroidResourcesHandler(
             .create()
     }
 
+
     override fun saveResolvedStringList(
+        outputDir: File,
         resolvedStrings: List<StringAndroidResource>,
         language: Language
     ) {
         val resDocument = AndroidXmlResDocument()
         resDocument.appendAllStringResources(resolvedStrings)
-        resDocument.saveToFile(outputStringFileResolver.getResolvedStringsFile(getResolvedValuesFolderName(language)))
+        resDocument.saveToFile(
+            outputStringFileResolver.getResolvedStringsFile(
+                outputDir,
+                getResolvedValuesFolderName(language)
+            )
+        )
     }
 
     private fun getResolvedValuesFolderName(language: Language): String {
@@ -45,8 +52,8 @@ class AndroidResourcesHandler(
         return gson.fromJson(templateFile.readText(), StringsTemplatesModel::class.java)
     }
 
-    override fun saveTemplates(templates: StringsTemplatesModel) {
+    override fun saveTemplates(outputDir: File, templates: StringsTemplatesModel) {
         val jsonTemplates = gson.toJson(templates)
-        outputStringFileResolver.getTemplateStringsFile(templates.language.id).writeText(jsonTemplates)
+        outputStringFileResolver.getTemplateStringsFile(outputDir, templates.language.id).writeText(jsonTemplates)
     }
 }

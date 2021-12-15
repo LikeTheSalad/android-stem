@@ -4,9 +4,8 @@ import com.likethesalad.placeholder.modules.templateStrings.data.GatherTemplates
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.tasks.InputDirectory
-import org.gradle.api.tasks.OutputFiles
+import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
-import java.io.File
 import javax.inject.Inject
 
 @Suppress("UnstableApiUsage")
@@ -16,16 +15,17 @@ open class GatherTemplatesTask
     @InputDirectory
     val inDir: DirectoryProperty = project.objects.directoryProperty()
 
-    @OutputFiles
-    fun getTemplatesFiles(): List<File> = args.gatherTemplatesAction.getTemplatesFiles()
+    @OutputDirectory
+    val outDir: DirectoryProperty = project.objects.directoryProperty()
 
     init {
         inDir.set(args.languageResourceFinderProvider.directoryProvider.getOutputDirProperty())
+        outDir.set(project.layout.buildDirectory.dir("intermediates/incremental/$name"))
     }
 
     @TaskAction
     fun gatherTemplateStrings() {
         val languageResourceFinder = args.languageResourceFinderProvider.get()
-        args.gatherTemplatesAction.gatherTemplateStrings(languageResourceFinder)
+        args.gatherTemplatesAction.gatherTemplateStrings(outDir.get().asFile, languageResourceFinder)
     }
 }

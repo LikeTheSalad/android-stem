@@ -23,20 +23,12 @@ class GatherTemplatesAction @AssistedInject constructor(
         fun create(androidVariantContext: AndroidVariantContext): GatherTemplatesAction
     }
 
-    private val filesProvider = androidVariantContext.filesProvider
-    private val incrementalDataCleaner = androidVariantContext.incrementalDataCleaner
     private val resourcesHandler = androidVariantContext.androidResourcesHandler
 
-    fun getTemplatesFiles(): List<File> {
-        return filesProvider.getAllExpectedTemplatesFiles()
-    }
-
-    fun gatherTemplateStrings(languageResourceFinder: LanguageResourceFinder) {
-        incrementalDataCleaner.clearTemplateStrings()
-
+    fun gatherTemplateStrings(outputDir: File, languageResourceFinder: LanguageResourceFinder) {
         for (language in languageResourceFinder.listLanguages()) {
             val resources = languageResourceFinder.getMergedResourcesForLanguage(language)
-            resourcesHandler.saveTemplates(gatheredStringsToTemplateStrings(language, resources))
+            resourcesHandler.saveTemplates(outputDir, gatheredStringsToTemplateStrings(language, resources))
         }
     }
 

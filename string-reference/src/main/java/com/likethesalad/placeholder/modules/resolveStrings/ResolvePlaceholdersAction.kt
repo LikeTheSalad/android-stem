@@ -20,25 +20,18 @@ class ResolvePlaceholdersAction @AssistedInject constructor(
         fun create(androidVariantContext: AndroidVariantContext): ResolvePlaceholdersAction
     }
 
-    private val filesProvider = androidVariantContext.filesProvider
     private val resourcesHandler = androidVariantContext.androidResourcesHandler
 
-    fun getTemplatesFiles(): List<File> {
-        return filesProvider.getAllTemplatesFiles()
-    }
-
-    fun getResolvedFiles(): List<File> {
-        return filesProvider.getAllExpectedResolvedFiles()
-    }
-
-    fun resolve() {
-        for (templateFile in filesProvider.getAllTemplatesFiles()) {
+    fun resolve(templatesDir: File, outputDir: File) {
+        val templateFiles = templatesDir.listFiles()?.toList() ?: emptyList<File>()
+        for (templateFile in templateFiles) {
             val templatesModel = resourcesHandler.getTemplatesFromFile(templateFile)
             val resolvedTemplates = templateResolver.resolveTemplates(templatesModel)
             val curatedTemplates =
                 filterNonTranslatableStringsForLanguage(templatesModel.language, resolvedTemplates)
             if (curatedTemplates.isNotEmpty()) {
                 resourcesHandler.saveResolvedStringList(
+                    outputDir,
                     curatedTemplates,
                     templatesModel.language
                 )

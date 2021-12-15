@@ -80,7 +80,7 @@ class GatherTemplatesActionTest {
         }.returns(gatheredStringsEs)
 
         // When:
-        gatherTemplatesAction.gatherTemplateStrings(languageResourceFinder)
+        gatherTemplatesAction.gatherTemplateStrings(languageResourceFinder,)
 
         // Then:
         verify { incrementalDataCleaner.clearTemplateStrings() }
