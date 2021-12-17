@@ -4,7 +4,7 @@ import com.likethesalad.placeholder.modules.resolveStrings.data.ResolvePlacehold
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.tasks.InputDirectory
-import org.gradle.api.tasks.OutputFiles
+import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import javax.inject.Inject
 
@@ -15,7 +15,7 @@ open class ResolvePlaceholdersTask
     @InputDirectory
     val templatesDir: DirectoryProperty = project.objects.directoryProperty()
 
-    @OutputFiles
+    @OutputDirectory
     val outputDir: DirectoryProperty = project.objects.directoryProperty()
 
     @TaskAction
