@@ -18,11 +18,15 @@ class VariantBuildResolvedDir @AssistedInject constructor(
         fun create(androidVariantData: AndroidVariantData): VariantBuildResolvedDir
     }
 
+    companion object {
+        const val RESOLVED_DIR_BUILD_RELATIVE_PATH = "generated/resolved"
+    }
+
     private val androidExtension by lazy { androidExtensionProvider.getExtension() }
     private val variantName by lazy { androidVariantData.getVariantName() }
 
     val resolvedDir: File by lazy {
-        val dir = File(buildDirProvider.getBuildDir(), "generated/resolved/$variantName")
+        val dir = File(buildDirProvider.getBuildDir(), "$RESOLVED_DIR_BUILD_RELATIVE_PATH/$variantName")
         addResolvedDirToSourceSets(dir)
         dir
     }
