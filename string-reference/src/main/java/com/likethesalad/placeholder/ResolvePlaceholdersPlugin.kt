@@ -37,6 +37,9 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Bui
     private lateinit var stringsLocatorExtension: ResourceLocatorExtension
 
     override fun apply(project: Project) {
+        if (!project.plugins.hasPlugin("com.android.application")) {
+            throw IllegalStateException("The strings placeholder resolver can only be applied to Android Application projects")
+        }
         this.project = project
         AppInjector.init(this)
         project.plugins.apply(StringResourceLocatorPlugin::class.java)
