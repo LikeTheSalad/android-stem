@@ -1,6 +1,7 @@
 package com.likethesalad.placeholder.modules.templateStrings
 
 import com.likethesalad.placeholder.modules.templateStrings.data.GatherTemplatesArgs
+import com.likethesalad.placeholder.utils.DirectoryUtils
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.tasks.InputDirectory
@@ -25,6 +26,7 @@ open class GatherTemplatesTask
 
     @TaskAction
     fun gatherTemplateStrings() {
+        DirectoryUtils.clearIfNeeded(outDir.get().asFile)
         val languageResourceFinder = args.languageResourceFinderProvider.get()
         args.gatherTemplatesAction.gatherTemplateStrings(outDir.get().asFile, languageResourceFinder)
     }

@@ -1,6 +1,7 @@
 package com.likethesalad.placeholder.modules.resolveStrings
 
 import com.likethesalad.placeholder.modules.resolveStrings.data.ResolvePlaceholdersArgs
+import com.likethesalad.placeholder.utils.DirectoryUtils
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.tasks.InputDirectory
@@ -20,6 +21,7 @@ open class ResolvePlaceholdersTask
 
     @TaskAction
     fun resolve() {
+        DirectoryUtils.clearIfNeeded(outputDir.get().asFile)
         args.resolvePlaceholdersAction.resolve(templatesDir.get().asFile, outputDir.get().asFile)
     }
 }
