@@ -45,6 +45,7 @@ class AndroidResourcesHandlerTest {
         // Given:
         val valuesFolderName = "values"
         val language = Language.Default
+        val resolvedDir = temporaryFolder.newFolder("resolved")
         val resolvedFile = temporaryFolder.newFile()
         val stringResourceModel1 =
             StringAndroidResource(
@@ -62,10 +63,10 @@ class AndroidResourcesHandlerTest {
                 androidScope
             )
         val list = listOf(stringResourceModel1, stringResourceModel2)
-        every { outputStringFileResolver.getResolvedStringsFile(valuesFolderName) }.returns(resolvedFile)
+        every { outputStringFileResolver.getResolvedStringsFile(resolvedDir, valuesFolderName) }.returns(resolvedFile)
 
         // When:
-        androidResourcesHandler.saveResolvedStringList(list, language)
+        androidResourcesHandler.saveResolvedStringList(resolvedDir, list, language)
 
         // Then:
         val expectedResult = File(javaClass.getResource("save_resolved_strings.xml").file).readText()
@@ -130,11 +131,12 @@ class AndroidResourcesHandlerTest {
                 listOf(template1, template2),
                 mapOf("app_name" to "TesT")
             )
+        val templatesDir = temporaryFolder.newFolder("templates")
         val file = temporaryFolder.newFile()
-        every { outputStringFileResolver.getTemplateStringsFile("es") }.returns(file)
+        every { outputStringFileResolver.getTemplateStringsFile(templatesDir, "es") }.returns(file)
 
         // When:
-        androidResourcesHandler.saveTemplates(templates)
+        androidResourcesHandler.saveTemplates(templatesDir, templates)
 
         // Then:
         val expectedResult = File(javaClass.getResource("string_templates.json").file).readText()

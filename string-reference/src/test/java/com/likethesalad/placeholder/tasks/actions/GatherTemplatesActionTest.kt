@@ -1,9 +1,6 @@
 package com.likethesalad.placeholder.tasks.actions
 
-import com.google.common.truth.Truth
 import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
-import com.likethesalad.placeholder.modules.common.helpers.files.IncrementalDataCleaner
-import com.likethesalad.placeholder.modules.common.helpers.files.storage.FilesProvider
 import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHandler
 import com.likethesalad.placeholder.modules.templateStrings.GatherTemplatesAction
 import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
@@ -23,41 +20,21 @@ import java.io.File
 
 class GatherTemplatesActionTest {
 
-    private lateinit var filesProvider: FilesProvider
     private lateinit var resourcesHandler: ResourcesHandler
-    private lateinit var incrementalDataCleaner: IncrementalDataCleaner
     private lateinit var gatherTemplatesAction: GatherTemplatesAction
     private lateinit var languageResourceFinder: LanguageResourceFinder
 
     @Before
     fun setUp() {
         val androidVariantContext = mockk<AndroidVariantContext>()
-        filesProvider = mockk()
         resourcesHandler = mockk(relaxUnitFun = true)
-        incrementalDataCleaner = mockk(relaxUnitFun = true)
         languageResourceFinder = mockk()
 
-        every { androidVariantContext.filesProvider }.returns(filesProvider)
-        every { androidVariantContext.incrementalDataCleaner }.returns(incrementalDataCleaner)
         every { androidVariantContext.androidResourcesHandler }.returns(resourcesHandler)
 
         gatherTemplatesAction = GatherTemplatesAction(
             androidVariantContext
         )
-    }
-
-    @Test
-    fun check_getTemplatesFiles() {
-        // Given:
-        val files = listOf<File>(mockk())
-        every { filesProvider.getAllExpectedTemplatesFiles() } returns files
-
-        // When:
-        val result = gatherTemplatesAction.getTemplatesFiles()
-
-        // Then:
-        verify { filesProvider.getAllExpectedTemplatesFiles() }
-        Truth.assertThat(result).isEqualTo(files)
     }
 
     @Test
@@ -71,6 +48,7 @@ class GatherTemplatesActionTest {
         val (gatheredStringsEs, expectedGatheredTemplatesEs) = getRawAndTemplatesPair(
             language2
         )
+        val outputDir = mockk<File>()
         every { languageResourceFinder.listLanguages() }.returns(listOf(language1, language2))
         every {
             languageResourceFinder.getMergedResourcesForLanguage(language1)
@@ -80,12 +58,11 @@ class GatherTemplatesActionTest {
         }.returns(gatheredStringsEs)
 
         // When:
-        gatherTemplatesAction.gatherTemplateStrings(languageResourceFinder,)
+        gatherTemplatesAction.gatherTemplateStrings(outputDir, languageResourceFinder)
 
         // Then:
-        verify { incrementalDataCleaner.clearTemplateStrings() }
-        verify { resourcesHandler.saveTemplates(expectedGatheredTemplates) }
-        verify { resourcesHandler.saveTemplates(expectedGatheredTemplatesEs) }
+        verify { resourcesHandler.saveTemplates(outputDir, expectedGatheredTemplates) }
+        verify { resourcesHandler.saveTemplates(outputDir, expectedGatheredTemplatesEs) }
     }
 
     private fun getRawAndTemplatesPair(
