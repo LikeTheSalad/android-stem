@@ -1,6 +1,5 @@
 package com.likethesalad.placeholder.modules.resolveStrings
 
-import com.likethesalad.placeholder.base.TaskAction
 import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.placeholder.modules.resolveStrings.resolver.TemplateResolver
 import com.likethesalad.tools.resource.api.android.environment.Language
@@ -13,7 +12,7 @@ import java.io.File
 class ResolvePlaceholdersAction @AssistedInject constructor(
     @Assisted androidVariantContext: AndroidVariantContext,
     private val templateResolver: TemplateResolver
-) : TaskAction {
+) {
 
     @AssistedFactory
     interface Factory {
@@ -57,9 +56,5 @@ class ResolvePlaceholdersAction @AssistedInject constructor(
     private fun isTranslatable(stringResource: StringAndroidResource): Boolean {
         val translatable = stringResource.attributes().get("translatable") ?: return true
         return translatable.toBoolean()
-    }
-
-    override fun execute() {
-        TODO("Not yet implemented")
     }
 }

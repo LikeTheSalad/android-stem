@@ -1,6 +1,5 @@
 package com.likethesalad.placeholder.modules.templateStrings
 
-import com.likethesalad.placeholder.base.TaskAction
 import com.likethesalad.placeholder.modules.common.Constants
 import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
@@ -16,7 +15,7 @@ import java.io.File
 
 class GatherTemplatesAction @AssistedInject constructor(
     @Assisted androidVariantContext: AndroidVariantContext
-) : TaskAction {
+) {
 
     @AssistedFactory
     interface Factory {
@@ -72,9 +71,5 @@ class GatherTemplatesAction @AssistedInject constructor(
             map[it.name()] = it.stringValue()
         }
         return map
-    }
-
-    override fun execute() {
-        TODO("Not yet implemented")
     }
 }
