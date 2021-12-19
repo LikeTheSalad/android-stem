@@ -2,6 +2,7 @@ plugins {
     id 'java-gradle-plugin'
     id 'org.jetbrains.kotlin.jvm'
     id 'kotlin-kapt'
+    id 'com.gradle.plugin-publish' version '0.18.0'
 }
 
 dependencies {
@@ -45,10 +46,17 @@ task functionalTest(type: Test) {
     classpath = sourceSets.functionalTest.runtimeClasspath
 }
 
+pluginBundle {
+    website = rootProject.artifactPublisher.url
+    vcsUrl = rootProject.artifactPublisher.vcsUrl
+    tags = ['android', 'resolved-strings', 'xml-strings']
+}
+
 gradlePlugin {
     plugins {
-        simplePlugin {
+        placeholderResolverPlugin {
             id = 'placeholder-resolver'
+            displayName = rootProject.artifactPublisher.displayName
             implementationClass = 'com.likethesalad.placeholder.ResolvePlaceholdersPlugin'
         }
     }
