@@ -4,16 +4,26 @@ buildscript {
         mavenLocal()
         mavenCentral()
         google()
-        gradlePluginPortal()
     }
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "io.github.gradle-nexus:publish-plugin:1.0.0"
+        classpath 'com.likethesalad.tools:artifact-publisher:1.1.0'
     }
 }
 
-apply plugin: "io.github.gradle-nexus.publish-plugin"
+apply plugin: "artifact-publisher"
+
+artifactPublisher {
+    displayName = "Android String XML Reference"
+    url = "https://github.com/LikeTheSalad/android-string-reference"
+    vcsUrl = "https://github.com/LikeTheSalad/android-string-reference.git"
+    issueTrackerUrl = "https://github.com/LikeTheSalad/android-string-reference/issues"
+}
+
+description = "This is a Gradle plugin for Android applications which resolves XML string references in other XML strings."
+group = 'com.likethesalad.android'
+version = '1.2.2'
 
 ext {
     dagger_version = '2.39.1'
@@ -26,14 +36,5 @@ allprojects {
         mavenLocal()
         mavenCentral()
         google()
-    }
-}
-
-group 'com.likethesalad.android'
-version '1.2.2'
-
-nexusPublishing {
-    repositories {
-        sonatype()
     }
 }

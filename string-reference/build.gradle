@@ -1,7 +1,8 @@
-apply plugin: 'java-gradle-plugin'
-apply plugin: 'kotlin'
-apply plugin: 'kotlin-kapt'
-apply from: '../javaUpload.gradle'
+plugins {
+    id 'java-gradle-plugin'
+    id 'org.jetbrains.kotlin.jvm'
+    id 'kotlin-kapt'
+}
 
 dependencies {
     api gradleApi()
