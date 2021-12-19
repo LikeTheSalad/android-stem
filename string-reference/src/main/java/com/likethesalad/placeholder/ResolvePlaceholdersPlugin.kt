@@ -20,6 +20,7 @@ import com.likethesalad.tools.resource.locator.android.extension.ResourceLocator
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
+import org.gradle.api.logging.LogLevel
 import java.io.File
 
 @Suppress("UnstableApiUsage")
@@ -64,6 +65,16 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Bui
                 taskActionProviderHolder, languageResourceFinderProvider,
                 extension.resolveOnBuild.get()
             )
+        }
+        checkForDeprecatedConfigs()
+    }
+
+    private fun checkForDeprecatedConfigs() {
+        if (extension.keepResolvedFiles != null) {
+            showDeprecatedConfigurationWarning("keepResolvedFiles")
+        }
+        if (extension.useDependenciesRes != null) {
+            showDeprecatedConfigurationWarning("useDependenciesRes")
         }
     }
 
@@ -123,5 +134,12 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Bui
     @Suppress("UNCHECKED_CAST")
     override fun <T : Task> findTaskByName(name: String): T {
         return project.tasks.findByName(name) as T
+    }
+
+    private fun showDeprecatedConfigurationWarning(name: String) {
+        project.logger.log(
+            LogLevel.WARN,
+            "'$name' is deprecated and will be removed in the next version"
+        )
     }
 }
