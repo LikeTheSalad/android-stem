@@ -48,6 +48,7 @@ task functionalTest(type: Test) {
 pluginBundle {
     website = rootProject.artifactPublisher.url.get()
     vcsUrl = rootProject.artifactPublisher.vcsUrl.get()
+    description = rootProject.description
     tags = ['android', 'resolved-strings', 'xml-strings']
 }
 
