@@ -28,7 +28,7 @@ version = '1.3.0'
 ext {
     dagger_version = '2.39.1'
     androidBuild_version = '3.3.3'
-    testingUtilities_version = '1.0.5'
+    testingUtilities_version = '1.0.6'
 }
 
 allprojects {

@@ -14,9 +14,8 @@ dependencies {
     compileOnly "com.android.tools.build:gradle:$androidBuild_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     testImplementation "com.likethesalad.tools.testing:android-gradle:$testingUtilities_version"
+    testImplementation "com.likethesalad.tools.testing:unit-testing:$testingUtilities_version"
     testImplementation "com.android.tools.build:gradle:$androidBuild_version"
-    testImplementation "io.mockk:mockk:1.9.3"
-    testImplementation 'com.google.truth:truth:1.0'
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 }
 

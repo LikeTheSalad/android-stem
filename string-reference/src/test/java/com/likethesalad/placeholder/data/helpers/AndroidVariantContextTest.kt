@@ -5,7 +5,6 @@ import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVarian
 import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantBuildResolvedDir
 import com.likethesalad.placeholder.modules.common.models.TasksNamesModel
 import com.likethesalad.placeholder.providers.BuildDirProvider
-import com.likethesalad.placeholder.providers.LanguageResourceFinderProvider
 import com.likethesalad.placeholder.providers.TaskProvider
 import com.likethesalad.tools.android.plugin.data.AndroidVariantData
 import com.likethesalad.tools.resource.serializer.ResourceSerializer
@@ -27,7 +26,6 @@ class AndroidVariantContextTest {
     private lateinit var tasksNamesModelFactory: TasksNamesModel.Factory
     private lateinit var variantBuildResolvedDirFactory: VariantBuildResolvedDir.Factory
     private lateinit var resourceSerializer: ResourceSerializer
-    private lateinit var languageResourceFinderProvider: LanguageResourceFinderProvider
 
     private lateinit var androidVariantContext: AndroidVariantContext
 
@@ -46,7 +44,6 @@ class AndroidVariantContextTest {
         variantBuildResolvedDirFactory = mockk()
         variantBuildResolvedDir = mockk()
         resourceSerializer = mockk()
-        languageResourceFinderProvider = mockk()
 
         every { tasksNamesModelFactory.create(androidVariantData) }.returns(tasksNames)
         every { tasksNames.mergeResourcesName }.returns(mergeResourcesName)
@@ -61,7 +58,6 @@ class AndroidVariantContextTest {
         androidVariantContext = AndroidVariantContext(
             androidVariantData,
             resourceSerializer,
-            languageResourceFinderProvider,
             tasksNamesModelFactory,
             variantBuildResolvedDirFactory,
             taskProvider,
