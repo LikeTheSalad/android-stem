@@ -62,7 +62,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Bui
                     languageResourceFinderProvider
                 ),
                 taskActionProviderHolder, languageResourceFinderProvider,
-                extension.resolveOnBuild
+                extension.resolveOnBuild.get()
             )
         }
     }
