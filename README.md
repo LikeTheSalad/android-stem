@@ -149,10 +149,6 @@ this plugin won't run automatically during your app's build process and instead 
 proper Gradle commands depending on the build variant you'd want to resolve the strings for. More info on this below under
 "Running it manually".
 
-- **useDependenciesRes** (Boolean, default is `false`, added in version 1.2.0). When false, it will only take your app's string resources into account
-for resolving your string's placeholders. When true, it will take both your app's strings as well as your app's dependencies strings
-for doing the resolving process. It will take all strings from your dependencies, even templates (if any) which will be resolved too.
-
 ### 3.2- How to change a configuration parameter?
 
 In order to set any of the configuration parameters available, you'll have to add to your app's `build.gradle` file
@@ -169,7 +165,7 @@ android {
 
 // Example of how to change some config flags
 stringXmlReference {
-    useDependenciesRes = true // Its default value is false.
+    resolveOnBuild = false // Its default value is true.
 }
 ```
 
