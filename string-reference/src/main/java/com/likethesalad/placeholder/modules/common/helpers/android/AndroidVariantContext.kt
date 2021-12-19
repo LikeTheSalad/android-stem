@@ -6,7 +6,6 @@ import com.likethesalad.placeholder.modules.common.helpers.resources.AndroidReso
 import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHandler
 import com.likethesalad.placeholder.modules.common.models.TasksNamesModel
 import com.likethesalad.placeholder.providers.BuildDirProvider
-import com.likethesalad.placeholder.providers.LanguageResourceFinderProvider
 import com.likethesalad.placeholder.providers.TaskProvider
 import com.likethesalad.tools.android.plugin.data.AndroidVariantData
 import com.likethesalad.tools.resource.serializer.ResourceSerializer
@@ -28,8 +27,7 @@ class AndroidVariantContext @AssistedInject constructor(
     interface Factory {
         fun create(
             androidVariantData: AndroidVariantData,
-            resourceSerializer: ResourceSerializer,
-            languageResourceFinderProvider: LanguageResourceFinderProvider
+            resourceSerializer: ResourceSerializer
         ): AndroidVariantContext
     }
 
