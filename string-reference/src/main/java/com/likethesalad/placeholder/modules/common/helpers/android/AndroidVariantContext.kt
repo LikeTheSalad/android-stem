@@ -18,7 +18,6 @@ import org.gradle.api.Task
 class AndroidVariantContext @AssistedInject constructor(
     @Assisted val androidVariantData: AndroidVariantData,
     @Assisted val resourceSerializer: ResourceSerializer,
-    @Assisted val languageResourceFinderProvider: LanguageResourceFinderProvider,
     tasksNamesModelFactory: TasksNamesModel.Factory,
     variantBuildResolvedDirFactory: VariantBuildResolvedDir.Factory,
     private val taskProvider: TaskProvider,

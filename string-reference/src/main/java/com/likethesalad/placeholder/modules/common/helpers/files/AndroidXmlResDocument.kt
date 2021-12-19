@@ -9,9 +9,7 @@ import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
 import org.w3c.dom.NodeList
-import org.xml.sax.InputSource
 import java.io.File
-import java.io.StringReader
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.transform.OutputKeys
 import javax.xml.transform.TransformerFactory
@@ -25,18 +23,6 @@ class AndroidXmlResDocument(
 ) {
 
     val resources: Element = getOrCreateResources()
-
-    companion object {
-
-        fun readFromFile(xmlFile: File): AndroidXmlResDocument {
-            val dbFactory = DocumentBuilderFactory.newInstance()
-            val dBuilder = dbFactory.newDocumentBuilder()
-            val xmlInput = InputSource(StringReader(xmlFile.readText()))
-            return AndroidXmlResDocument(
-                dBuilder.parse(xmlInput)
-            )
-        }
-    }
 
     fun saveToFile(file: File, indentSpaces: Int = 4) {
         val transformerFactory = TransformerFactory.newInstance()
