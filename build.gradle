@@ -18,7 +18,7 @@ apply plugin: "io.github.gradle-nexus.publish-plugin"
 ext {
     dagger_version = '2.39.1'
     androidBuild_version = '3.3.3'
-    testingUtilities_version = '1.0.5-SNAPSHOT5'
+    testingUtilities_version = '1.0.5'
 }
 
 allprojects {
