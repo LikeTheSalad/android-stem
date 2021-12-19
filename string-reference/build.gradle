@@ -46,8 +46,8 @@ task functionalTest(type: Test) {
 }
 
 pluginBundle {
-    website = rootProject.artifactPublisher.url
-    vcsUrl = rootProject.artifactPublisher.vcsUrl
+    website = rootProject.artifactPublisher.url.get()
+    vcsUrl = rootProject.artifactPublisher.vcsUrl.get()
     tags = ['android', 'resolved-strings', 'xml-strings']
 }
 
@@ -55,7 +55,7 @@ gradlePlugin {
     plugins {
         placeholderResolverPlugin {
             id = 'placeholder-resolver'
-            displayName = rootProject.artifactPublisher.displayName
+            displayName = rootProject.artifactPublisher.displayName.get()
             implementationClass = 'com.likethesalad.placeholder.ResolvePlaceholdersPlugin'
         }
     }
