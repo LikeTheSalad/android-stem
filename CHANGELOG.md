@@ -1,6 +1,14 @@
 Change Log
 ==========
 
+Version 1.3.0 *(19-12-2021)*
+---
+
+* Fix: #10 keeping generic strings outside of language specific resolved files.
+* New: Raw resource collection has been moved outside this project.
+* New: Deprecated `keepResolvedFiles` and `useDependenciesRes` configurations.
+* New: Updated minimum Android Gradle Plugin version to 5.6.4.
+
 Version 1.2.2 *(11-04-2021)*
 ---
 

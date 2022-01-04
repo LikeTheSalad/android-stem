@@ -1,24 +1,26 @@
-apply plugin: 'java-library'
-apply plugin: 'kotlin'
-apply plugin: 'kotlin-kapt'
-apply from: '../javaUpload.gradle'
+plugins {
+    id 'java-gradle-plugin'
+    id 'org.jetbrains.kotlin.jvm'
+    id 'kotlin-kapt'
+    id 'com.gradle.plugin-publish' version '0.18.0'
+}
 
 dependencies {
     api gradleApi()
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation "com.google.auto.factory:auto-factory:$autoFactory_version"
     implementation "com.google.dagger:dagger:$dagger_version"
-    implementation 'com.squareup.retrofit2:retrofit:2.1.0'
+    implementation "com.likethesalad.tools.resources:string-android-resource-locator:1.0.1"
     compileOnly "com.android.tools.build:gradle:$androidBuild_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
-    kapt "com.google.auto.factory:auto-factory:$autoFactory_version"
-    annotationProcessor "com.google.auto.factory:auto-factory:$autoFactory_version"
-    testImplementation gradleTestKit()
+    testImplementation "com.likethesalad.tools.testing:android-gradle:$testingUtilities_version"
+    testImplementation "com.likethesalad.tools.testing:unit-testing:$testingUtilities_version"
     testImplementation "com.android.tools.build:gradle:$androidBuild_version"
-    testImplementation "io.mockk:mockk:1.9.3"
-    testImplementation 'com.google.truth:truth:1.0'
     testImplementation group: 'junit', name: 'junit', version: '4.12'
+}
+
+tasks.withType(PluginUnderTestMetadata).configureEach {
+    pluginClasspath.from(configurations.compileOnly)
 }
 
 kapt {
@@ -41,6 +43,23 @@ sourceSets {
 task functionalTest(type: Test) {
     testClassesDirs = sourceSets.functionalTest.output.classesDirs
     classpath = sourceSets.functionalTest.runtimeClasspath
+}
+
+pluginBundle {
+    website = rootProject.artifactPublisher.url.get()
+    vcsUrl = rootProject.artifactPublisher.vcsUrl.get()
+    description = rootProject.description
+    tags = ['android', 'resolved-strings', 'xml-strings']
+}
+
+gradlePlugin {
+    plugins {
+        placeholderResolverPlugin {
+            id = 'placeholder-resolver'
+            displayName = rootProject.artifactPublisher.displayName.get()
+            implementationClass = 'com.likethesalad.placeholder.ResolvePlaceholdersPlugin'
+        }
+    }
 }
 
 compileKotlin {

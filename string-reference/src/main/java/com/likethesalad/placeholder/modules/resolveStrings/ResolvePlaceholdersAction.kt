@@ -1,61 +1,60 @@
 package com.likethesalad.placeholder.modules.resolveStrings
 
-import com.google.auto.factory.AutoFactory
-import com.google.auto.factory.Provided
-import com.likethesalad.placeholder.base.TaskAction
 import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
-import com.likethesalad.placeholder.modules.common.models.StringResourceModel
-import com.likethesalad.placeholder.modules.resolveStrings.data.helpers.files.ResolvedDataCleanerFactory
 import com.likethesalad.placeholder.modules.resolveStrings.resolver.TemplateResolver
+import com.likethesalad.tools.resource.api.android.environment.Language
+import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import java.io.File
 
-@AutoFactory
-class ResolvePlaceholdersAction(
-    androidVariantContext: AndroidVariantContext,
-    @Provided resolvedDataCleanerFactory: ResolvedDataCleanerFactory,
-    @Provided private val templateResolver: TemplateResolver
-) : TaskAction {
+class ResolvePlaceholdersAction @AssistedInject constructor(
+    @Assisted androidVariantContext: AndroidVariantContext,
+    private val templateResolver: TemplateResolver
+) {
 
-    private val filesProvider = androidVariantContext.filesProvider
+    @AssistedFactory
+    interface Factory {
+        fun create(androidVariantContext: AndroidVariantContext): ResolvePlaceholdersAction
+    }
+
     private val resourcesHandler = androidVariantContext.androidResourcesHandler
-    private val resolvedDataCleaner = resolvedDataCleanerFactory.create(androidVariantContext)
 
-    fun getTemplatesFiles(): List<File> {
-        return filesProvider.getAllTemplatesFiles()
-    }
-
-    fun getResolvedFiles(): List<File> {
-        return filesProvider.getAllExpectedResolvedFiles()
-    }
-
-    fun resolve() {
-        resolvedDataCleaner.removeResolvedFiles()
-        for (templateFile in filesProvider.getAllTemplatesFiles()) {
+    fun resolve(templatesDir: File, outputDir: File) {
+        val templateFiles = templatesDir.listFiles()?.toList() ?: emptyList<File>()
+        for (templateFile in templateFiles) {
             val templatesModel = resourcesHandler.getTemplatesFromFile(templateFile)
             val resolvedTemplates = templateResolver.resolveTemplates(templatesModel)
             val curatedTemplates =
-                filterNonTranslatableStringsForLanguage(templatesModel.pathIdentity.suffix, resolvedTemplates)
+                filterNonTranslatableStringsForLanguage(templatesModel.language, resolvedTemplates)
             if (curatedTemplates.isNotEmpty()) {
                 resourcesHandler.saveResolvedStringList(
+                    outputDir,
                     curatedTemplates,
-                    templatesModel.pathIdentity
+                    templatesModel.language
                 )
             }
         }
     }
 
     private fun filterNonTranslatableStringsForLanguage(
-        suffix: String,
-        resolvedStrings: List<StringResourceModel>
-    ): List<StringResourceModel> {
-        if (suffix.isNotEmpty()) {
+        language: Language,
+        resolvedStrings: List<StringAndroidResource>
+    ): List<StringAndroidResource> {
+        if (language != Language.Default) {
             // It is a language specific file
-            return resolvedStrings.filter { it.translatable }
+            return resolvedStrings.filter { isTranslatable(it) && belongsToLanguage(it, language) }
         }
         return resolvedStrings
     }
 
-    override fun execute() {
-        TODO("Not yet implemented")
+    private fun belongsToLanguage(stringAndroidResource: StringAndroidResource, language: Language): Boolean {
+        return stringAndroidResource.getAndroidScope().language == language
+    }
+
+    private fun isTranslatable(stringResource: StringAndroidResource): Boolean {
+        val translatable = stringResource.attributes().get("translatable") ?: return true
+        return translatable.toBoolean()
     }
 }

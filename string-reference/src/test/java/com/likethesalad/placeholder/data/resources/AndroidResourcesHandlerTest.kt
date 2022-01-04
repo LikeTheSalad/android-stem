@@ -3,10 +3,13 @@ package com.likethesalad.placeholder.data.resources
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.modules.common.helpers.files.OutputStringFileResolver
 import com.likethesalad.placeholder.modules.common.helpers.resources.AndroidResourcesHandler
-import com.likethesalad.placeholder.modules.common.models.PathIdentity
-import com.likethesalad.placeholder.modules.common.models.StringResourceModel
-import com.likethesalad.placeholder.modules.rawStrings.models.StringsGatheredModel
 import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
+import com.likethesalad.resource.serializer.android.AndroidResourceSerializer
+import com.likethesalad.tools.resource.api.android.AndroidResourceScope
+import com.likethesalad.tools.resource.api.android.environment.Language
+import com.likethesalad.tools.resource.api.android.environment.Variant
+import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
+import com.likethesalad.tools.resource.serializer.ResourceSerializer
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Before
@@ -18,7 +21,10 @@ import java.io.File
 class AndroidResourcesHandlerTest {
 
     private lateinit var outputStringFileResolver: OutputStringFileResolver
+    private lateinit var resourceSerializer: ResourceSerializer
     private lateinit var androidResourcesHandler: AndroidResourcesHandler
+
+    private val androidScope = AndroidResourceScope(Variant.Default, Language.Default)
 
     @get:Rule
     val temporaryFolder = TemporaryFolder()
@@ -26,106 +32,41 @@ class AndroidResourcesHandlerTest {
     @Before
     fun setUp() {
         outputStringFileResolver = mockk()
+        resourceSerializer = AndroidResourceSerializer()
         androidResourcesHandler =
             AndroidResourcesHandler(
-                outputStringFileResolver
+                outputStringFileResolver,
+                resourceSerializer
             )
-    }
-
-    @Test
-    fun check_getGatheredStringsFromFile() {
-        // Given:
-        val file = File(javaClass.getResource("gathered_strings.json").file)
-
-        // When:
-        val result = androidResourcesHandler.getGatheredStringsFromFile(file)
-
-        // Then:
-        Truth.assertThat(result.pathIdentity).isEqualTo(
-            PathIdentity("values", "")
-        )
-        Truth.assertThat(result.mergedStrings).isEqualTo(
-            listOf(
-                StringResourceModel(
-                    "the_name",
-                    "the content"
-                ),
-                StringResourceModel(
-                    "the_name2",
-                    "the content 2"
-                ),
-                StringResourceModel(
-                    mapOf(
-                        "name" to "the_name3",
-                        "translatable" to "false"
-                    ), "The content 3"
-                )
-            )
-        )
-    }
-
-    @Test
-    fun check_saveGatheredStrings() {
-        // Given:
-        val pathIdentity =
-            PathIdentity("values", "")
-        val file = temporaryFolder.newFile()
-        every { outputStringFileResolver.getRawStringsFile("") }.returns(file)
-        val mergedStrings = listOf(
-            StringResourceModel(
-                "the_name",
-                "the content"
-            ),
-            StringResourceModel(
-                "the_name2",
-                "the content 2"
-            ),
-            StringResourceModel(
-                mapOf(
-                    "name" to "the_name3",
-                    "translatable" to "false"
-                ), "The content 3"
-            )
-        )
-        val stringsGathered =
-            StringsGatheredModel(
-                pathIdentity,
-                mergedStrings
-            )
-
-        // When:
-        androidResourcesHandler.saveGatheredStrings(stringsGathered)
-
-        // Then:
-        val fileResult = File(javaClass.getResource("save_gathered_strings.json").file)
-        Truth.assertThat(file.readText()).isEqualTo(fileResult.readText())
     }
 
     @Test
     fun check_saveResolvedStringList() {
         // Given:
         val valuesFolderName = "values"
-        val pathIdentity = mockk<PathIdentity>()
-        every { pathIdentity.valuesFolderName }.returns(valuesFolderName)
+        val language = Language.Default
+        val resolvedDir = temporaryFolder.newFolder("resolved")
         val resolvedFile = temporaryFolder.newFile()
         val stringResourceModel1 =
-            StringResourceModel(
+            StringAndroidResource(
                 "welcome",
-                "The welcome message for TesT"
+                "The welcome message for TesT",
+                androidScope
             )
         val stringResourceModel2 =
-            StringResourceModel(
+            StringAndroidResource(
                 mapOf(
                     "name" to "message_non_translatable",
                     "translatable" to "false"
                 ),
-                "Non translatable TesT"
+                "Non translatable TesT",
+                androidScope
             )
         val list = listOf(stringResourceModel1, stringResourceModel2)
-        every { outputStringFileResolver.getResolvedStringsFile(valuesFolderName) }.returns(resolvedFile)
+        every { outputStringFileResolver.getResolvedStringsFile(resolvedDir, valuesFolderName) }.returns(resolvedFile)
 
         // When:
-        androidResourcesHandler.saveResolvedStringList(list, pathIdentity)
+        androidResourcesHandler.saveResolvedStringList(resolvedDir, list, language)
 
         // Then:
         val expectedResult = File(javaClass.getResource("save_resolved_strings.xml").file).readText()
@@ -141,23 +82,20 @@ class AndroidResourcesHandlerTest {
         val result = androidResourcesHandler.getTemplatesFromFile(templatesFile)
 
         // Then:
-        Truth.assertThat(result.pathIdentity).isEqualTo(
-            PathIdentity(
-                "values-es",
-                "-es"
-            )
+        Truth.assertThat(result.language).isEqualTo(
+            Language.Custom("es")
         )
         Truth.assertThat(result.templates.size).isEqualTo(2)
-        Truth.assertThat(result.templates.map { it.name }).containsExactly(
+        Truth.assertThat(result.templates.map { it.name() }).containsExactly(
             "template_welcome",
             "template_message_non_translatable"
         )
-        val nameToContent = result.templates.map { it.name to it.content }.toMap()
+        val nameToContent = result.templates.associate { it.name() to it.stringValue() }
         Truth.assertThat(nameToContent).containsExactly(
             "template_welcome", "The welcome message for \${app_name}",
             "template_message_non_translatable", "Non translatable \${app_name}"
         )
-        val nameToAttrs = result.templates.map { it.name to it.attributes }.toMap()
+        val nameToAttrs = result.templates.associate { it.name() to it.attributes().asMap() }
         Truth.assertThat(nameToAttrs).containsExactly(
             "template_welcome", mapOf("name" to "template_welcome"),
             "template_message_non_translatable", mapOf(
@@ -173,29 +111,32 @@ class AndroidResourcesHandlerTest {
     @Test
     fun check_saveTemplatesToFile() {
         // Given:
-        val template1 = StringResourceModel(
+        val androidScope = AndroidResourceScope(Variant.Default, Language.Custom("es"))
+        val template1 = StringAndroidResource(
             "template_welcome",
-            "The welcome message for \${app_name}"
+            "The welcome message for \${app_name}",
+            androidScope
         )
-        val template2 = StringResourceModel(
+        val template2 = StringAndroidResource(
             mapOf(
                 "name" to "template_message_non_translatable",
                 "translatable" to "false"
-            ), "Non translatable \${app_name}"
+            ), "Non translatable \${app_name}",
+            androidScope
         )
-        val pathIdentity =
-            PathIdentity("values-es", "-es")
+        val language = Language.Custom("es")
         val templates =
             StringsTemplatesModel(
-                pathIdentity,
+                language,
                 listOf(template1, template2),
                 mapOf("app_name" to "TesT")
             )
+        val templatesDir = temporaryFolder.newFolder("templates")
         val file = temporaryFolder.newFile()
-        every { outputStringFileResolver.getTemplateStringsFile("-es") }.returns(file)
+        every { outputStringFileResolver.getTemplateStringsFile(templatesDir, "es") }.returns(file)
 
         // When:
-        androidResourcesHandler.saveTemplates(templates)
+        androidResourcesHandler.saveTemplates(templatesDir, templates)
 
         // Then:
         val expectedResult = File(javaClass.getResource("string_templates.json").file).readText()

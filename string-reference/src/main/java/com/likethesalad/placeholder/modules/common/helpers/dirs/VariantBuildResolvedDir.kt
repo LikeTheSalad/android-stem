@@ -1,35 +1,39 @@
 package com.likethesalad.placeholder.modules.common.helpers.dirs
 
-import com.google.auto.factory.AutoFactory
-import com.google.auto.factory.Provided
+import com.likethesalad.placeholder.providers.AndroidExtensionProvider
 import com.likethesalad.placeholder.providers.BuildDirProvider
-import com.likethesalad.placeholder.modules.common.helpers.android.AndroidExtensionHelper
-import com.likethesalad.placeholder.modules.common.helpers.android.AppVariantHelper
-import com.likethesalad.placeholder.utils.ConfigurationProvider
+import com.likethesalad.tools.android.plugin.data.AndroidVariantData
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import java.io.File
-import javax.inject.Inject
 
-@AutoFactory
-class VariantBuildResolvedDir @Inject constructor(
-    appVariantHelper: AppVariantHelper,
-    @Provided buildDirProvider: BuildDirProvider,
-    @Provided configurationProvider: ConfigurationProvider,
-    @Provided private val androidExtensionHelper: AndroidExtensionHelper
+class VariantBuildResolvedDir @AssistedInject constructor(
+    buildDirProvider: BuildDirProvider,
+    androidExtensionProvider: AndroidExtensionProvider,
+    @Assisted androidVariantData: AndroidVariantData
 ) {
+    @AssistedFactory
+    interface Factory {
+        fun create(androidVariantData: AndroidVariantData): VariantBuildResolvedDir
+    }
 
-    private val variantName by lazy { appVariantHelper.getVariantName() }
+    companion object {
+        const val RESOLVED_DIR_BUILD_RELATIVE_PATH = "generated/resolved"
+    }
 
-    val resolvedDir: File = if (configurationProvider.keepResolvedFiles()) {
-        androidExtensionHelper.getVariantSrcDirs(variantName).first()
-    } else {
-        val dir = File(buildDirProvider.getBuildDir(), "generated/resolved/$variantName")
+    private val androidExtension by lazy { androidExtensionProvider.getExtension() }
+    private val variantName by lazy { androidVariantData.getVariantName() }
+
+    val resolvedDir: File by lazy {
+        val dir = File(buildDirProvider.getBuildDir(), "$RESOLVED_DIR_BUILD_RELATIVE_PATH/$variantName")
         addResolvedDirToSourceSets(dir)
         dir
     }
 
 
     private fun addResolvedDirToSourceSets(resolvedDir: File) {
-        val variantSrcDirs = androidExtensionHelper.getVariantSrcDirs(variantName)
-        androidExtensionHelper.setVariantSrcDirs(variantName, variantSrcDirs + resolvedDir)
+        val variantSrcDirs = androidExtension.getVariantSrcDirs(variantName)
+        androidExtension.setVariantSrcDirs(variantName, variantSrcDirs + resolvedDir)
     }
 }

@@ -1,10 +1,10 @@
 package com.likethesalad.placeholder.modules.templateStrings.models
 
-import com.likethesalad.placeholder.modules.common.models.PathIdentity
-import com.likethesalad.placeholder.modules.common.models.StringResourceModel
+import com.likethesalad.tools.resource.api.android.environment.Language
+import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
 
 data class StringsTemplatesModel(
-    val pathIdentity: PathIdentity,
-    val templates: List<StringResourceModel>,
+    val language: Language,
+    val templates: List<StringAndroidResource>,
     val values: Map<String, String>
 )

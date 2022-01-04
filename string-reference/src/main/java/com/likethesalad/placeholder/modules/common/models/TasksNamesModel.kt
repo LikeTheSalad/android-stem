@@ -1,10 +1,16 @@
 package com.likethesalad.placeholder.modules.common.models
 
-import com.google.auto.factory.AutoFactory
-import com.likethesalad.placeholder.modules.common.helpers.android.AppVariantHelper
+import com.likethesalad.tools.android.plugin.data.AndroidVariantData
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
-@AutoFactory
-class TasksNamesModel(appVariantHelper: AppVariantHelper) {
+class TasksNamesModel @AssistedInject constructor(@Assisted androidVariantData: AndroidVariantData) {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(androidVariantData: AndroidVariantData): TasksNamesModel
+    }
 
     companion object {
         private const val GATHER_RAW_STRINGS_NAME_FORMAT = "gather%sRawStrings"
@@ -14,7 +20,7 @@ class TasksNamesModel(appVariantHelper: AppVariantHelper) {
         private const val ANDROID_MERGE_RESOURCES_TASK_NAME_FORMAT = "merge%sResources"
     }
 
-    private val capitalizedBuildVariant = appVariantHelper.getVariantName().capitalize()
+    private val capitalizedBuildVariant = androidVariantData.getVariantName().capitalize()
 
     val gatherRawStringsName: String by lazy {
         GATHER_RAW_STRINGS_NAME_FORMAT.format(capitalizedBuildVariant)

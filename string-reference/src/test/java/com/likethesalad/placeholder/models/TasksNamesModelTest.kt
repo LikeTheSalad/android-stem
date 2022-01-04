@@ -2,7 +2,7 @@ package com.likethesalad.placeholder.models
 
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.modules.common.models.TasksNamesModel
-import com.likethesalad.placeholder.modules.common.helpers.android.AppVariantHelper
+import com.likethesalad.tools.android.plugin.data.AndroidVariantData
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Test
@@ -42,9 +42,9 @@ class TasksNamesModelTest {
     }
 
     private fun getTasksNamesFor(variantName: String): TasksNamesModel {
-        val appVariantHelper = mockk<AppVariantHelper>()
-        every { appVariantHelper.getVariantName() }.returns(variantName)
+        val androidVariantData = mockk<AndroidVariantData>()
+        every { androidVariantData.getVariantName() }.returns(variantName)
 
-        return TasksNamesModel(appVariantHelper)
+        return TasksNamesModel(androidVariantData)
     }
 }

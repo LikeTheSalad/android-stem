@@ -11,7 +11,6 @@ class Constants {
         const val XML_STRING_TAG = "string"
         const val XML_RESOURCES_TAG = "resources"
         const val RESOLVED_FILE_NAME = "resolved.xml"
-        const val RAW_STRING_BASE_FILE_NAME = "strings"
         const val TEMPLATE_BASE_FILE_NAME = "templates"
     }
 }
