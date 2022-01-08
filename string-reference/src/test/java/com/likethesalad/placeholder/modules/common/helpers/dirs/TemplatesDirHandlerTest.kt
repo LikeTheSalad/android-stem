@@ -60,8 +60,6 @@ class TemplatesDirHandlerTest : BaseMockable() {
         verify {
             sourceSetsHandler.addToSourceSets(getExpectedResFolderForVariant(mainVariantName), mainVariantName)
             sourceSetsHandler.addToSourceSets(getExpectedResFolderForVariant(demoVariantName), demoVariantName)
-        }
-        verify(exactly = 0) {
             sourceSetsHandler.addToSourceSets(
                 getExpectedResFolderForVariant(demoDebugVariantName),
                 demoDebugVariantName
@@ -103,7 +101,8 @@ class TemplatesDirHandlerTest : BaseMockable() {
 
         Truth.assertThat(templatesDirs).containsExactly(
             ResDir(mainVariant, getExpectedResFolderForVariant(mainVariantName)),
-            ResDir(demoVariant, getExpectedResFolderForVariant(demoVariantName))
+            ResDir(demoVariant, getExpectedResFolderForVariant(demoVariantName)),
+            ResDir(demoDebugVariant, getExpectedResFolderForVariant(demoDebugVariantName))
         )
     }
 

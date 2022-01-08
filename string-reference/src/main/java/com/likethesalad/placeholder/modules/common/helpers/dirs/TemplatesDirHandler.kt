@@ -26,8 +26,7 @@ class TemplatesDirHandler @AssistedInject constructor(
     fun createResDirs() {
         validateNotCreatedAlready()
         templatesDirs = mutableListOf()
-        val variants = variantTree.getVariants()
-        variants.take(variants.size - 1).forEach { variant ->
+        variantTree.getVariants().forEach { variant ->
             createTemplatesResDir(variant)
         }
     }
