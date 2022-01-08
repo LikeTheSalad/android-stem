@@ -19,7 +19,7 @@ open class GatherTemplatesTask
     val inDir: DirectoryProperty = project.objects.directoryProperty()
 
     @InputFiles
-    val templateFiles: FileCollection = project.files(args.gatherTemplatesAction.getTemplatesSourceFiles())
+    val templates: FileCollection = project.files(args.gatherTemplatesAction.getTemplatesSourceFiles())
 
     @OutputDirectory
     val outDir: DirectoryProperty = project.objects.directoryProperty()
