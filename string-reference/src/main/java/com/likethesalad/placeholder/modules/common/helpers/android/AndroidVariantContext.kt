@@ -5,7 +5,7 @@ import com.likethesalad.placeholder.modules.common.helpers.files.OutputStringFil
 import com.likethesalad.placeholder.modules.common.helpers.resources.AndroidResourcesHandler
 import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHandler
 import com.likethesalad.placeholder.modules.common.models.TasksNamesModel
-import com.likethesalad.placeholder.providers.BuildDirProvider
+import com.likethesalad.placeholder.providers.ProjectDirsProvider
 import com.likethesalad.placeholder.providers.TaskProvider
 import com.likethesalad.tools.android.plugin.data.AndroidVariantData
 import com.likethesalad.tools.resource.serializer.ResourceSerializer
@@ -20,7 +20,7 @@ class AndroidVariantContext @AssistedInject constructor(
     tasksNamesModelFactory: TasksNamesModel.Factory,
     variantBuildResolvedDirFactory: VariantBuildResolvedDir.Factory,
     private val taskProvider: TaskProvider,
-    private val buildDirProvider: BuildDirProvider
+    private val projectDirsProvider: ProjectDirsProvider
 ) {
 
     @AssistedFactory
@@ -41,7 +41,7 @@ class AndroidVariantContext @AssistedInject constructor(
         taskProvider.findTaskByName(tasksNames.generateResValuesName)
     }
     val incrementalDir: String by lazy {
-        buildDirProvider.getBuildDir().absolutePath + "/intermediates/incremental/" + tasksNames.resolvePlaceholdersName
+        projectDirsProvider.getBuildDir().absolutePath + "/intermediates/incremental/" + tasksNames.resolvePlaceholdersName
     }
     val variantBuildResolvedDir by lazy { variantBuildResolvedDirFactory.create(androidVariantData) }
 

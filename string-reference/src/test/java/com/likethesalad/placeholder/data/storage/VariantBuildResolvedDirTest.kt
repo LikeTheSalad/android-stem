@@ -3,7 +3,7 @@ package com.likethesalad.placeholder.data.storage
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.modules.common.helpers.dirs.SourceSetsHandler
 import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantBuildResolvedDir
-import com.likethesalad.placeholder.providers.BuildDirProvider
+import com.likethesalad.placeholder.providers.ProjectDirsProvider
 import com.likethesalad.tools.android.plugin.data.AndroidVariantData
 import io.mockk.Runs
 import io.mockk.every
@@ -24,15 +24,15 @@ class VariantBuildResolvedDirTest {
     fun `Get build res dir for variant and don't keep it`() {
         val variantName = "demoDebug"
         val buildDir = temporaryFolder.newFolder("build")
-        val buildDirProvider = mockk<BuildDirProvider>()
+        val projectDirsProvider = mockk<ProjectDirsProvider>()
         val androidVariantData = mockk<AndroidVariantData>()
         val sourceSetsHandler = mockk<SourceSetsHandler>()
         val newSrcDir = File(buildDir, "generated/resolved/$variantName")
-        every { buildDirProvider.getBuildDir() }.returns(buildDir)
+        every { projectDirsProvider.getBuildDir() }.returns(buildDir)
         every { androidVariantData.getVariantName() }.returns(variantName)
         every { sourceSetsHandler.addToSourceSets(newSrcDir, variantName) } just Runs
         val variantBuildResolvedDir = VariantBuildResolvedDir(
-            buildDirProvider,
+            projectDirsProvider,
             sourceSetsHandler,
             androidVariantData
         )

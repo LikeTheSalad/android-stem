@@ -4,7 +4,7 @@ import com.google.common.truth.Truth
 import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantBuildResolvedDir
 import com.likethesalad.placeholder.modules.common.models.TasksNamesModel
-import com.likethesalad.placeholder.providers.BuildDirProvider
+import com.likethesalad.placeholder.providers.ProjectDirsProvider
 import com.likethesalad.placeholder.providers.TaskProvider
 import com.likethesalad.tools.android.plugin.data.AndroidVariantData
 import com.likethesalad.tools.resource.serializer.ResourceSerializer
@@ -20,7 +20,7 @@ class AndroidVariantContextTest {
 
     private lateinit var tasksNames: TasksNamesModel
     private lateinit var taskProvider: TaskProvider
-    private lateinit var buildDirProvider: BuildDirProvider
+    private lateinit var projectDirsProvider: ProjectDirsProvider
     private lateinit var variantBuildResolvedDir: VariantBuildResolvedDir
     private lateinit var androidVariantData: AndroidVariantData
     private lateinit var tasksNamesModelFactory: TasksNamesModel.Factory
@@ -37,7 +37,7 @@ class AndroidVariantContextTest {
     @Before
     fun setUp() {
         tasksNames = mockk()
-        buildDirProvider = mockk()
+        projectDirsProvider = mockk()
         taskProvider = mockk()
         androidVariantData = mockk()
         tasksNamesModelFactory = mockk()
@@ -52,7 +52,7 @@ class AndroidVariantContextTest {
         every { variantBuildResolvedDirFactory.create(androidVariantData) }.returns(variantBuildResolvedDir)
 
         val buildDir = mockk<File>()
-        every { buildDirProvider.getBuildDir() }.returns(buildDir)
+        every { projectDirsProvider.getBuildDir() }.returns(buildDir)
         every { buildDir.absolutePath }.returns(buildDirPath)
 
         androidVariantContext = AndroidVariantContext(
@@ -61,7 +61,7 @@ class AndroidVariantContextTest {
             tasksNamesModelFactory,
             variantBuildResolvedDirFactory,
             taskProvider,
-            buildDirProvider
+            projectDirsProvider
         )
     }
 

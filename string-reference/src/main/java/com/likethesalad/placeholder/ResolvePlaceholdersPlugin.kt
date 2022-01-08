@@ -10,8 +10,8 @@ import com.likethesalad.placeholder.modules.resolveStrings.data.ResolvePlacehold
 import com.likethesalad.placeholder.modules.templateStrings.GatherTemplatesTask
 import com.likethesalad.placeholder.modules.templateStrings.data.GatherTemplatesArgs
 import com.likethesalad.placeholder.providers.AndroidExtensionProvider
-import com.likethesalad.placeholder.providers.BuildDirProvider
 import com.likethesalad.placeholder.providers.LanguageResourceFinderProvider
+import com.likethesalad.placeholder.providers.ProjectDirsProvider
 import com.likethesalad.placeholder.providers.TaskProvider
 import com.likethesalad.placeholder.utils.TaskActionProviderHolder
 import com.likethesalad.tools.android.plugin.data.AndroidExtension
@@ -24,7 +24,7 @@ import org.gradle.api.logging.LogLevel
 import java.io.File
 
 @Suppress("UnstableApiUsage")
-class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, BuildDirProvider,
+class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, ProjectDirsProvider,
     TaskProvider {
 
     companion object {
@@ -124,6 +124,10 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Bui
 
     override fun getExtension(): AndroidExtension {
         return androidExtension
+    }
+
+    override fun getProjectDir(): File {
+        return project.projectDir
     }
 
     override fun getBuildDir(): File {

@@ -1,6 +1,6 @@
 package com.likethesalad.placeholder.modules.common.helpers.dirs
 
-import com.likethesalad.placeholder.providers.BuildDirProvider
+import com.likethesalad.placeholder.providers.ProjectDirsProvider
 import com.likethesalad.tools.android.plugin.data.AndroidVariantData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -8,7 +8,7 @@ import dagger.assisted.AssistedInject
 import java.io.File
 
 class VariantBuildResolvedDir @AssistedInject constructor(
-    buildDirProvider: BuildDirProvider,
+    projectDirsProvider: ProjectDirsProvider,
     sourceSetsHandler: SourceSetsHandler,
     @Assisted androidVariantData: AndroidVariantData
 ) {
@@ -24,7 +24,7 @@ class VariantBuildResolvedDir @AssistedInject constructor(
     private val variantName by lazy { androidVariantData.getVariantName() }
 
     val resolvedDir: File by lazy {
-        val dir = File(buildDirProvider.getBuildDir(), "$RESOLVED_DIR_BUILD_RELATIVE_PATH/$variantName")
+        val dir = File(projectDirsProvider.getBuildDir(), "$RESOLVED_DIR_BUILD_RELATIVE_PATH/$variantName")
         sourceSetsHandler.addToSourceSets(dir, variantName)
         dir
     }
