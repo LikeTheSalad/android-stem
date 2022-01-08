@@ -55,7 +55,7 @@ class TemplatesDirHandlerTest : BaseMockable() {
         val variants = listOf(mainVariant, demoVariant, demoDebugVariant)
         every { variantTree.getVariants() }.returns(variants)
 
-        templatesDirHandler.createResDirs()
+        templatesDirHandler.configureSourceSets()
 
         verify {
             sourceSetsHandler.addToSourceSets(getExpectedResFolderForVariant(mainVariantName), mainVariantName)
@@ -75,13 +75,13 @@ class TemplatesDirHandlerTest : BaseMockable() {
         val demoVariant = createVariant(demoVariantName)
         val variants = listOf(mainVariant, demoVariant)
         every { variantTree.getVariants() }.returns(variants)
-        templatesDirHandler.createResDirs()
+        templatesDirHandler.configureSourceSets()
 
         try {
-            templatesDirHandler.createResDirs()
+            templatesDirHandler.configureSourceSets()
             fail()
         } catch (e: IllegalStateException) {
-            Truth.assertThat(e.message).isEqualTo("Res dirs have already been created")
+            Truth.assertThat(e.message).isEqualTo("Res dirs have already been configured")
         }
     }
 
@@ -95,9 +95,9 @@ class TemplatesDirHandlerTest : BaseMockable() {
         val demoDebugVariant = createVariant(demoDebugVariantName)
         val variants = listOf(mainVariant, demoVariant, demoDebugVariant)
         every { variantTree.getVariants() }.returns(variants)
-        templatesDirHandler.createResDirs()
+        templatesDirHandler.configureSourceSets()
 
-        val templatesDirs = templatesDirHandler.getTemplatesDirs()
+        val templatesDirs = templatesDirHandler.templatesDirs
 
         Truth.assertThat(templatesDirs).containsExactly(
             ResDir(mainVariant, getExpectedResFolderForVariant(mainVariantName)),

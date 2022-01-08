@@ -37,11 +37,11 @@ class GatherTemplatesAction @AssistedInject constructor(
     }
 
     fun getTemplatesSourceFiles(): List<File> {
-        return templatesDirHandler.getTemplatesDirs().map { it.dir }
+        return templatesDirHandler.templatesDirs.map { it.dir }
     }
 
     private fun getTemplateStringResources(): List<StringAndroidResource> {
-        val sourceProvider = templatesResourceSourceProviderFactory.create(templatesDirHandler.getTemplatesDirs())
+        val sourceProvider = templatesResourceSourceProviderFactory.create(templatesDirHandler.templatesDirs)
         val extractor = StringXmlResourceExtractor()
         val collector =
             AndroidResourceCollector.newInstance(sourceProvider, androidVariantContext.variantTree, extractor)

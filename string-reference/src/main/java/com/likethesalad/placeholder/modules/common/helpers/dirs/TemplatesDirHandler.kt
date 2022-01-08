@@ -1,7 +1,6 @@
 package com.likethesalad.placeholder.modules.common.helpers.dirs
 
 import com.likethesalad.placeholder.providers.ProjectDirsProvider
-import com.likethesalad.tools.resource.api.android.environment.Variant
 import com.likethesalad.tools.resource.collector.android.data.resdir.ResDir
 import com.likethesalad.tools.resource.collector.android.data.variant.VariantTree
 import dagger.assisted.Assisted
@@ -16,35 +15,32 @@ class TemplatesDirHandler @AssistedInject constructor(
 ) {
 
     private val projectDir: File by lazy { projectDirsProvider.getProjectDir() }
-    private var templatesDirs: MutableList<ResDir>? = null
+    private var sourceSetsCreated = false
+    val templatesDirs: List<ResDir> by lazy { createTemplatesDirs() }
+
+    private fun createTemplatesDirs(): List<ResDir> {
+        return variantTree.getVariants().map {
+            val dir = File(projectDir, "src/${it.name}/templates")
+            ResDir(it, dir)
+        }
+    }
 
     @AssistedFactory
     interface Factory {
         fun create(variantTree: VariantTree): TemplatesDirHandler
     }
 
-    fun createResDirs() {
-        validateNotCreatedAlready()
-        templatesDirs = mutableListOf()
-        variantTree.getVariants().forEach { variant ->
-            createTemplatesResDir(variant)
+    fun configureSourceSets() {
+        validateNotConfiguredAlready()
+        sourceSetsCreated = true
+        templatesDirs.forEach { resDir ->
+            sourceSetsHandler.addToSourceSets(resDir.dir, resDir.variant.name)
         }
     }
 
-    private fun validateNotCreatedAlready() {
-        if (templatesDirs != null) {
-            throw IllegalStateException("Res dirs have already been created")
+    private fun validateNotConfiguredAlready() {
+        if (sourceSetsCreated) {
+            throw IllegalStateException("Res dirs have already been configured")
         }
-    }
-
-    private fun createTemplatesResDir(variant: Variant) {
-        val variantName = variant.name
-        val dir = File(projectDir, "src/$variantName/templates")
-        templatesDirs?.add(ResDir(variant, dir))
-        sourceSetsHandler.addToSourceSets(dir, variantName)
-    }
-
-    fun getTemplatesDirs(): List<ResDir> {
-        return templatesDirs!!
     }
 }
