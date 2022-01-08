@@ -13,12 +13,18 @@ class TemplatesResourceSourceProvider @AssistedInject constructor(
     private val resDirResourceSourceProviderFactory: ResDirResourceSourceProvider.Factory
 ) : ResourceSourceProvider() {
 
+    private val internalSources by lazy { findSources() }
+
     @AssistedFactory
     interface Factory {
         fun create(templatesResDirs: List<ResDir>): TemplatesResourceSourceProvider
     }
 
     override fun doGetSources(): List<ResourceSource> {
+        return internalSources
+    }
+
+    private fun findSources(): List<ResourceSource> {
         val sources = mutableListOf<ResourceSource>()
 
         templatesResDirs.forEach { resDir ->
