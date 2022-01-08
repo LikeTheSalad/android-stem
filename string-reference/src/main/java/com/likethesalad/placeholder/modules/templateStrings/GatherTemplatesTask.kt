@@ -4,7 +4,9 @@ import com.likethesalad.placeholder.modules.templateStrings.data.GatherTemplates
 import com.likethesalad.placeholder.utils.DirectoryUtils
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import javax.inject.Inject
@@ -15,6 +17,9 @@ open class GatherTemplatesTask
 
     @InputDirectory
     val inDir: DirectoryProperty = project.objects.directoryProperty()
+
+    @InputFiles
+    val templateFiles: FileCollection = project.files(args.gatherTemplatesAction.getTemplatesSourceFiles())
 
     @OutputDirectory
     val outDir: DirectoryProperty = project.objects.directoryProperty()
