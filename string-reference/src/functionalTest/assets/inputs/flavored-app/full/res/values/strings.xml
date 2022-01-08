@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Full flavored app</string>
-    <string name="template_welcome_message">Welcome to ${app_name} on full variant</string>
 </resources>

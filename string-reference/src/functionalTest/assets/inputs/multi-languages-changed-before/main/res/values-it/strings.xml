@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Different languages IT</string>
-    <string name="template_welcome_message">Italian welcome message to ${app_name}</string>
 </resources>

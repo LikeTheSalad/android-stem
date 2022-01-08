@@ -1,0 +1,3 @@
+<resources>
+    <string name="welcome_message">Welcome to ${app_name}, we use the library value: ${library_value}</string>
+</resources>

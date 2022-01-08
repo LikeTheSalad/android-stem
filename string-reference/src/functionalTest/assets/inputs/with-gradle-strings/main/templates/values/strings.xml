@@ -1,0 +1,3 @@
+<resources>
+    <string name="welcome_message">Welcome to ${app_name}, which id is: ${my_app_id}</string>
+</resources>
