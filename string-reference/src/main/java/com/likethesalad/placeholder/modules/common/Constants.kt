@@ -4,7 +4,6 @@ class Constants {
     companion object {
         const val TEMPLATE_STRING_PREFIX = "template_"
         val TEMPLATE_STRING_PREFIX_REGEX = Regex("^$TEMPLATE_STRING_PREFIX")
-        val TEMPLATE_STRING_REGEX = Regex("^$TEMPLATE_STRING_PREFIX[a-zA-Z][a-zA-Z0-9_]*")
         val PLACEHOLDER_REGEX = Regex("\\$\\{([a-zA-Z0-9_]+)}")
         val TEMPLATE_AS_PLACEHOLDER_REGEX = Regex("\\\$\\{($TEMPLATE_STRING_PREFIX[a-zA-Z0-9_]+)}")
 

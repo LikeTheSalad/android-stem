@@ -1,12 +1,15 @@
 package com.likethesalad.placeholder.modules.templateStrings
 
+import com.likethesalad.android.string.resources.locator.extractor.StringXmlResourceExtractor
 import com.likethesalad.placeholder.modules.common.Constants
 import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
+import com.likethesalad.placeholder.modules.templateStrings.collector.TemplatesResourceSourceProvider
 import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
 import com.likethesalad.tools.resource.api.android.data.AndroidResourceType
 import com.likethesalad.tools.resource.api.android.environment.Language
 import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
 import com.likethesalad.tools.resource.api.collection.ResourceCollection
+import com.likethesalad.tools.resource.collector.android.AndroidResourceCollector
 import com.likethesalad.tools.resource.locator.android.extension.LanguageResourceFinder
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -14,7 +17,8 @@ import dagger.assisted.AssistedInject
 import java.io.File
 
 class GatherTemplatesAction @AssistedInject constructor(
-    @Assisted androidVariantContext: AndroidVariantContext
+    @Assisted private val androidVariantContext: AndroidVariantContext,
+    private val templatesResourceSourceProviderFactory: TemplatesResourceSourceProvider.Factory
 ) {
 
     @AssistedFactory
@@ -23,6 +27,7 @@ class GatherTemplatesAction @AssistedInject constructor(
     }
 
     private val resourcesHandler = androidVariantContext.androidResourcesHandler
+    private val templatesDirHandler = androidVariantContext.templatesDirHandler
 
     fun gatherTemplateStrings(outputDir: File, languageResourceFinder: LanguageResourceFinder) {
         for (language in languageResourceFinder.listLanguages()) {
@@ -31,14 +36,25 @@ class GatherTemplatesAction @AssistedInject constructor(
         }
     }
 
-    @Suppress("UNCHECKED_CAST")
+    fun getTemplatesSourceFiles(): List<File> {
+        return templatesDirHandler.getTemplatesDirs().map { it.dir }
+    }
+
+    private fun getTemplateStringResources(): List<StringAndroidResource> {
+        val sourceProvider = templatesResourceSourceProviderFactory.create(templatesDirHandler.getTemplatesDirs())
+        val extractor = StringXmlResourceExtractor()
+        val collector =
+            AndroidResourceCollector.newInstance(sourceProvider, androidVariantContext.variantTree, extractor)
+
+        return asStringResources(collector.collect())
+    }
+
     private fun gatheredStringsToTemplateStrings(
         language: Language,
         resources: ResourceCollection
     ): StringsTemplatesModel {
-        val stringResources =
-            resources.getResourcesByType(AndroidResourceType.StringType) as List<StringAndroidResource>
-        val stringTemplates = stringResources.filter { Constants.TEMPLATE_STRING_REGEX.containsMatchIn(it.name()) }
+        val stringResources = asStringResources(resources)
+        val stringTemplates = getTemplateStringResources()
         val placeholdersResolved = getPlaceholdersResolved(stringResources, stringTemplates)
 
         return StringsTemplatesModel(
@@ -46,6 +62,11 @@ class GatherTemplatesAction @AssistedInject constructor(
             stringTemplates,
             placeholdersResolved
         )
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun asStringResources(resources: ResourceCollection): List<StringAndroidResource> {
+        return resources.getResourcesByType(AndroidResourceType.StringType) as List<StringAndroidResource>
     }
 
     private fun getPlaceholdersResolved(
