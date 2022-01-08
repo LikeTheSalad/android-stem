@@ -1,5 +1,6 @@
 package com.likethesalad.placeholder.modules.common.helpers.dirs
 
+import com.google.common.truth.Truth
 import com.likethesalad.placeholder.providers.ProjectDirsProvider
 import com.likethesalad.tools.resource.api.android.environment.Variant
 import com.likethesalad.tools.resource.collector.android.data.variant.VariantTree
@@ -64,6 +65,26 @@ class TemplatesDirHandlerTest : BaseMockable() {
                 demoDebugVariantName
             )
         }
+    }
+
+    @Test
+    fun `Get list of created res dirs`() {
+        val mainVariantName = "main"
+        val demoVariantName = "demo"
+        val demoDebugVariantName = "demoDebug"
+        val mainVariant = createVariant(mainVariantName)
+        val demoVariant = createVariant(demoVariantName)
+        val demoDebugVariant = createVariant(demoDebugVariantName)
+        val variants = listOf(mainVariant, demoVariant, demoDebugVariant)
+        every { variantTree.getVariants() }.returns(variants)
+        templatesDirHandler.createResDirs()
+
+        val templatesDirs = templatesDirHandler.getTemplatesDirs()
+
+        Truth.assertThat(templatesDirs).containsExactly(
+            getExpectedResFolderForVariant(mainVariantName),
+            getExpectedResFolderForVariant(demoVariantName)
+        )
     }
 
     private fun getExpectedResFolderForVariant(variantName: String): File {

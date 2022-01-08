@@ -15,6 +15,7 @@ class TemplatesDirHandler @AssistedInject constructor(
 ) {
 
     private val projectDir: File by lazy { projectDirsProvider.getProjectDir() }
+    private val templatesDirs = mutableListOf<File>()
 
     @AssistedFactory
     interface TemplateDirHandlerFactory {
@@ -30,6 +31,12 @@ class TemplatesDirHandler @AssistedInject constructor(
 
     private fun createTemplatesResDir(variant: Variant) {
         val variantName = variant.name
-        sourceSetsHandler.addToSourceSets(File(projectDir, "src/$variantName/templates"), variantName)
+        val dir = File(projectDir, "src/$variantName/templates")
+        templatesDirs.add(dir)
+        sourceSetsHandler.addToSourceSets(dir, variantName)
+    }
+
+    fun getTemplatesDirs(): List<File> {
+        return templatesDirs
     }
 }
