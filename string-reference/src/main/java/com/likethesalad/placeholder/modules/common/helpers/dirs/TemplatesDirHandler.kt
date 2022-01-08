@@ -18,7 +18,7 @@ class TemplatesDirHandler @AssistedInject constructor(
     private var templatesDirs: MutableList<File>? = null
 
     @AssistedFactory
-    interface TemplateDirHandlerFactory {
+    interface Factory {
         fun create(variantTree: VariantTree): TemplatesDirHandler
     }
 

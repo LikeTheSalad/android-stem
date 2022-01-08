@@ -2,6 +2,7 @@ package com.likethesalad.placeholder.data.helpers
 
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
+import com.likethesalad.placeholder.modules.common.helpers.dirs.TemplatesDirHandler
 import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantBuildResolvedDir
 import com.likethesalad.placeholder.modules.common.models.TasksNamesModel
 import com.likethesalad.placeholder.providers.ProjectDirsProvider
@@ -28,6 +29,8 @@ class AndroidVariantContextTest {
     private lateinit var tasksNamesModelFactory: TasksNamesModel.Factory
     private lateinit var variantBuildResolvedDirFactory: VariantBuildResolvedDir.Factory
     private lateinit var resourceSerializer: ResourceSerializer
+    private lateinit var templatesDirHandler: TemplatesDirHandler
+    private lateinit var templatesDirHandlerFactory: TemplatesDirHandler.Factory
 
     private lateinit var androidVariantContext: AndroidVariantContext
 
@@ -47,6 +50,8 @@ class AndroidVariantContextTest {
         variantBuildResolvedDirFactory = mockk()
         variantBuildResolvedDir = mockk()
         resourceSerializer = mockk()
+        templatesDirHandler = mockk()
+        templatesDirHandlerFactory = mockk()
 
         every { variantTree.androidVariantData }.returns(androidVariantData)
         every { tasksNamesModelFactory.create(androidVariantData) }.returns(tasksNames)
@@ -54,6 +59,7 @@ class AndroidVariantContextTest {
         every { tasksNames.generateResValuesName }.returns(generateResValuesName)
         every { tasksNames.resolvePlaceholdersName }.returns(resolvePlaceholdersName)
         every { variantBuildResolvedDirFactory.create(androidVariantData) }.returns(variantBuildResolvedDir)
+        every { templatesDirHandlerFactory.create(variantTree) }.returns(templatesDirHandler)
 
         val buildDir = mockk<File>()
         every { projectDirsProvider.getBuildDir() }.returns(buildDir)
@@ -64,6 +70,7 @@ class AndroidVariantContextTest {
             resourceSerializer,
             tasksNamesModelFactory,
             variantBuildResolvedDirFactory,
+            templatesDirHandlerFactory,
             taskProvider,
             projectDirsProvider
         )
@@ -104,5 +111,15 @@ class AndroidVariantContextTest {
 
         // Then:
         Truth.assertThat(result).isEqualTo("$buildDirPath/intermediates/incremental/$resolvePlaceholdersName")
+    }
+
+    @Test
+    fun `Get TemplatesDirHandler`() {
+        val result = androidVariantContext.templatesDirHandler
+
+        verify {
+            templatesDirHandlerFactory.create(variantTree)
+        }
+        Truth.assertThat(result).isEqualTo(templatesDirHandler)
     }
 }
