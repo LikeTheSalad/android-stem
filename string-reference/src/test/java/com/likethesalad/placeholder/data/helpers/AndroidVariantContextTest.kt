@@ -7,6 +7,7 @@ import com.likethesalad.placeholder.modules.common.models.TasksNamesModel
 import com.likethesalad.placeholder.providers.ProjectDirsProvider
 import com.likethesalad.placeholder.providers.TaskProvider
 import com.likethesalad.tools.android.plugin.data.AndroidVariantData
+import com.likethesalad.tools.resource.collector.android.data.variant.VariantTree
 import com.likethesalad.tools.resource.serializer.ResourceSerializer
 import io.mockk.every
 import io.mockk.mockk
@@ -22,6 +23,7 @@ class AndroidVariantContextTest {
     private lateinit var taskProvider: TaskProvider
     private lateinit var projectDirsProvider: ProjectDirsProvider
     private lateinit var variantBuildResolvedDir: VariantBuildResolvedDir
+    private lateinit var variantTree: VariantTree
     private lateinit var androidVariantData: AndroidVariantData
     private lateinit var tasksNamesModelFactory: TasksNamesModel.Factory
     private lateinit var variantBuildResolvedDirFactory: VariantBuildResolvedDir.Factory
@@ -39,12 +41,14 @@ class AndroidVariantContextTest {
         tasksNames = mockk()
         projectDirsProvider = mockk()
         taskProvider = mockk()
+        variantTree = mockk()
         androidVariantData = mockk()
         tasksNamesModelFactory = mockk()
         variantBuildResolvedDirFactory = mockk()
         variantBuildResolvedDir = mockk()
         resourceSerializer = mockk()
 
+        every { variantTree.androidVariantData }.returns(androidVariantData)
         every { tasksNamesModelFactory.create(androidVariantData) }.returns(tasksNames)
         every { tasksNames.mergeResourcesName }.returns(mergeResourcesName)
         every { tasksNames.generateResValuesName }.returns(generateResValuesName)
@@ -56,7 +60,7 @@ class AndroidVariantContextTest {
         every { buildDir.absolutePath }.returns(buildDirPath)
 
         androidVariantContext = AndroidVariantContext(
-            androidVariantData,
+            variantTree,
             resourceSerializer,
             tasksNamesModelFactory,
             variantBuildResolvedDirFactory,

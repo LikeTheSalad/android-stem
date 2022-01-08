@@ -7,7 +7,7 @@ import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHa
 import com.likethesalad.placeholder.modules.common.models.TasksNamesModel
 import com.likethesalad.placeholder.providers.ProjectDirsProvider
 import com.likethesalad.placeholder.providers.TaskProvider
-import com.likethesalad.tools.android.plugin.data.AndroidVariantData
+import com.likethesalad.tools.resource.collector.android.data.variant.VariantTree
 import com.likethesalad.tools.resource.serializer.ResourceSerializer
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -15,7 +15,7 @@ import dagger.assisted.AssistedInject
 import org.gradle.api.Task
 
 class AndroidVariantContext @AssistedInject constructor(
-    @Assisted val androidVariantData: AndroidVariantData,
+    @Assisted val variantTree: VariantTree,
     @Assisted val resourceSerializer: ResourceSerializer,
     tasksNamesModelFactory: TasksNamesModel.Factory,
     variantBuildResolvedDirFactory: VariantBuildResolvedDir.Factory,
@@ -26,11 +26,12 @@ class AndroidVariantContext @AssistedInject constructor(
     @AssistedFactory
     interface Factory {
         fun create(
-            androidVariantData: AndroidVariantData,
+            variantTree: VariantTree,
             resourceSerializer: ResourceSerializer
         ): AndroidVariantContext
     }
 
+    val androidVariantData = variantTree.androidVariantData
     val tasksNames by lazy {
         tasksNamesModelFactory.create(androidVariantData)
     }

@@ -58,7 +58,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Pro
             )
             createResolvePlaceholdersTaskForVariant(
                 androidVariantContextFactory.create(
-                    taskContainer.taskContext.variantTree.androidVariantData,
+                    taskContainer.taskContext.variantTree,
                     stringsLocatorExtension.getResourceSerializer()
                 ),
                 taskActionProviderHolder, languageResourceFinderProvider,
