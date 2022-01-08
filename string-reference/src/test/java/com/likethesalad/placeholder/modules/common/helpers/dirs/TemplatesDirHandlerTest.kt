@@ -3,6 +3,7 @@ package com.likethesalad.placeholder.modules.common.helpers.dirs
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.providers.ProjectDirsProvider
 import com.likethesalad.tools.resource.api.android.environment.Variant
+import com.likethesalad.tools.resource.collector.android.data.resdir.ResDir
 import com.likethesalad.tools.resource.collector.android.data.variant.VariantTree
 import com.likethesalad.tools.testing.BaseMockable
 import io.mockk.Runs
@@ -101,8 +102,8 @@ class TemplatesDirHandlerTest : BaseMockable() {
         val templatesDirs = templatesDirHandler.getTemplatesDirs()
 
         Truth.assertThat(templatesDirs).containsExactly(
-            getExpectedResFolderForVariant(mainVariantName),
-            getExpectedResFolderForVariant(demoVariantName)
+            ResDir(mainVariant, getExpectedResFolderForVariant(mainVariantName)),
+            ResDir(demoVariant, getExpectedResFolderForVariant(demoVariantName))
         )
     }
 
