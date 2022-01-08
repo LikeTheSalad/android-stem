@@ -15,7 +15,7 @@ class TemplatesDirHandler @AssistedInject constructor(
 ) {
 
     private val projectDir: File by lazy { projectDirsProvider.getProjectDir() }
-    private val templatesDirs = mutableListOf<File>()
+    private var templatesDirs: MutableList<File>? = null
 
     @AssistedFactory
     interface TemplateDirHandlerFactory {
@@ -23,20 +23,28 @@ class TemplatesDirHandler @AssistedInject constructor(
     }
 
     fun createResDirs() {
+        validateNotCreatedAlready()
+        templatesDirs = mutableListOf()
         val variants = variantTree.getVariants()
         variants.take(variants.size - 1).forEach { variant ->
             createTemplatesResDir(variant)
         }
     }
 
+    private fun validateNotCreatedAlready() {
+        if (templatesDirs != null) {
+            throw IllegalStateException("Res dirs have already been created")
+        }
+    }
+
     private fun createTemplatesResDir(variant: Variant) {
         val variantName = variant.name
         val dir = File(projectDir, "src/$variantName/templates")
-        templatesDirs.add(dir)
+        templatesDirs?.add(dir)
         sourceSetsHandler.addToSourceSets(dir, variantName)
     }
 
     fun getTemplatesDirs(): List<File> {
-        return templatesDirs
+        return templatesDirs!!
     }
 }

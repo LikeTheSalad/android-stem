@@ -10,6 +10,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.verify
+import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -64,6 +65,24 @@ class TemplatesDirHandlerTest : BaseMockable() {
                 getExpectedResFolderForVariant(demoDebugVariantName),
                 demoDebugVariantName
             )
+        }
+    }
+
+    @Test
+    fun `Validate creation of dirs is done only once`() {
+        val mainVariantName = "main"
+        val demoVariantName = "demo"
+        val mainVariant = createVariant(mainVariantName)
+        val demoVariant = createVariant(demoVariantName)
+        val variants = listOf(mainVariant, demoVariant)
+        every { variantTree.getVariants() }.returns(variants)
+        templatesDirHandler.createResDirs()
+
+        try {
+            templatesDirHandler.createResDirs()
+            fail()
+        } catch (e: IllegalStateException) {
+            Truth.assertThat(e.message).isEqualTo("Res dirs have already been created")
         }
     }
 
