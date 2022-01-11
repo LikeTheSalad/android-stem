@@ -3,6 +3,7 @@ package com.likethesalad.placeholder
 import com.likethesalad.android.string.resources.locator.StringResourceLocatorPlugin
 import com.likethesalad.placeholder.di.AppInjector
 import com.likethesalad.placeholder.locator.ResolvedXmlSourceFilterRule
+import com.likethesalad.placeholder.locator.TemplateDirsXmlSourceFilterRule
 import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantBuildResolvedDir
 import com.likethesalad.placeholder.modules.resolveStrings.ResolvePlaceholdersTask
@@ -47,7 +48,6 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Pro
         androidExtension = project.extensions.getByType(AndroidToolsPluginExtension::class.java).androidExtension
         extension = project.extensions.create(EXTENSION_NAME, PlaceholderExtension::class.java)
         stringsLocatorExtension = project.extensions.getByType(ResourceLocatorExtension::class.java)
-        addResolvedSourceExclusionRule(stringsLocatorExtension)
         val taskActionProviderHolder = AppInjector.getTaskActionProviderHolder()
         val androidVariantContextFactory = AppInjector.getAndroidVariantContextFactory()
 
@@ -77,12 +77,6 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Pro
         }
     }
 
-    private fun addResolvedSourceExclusionRule(stringsLocatorExtension: ResourceLocatorExtension) {
-        val rule =
-            ResolvedXmlSourceFilterRule("${project.buildDir}/${VariantBuildResolvedDir.RESOLVED_DIR_BUILD_RELATIVE_PATH}")
-        stringsLocatorExtension.getConfiguration().addSourceFilterRule(rule)
-    }
-
     private fun createResolvePlaceholdersTaskForVariant(
         androidVariantContext: AndroidVariantContext,
         taskActionProviderHolder: TaskActionProviderHolder,
@@ -91,6 +85,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Pro
     ) {
         val gatherTemplatesActionProvider = taskActionProviderHolder.gatherTemplatesActionProvider
         val resolvePlaceholdersActionProvider = taskActionProviderHolder.resolvePlaceholdersActionProvider
+        addLocatorExclusionRules(androidVariantContext)
 
         val gatherTemplatesTask = project.tasks.register(
             androidVariantContext.tasksNames.gatherStringTemplatesName,
@@ -120,6 +115,18 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Pro
         if (resolveOnBuild) {
             androidVariantContext.mergeResourcesTask.dependsOn(resolvePlaceholdersTask)
         }
+    }
+
+    private fun addLocatorExclusionRules(androidVariantContext: AndroidVariantContext) {
+        val locatorConfiguration =
+            stringsLocatorExtension.getConfiguration(androidVariantContext.androidVariantData.getVariantName())
+
+        val templatesExclusionRule = TemplateDirsXmlSourceFilterRule(androidVariantContext)
+        val resolvedStringsExclusionRule =
+            ResolvedXmlSourceFilterRule("${project.buildDir}/${VariantBuildResolvedDir.RESOLVED_DIR_BUILD_RELATIVE_PATH}")
+
+        locatorConfiguration.addSourceFilterRule(templatesExclusionRule)
+        locatorConfiguration.addSourceFilterRule(resolvedStringsExclusionRule)
     }
 
     override fun getExtension(): AndroidExtension {
