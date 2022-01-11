@@ -2,6 +2,7 @@ package com.likethesalad.placeholder.resolver
 
 import com.google.common.truth.Truth
 import com.likethesalad.placeholder.modules.resolveStrings.resolver.RecursiveLevelDetector
+import com.likethesalad.placeholder.modules.resolveStrings.resolver.TemplateContainerFinder
 import com.likethesalad.tools.resource.api.android.AndroidResourceScope
 import com.likethesalad.tools.resource.api.android.environment.Language
 import com.likethesalad.tools.resource.api.android.environment.Variant
@@ -18,44 +19,44 @@ class RecursiveLevelDetectorTest {
         // Given:
         val levelOneTemplate =
             StringAndroidResource(
-                "template_name",
+                "name",
                 "The name",
                 scope
             )
         val levelOneTemplate2 =
             StringAndroidResource(
-                "template_description",
+                "description",
                 "The description",
                 scope
             )
         val levelTwoTemplate =
             StringAndroidResource(
-                "template_the_message",
-                "Hello \${template_name}",
+                "the_message",
+                "Hello \${name}",
                 scope
             )
         val levelThreeTemplate =
             StringAndroidResource(
-                "template_the_message_2",
-                "Hello2 \${template_the_message}",
+                "the_message_2",
+                "Hello2 \${the_message}",
                 scope
             )
         val levelThreeTemplate2 =
             StringAndroidResource(
-                "template_message_4",
-                "The message4 \${template_the_message}",
+                "message_4",
+                "The message4 \${the_message}",
                 scope
             )
         val levelFourTemplate =
             StringAndroidResource(
-                "template_message_3",
-                "The message3 \${template_the_message_2}",
+                "message_3",
+                "The message3 \${the_message_2}",
                 scope
             )
         val levelFourTemplate2 =
             StringAndroidResource(
-                "template_message_5",
-                "The message5 \${template_the_message} \${template_message_4}",
+                "message_5",
+                "The message5 \${the_message} \${message_4}",
                 scope
             )
         val templates = listOf(
@@ -67,11 +68,11 @@ class RecursiveLevelDetectorTest {
             levelThreeTemplate2,
             levelFourTemplate2
         )
-        val recursiveLevelDetector =
-            RecursiveLevelDetector()
+        val recursiveLevelDetector = RecursiveLevelDetector()
+        val templateContainerFinder = TemplateContainerFinder(templates.map { it.name() })
 
         // When:
-        val result = recursiveLevelDetector.orderTemplatesByRecursiveLevel(templates)
+        val result = recursiveLevelDetector.orderTemplatesByRecursiveLevel(templates, templateContainerFinder)
 
         // Then:
         Truth.assertThat(result.size).isEqualTo(4)
@@ -93,19 +94,19 @@ class RecursiveLevelDetectorTest {
     fun check_orderTemplatesByRecursiveLevel_verify_circular_dependency() {
         // Given:
         val template = StringAndroidResource(
-            "template_name",
+            "name",
             "The name",
             scope
         )
         val template2 =
             StringAndroidResource(
-                "template_description",
-                "The description and message \${template_the_message}",
+                "description",
+                "The description and message \${the_message}",
                 scope
             )
         val template3 = StringAndroidResource(
-            "template_the_message",
-            "Hello \${template_description}",
+            "the_message",
+            "Hello \${description}",
             scope
         )
         val templates = listOf(
@@ -113,12 +114,12 @@ class RecursiveLevelDetectorTest {
             template2,
             template3
         )
-        val recursiveLevelDetector =
-            RecursiveLevelDetector()
+        val recursiveLevelDetector = RecursiveLevelDetector()
+        val templateContainerFinder = TemplateContainerFinder(templates.map { it.name() })
 
         // When:
         try {
-            recursiveLevelDetector.orderTemplatesByRecursiveLevel(templates)
+            recursiveLevelDetector.orderTemplatesByRecursiveLevel(templates, templateContainerFinder)
             fail()
         } catch (e: IllegalArgumentException) {
             // Then:

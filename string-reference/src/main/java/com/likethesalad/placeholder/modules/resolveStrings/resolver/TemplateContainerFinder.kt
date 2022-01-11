@@ -1,5 +1,7 @@
 package com.likethesalad.placeholder.modules.resolveStrings.resolver
 
+import com.likethesalad.placeholder.modules.common.Constants
+
 class TemplateContainerFinder(private val templateNames: List<String>) {
 
     private val templatesPattern: Regex by lazy {
@@ -7,9 +9,6 @@ class TemplateContainerFinder(private val templateNames: List<String>) {
             val placeholder = toPlaceholderFormat(current)
             if (accumulated.isEmpty()) placeholder else "$accumulated|$placeholder"
         })
-    }
-    private val placeholderFormat: Regex by lazy {
-        Regex("^\\\$\\{([^}]+)}")
     }
 
     fun containsTemplates(text: String): Boolean {
@@ -23,6 +22,6 @@ class TemplateContainerFinder(private val templateNames: List<String>) {
     fun getTemplateNamesFrom(text: String): List<String> {
         val matches = templatesPattern.findAll(text).toList().map { it.value }
 
-        return matches.toSet().map { placeholderFormat.matchEntire(it)!!.groupValues[1] }
+        return matches.toSet().map { Constants.PLACEHOLDER_REGEX.matchEntire(it)!!.groupValues[1] }
     }
 }

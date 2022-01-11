@@ -1,6 +1,5 @@
 package com.likethesalad.placeholder.modules.resolveStrings.resolver
 
-import com.likethesalad.placeholder.modules.common.Constants
 import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -8,8 +7,10 @@ import javax.inject.Singleton
 @Singleton
 class RecursiveLevelDetector @Inject constructor() {
 
-    fun orderTemplatesByRecursiveLevel(templates: List<StringAndroidResource>)
-            : List<List<StringAndroidResource>> {
+    fun orderTemplatesByRecursiveLevel(
+        templates: List<StringAndroidResource>,
+        templateContainerFinder: TemplateContainerFinder
+    ): List<List<StringAndroidResource>> {
         // Wrap templates:
         val templatesMap = templates.associate {
             it.name() to TemplateRecursiveLevel(it)
@@ -18,7 +19,7 @@ class RecursiveLevelDetector @Inject constructor() {
         // Get each's recursive level:
         for (it in templatesMap.values) {
             if (!it.hasLevelDefined) {
-                it.recursiveLevel = getRecursiveLevel(it, templatesMap)
+                it.recursiveLevel = getRecursiveLevel(it, templateContainerFinder, templatesMap)
             }
         }
 
@@ -37,18 +38,18 @@ class RecursiveLevelDetector @Inject constructor() {
 
     private fun getRecursiveLevel(
         template: TemplateRecursiveLevel,
+        templateContainerFinder: TemplateContainerFinder,
         allTemplates: Map<String, TemplateRecursiveLevel>,
         idPath: MutableList<String> = mutableListOf()
     ): Int {
 
-        val templatesAsPlaceholder = Constants.TEMPLATE_AS_PLACEHOLDER_REGEX
-            .findAll(template.stringResourceModel.stringValue())
+        val templatesAsPlaceholder =
+            templateContainerFinder.getTemplateNamesFrom(template.stringResourceModel.stringValue())
 
         return if (templatesAsPlaceholder.any()) {
 
             // Extract templates from text:
-            val templatesPlaceholders = templatesAsPlaceholder.toList().map { it.groupValues[1] }.toSet()
-                .map { allTemplates.getValue(it) }
+            val templatesPlaceholders = templatesAsPlaceholder.map { allTemplates.getValue(it) }
 
             // Check for circular dependencies:
             if (templatesPlaceholders.any { it.stringResourceModel.name() in idPath }) {
@@ -61,7 +62,7 @@ class RecursiveLevelDetector @Inject constructor() {
             // Check recursively for each template's level of dependencies
             val levels = templatesPlaceholders.map {
                 if (!it.hasLevelDefined) {
-                    it.recursiveLevel = getRecursiveLevel(it, allTemplates, idPath)
+                    it.recursiveLevel = getRecursiveLevel(it, templateContainerFinder, allTemplates, idPath)
                 }
                 it.recursiveLevel + 1
             }
