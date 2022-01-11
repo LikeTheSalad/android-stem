@@ -33,12 +33,12 @@ class TemplateResolverTest {
         // Given:
         val templates = listOf(
             StringAndroidResource(
-                "template_welcome",
+                "welcome",
                 "Welcome \${name}",
                 scope
             ),
             StringAndroidResource(
-                "template_address_input",
+                "address_input",
                 "The address is \${address} for the \${name}",
                 scope
             )
@@ -63,7 +63,7 @@ class TemplateResolverTest {
         val second = result[1]
         Truth.assertThat(second.name()).isEqualTo("address_input")
         Truth.assertThat(second.stringValue()).isEqualTo("The address is The address for the The name")
-        verify(exactly = 0) { recursiveLevelDetectorSpy.orderTemplatesByRecursiveLevel(any()) }
+        verify(exactly = 0) { recursiveLevelDetectorSpy.orderTemplatesByRecursiveLevel(any(), any()) }
     }
 
     @Test
@@ -72,7 +72,7 @@ class TemplateResolverTest {
         val attrs = mapOf(
             "one_attr" to "one_value",
             "other_attr" to "other value",
-            "name" to "template_the_name"
+            "name" to "the_name"
         )
         val templates = listOf(
             StringAndroidResource(
@@ -109,25 +109,25 @@ class TemplateResolverTest {
         // Given:
         val templates = listOf(
             StringAndroidResource(
-                "template_welcome",
+                "welcome",
                 "Welcome \${name}",
                 scope
             ),
             StringAndroidResource(
-                "template_address_input",
+                "address_input",
                 "The address is \${address} for the \${name}",
                 scope
             ),
             StringAndroidResource(
-                "template_using_other_template",
-                "Reused: \${template_welcome}",
+                "using_other_template",
+                "Reused: \${welcome}",
                 scope
             )
         )
         val values = mapOf(
             "name" to "The name",
             "address" to "The address",
-            "template_welcome" to "Welcome \${name}"
+            "welcome" to "Welcome \${name}"
         )
         val templatesModel =
             StringsTemplatesModel(
@@ -148,6 +148,6 @@ class TemplateResolverTest {
         val third = result[2]
         Truth.assertThat(third.name()).isEqualTo("using_other_template")
         Truth.assertThat(third.stringValue()).isEqualTo("Reused: Welcome The name")
-        verify { recursiveLevelDetectorSpy.orderTemplatesByRecursiveLevel(any()) }
+        verify { recursiveLevelDetectorSpy.orderTemplatesByRecursiveLevel(any(), any()) }
     }
 }
