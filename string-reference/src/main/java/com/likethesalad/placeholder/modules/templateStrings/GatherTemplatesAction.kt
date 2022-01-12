@@ -3,6 +3,7 @@ package com.likethesalad.placeholder.modules.templateStrings
 import com.likethesalad.android.string.resources.locator.extractor.StringXmlResourceExtractor
 import com.likethesalad.placeholder.modules.common.Constants
 import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
+import com.likethesalad.placeholder.modules.templateStrings.collector.TemplatesCollectionProvider
 import com.likethesalad.placeholder.modules.templateStrings.collector.TemplatesResourceSourceProvider
 import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
 import com.likethesalad.tools.resource.api.android.data.AndroidResourceType
@@ -30,10 +31,17 @@ class GatherTemplatesAction @AssistedInject constructor(
     private val templatesDirHandler = androidVariantContext.templatesDirHandler
 
     fun gatherTemplateStrings(outputDir: File, languageResourcesHandler: LanguageResourcesHandler) {
+        val templatesHandler = getTemplatesLanguageHandler()
         for (language in languageResourcesHandler.listLanguages()) {
             val resources = languageResourcesHandler.getMergedResourcesForLanguage(language)
-            resourcesHandler.saveTemplates(outputDir, gatheredStringsToTemplateStrings(language, resources))
+            val templates = templatesHandler.getMergedResourcesForLanguage(language)
+            resourcesHandler.saveTemplates(outputDir, gatheredStringsToTemplateStrings(language, resources, templates))
         }
+    }
+
+    private fun getTemplatesLanguageHandler(): LanguageResourcesHandler {
+        val resources = getTemplateStringResources()
+        return LanguageResourcesHandler(TemplatesCollectionProvider(resources))
     }
 
     fun getTemplatesSourceFiles(): List<File> {
@@ -51,10 +59,11 @@ class GatherTemplatesAction @AssistedInject constructor(
 
     private fun gatheredStringsToTemplateStrings(
         language: Language,
-        resources: ResourceCollection
+        resources: ResourceCollection,
+        templates: ResourceCollection
     ): StringsTemplatesModel {
         val stringResources = asStringResources(resources)
-        val stringTemplates = getTemplateStringResources()
+        val stringTemplates = asStringResources(templates)
         val placeholdersResolved = getPlaceholdersResolved(stringResources, stringTemplates)
 
         return StringsTemplatesModel(
