@@ -10,7 +10,7 @@ import com.likethesalad.tools.resource.api.android.environment.Language
 import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
 import com.likethesalad.tools.resource.api.collection.ResourceCollection
 import com.likethesalad.tools.resource.collector.android.AndroidResourceCollector
-import com.likethesalad.tools.resource.locator.android.extension.LanguageResourceFinder
+import com.likethesalad.tools.resource.locator.android.extension.resources.LanguageResourcesHandler
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -29,9 +29,9 @@ class GatherTemplatesAction @AssistedInject constructor(
     private val resourcesHandler = androidVariantContext.androidResourcesHandler
     private val templatesDirHandler = androidVariantContext.templatesDirHandler
 
-    fun gatherTemplateStrings(outputDir: File, languageResourceFinder: LanguageResourceFinder) {
-        for (language in languageResourceFinder.listLanguages()) {
-            val resources = languageResourceFinder.getMergedResourcesForLanguage(language)
+    fun gatherTemplateStrings(outputDir: File, languageResourcesHandler: LanguageResourcesHandler) {
+        for (language in languageResourcesHandler.listLanguages()) {
+            val resources = languageResourcesHandler.getMergedResourcesForLanguage(language)
             resourcesHandler.saveTemplates(outputDir, gatheredStringsToTemplateStrings(language, resources))
         }
     }

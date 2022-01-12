@@ -25,14 +25,14 @@ open class GatherTemplatesTask
     val outDir: DirectoryProperty = project.objects.directoryProperty()
 
     init {
-        inDir.set(args.languageResourceFinderProvider.directoryProvider.getOutputDirProperty())
+        inDir.set(args.languageResourcesHandlerProvider.directoryProvider.getOutputDirProperty())
         outDir.set(project.layout.buildDirectory.dir("intermediates/incremental/$name"))
     }
 
     @TaskAction
     fun gatherTemplateStrings() {
         DirectoryUtils.clearIfNeeded(outDir.get().asFile)
-        val languageResourceFinder = args.languageResourceFinderProvider.get()
+        val languageResourceFinder = args.languageResourcesHandlerProvider.get()
         args.gatherTemplatesAction.gatherTemplateStrings(outDir.get().asFile, languageResourceFinder)
     }
 }

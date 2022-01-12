@@ -11,7 +11,7 @@ import com.likethesalad.placeholder.modules.resolveStrings.data.ResolvePlacehold
 import com.likethesalad.placeholder.modules.templateStrings.GatherTemplatesTask
 import com.likethesalad.placeholder.modules.templateStrings.data.GatherTemplatesArgs
 import com.likethesalad.placeholder.providers.AndroidExtensionProvider
-import com.likethesalad.placeholder.providers.LanguageResourceFinderProvider
+import com.likethesalad.placeholder.providers.LanguageResourcesHandlerProvider
 import com.likethesalad.placeholder.providers.ProjectDirsProvider
 import com.likethesalad.placeholder.providers.TaskProvider
 import com.likethesalad.placeholder.utils.TaskActionProviderHolder
@@ -52,7 +52,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Pro
         val androidVariantContextFactory = AppInjector.getAndroidVariantContextFactory()
 
         stringsLocatorExtension.onResourceLocatorTaskCreated { taskContainer ->
-            val languageResourceFinderProvider = LanguageResourceFinderProvider(
+            val languageResourcesHandlerProvider = LanguageResourcesHandlerProvider(
                 taskContainer.outputDirProvider,
                 stringsLocatorExtension
             )
@@ -61,7 +61,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Pro
                     taskContainer.taskContext.variantTree,
                     stringsLocatorExtension.getResourceSerializer()
                 ),
-                taskActionProviderHolder, languageResourceFinderProvider,
+                taskActionProviderHolder, languageResourcesHandlerProvider,
                 extension.resolveOnBuild.get()
             )
         }
@@ -80,7 +80,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Pro
     private fun createResolvePlaceholdersTaskForVariant(
         androidVariantContext: AndroidVariantContext,
         taskActionProviderHolder: TaskActionProviderHolder,
-        languageResourceFinderProvider: LanguageResourceFinderProvider,
+        languageResourcesHandlerProvider: LanguageResourcesHandlerProvider,
         resolveOnBuild: Boolean
     ) {
         val gatherTemplatesActionProvider = taskActionProviderHolder.gatherTemplatesActionProvider
@@ -92,7 +92,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Pro
             GatherTemplatesTask::class.java,
             GatherTemplatesArgs(
                 gatherTemplatesActionProvider.provide(androidVariantContext),
-                languageResourceFinderProvider
+                languageResourcesHandlerProvider
             )
         )
 
