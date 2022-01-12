@@ -7,6 +7,7 @@ plugins {
 
 dependencies {
     api gradleApi()
+    implementation project(':templates-provider')
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation "com.google.dagger:dagger:$dagger_version"
@@ -16,7 +17,6 @@ dependencies {
     testImplementation "com.likethesalad.tools.testing:android-gradle:$testingUtilities_version"
     testImplementation "com.likethesalad.tools.testing:unit-testing:$testingUtilities_version"
     testImplementation "com.android.tools.build:gradle:$androidBuild_version"
-    testImplementation group: 'junit', name: 'junit', version: '4.12'
 }
 
 tasks.withType(PluginUnderTestMetadata).configureEach {
@@ -58,6 +58,10 @@ gradlePlugin {
             id = 'placeholder-resolver'
             displayName = rootProject.artifactPublisher.displayName.get()
             implementationClass = 'com.likethesalad.placeholder.ResolvePlaceholdersPlugin'
+        }
+        templatesProvider {
+            id = 'resource.templates.provider'
+            implementationClass = 'com.likethesalad.android.templates.provider.TemplatesProviderPlugin'
         }
     }
 }
