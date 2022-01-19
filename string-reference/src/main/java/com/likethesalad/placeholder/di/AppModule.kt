@@ -7,7 +7,6 @@ import com.likethesalad.placeholder.providers.TaskProvider
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
-import javax.xml.parsers.DocumentBuilderFactory
 
 @Module
 class AppModule(private val resolvePlaceholdersPlugin: ResolvePlaceholdersPlugin) {
@@ -28,11 +27,5 @@ class AppModule(private val resolvePlaceholdersPlugin: ResolvePlaceholdersPlugin
     @Singleton
     fun provideTaskProvider(): TaskProvider {
         return resolvePlaceholdersPlugin
-    }
-
-    @Provides
-    @Singleton
-    fun provideDocumentBuilderFactory(): DocumentBuilderFactory {
-        return DocumentBuilderFactory.newInstance()
     }
 }
