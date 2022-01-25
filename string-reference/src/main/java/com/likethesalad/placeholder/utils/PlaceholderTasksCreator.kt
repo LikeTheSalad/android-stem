@@ -57,9 +57,7 @@ class PlaceholderTasksCreator @Inject constructor(
         gatherTemplatesTask.configure {
             it.group = ResolvePlaceholdersPlugin.RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME
             it.commonResourcesDir.set(commonResourcesInfo.taskInfo.outputDirectoryProvider.getOutputDirProperty())
-            it.templateResourcesDir.set(
-                templateResourcesInfo.taskInfo.outputDirectoryProvider.getOutputDirProperty().get()
-            )
+            it.templateResourcesDir.set(templateResourcesInfo.taskInfo.outputDirectoryProvider.getOutputDirProperty())
         }
 
         val resolvePlaceholdersTask = taskContainer.register(
