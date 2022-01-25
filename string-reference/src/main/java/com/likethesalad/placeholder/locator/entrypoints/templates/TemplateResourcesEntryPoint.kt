@@ -7,8 +7,11 @@ import com.likethesalad.tools.resource.collector.android.data.variant.VariantTre
 import com.likethesalad.tools.resource.locator.android.extension.configuration.ResourceLocatorEntryPoint
 import com.likethesalad.tools.resource.locator.android.extension.configuration.data.ResourceLocatorInfo
 import com.likethesalad.tools.resource.locator.android.extension.configuration.source.ResourceSourceConfiguration
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class TemplateResourcesEntryPoint(
+@Singleton
+class TemplateResourcesEntryPoint @Inject constructor(
     private val templatesDirHandlerFactory: TemplatesDirHandler.Factory,
     private val templateDirsXmlSourceFilterRuleFactory: TemplateDirsXmlSourceFilterRule.Factory,
     private val templatesSourceConfigurationFactory: TemplatesSourceConfiguration.Factory

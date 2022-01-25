@@ -2,6 +2,7 @@ package com.likethesalad.placeholder.di
 
 import com.likethesalad.placeholder.ResolvePlaceholdersPlugin
 import com.likethesalad.placeholder.locator.entrypoints.common.CommonResourcesEntryPoint
+import com.likethesalad.placeholder.locator.entrypoints.templates.TemplateResourcesEntryPoint
 import com.likethesalad.placeholder.utils.PlaceholderTasksCreator
 
 object AppInjector {
@@ -20,5 +21,9 @@ object AppInjector {
 
     fun getCommonResourcesEntryPointFactory(): CommonResourcesEntryPoint.Factory {
         return component.commonResourcesEntryPointFactory()
+    }
+
+    fun getTemplateResourcesEntryPoint(): TemplateResourcesEntryPoint {
+        return component.templateResourcesEntryPointFactory()
     }
 }

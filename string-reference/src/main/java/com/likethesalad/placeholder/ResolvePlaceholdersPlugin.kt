@@ -2,31 +2,27 @@ package com.likethesalad.placeholder
 
 import com.likethesalad.android.string.resources.locator.StringResourceLocatorPlugin
 import com.likethesalad.placeholder.di.AppInjector
-import com.likethesalad.placeholder.locator.ResolvedXmlSourceFilterRule
-import com.likethesalad.placeholder.locator.TemplateDirsXmlSourceFilterRule
-import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
-import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantBuildResolvedDir
-import com.likethesalad.placeholder.modules.resolveStrings.ResolvePlaceholdersTask
-import com.likethesalad.placeholder.modules.resolveStrings.data.ResolvePlaceholdersArgs
-import com.likethesalad.placeholder.modules.templateStrings.GatherTemplatesTask
-import com.likethesalad.placeholder.modules.templateStrings.data.GatherTemplatesArgs
+import com.likethesalad.placeholder.locator.listener.TypeLocatorCreationListener
 import com.likethesalad.placeholder.providers.AndroidExtensionProvider
-import com.likethesalad.placeholder.providers.LanguageResourcesHandlerProvider
+import com.likethesalad.placeholder.providers.LocatorExtensionProvider
+import com.likethesalad.placeholder.providers.PluginExtensionProvider
 import com.likethesalad.placeholder.providers.ProjectDirsProvider
+import com.likethesalad.placeholder.providers.TaskContainerProvider
 import com.likethesalad.placeholder.providers.TaskProvider
-import com.likethesalad.placeholder.utils.TaskActionProviderHolder
+import com.likethesalad.placeholder.utils.PlaceholderTasksCreator
 import com.likethesalad.tools.android.plugin.data.AndroidExtension
 import com.likethesalad.tools.android.plugin.extension.AndroidToolsPluginExtension
-import com.likethesalad.tools.resource.locator.android.extension.ResourceLocatorExtension
+import com.likethesalad.tools.resource.locator.android.extension.AndroidResourceLocatorExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.logging.LogLevel
+import org.gradle.api.tasks.TaskContainer
 import java.io.File
 
 @Suppress("UnstableApiUsage")
 class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, ProjectDirsProvider,
-    TaskProvider {
+    TaskProvider, TaskContainerProvider, PluginExtensionProvider, LocatorExtensionProvider {
 
     companion object {
         const val RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME = "resolver"
@@ -36,7 +32,7 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Pro
     private lateinit var project: Project
     private lateinit var extension: PlaceholderExtension
     private lateinit var androidExtension: AndroidExtension
-    private lateinit var stringsLocatorExtension: ResourceLocatorExtension
+    private lateinit var stringsLocatorExtension: AndroidResourceLocatorExtension
 
     override fun apply(project: Project) {
         if (!project.plugins.hasPlugin("com.android.application")) {
@@ -47,24 +43,22 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Pro
         project.plugins.apply(StringResourceLocatorPlugin::class.java)
         androidExtension = project.extensions.getByType(AndroidToolsPluginExtension::class.java).androidExtension
         extension = project.extensions.create(EXTENSION_NAME, PlaceholderExtension::class.java)
-        stringsLocatorExtension = project.extensions.getByType(ResourceLocatorExtension::class.java)
-        val taskActionProviderHolder = AppInjector.getTaskActionProviderHolder()
-        val androidVariantContextFactory = AppInjector.getAndroidVariantContextFactory()
+        stringsLocatorExtension = project.extensions.getByType(AndroidResourceLocatorExtension::class.java)
+        val placeholderTasksCreator = AppInjector.getPlaceholderTasksCreator()
+        val commonResourcesEntryPointFactory = AppInjector.getCommonResourcesEntryPointFactory()
+        val templateResourcesEntryPoint = AppInjector.getTemplateResourcesEntryPoint()
 
-        stringsLocatorExtension.onResourceLocatorTaskCreated { taskContainer ->
-            val languageResourcesHandlerProvider = LanguageResourcesHandlerProvider(
-                taskContainer.outputDirProvider,
-                stringsLocatorExtension
-            )
-            createResolvePlaceholdersTaskForVariant(
-                androidVariantContextFactory.create(
-                    taskContainer.taskContext.variantTree,
-                    stringsLocatorExtension.getResourceSerializer()
-                ),
-                taskActionProviderHolder, languageResourcesHandlerProvider,
-                extension.resolveOnBuild.get()
-            )
-        }
+        val typeCommon = PlaceholderTasksCreator.RESOURCE_TYPE_COMMON
+        val typeTemplate = PlaceholderTasksCreator.RESOURCE_TYPE_TEMPLATE
+        val creationListener = TypeLocatorCreationListener(setOf(typeCommon, typeTemplate), placeholderTasksCreator)
+
+        stringsLocatorExtension.registerLocator(
+            typeCommon,
+            commonResourcesEntryPointFactory.create(stringsLocatorExtension.getCommonSourceConfigurationCreator()),
+            creationListener
+        )
+        stringsLocatorExtension.registerLocator(typeTemplate, templateResourcesEntryPoint, creationListener)
+
         checkForDeprecatedConfigs()
     }
 
@@ -75,58 +69,6 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Pro
         if (extension.useDependenciesRes != null) {
             showDeprecatedConfigurationWarning("useDependenciesRes")
         }
-    }
-
-    private fun createResolvePlaceholdersTaskForVariant(
-        androidVariantContext: AndroidVariantContext,
-        taskActionProviderHolder: TaskActionProviderHolder,
-        languageResourcesHandlerProvider: LanguageResourcesHandlerProvider,
-        resolveOnBuild: Boolean
-    ) {
-        val gatherTemplatesActionProvider = taskActionProviderHolder.gatherTemplatesActionProvider
-        val resolvePlaceholdersActionProvider = taskActionProviderHolder.resolvePlaceholdersActionProvider
-        addLocatorExclusionRules(androidVariantContext)
-
-        val gatherTemplatesTask = project.tasks.register(
-            androidVariantContext.tasksNames.gatherStringTemplatesName,
-            GatherTemplatesTask::class.java,
-            GatherTemplatesArgs(
-                gatherTemplatesActionProvider.provide(androidVariantContext),
-                languageResourcesHandlerProvider
-            )
-        )
-
-        gatherTemplatesTask.configure {
-            it.group = RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME
-        }
-
-        val resolvePlaceholdersTask = project.tasks.register(
-            androidVariantContext.tasksNames.resolvePlaceholdersName,
-            ResolvePlaceholdersTask::class.java,
-            ResolvePlaceholdersArgs(resolvePlaceholdersActionProvider.provide(androidVariantContext))
-        )
-
-        resolvePlaceholdersTask.configure {
-            it.group = RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME
-            it.templatesDir.set(gatherTemplatesTask.flatMap { gatherTemplates -> gatherTemplates.outDir })
-            it.outputDir.set(androidVariantContext.variantBuildResolvedDir.resolvedDir)
-        }
-
-        if (resolveOnBuild) {
-            androidVariantContext.mergeResourcesTask.dependsOn(resolvePlaceholdersTask)
-        }
-    }
-
-    private fun addLocatorExclusionRules(androidVariantContext: AndroidVariantContext) {
-        val locatorConfiguration =
-            stringsLocatorExtension.getConfiguration(androidVariantContext.androidVariantData.getVariantName())
-
-        val templatesExclusionRule = TemplateDirsXmlSourceFilterRule(androidVariantContext)
-        val resolvedStringsExclusionRule =
-            ResolvedXmlSourceFilterRule("${project.buildDir}/${VariantBuildResolvedDir.RESOLVED_DIR_BUILD_RELATIVE_PATH}")
-
-        locatorConfiguration.addSourceFilterRule(templatesExclusionRule)
-        locatorConfiguration.addSourceFilterRule(resolvedStringsExclusionRule)
     }
 
     override fun getExtension(): AndroidExtension {
@@ -151,5 +93,17 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Pro
             LogLevel.WARN,
             "'$name' is deprecated and will be removed in the next version"
         )
+    }
+
+    override fun getTaskContainer(): TaskContainer {
+        return project.tasks
+    }
+
+    override fun getPluginExtension(): PlaceholderExtension {
+        return extension
+    }
+
+    override fun getLocatorExtension(): AndroidResourceLocatorExtension {
+        return stringsLocatorExtension
     }
 }
