@@ -1,25 +1,20 @@
 package com.likethesalad.placeholder.modules.templateStrings
 
-import com.likethesalad.android.string.resources.locator.extractor.StringXmlResourceExtractor
 import com.likethesalad.placeholder.modules.common.Constants
 import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
-import com.likethesalad.placeholder.modules.templateStrings.collector.TemplatesCollectionProvider
-import com.likethesalad.placeholder.modules.templateStrings.collector.TemplatesResourceSourceProvider
 import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
 import com.likethesalad.tools.resource.api.android.data.AndroidResourceType
 import com.likethesalad.tools.resource.api.android.environment.Language
 import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
 import com.likethesalad.tools.resource.api.collection.ResourceCollection
-import com.likethesalad.tools.resource.collector.android.AndroidResourceCollector
-import com.likethesalad.tools.resource.locator.android.extension.resources.LanguageResourcesHandler
+import com.likethesalad.tools.resource.locator.android.extension.configuration.data.ResourcesProvider
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import java.io.File
 
 class GatherTemplatesAction @AssistedInject constructor(
-    @Assisted private val androidVariantContext: AndroidVariantContext,
-    private val templatesResourceSourceProviderFactory: TemplatesResourceSourceProvider.Factory
+    @Assisted private val androidVariantContext: AndroidVariantContext
 ) {
 
     @AssistedFactory
@@ -28,33 +23,19 @@ class GatherTemplatesAction @AssistedInject constructor(
     }
 
     private val resourcesHandler = androidVariantContext.androidResourcesHandler
-    private val templatesDirHandler = androidVariantContext.templatesDirHandler
 
-    fun gatherTemplateStrings(outputDir: File, languageResourcesHandler: LanguageResourcesHandler) {
-        val templatesHandler = getTemplatesLanguageHandler()
-        for (language in languageResourcesHandler.listLanguages()) {
-            val resources = languageResourcesHandler.getMergedResourcesForLanguage(language)
+    fun gatherTemplateStrings(
+        outputDir: File,
+        commonResources: ResourcesProvider,
+        templateResources: ResourcesProvider
+    ) {
+        val commonHandler = commonResources.resources
+        val templatesHandler = templateResources.resources
+        for (language in commonHandler.listLanguages()) {
+            val resources = commonHandler.getMergedResourcesForLanguage(language)
             val templates = templatesHandler.getMergedResourcesForLanguage(language)
             resourcesHandler.saveTemplates(outputDir, gatheredStringsToTemplateStrings(language, resources, templates))
         }
-    }
-
-    private fun getTemplatesLanguageHandler(): LanguageResourcesHandler {
-        val resources = getTemplateStringResources()
-        return LanguageResourcesHandler(TemplatesCollectionProvider(resources))
-    }
-
-    fun getTemplatesSourceFiles(): List<File> {
-        return templatesDirHandler.templatesDirs.map { it.dir }
-    }
-
-    private fun getTemplateStringResources(): List<StringAndroidResource> {
-        val sourceProvider = templatesResourceSourceProviderFactory.create(templatesDirHandler.templatesDirs)
-        val extractor = StringXmlResourceExtractor()
-        val collector =
-            AndroidResourceCollector.newInstance(sourceProvider, androidVariantContext.variantTree, extractor)
-
-        return asStringResources(collector.collect())
     }
 
     private fun gatheredStringsToTemplateStrings(

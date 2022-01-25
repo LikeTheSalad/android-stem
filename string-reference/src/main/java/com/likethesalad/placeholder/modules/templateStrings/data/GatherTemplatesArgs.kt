@@ -5,5 +5,6 @@ import com.likethesalad.tools.resource.locator.android.extension.configuration.d
 
 data class GatherTemplatesArgs(
     val gatherTemplatesAction: GatherTemplatesAction,
-    val resourcesProvider: ResourcesProvider
+    val commonResourcesProvider: ResourcesProvider,
+    val templateResourcesProvider: ResourcesProvider
 )
