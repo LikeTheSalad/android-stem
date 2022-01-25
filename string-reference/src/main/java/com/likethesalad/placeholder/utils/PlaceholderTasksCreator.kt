@@ -11,8 +11,11 @@ import com.likethesalad.placeholder.modules.templateStrings.data.GatherTemplates
 import com.likethesalad.placeholder.providers.TaskContainerProvider
 import com.likethesalad.tools.resource.collector.android.data.variant.VariantTree
 import com.likethesalad.tools.resource.locator.android.extension.configuration.data.ResourceLocatorInfo
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class PlaceholderTasksCreator(
+@Singleton
+class PlaceholderTasksCreator @Inject constructor(
     taskContainerProvider: TaskContainerProvider,
     private val androidVariantContextFactory: AndroidVariantContext.Factory,
     private val taskActionProviderHolder: TaskActionProviderHolder,
