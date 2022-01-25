@@ -1,6 +1,5 @@
 package com.likethesalad.placeholder.modules.common.helpers.android
 
-import com.likethesalad.placeholder.modules.common.helpers.dirs.TemplatesDirHandler
 import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantBuildResolvedDir
 import com.likethesalad.placeholder.modules.common.helpers.files.OutputStringFileResolver
 import com.likethesalad.placeholder.modules.common.helpers.resources.AndroidResourcesHandler
@@ -17,20 +16,16 @@ import org.gradle.api.Task
 
 class AndroidVariantContext @AssistedInject constructor(
     @Assisted val variantTree: VariantTree,
-    @Assisted val resourceSerializer: ResourceSerializer,
     tasksNamesModelFactory: TasksNamesModel.Factory,
     variantBuildResolvedDirFactory: VariantBuildResolvedDir.Factory,
-    templatesDirHandlerFactory: TemplatesDirHandler.Factory,
+    resourceSerializer: ResourceSerializer,
     private val taskProvider: TaskProvider,
     private val projectDirsProvider: ProjectDirsProvider
 ) {
 
     @AssistedFactory
     interface Factory {
-        fun create(
-            variantTree: VariantTree,
-            resourceSerializer: ResourceSerializer
-        ): AndroidVariantContext
+        fun create(variantTree: VariantTree): AndroidVariantContext
     }
 
     val androidVariantData = variantTree.androidVariantData
@@ -47,7 +42,6 @@ class AndroidVariantContext @AssistedInject constructor(
         projectDirsProvider.getBuildDir().absolutePath + "/intermediates/incremental/" + tasksNames.resolvePlaceholdersName
     }
     val variantBuildResolvedDir by lazy { variantBuildResolvedDirFactory.create(androidVariantData) }
-    val templatesDirHandler by lazy { templatesDirHandlerFactory.create(variantTree) }
 
     private val outputStringFileResolver = OutputStringFileResolver()
     val androidResourcesHandler: ResourcesHandler = AndroidResourcesHandler(

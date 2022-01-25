@@ -1,7 +1,7 @@
 package com.likethesalad.placeholder.locator
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.locator.exclusionrules.TemplateDirsXmlSourceFilterRule
+import com.likethesalad.placeholder.locator.entrypoints.templates.source.TemplateDirsXmlSourceFilterRule
 import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.placeholder.modules.common.helpers.dirs.TemplatesDirHandler
 import com.likethesalad.tools.resource.api.android.environment.Variant

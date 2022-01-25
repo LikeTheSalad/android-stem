@@ -1,13 +1,13 @@
 package com.likethesalad.placeholder.di
 
-import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
-import com.likethesalad.placeholder.utils.TaskActionProviderHolder
+import com.likethesalad.placeholder.locator.entrypoints.common.CommonResourcesEntryPoint
+import com.likethesalad.placeholder.utils.PlaceholderTasksCreator
 import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [AppModule::class])
 interface AppComponent {
-    fun taskActionProviderHolder(): TaskActionProviderHolder
-    fun androidVariantContextFactory(): AndroidVariantContext.Factory
+    fun placeholderTasksCreator(): PlaceholderTasksCreator
+    fun commonResourcesEntryPointFactory(): CommonResourcesEntryPoint.Factory
 }

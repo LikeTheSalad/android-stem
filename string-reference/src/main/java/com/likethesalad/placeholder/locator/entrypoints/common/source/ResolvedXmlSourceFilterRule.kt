@@ -1,4 +1,4 @@
-package com.likethesalad.placeholder.locator.exclusionrules
+package com.likethesalad.placeholder.locator.entrypoints.common.source
 
 import com.likethesalad.tools.resource.collector.android.filter.BaseAndroidXmlSourceFilterRule
 import com.likethesalad.tools.resource.collector.android.source.AndroidXmlResourceSource
