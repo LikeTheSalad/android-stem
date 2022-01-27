@@ -10,7 +10,6 @@ import com.likethesalad.tools.resource.serializer.ResourceSerializer
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
-import javax.xml.parsers.DocumentBuilderFactory
 
 @Module
 class AppModule(private val resolvePlaceholdersPlugin: ResolvePlaceholdersPlugin) {
@@ -49,11 +48,5 @@ class AppModule(private val resolvePlaceholdersPlugin: ResolvePlaceholdersPlugin
     @Singleton
     fun provideResourceSerializer(): ResourceSerializer {
         return resolvePlaceholdersPlugin.getLocatorExtension().getResourceSerializer()
-    }
-
-    @Provides
-    @Singleton
-    fun provideDocumentBuilderFactory(): DocumentBuilderFactory {
-        return DocumentBuilderFactory.newInstance()
     }
 }
