@@ -1,4 +1,4 @@
-package com.likethesalad.placeholder.locator.entrypoints.templates.source
+package com.likethesalad.placeholder.locator.entrypoints.common.source
 
 import com.likethesalad.placeholder.modules.common.helpers.dirs.TemplatesDirHandler
 import com.likethesalad.tools.resource.collector.android.data.variant.VariantTree

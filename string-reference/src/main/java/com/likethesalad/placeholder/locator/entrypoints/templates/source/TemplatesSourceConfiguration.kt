@@ -25,7 +25,7 @@ class TemplatesSourceConfiguration @AssistedInject constructor(
         return templatesDirHandler.templatesDirs.map { it.dir }
     }
 
-    override fun getSourceProviders(): List<ResourceSourceProvider> {
+    override fun doGetSourceProviders(): List<ResourceSourceProvider> {
         return templatesDirHandler.templatesDirs.map {
             resDirResourceSourceProviderFactory.create(it)
         }

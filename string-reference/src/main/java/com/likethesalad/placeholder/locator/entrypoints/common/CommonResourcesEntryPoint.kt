@@ -1,7 +1,7 @@
 package com.likethesalad.placeholder.locator.entrypoints.common
 
 import com.likethesalad.placeholder.locator.entrypoints.common.source.ResolvedXmlSourceFilterRule
-import com.likethesalad.placeholder.locator.entrypoints.templates.source.TemplateDirsXmlSourceFilterRule
+import com.likethesalad.placeholder.locator.entrypoints.common.source.TemplateDirsXmlSourceFilterRule
 import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantBuildResolvedDir
 import com.likethesalad.placeholder.providers.ProjectDirsProvider
 import com.likethesalad.tools.resource.collector.android.data.variant.VariantTree

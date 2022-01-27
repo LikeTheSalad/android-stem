@@ -1,6 +1,5 @@
 package com.likethesalad.placeholder.locator.entrypoints.templates
 
-import com.likethesalad.placeholder.locator.entrypoints.templates.source.TemplateDirsXmlSourceFilterRule
 import com.likethesalad.placeholder.locator.entrypoints.templates.source.TemplatesSourceConfiguration
 import com.likethesalad.placeholder.modules.common.helpers.dirs.TemplatesDirHandler
 import com.likethesalad.tools.resource.collector.android.data.variant.VariantTree
@@ -13,15 +12,13 @@ import javax.inject.Singleton
 @Singleton
 class TemplateResourcesEntryPoint @Inject constructor(
     private val templatesDirHandlerFactory: TemplatesDirHandler.Factory,
-    private val templateDirsXmlSourceFilterRuleFactory: TemplateDirsXmlSourceFilterRule.Factory,
     private val templatesSourceConfigurationFactory: TemplatesSourceConfiguration.Factory
 ) : ResourceLocatorEntryPoint {
 
     override fun getResourceSourceConfigurations(variantTree: VariantTree): List<ResourceSourceConfiguration> {
         val templatesDirHandler = templatesDirHandlerFactory.create(variantTree)
         val templatesSourceConfiguration = templatesSourceConfigurationFactory.create(variantTree, templatesDirHandler)
-        val templateDirsXmlSourceFilterRule = templateDirsXmlSourceFilterRuleFactory.create(variantTree)
-        templatesSourceConfiguration.addFilterRule(templateDirsXmlSourceFilterRule)
+        templatesDirHandler.configureSourceSets()
 
         return listOf(templatesSourceConfiguration)
     }

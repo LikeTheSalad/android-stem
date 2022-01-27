@@ -1,11 +1,12 @@
 package com.likethesalad.placeholder.locator
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.locator.entrypoints.templates.source.TemplateDirsXmlSourceFilterRule
+import com.likethesalad.placeholder.locator.entrypoints.common.source.TemplateDirsXmlSourceFilterRule
 import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.placeholder.modules.common.helpers.dirs.TemplatesDirHandler
 import com.likethesalad.tools.resource.api.android.environment.Variant
 import com.likethesalad.tools.resource.collector.android.data.resdir.ResDir
+import com.likethesalad.tools.resource.collector.android.data.variant.VariantTree
 import com.likethesalad.tools.resource.collector.android.source.AndroidXmlResourceSource
 import com.likethesalad.tools.testing.BaseMockable
 import io.mockk.every
@@ -24,6 +25,12 @@ class TemplateDirsXmlSourceFilterRuleTest : BaseMockable() {
     @MockK
     lateinit var templatesDirHandler: TemplatesDirHandler
 
+    @MockK
+    lateinit var variantTree: VariantTree
+
+    @MockK
+    lateinit var templatesDirHandlerFactory: TemplatesDirHandler.Factory
+
     @get:Rule
     val temporaryFolder = TemporaryFolder()
 
@@ -31,9 +38,9 @@ class TemplateDirsXmlSourceFilterRuleTest : BaseMockable() {
 
     @Before
     fun setUp() {
-        every { androidVariantContext.templatesDirHandler }.returns(templatesDirHandler)
+        every { templatesDirHandlerFactory.create(variantTree) }.returns(templatesDirHandler)
 
-        templateDirsXmlSourceFilterRule = TemplateDirsXmlSourceFilterRule(androidVariantContext)
+        templateDirsXmlSourceFilterRule = TemplateDirsXmlSourceFilterRule(variantTree, templatesDirHandlerFactory)
     }
 
     @Test
