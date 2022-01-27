@@ -6,6 +6,7 @@ plugins {
 dependencies {
     api gradleApi()
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "com.likethesalad.tools.resources:string-android-resource-locator:$resourceLocator_version"
     testImplementation "com.likethesalad.tools.testing:unit-testing:$testingUtilities_version"
 }
 

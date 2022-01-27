@@ -29,6 +29,7 @@ ext {
     dagger_version = '2.39.1'
     androidBuild_version = '3.3.3'
     testingUtilities_version = '1.0.6'
+    resourceLocator_version = '1.1.0-SNAPSHOT9'
 }
 
 allprojects {
