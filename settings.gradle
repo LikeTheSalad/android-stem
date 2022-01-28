@@ -1,4 +1,4 @@
 rootProject.name = 'placeholder-resolver'
 include ':string-reference'
-include ':templates-provider'
+include ':templates-provider-plugin'
 include ':templates-provider-api'
