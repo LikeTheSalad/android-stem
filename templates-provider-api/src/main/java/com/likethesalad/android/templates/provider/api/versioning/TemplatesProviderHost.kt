@@ -1,5 +1,5 @@
 package com.likethesalad.android.templates.provider.api.versioning
 
-interface TemplatesProviderVersion {
-    fun getVersion(): String
+interface TemplatesProviderHost {
+    fun getPluginVersion(): String
 }
