@@ -1,5 +1,8 @@
 buildscript {
-    ext.kotlin_version = '1.5.10'
+    ext {
+        kotlin_version = '1.5.10'
+        pluginMetadataTool_version = '1.0.0-SNAPSHOT4'
+    }
     repositories {
         mavenLocal()
         mavenCentral()
@@ -8,6 +11,7 @@ buildscript {
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.likethesalad.tools:plugin-metadata-producer:$pluginMetadataTool_version"
         classpath 'com.likethesalad.tools:artifact-publisher:1.1.1'
     }
 }

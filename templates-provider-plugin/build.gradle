@@ -2,6 +2,7 @@ plugins {
     id 'java-library'
     id 'org.jetbrains.kotlin.jvm'
     id 'kotlin-kapt'
+    id 'plugin-metadata-producer'
 }
 
 dependencies {
@@ -10,8 +11,13 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "com.google.dagger:dagger:$dagger_version"
     implementation "com.likethesalad.tools.resources:string-android-resource-locator:$resourceLocator_version"
+    implementation "com.likethesalad.tools:plugin-metadata-consumer:$pluginMetadataTool_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     testImplementation "com.likethesalad.tools.testing:unit-testing:$testingUtilities_version"
+}
+
+pluginMetadataConfiguration {
+    id = "teplates-provider"
 }
 
 compileKotlin {
