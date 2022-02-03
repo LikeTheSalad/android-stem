@@ -1,7 +1,7 @@
 buildscript {
     ext {
         kotlin_version = '1.5.10'
-        pluginMetadataTool_version = '1.0.0-SNAPSHOT5'
+        pluginMetadataTool_version = '1.0.0-SNAPSHOT6'
     }
     repositories {
         mavenLocal()
