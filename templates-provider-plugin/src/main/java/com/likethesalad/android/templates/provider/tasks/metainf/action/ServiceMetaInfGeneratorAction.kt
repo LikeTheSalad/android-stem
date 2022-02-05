@@ -21,7 +21,14 @@ class ServiceMetaInfGeneratorAction(
     }
 
     private fun getOutputFile(): File {
-        return File(outputDir, "META-INF/services/${TemplatesProvider::class.java.name}")
+        val file = File(outputDir, "META-INF/services/${TemplatesProvider::class.java.name}")
+        val parent = file.parentFile
+
+        if (!parent.exists()) {
+            parent.mkdirs()
+        }
+
+        return file
     }
 
     private fun convertToClassNames(classPaths: List<File>): List<String> {

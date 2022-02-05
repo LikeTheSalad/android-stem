@@ -8,7 +8,7 @@ import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 
 @Suppress("UnstableApiUsage")
-class ServiceMetaInfGeneratorTask : DefaultTask() {
+open class ServiceMetaInfGeneratorTask : DefaultTask() {
 
     @InputDirectory
     val generatedClasspath: DirectoryProperty = project.objects.directoryProperty()
