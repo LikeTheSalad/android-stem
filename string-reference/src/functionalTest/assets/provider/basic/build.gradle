@@ -1,0 +1,13 @@
+plugins {
+    id "com.android.library"
+    // id "resource.templates.provider
+}
+
+repositories {
+    mavenCentral()
+    google()
+}
+
+android {
+    compileSdkVersion 29
+}

@@ -15,6 +15,7 @@ dependencies {
     implementation "com.likethesalad.tools:plugin-metadata-consumer:$pluginMetadataTool_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     testImplementation "com.likethesalad.tools.testing:unit-testing:$testingUtilities_version"
+    testImplementation gradleTestKit()
 }
 
 def metadataPropertiesId = "${rootProject.group}_${name}"

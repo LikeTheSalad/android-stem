@@ -267,5 +267,5 @@ class CheckOutputsTest : AndroidProjectTest() {
         Truth.assertThat(fileWithSameName.readText()).isEqualTo(file.readText())
     }
 
-    override fun getGradleVersion(): String = "5.6.4"
+    override fun getGradleVersion(): String = "6.5"
 }
