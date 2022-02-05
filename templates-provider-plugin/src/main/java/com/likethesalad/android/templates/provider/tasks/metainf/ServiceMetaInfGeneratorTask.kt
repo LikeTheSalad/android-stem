@@ -1,5 +1,6 @@
 package com.likethesalad.android.templates.provider.tasks.metainf
 
+import com.likethesalad.android.templates.provider.tasks.metainf.action.ServiceMetaInfGeneratorAction
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.tasks.InputDirectory
@@ -21,6 +22,7 @@ class ServiceMetaInfGeneratorTask : DefaultTask() {
 
     @TaskAction
     fun execute() {
-
+        val action = ServiceMetaInfGeneratorAction(generatedClasspath.get().asFile, outputDir.get().asFile)
+        action.execute()
     }
 }
