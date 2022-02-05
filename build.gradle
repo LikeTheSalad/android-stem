@@ -36,7 +36,7 @@ ext {
     androidBuild_version = '4.1.0'
     testingUtilities_version = '1.0.6'
     resourceLocator_version = '1.1.0-SNAPSHOT9'
-    androidTools_version = "1.0.1-SNAPSHOT4"
+    androidTools_version = "1.1.0-SNAPSHOT2"
 }
 
 allprojects {

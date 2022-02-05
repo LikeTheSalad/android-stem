@@ -37,7 +37,9 @@ class TemplatesProviderPlugin : AndroidToolsPluginConsumer() {
         }
 
         variant.registerGeneratedJavaBinaries(serviceGenerator, serviceGenerator.flatMap { it.outputDir })
-        variant.registerGeneratedJavaResources(metaInfGenerator, metaInfGenerator.flatMap { it.outputDir })
+        variant.getProcessJavaResourcesProvider().configure {
+            it.from(metaInfGenerator)
+        }
     }
 
     private fun createServiceGeneratorTask(
