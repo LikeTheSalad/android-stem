@@ -12,7 +12,7 @@ import org.gradle.api.tasks.TaskProvider
 class TemplatesProviderPlugin : AndroidToolsPluginConsumer() {
 
     companion object {
-        private const val SERVICE_GENERATOR_TASK_TEMPLATE = "templateProvider%sMetadata"
+        private const val SERVICE_GENERATOR_TASK_TEMPLATE = "templateProvider%sGenerateMetadata"
     }
 
     private lateinit var component: TemplatesProviderComponent

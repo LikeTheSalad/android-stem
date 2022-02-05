@@ -14,6 +14,10 @@ open class TemplatesServiceGeneratorTask @Inject constructor(private val args: A
     @OutputDirectory
     val outputDir: DirectoryProperty = project.objects.directoryProperty()
 
+    init {
+        outputDir.set(project.layout.buildDirectory.dir("intermediates/incremental/$name"))
+    }
+
     @TaskAction
     fun execute() {
         val action = args.actionFactory.create(project.name, outputDir.get().asFile)
