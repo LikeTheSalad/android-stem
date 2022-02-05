@@ -11,7 +11,7 @@ class ClassNameGenerator @Inject constructor(
 ) {
 
     companion object {
-        private const val PACKAGE_NAME = "com.likethesalad.android.templates.provider.implementation"
+        const val PACKAGE_NAME = "com.likethesalad.android.templates.provider.implementation"
         private const val NAME_PREFIX = "A_"
         private val BASE64_TO_JAVA_IDENTIFIER = mapOf(
             "=" to "_",

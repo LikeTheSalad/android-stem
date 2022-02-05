@@ -1,16 +1,13 @@
 package com.likethesalad.android.templates.provider.tasks.metainf.action
 
 import com.likethesalad.android.templates.provider.api.TemplatesProvider
+import com.likethesalad.android.templates.provider.tasks.service.action.helpers.ClassNameGenerator
 import java.io.File
 
 class ServiceMetaInfGeneratorAction(
     private val classpathDir: File,
     private val outputDir: File
 ) {
-
-    companion object {
-        private val REGEX_CLASS_EXTENSION = Regex("\\.class\$")
-    }
 
     fun execute() {
         val classPaths = classpathDir.walk().filter { it.isFile }.toList()
@@ -38,7 +35,6 @@ class ServiceMetaInfGeneratorAction(
     }
 
     private fun convertToClassFullName(classFile: File): String {
-        val pathWithoutExtension = classFile.absolutePath.replace(REGEX_CLASS_EXTENSION, "")
-        return pathWithoutExtension.replace("/", ".")
+        return "${ClassNameGenerator.PACKAGE_NAME}.${classFile.nameWithoutExtension}"
     }
 }
