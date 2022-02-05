@@ -1,6 +1,6 @@
 plugins {
     id "com.android.library"
-    // id "resource.templates.provider
+    id "resource.templates.provider"
 }
 
 repositories {
