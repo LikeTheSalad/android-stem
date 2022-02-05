@@ -13,6 +13,7 @@ dependencies {
     implementation "com.google.dagger:dagger:$dagger_version"
     implementation "com.likethesalad.tools.resources:string-android-resource-locator:$resourceLocator_version"
     implementation "com.likethesalad.tools:plugin-metadata-consumer:$pluginMetadataTool_version"
+    implementation "com.likethesalad.tools:android-tools-plugin:$androidTools_version"
     implementation "net.bytebuddy:byte-buddy:1.12.7"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     testImplementation "com.likethesalad.tools.testing:unit-testing:$testingUtilities_version"
