@@ -1,6 +1,6 @@
-package com.likethesalad.android.templates.provider.task
+package com.likethesalad.android.templates.provider.tasks.service
 
-import com.likethesalad.android.templates.provider.task.action.TemplatesServiceGeneratorAction
+import com.likethesalad.android.templates.provider.tasks.service.action.TemplatesServiceGeneratorAction
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.tasks.OutputDirectory

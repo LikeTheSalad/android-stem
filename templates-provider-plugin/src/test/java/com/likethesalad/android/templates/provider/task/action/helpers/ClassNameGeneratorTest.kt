@@ -1,6 +1,8 @@
 package com.likethesalad.android.templates.provider.task.action.helpers
 
 import com.google.common.truth.Truth
+import com.likethesalad.android.templates.provider.tasks.service.action.helpers.ClassNameGenerator
+import com.likethesalad.android.templates.provider.tasks.service.action.helpers.RandomStringGenerator
 import com.likethesalad.tools.testing.BaseMockable
 import io.mockk.every
 import io.mockk.impl.annotations.MockK

@@ -2,7 +2,7 @@ package com.likethesalad.android.templates.provider
 
 import com.likethesalad.android.templates.provider.di.TemplatesProviderComponent
 import com.likethesalad.android.templates.provider.di.TemplatesProviderInjector
-import com.likethesalad.android.templates.provider.task.TemplatesServiceGeneratorTask
+import com.likethesalad.android.templates.provider.tasks.service.TemplatesServiceGeneratorTask
 import com.likethesalad.tools.android.plugin.base.AndroidToolsPluginConsumer
 import com.likethesalad.tools.android.plugin.data.AndroidVariantData
 import org.gradle.api.Project
@@ -12,7 +12,7 @@ import org.gradle.api.tasks.TaskProvider
 class TemplatesProviderPlugin : AndroidToolsPluginConsumer() {
 
     companion object {
-        private const val SERVICE_GENERATOR_TASK_TEMPLATE = "templateProvider%sGenerateMetadata"
+        private const val SERVICE_GENERATOR_TASK_TEMPLATE = "templateProvider%sGenerateService"
     }
 
     private lateinit var component: TemplatesProviderComponent

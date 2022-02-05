@@ -1,7 +1,7 @@
-package com.likethesalad.android.templates.provider.task.action
+package com.likethesalad.android.templates.provider.tasks.service.action
 
 import com.likethesalad.android.templates.provider.api.TemplatesProvider
-import com.likethesalad.android.templates.provider.task.action.helpers.ClassNameGenerator
+import com.likethesalad.android.templates.provider.tasks.service.action.helpers.ClassNameGenerator
 import com.likethesalad.tools.plugin.metadata.api.PluginMetadata
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory

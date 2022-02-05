@@ -1,4 +1,4 @@
-package com.likethesalad.android.templates.provider.task.action.helpers
+package com.likethesalad.android.templates.provider.tasks.service.action.helpers
 
 import java.util.UUID
 import javax.inject.Inject

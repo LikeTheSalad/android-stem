@@ -1,4 +1,4 @@
-package com.likethesalad.android.templates.provider.task.action.helpers
+package com.likethesalad.android.templates.provider.tasks.service.action.helpers
 
 import java.util.Base64
 import javax.inject.Inject
@@ -25,7 +25,7 @@ class ClassNameGenerator @Inject constructor(
         val encoded = base64Encoder.encodeToString(raw.toByteArray())
         val curated = clearBase64NonAlphanumerics(encoded)
 
-        return "${PACKAGE_NAME}.$NAME_PREFIX$curated"
+        return "$PACKAGE_NAME.$NAME_PREFIX$curated"
     }
 
     private fun clearBase64NonAlphanumerics(encoded: String): String {
