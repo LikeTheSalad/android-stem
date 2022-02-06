@@ -1,4 +1,4 @@
-package com.likethesalad.android.templates.provider.api.data
+package com.likethesalad.android.templates.common.tasks.templates.data
 
 import com.google.common.truth.Truth
 import org.junit.Test
