@@ -1,6 +1,8 @@
 package com.likethesalad.placeholder.modules.templateStrings
 
-import com.likethesalad.placeholder.modules.common.Constants
+import com.likethesalad.android.templates.common.tasks.templates.TemplatesConstants
+import com.likethesalad.android.templates.common.tasks.templates.data.TemplateItem
+import com.likethesalad.android.templates.common.tasks.templates.data.TemplateItemsSerializer
 import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
 import com.likethesalad.tools.resource.api.android.data.AndroidResourceType
@@ -14,7 +16,8 @@ import dagger.assisted.AssistedInject
 import java.io.File
 
 class GatherTemplatesAction @AssistedInject constructor(
-    @Assisted private val androidVariantContext: AndroidVariantContext
+    @Assisted private val androidVariantContext: AndroidVariantContext,
+    private val templateItemsSerializer: TemplateItemsSerializer
 ) {
 
     @AssistedFactory
@@ -27,24 +30,37 @@ class GatherTemplatesAction @AssistedInject constructor(
     fun gatherTemplateStrings(
         outputDir: File,
         commonResources: ResourcesProvider,
-        templateResources: ResourcesProvider
+        templateIdsContainer: File
     ) {
         val commonHandler = commonResources.resources
-        val templatesHandler = templateResources.resources
+        val templateIds = getTemplateIds(templateIdsContainer)
         for (language in commonHandler.listLanguages()) {
-            val resources = commonHandler.getMergedResourcesForLanguage(language)
-            val templates = templatesHandler.getMergedResourcesForLanguage(language)
+            val allResources = asStringResources(commonHandler.getMergedResourcesForLanguage(language))
+            val templates = getTemplatesFromResources(templateIds, allResources)
+            val resources = allResources.minus(templates)
             resourcesHandler.saveTemplates(outputDir, gatheredStringsToTemplateStrings(language, resources, templates))
         }
     }
 
+    private fun getTemplatesFromResources(
+        templateIds: List<TemplateItem>,
+        resources: List<StringAndroidResource>
+    ): List<StringAndroidResource> {
+        val templateNames = templateIds.map { it.name }
+        return resources.filter {
+            it.name() in templateNames
+        }
+    }
+
+    private fun getTemplateIds(templateIdsContainer: File): List<TemplateItem> {
+        return templateItemsSerializer.deserialize(templateIdsContainer.readText())
+    }
+
     private fun gatheredStringsToTemplateStrings(
         language: Language,
-        resources: ResourceCollection,
-        templates: ResourceCollection
+        stringResources: List<StringAndroidResource>,
+        stringTemplates: List<StringAndroidResource>
     ): StringsTemplatesModel {
-        val stringResources = asStringResources(resources)
-        val stringTemplates = asStringResources(templates)
         val placeholdersResolved = getPlaceholdersResolved(stringResources, stringTemplates)
 
         return StringsTemplatesModel(
@@ -64,7 +80,7 @@ class GatherTemplatesAction @AssistedInject constructor(
         templates: List<StringAndroidResource>
     ): Map<String, String> {
         val stringsMap = stringResourcesToMap(strings)
-        val placeholders = templates.map { Constants.PLACEHOLDER_REGEX.findAll(it.stringValue()) }
+        val placeholders = templates.map { TemplatesConstants.PLACEHOLDER_REGEX.findAll(it.stringValue()) }
             .flatMap { it.toList().map { m -> m.groupValues[1] } }.toSet()
 
         val placeholdersResolved = mutableMapOf<String, String>()

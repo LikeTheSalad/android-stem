@@ -59,15 +59,14 @@ class PlaceholderTasksCreator @Inject constructor(
             GatherTemplatesTask::class.java,
             GatherTemplatesArgs(
                 gatherTemplatesActionProvider.provide(androidVariantContext),
-                commonResourcesInfo.resourcesProvider,
-                templatesIdentifierTask.flatMap { it.outputFile }
+                commonResourcesInfo.resourcesProvider
             )
         )
 
         gatherTemplatesTask.configure {
             it.group = ResolvePlaceholdersPlugin.RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME
             it.commonResourcesDir.set(commonResourcesInfo.taskInfo.outputDirectoryProvider.getOutputDirProperty())
-            it.templateResourcesDir.set(templateResourcesInfo.taskInfo.outputDirectoryProvider.getOutputDirProperty())
+            it.templateIdsFile.set(templatesIdentifierTask.flatMap { identifierTask -> identifierTask.outputFile })
         }
 
         val resolvePlaceholdersTask = taskContainer.register(
