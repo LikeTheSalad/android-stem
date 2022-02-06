@@ -4,8 +4,11 @@ import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantBuildReso
 import com.likethesalad.placeholder.providers.ProjectDirsProvider
 import com.likethesalad.tools.resource.collector.android.filter.BaseAndroidXmlSourceFilterRule
 import com.likethesalad.tools.resource.collector.android.source.AndroidXmlResourceSource
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ResolvedXmlSourceFilterRule(
+@Singleton
+class ResolvedXmlSourceFilterRule @Inject constructor(
     projectDirsProvider: ProjectDirsProvider
 ) : BaseAndroidXmlSourceFilterRule() {
 
