@@ -1,6 +1,10 @@
 package com.likethesalad.android.templates.common.tasks.templates.data
 
-class TemplateItemsSerializer {
+import javax.inject.Inject
+import javax.inject.Singleton
+
+@Singleton
+class TemplateItemsSerializer @Inject constructor() {
 
     companion object {
         private const val LIST_SEPARATOR = ","
