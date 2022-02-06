@@ -1,26 +1,24 @@
 package com.likethesalad.placeholder.locator.entrypoints.templates
 
-import com.likethesalad.placeholder.locator.entrypoints.templates.source.TemplatesSourceConfiguration
-import com.likethesalad.placeholder.modules.common.helpers.dirs.TemplatesDirHandler
+import com.likethesalad.placeholder.locator.entrypoints.common.source.ResolvedXmlSourceFilterRule
 import com.likethesalad.tools.resource.collector.android.data.variant.VariantTree
 import com.likethesalad.tools.resource.locator.android.extension.configuration.ResourceLocatorEntryPoint
 import com.likethesalad.tools.resource.locator.android.extension.configuration.data.ResourceLocatorInfo
 import com.likethesalad.tools.resource.locator.android.extension.configuration.source.ResourceSourceConfiguration
-import javax.inject.Inject
-import javax.inject.Singleton
+import com.likethesalad.tools.resource.locator.android.extension.configuration.source.utils.CommonSourceConfigurationCreator
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 
-@Singleton
-class TemplateResourcesEntryPoint @Inject constructor(
-    private val templatesDirHandlerFactory: TemplatesDirHandler.Factory,
-    private val templatesSourceConfigurationFactory: TemplatesSourceConfiguration.Factory
+class TemplateResourcesEntryPoint @AssistedInject constructor(
+    @Assisted private val commonSourceConfigurationCreator: CommonSourceConfigurationCreator,
+    private val resolvedXmlSourceFilterRule: ResolvedXmlSourceFilterRule
 ) : ResourceLocatorEntryPoint {
 
     override fun getResourceSourceConfigurations(variantTree: VariantTree): List<ResourceSourceConfiguration> {
-        val templatesDirHandler = templatesDirHandlerFactory.create(variantTree)
-        val templatesSourceConfiguration = templatesSourceConfigurationFactory.create(variantTree, templatesDirHandler)
-        templatesDirHandler.configureSourceSets()
+        val rawConfiguration = commonSourceConfigurationCreator.createAndroidRawConfiguration(variantTree)
+        rawConfiguration.addFilterRule(resolvedXmlSourceFilterRule)
 
-        return listOf(templatesSourceConfiguration)
+        return listOf(rawConfiguration)
     }
 
     override fun onLocatorCreated(variantTree: VariantTree, info: ResourceLocatorInfo) {

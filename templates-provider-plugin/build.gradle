@@ -9,6 +9,7 @@ plugins {
 dependencies {
     api gradleApi()
     api project(':templates-provider-api')
+    implementation project(':common-tools')
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "com.google.dagger:dagger:$dagger_version"
     implementation "com.likethesalad.tools.resources:string-android-resource-locator:$resourceLocator_version"

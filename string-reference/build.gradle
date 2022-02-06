@@ -7,6 +7,7 @@ plugins {
 
 dependencies {
     api gradleApi()
+    implementation project(':common-tools')
     implementation project(':templates-provider-plugin')
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'com.google.code.gson:gson:2.8.5'
