@@ -1,9 +1,11 @@
 package com.likethesalad.placeholder.utils
 
+import com.likethesalad.android.templates.common.tasks.templates.TemplatesIdentifierTask
 import com.likethesalad.placeholder.ResolvePlaceholdersPlugin
 import com.likethesalad.placeholder.configuration.ResolvePlaceholderConfiguration
 import com.likethesalad.placeholder.locator.listener.TypeLocatorCreationListener
 import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
+import com.likethesalad.placeholder.modules.common.models.TasksNamesModel
 import com.likethesalad.placeholder.modules.resolveStrings.ResolvePlaceholdersTask
 import com.likethesalad.placeholder.modules.resolveStrings.data.ResolvePlaceholdersArgs
 import com.likethesalad.placeholder.modules.templateStrings.GatherTemplatesTask
@@ -11,14 +13,17 @@ import com.likethesalad.placeholder.modules.templateStrings.data.GatherTemplates
 import com.likethesalad.placeholder.providers.TaskContainerProvider
 import com.likethesalad.tools.resource.collector.android.data.variant.VariantTree
 import com.likethesalad.tools.resource.locator.android.extension.configuration.data.ResourceLocatorInfo
+import org.gradle.api.tasks.TaskProvider
 import javax.inject.Inject
 import javax.inject.Singleton
 
+@Suppress("UnstableApiUsage")
 @Singleton
 class PlaceholderTasksCreator @Inject constructor(
     taskContainerProvider: TaskContainerProvider,
     private val androidVariantContextFactory: AndroidVariantContext.Factory,
     private val taskActionProviderHolder: TaskActionProviderHolder,
+    private val templatesIdentifierArgsFactory: TemplatesIdentifierTask.Args.Factory,
     private val configuration: ResolvePlaceholderConfiguration
 ) : TypeLocatorCreationListener.Callback {
 
@@ -44,13 +49,18 @@ class PlaceholderTasksCreator @Inject constructor(
         val gatherTemplatesActionProvider = taskActionProviderHolder.gatherTemplatesActionProvider
         val resolvePlaceholdersActionProvider = taskActionProviderHolder.resolvePlaceholdersActionProvider
 
+        val templatesIdentifierTask = createTemplatesIdentifierTaskProvider(
+            androidVariantContext.tasksNames,
+            templateResourcesInfo
+        )
+
         val gatherTemplatesTask = taskContainer.register(
             androidVariantContext.tasksNames.gatherStringTemplatesName,
             GatherTemplatesTask::class.java,
             GatherTemplatesArgs(
                 gatherTemplatesActionProvider.provide(androidVariantContext),
                 commonResourcesInfo.resourcesProvider,
-                templateResourcesInfo.resourcesProvider
+                templatesIdentifierTask.flatMap { it.outputFile }
             )
         )
 
@@ -75,5 +85,23 @@ class PlaceholderTasksCreator @Inject constructor(
         if (configuration.resolveOnBuild()) {
             androidVariantContext.mergeResourcesTask.dependsOn(resolvePlaceholdersTask)
         }
+    }
+
+    private fun createTemplatesIdentifierTaskProvider(
+        taskNames: TasksNamesModel,
+        localResourcesInfo: ResourceLocatorInfo
+    ): TaskProvider<TemplatesIdentifierTask> {
+        val provider = taskContainer.register(
+            taskNames.templatesIdentifierName,
+            TemplatesIdentifierTask::class.java,
+            templatesIdentifierArgsFactory.create(localResourcesInfo.resourcesProvider)
+        )
+
+        provider.configure {
+            it.group = ResolvePlaceholdersPlugin.RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME
+            it.localResourcesDir.set(localResourcesInfo.taskInfo.outputDirectoryProvider.getOutputDirProperty())
+        }
+
+        return provider
     }
 }

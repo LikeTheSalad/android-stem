@@ -35,9 +35,6 @@ class AndroidVariantContext @AssistedInject constructor(
     val mergeResourcesTask: Task by lazy {
         taskProvider.findTaskByName(tasksNames.mergeResourcesName)
     }
-    val generateResValuesTask: Task by lazy {
-        taskProvider.findTaskByName(tasksNames.generateResValuesName)
-    }
     val incrementalDir: String by lazy {
         projectDirsProvider.getBuildDir().absolutePath + "/intermediates/incremental/" + tasksNames.resolvePlaceholdersName
     }

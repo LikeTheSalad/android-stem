@@ -84,20 +84,6 @@ class AndroidVariantContextTest {
     }
 
     @Test
-    fun check_generateResValuesTask() {
-        // Given:
-        val taskMock = mockk<Task>()
-        every { taskProvider.findTaskByName<Task>(generateResValuesName) }.returns(taskMock)
-
-        // When:
-        val result = androidVariantContext.generateResValuesTask
-
-        // Then:
-        Truth.assertThat(result).isEqualTo(taskMock)
-        verify { taskProvider.findTaskByName<Task>(generateResValuesName) }
-    }
-
-    @Test
     fun check_incrementalDir() {
         // When:
         val result = androidVariantContext.incrementalDir
