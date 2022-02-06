@@ -1,6 +1,7 @@
 package com.likethesalad.placeholder.utils
 
 import com.likethesalad.android.templates.common.tasks.templates.TemplatesIdentifierTask
+import com.likethesalad.android.templates.common.tasks.templates.data.TemplateItemsSerializer
 import com.likethesalad.placeholder.ResolvePlaceholdersPlugin
 import com.likethesalad.placeholder.configuration.ResolvePlaceholderConfiguration
 import com.likethesalad.placeholder.locator.listener.TypeLocatorCreationListener
@@ -23,7 +24,7 @@ class PlaceholderTasksCreator @Inject constructor(
     taskContainerProvider: TaskContainerProvider,
     private val androidVariantContextFactory: AndroidVariantContext.Factory,
     private val taskActionProviderHolder: TaskActionProviderHolder,
-    private val templatesIdentifierArgsFactory: TemplatesIdentifierTask.Args.Factory,
+    private val templateItemsSerializer: TemplateItemsSerializer,
     private val configuration: ResolvePlaceholderConfiguration
 ) : TypeLocatorCreationListener.Callback {
 
@@ -93,7 +94,10 @@ class PlaceholderTasksCreator @Inject constructor(
         val provider = taskContainer.register(
             taskNames.templatesIdentifierName,
             TemplatesIdentifierTask::class.java,
-            templatesIdentifierArgsFactory.create(localResourcesInfo.resourcesProvider)
+            TemplatesIdentifierTask.Args(
+                localResourcesInfo.resourcesProvider,
+                templateItemsSerializer
+            )
         )
 
         provider.configure {

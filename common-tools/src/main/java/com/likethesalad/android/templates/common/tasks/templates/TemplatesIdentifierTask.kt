@@ -1,10 +1,8 @@
 package com.likethesalad.android.templates.common.tasks.templates
 
 import com.likethesalad.android.templates.common.tasks.templates.action.TemplatesIdentifierAction
+import com.likethesalad.android.templates.common.tasks.templates.data.TemplateItemsSerializer
 import com.likethesalad.tools.resource.locator.android.extension.configuration.data.ResourcesProvider
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
@@ -28,17 +26,16 @@ open class TemplatesIdentifierTask @Inject constructor(private val args: Args) :
 
     @TaskAction
     fun execute() {
-        args.actionFactory.create(args.localResources, outputFile.get().asFile)
+        val action = TemplatesIdentifierAction(
+            args.localResources,
+            outputFile.get().asFile,
+            args.templateItemsSerializer
+        )
+        action.execute()
     }
 
-    data class Args @AssistedInject constructor(
-        @Assisted val localResources: ResourcesProvider,
-        val actionFactory: TemplatesIdentifierAction.Factory
-    ) {
-
-        @AssistedFactory
-        interface Factory {
-            fun create(localResources: ResourcesProvider): Args
-        }
-    }
+    data class Args(
+        val localResources: ResourcesProvider,
+        val templateItemsSerializer: TemplateItemsSerializer
+    )
 }
