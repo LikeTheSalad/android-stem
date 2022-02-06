@@ -51,7 +51,6 @@ class AndroidVariantContextTest {
         every { variantTree.androidVariantData }.returns(androidVariantData)
         every { tasksNamesModelFactory.create(androidVariantData) }.returns(tasksNames)
         every { tasksNames.mergeResourcesName }.returns(mergeResourcesName)
-        every { tasksNames.generateResValuesName }.returns(generateResValuesName)
         every { tasksNames.resolvePlaceholdersName }.returns(resolvePlaceholdersName)
         every { variantBuildResolvedDirFactory.create(androidVariantData) }.returns(variantBuildResolvedDir)
 

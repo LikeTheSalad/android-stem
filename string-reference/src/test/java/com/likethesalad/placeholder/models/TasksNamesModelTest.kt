@@ -18,10 +18,9 @@ class TasksNamesModelTest {
         val tasksNamesModel = getTasksNamesFor(variant)
 
         // Then:
-        Truth.assertThat(tasksNamesModel.gatherRawStringsName).isEqualTo("gatherTheVariantRawStrings")
+        Truth.assertThat(tasksNamesModel.templatesIdentifierName).isEqualTo("templatesTheVariantIdentifier")
         Truth.assertThat(tasksNamesModel.gatherStringTemplatesName).isEqualTo("gatherTheVariantStringTemplates")
         Truth.assertThat(tasksNamesModel.resolvePlaceholdersName).isEqualTo("resolveTheVariantPlaceholders")
-        Truth.assertThat(tasksNamesModel.generateResValuesName).isEqualTo("generateTheVariantResValues")
         Truth.assertThat(tasksNamesModel.mergeResourcesName).isEqualTo("mergeTheVariantResources")
     }
 
@@ -34,10 +33,9 @@ class TasksNamesModelTest {
         val tasksNamesModel = getTasksNamesFor(variant)
 
         // Then:
-        Truth.assertThat(tasksNamesModel.gatherRawStringsName).isEqualTo("gatherRawStrings")
+        Truth.assertThat(tasksNamesModel.templatesIdentifierName).isEqualTo("templatesIdentifier")
         Truth.assertThat(tasksNamesModel.gatherStringTemplatesName).isEqualTo("gatherStringTemplates")
         Truth.assertThat(tasksNamesModel.resolvePlaceholdersName).isEqualTo("resolvePlaceholders")
-        Truth.assertThat(tasksNamesModel.generateResValuesName).isEqualTo("generateResValues")
         Truth.assertThat(tasksNamesModel.mergeResourcesName).isEqualTo("mergeResources")
     }
 
