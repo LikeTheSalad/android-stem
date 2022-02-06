@@ -23,7 +23,7 @@ object AppInjector {
         return component.commonResourcesEntryPointFactory()
     }
 
-    fun getTemplateResourcesEntryPoint(): TemplateResourcesEntryPoint {
+    fun getTemplateResourcesEntryPointFactory(): TemplateResourcesEntryPoint.Factory {
         return component.templateResourcesEntryPointFactory()
     }
 }

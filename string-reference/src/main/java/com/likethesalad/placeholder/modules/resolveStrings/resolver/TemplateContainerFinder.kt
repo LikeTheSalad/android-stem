@@ -1,6 +1,6 @@
 package com.likethesalad.placeholder.modules.resolveStrings.resolver
 
-import com.likethesalad.placeholder.modules.common.Constants
+import com.likethesalad.android.templates.common.tasks.templates.TemplatesConstants
 
 class TemplateContainerFinder(private val templateNames: List<String>) {
 
@@ -22,6 +22,6 @@ class TemplateContainerFinder(private val templateNames: List<String>) {
     fun getTemplateNamesFrom(text: String): List<String> {
         val matches = templatesPattern.findAll(text).toList().map { it.value }
 
-        return matches.toSet().map { Constants.PLACEHOLDER_REGEX.matchEntire(it)!!.groupValues[1] }
+        return matches.toSet().map { TemplatesConstants.PLACEHOLDER_REGEX.matchEntire(it)!!.groupValues[1] }
     }
 }

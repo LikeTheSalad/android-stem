@@ -46,18 +46,24 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Pro
         stringsLocatorExtension = project.extensions.getByType(AndroidResourceLocatorExtension::class.java)
         val placeholderTasksCreator = AppInjector.getPlaceholderTasksCreator()
         val commonResourcesEntryPointFactory = AppInjector.getCommonResourcesEntryPointFactory()
-        val templateResourcesEntryPoint = AppInjector.getTemplateResourcesEntryPoint()
+        val templateResourcesEntryPointFactory = AppInjector.getTemplateResourcesEntryPointFactory()
 
         val typeCommon = PlaceholderTasksCreator.RESOURCE_TYPE_COMMON
         val typeTemplate = PlaceholderTasksCreator.RESOURCE_TYPE_TEMPLATE
         val creationListener = TypeLocatorCreationListener(setOf(typeCommon, typeTemplate), placeholderTasksCreator)
 
+        val commonSourceConfigurationCreator = stringsLocatorExtension.getCommonSourceConfigurationCreator()
+
         stringsLocatorExtension.registerLocator(
             typeCommon,
-            commonResourcesEntryPointFactory.create(stringsLocatorExtension.getCommonSourceConfigurationCreator()),
+            commonResourcesEntryPointFactory.create(commonSourceConfigurationCreator),
             creationListener
         )
-        stringsLocatorExtension.registerLocator(typeTemplate, templateResourcesEntryPoint, creationListener)
+        stringsLocatorExtension.registerLocator(
+            typeTemplate,
+            templateResourcesEntryPointFactory.create(commonSourceConfigurationCreator),
+            creationListener
+        )
 
         checkForDeprecatedConfigs()
     }

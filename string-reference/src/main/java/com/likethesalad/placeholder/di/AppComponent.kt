@@ -11,5 +11,5 @@ import javax.inject.Singleton
 interface AppComponent {
     fun placeholderTasksCreator(): PlaceholderTasksCreator
     fun commonResourcesEntryPointFactory(): CommonResourcesEntryPoint.Factory
-    fun templateResourcesEntryPointFactory(): TemplateResourcesEntryPoint
+    fun templateResourcesEntryPointFactory(): TemplateResourcesEntryPoint.Factory
 }
