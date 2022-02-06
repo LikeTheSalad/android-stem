@@ -1,6 +1,6 @@
 package com.likethesalad.placeholder.modules.templateStrings
 
-import com.likethesalad.android.templates.common.tasks.templates.TemplatesConstants
+import com.likethesalad.android.templates.common.utils.CommonConstants
 import com.likethesalad.android.templates.common.tasks.templates.data.TemplateItem
 import com.likethesalad.android.templates.common.tasks.templates.data.TemplateItemsSerializer
 import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
@@ -80,7 +80,7 @@ class GatherTemplatesAction @AssistedInject constructor(
         templates: List<StringAndroidResource>
     ): Map<String, String> {
         val stringsMap = stringResourcesToMap(strings)
-        val placeholders = templates.map { TemplatesConstants.PLACEHOLDER_REGEX.findAll(it.stringValue()) }
+        val placeholders = templates.map { CommonConstants.PLACEHOLDER_REGEX.findAll(it.stringValue()) }
             .flatMap { it.toList().map { m -> m.groupValues[1] } }.toSet()
 
         val placeholdersResolved = mutableMapOf<String, String>()

@@ -1,6 +1,6 @@
 package com.likethesalad.android.templates.common.tasks.templates.action
 
-import com.likethesalad.android.templates.common.tasks.templates.TemplatesConstants
+import com.likethesalad.android.templates.common.utils.CommonConstants
 import com.likethesalad.android.templates.common.tasks.templates.data.TemplateItem
 import com.likethesalad.android.templates.common.tasks.templates.data.TemplateItemsSerializer
 import com.likethesalad.tools.resource.api.android.data.AndroidResourceType
@@ -33,7 +33,7 @@ class TemplatesIdentifierAction constructor(
 
     private fun filterTemplates(stringResources: List<StringAndroidResource>): List<StringAndroidResource> {
         return stringResources.filter { stringResource ->
-            TemplatesConstants.PLACEHOLDER_REGEX.containsMatchIn(stringResource.stringValue())
+            CommonConstants.PLACEHOLDER_REGEX.containsMatchIn(stringResource.stringValue())
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.likethesalad.placeholder.modules.resolveStrings.resolver
 
-import com.likethesalad.android.templates.common.tasks.templates.TemplatesConstants
+import com.likethesalad.android.templates.common.utils.CommonConstants
 import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
 import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
 import javax.inject.Inject
@@ -80,7 +80,7 @@ class TemplateResolver @Inject constructor(private val recursiveLevelDetector: R
     private fun resolve(template: String, values: Map<String, String>): String {
         var resolvedString = template
         val occurrences =
-            TemplatesConstants.PLACEHOLDER_REGEX.findAll(template).toList().map { it.groupValues[1] }.toSet()
+            CommonConstants.PLACEHOLDER_REGEX.findAll(template).toList().map { it.groupValues[1] }.toSet()
         for (it in occurrences) {
             resolvedString = resolvedString.replace("\${$it}", values.getValue(it))
         }
