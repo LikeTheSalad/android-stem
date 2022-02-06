@@ -1,8 +1,8 @@
-package com.likethesalad.android.templates.common.tasks.templates.action
+package com.likethesalad.android.templates.common.tasks.identifier.action
 
 import com.likethesalad.android.templates.common.utils.CommonConstants
-import com.likethesalad.android.templates.common.tasks.templates.data.TemplateItem
-import com.likethesalad.android.templates.common.tasks.templates.data.TemplateItemsSerializer
+import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItem
+import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer
 import com.likethesalad.tools.resource.api.android.data.AndroidResourceType
 import com.likethesalad.tools.resource.api.android.environment.Language
 import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource

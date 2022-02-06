@@ -1,7 +1,7 @@
 package com.likethesalad.placeholder.utils
 
-import com.likethesalad.android.templates.common.tasks.templates.TemplatesIdentifierTask
-import com.likethesalad.android.templates.common.tasks.templates.data.TemplateItemsSerializer
+import com.likethesalad.android.templates.common.tasks.identifier.TemplatesIdentifierTask
+import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer
 import com.likethesalad.placeholder.ResolvePlaceholdersPlugin
 import com.likethesalad.placeholder.configuration.ResolvePlaceholderConfiguration
 import com.likethesalad.placeholder.locator.listener.TypeLocatorCreationListener

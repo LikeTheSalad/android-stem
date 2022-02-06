@@ -1,6 +1,8 @@
 package com.likethesalad.android.templates.common.tasks.templates.data
 
 import com.google.common.truth.Truth
+import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItem
+import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer
 import org.junit.Test
 
 class TemplateItemsSerializerTest {

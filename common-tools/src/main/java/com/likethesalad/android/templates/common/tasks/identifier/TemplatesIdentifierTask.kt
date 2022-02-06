@@ -1,7 +1,7 @@
-package com.likethesalad.android.templates.common.tasks.templates
+package com.likethesalad.android.templates.common.tasks.identifier
 
-import com.likethesalad.android.templates.common.tasks.templates.action.TemplatesIdentifierAction
-import com.likethesalad.android.templates.common.tasks.templates.data.TemplateItemsSerializer
+import com.likethesalad.android.templates.common.tasks.identifier.action.TemplatesIdentifierAction
+import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer
 import com.likethesalad.tools.resource.locator.android.extension.configuration.data.ResourcesProvider
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty

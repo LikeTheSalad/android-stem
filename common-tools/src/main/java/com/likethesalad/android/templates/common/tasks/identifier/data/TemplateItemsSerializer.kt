@@ -1,4 +1,4 @@
-package com.likethesalad.android.templates.common.tasks.templates.data
+package com.likethesalad.android.templates.common.tasks.identifier.data
 
 import javax.inject.Inject
 import javax.inject.Singleton
