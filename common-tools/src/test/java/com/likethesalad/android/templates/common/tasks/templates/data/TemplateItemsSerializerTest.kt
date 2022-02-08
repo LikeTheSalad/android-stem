@@ -42,4 +42,11 @@ class TemplateItemsSerializerTest {
             TemplateItem("template1", "dimen")
         )
     }
+
+    @Test
+    fun `Get empty list when deserializing empty string`() {
+        val result = templateItemsSerializer.deserialize("")
+
+        Truth.assertThat(result).isEmpty()
+    }
 }

@@ -17,7 +17,13 @@ class TemplateItemsSerializer @Inject constructor() {
     }
 
     fun deserialize(string: String): List<TemplateItem> {
-        return string.split(LIST_SEPARATOR)
+        val separatedItems = string.split(LIST_SEPARATOR).filter { it.isNotEmpty() }
+
+        if (separatedItems.isEmpty()) {
+            return emptyList()
+        }
+
+        return separatedItems
             .map { stringToTemplateItem(it) }
     }
 
