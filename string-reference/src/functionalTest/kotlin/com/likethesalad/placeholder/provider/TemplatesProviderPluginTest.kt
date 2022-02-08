@@ -1,8 +1,12 @@
 package com.likethesalad.placeholder.provider
 
 import com.google.common.truth.Truth
+import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItem
+import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer
 import com.likethesalad.android.templates.provider.api.TemplatesProvider
+import com.likethesalad.android_templates.provider.plugin.generated.BuildConfig
 import com.likethesalad.tools.functional.testing.utils.TestAssetsProvider
+import com.likethesalad.tools.plugin.metadata.consumer.PluginMetadataProvider
 import net.lingala.zip4j.ZipFile
 import org.junit.Test
 import java.io.File
@@ -23,6 +27,21 @@ class TemplatesProviderPluginTest : BaseGradleTest() {
         val jarFile = extractJar(aarFile)
         val templateProviders = extractProviders(jarFile)
         Truth.assertThat(templateProviders.size).isEqualTo(1)
+        val provider = templateProviders.first()
+        Truth.assertThat(provider.getId()).isEqualTo("basic")
+        Truth.assertThat(provider.getPluginVersion()).isEqualTo(getProviderVersion())
+        assertTemplatesContainExactly(
+            provider,
+            TemplateItem("someTemplate", "string")
+        )
+    }
+
+    private fun assertTemplatesContainExactly(
+        provider: TemplatesProvider,
+        vararg templateItems: TemplateItem
+    ) {
+        val templates = TemplateItemsSerializer().deserialize(provider.getTemplates())
+        Truth.assertThat(templates).containsExactly(*templateItems)
     }
 
     private fun extractProviders(jarFile: File): List<TemplatesProvider> {
@@ -51,5 +70,9 @@ class TemplatesProviderPluginTest : BaseGradleTest() {
 
     override fun getSourceDir(name: String): File {
         return inputAssetsRoot.getAssetFile(name)
+    }
+
+    private fun getProviderVersion(): String {
+        return PluginMetadataProvider.getInstance(BuildConfig.METADATA_PROPERTIES_ID).provide().version
     }
 }
