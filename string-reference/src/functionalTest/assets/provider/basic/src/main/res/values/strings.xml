@@ -1,1 +1,4 @@
-<string name="someString">Some value</string>
+<resources>
+    <string name="someString">Some value</string>
+    <string name="someTemplate">Some template holding ${someString}</string>
+</resources>
