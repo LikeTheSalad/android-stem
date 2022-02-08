@@ -44,6 +44,7 @@ class CheckOutputsTest : AndroidProjectTest() {
         val result1 = buildProject(commandList, inOutDirName)
         verifyResultContainsText(
             result1, """
+            > Task :basic-repeated:templatesDebugIdentifier
             > Task :basic-repeated:gatherDebugStringTemplates
             > Task :basic-repeated:resolveDebugPlaceholders
         """.trimIndent()
@@ -57,6 +58,7 @@ class CheckOutputsTest : AndroidProjectTest() {
         verifyVariantResults(variantNames, inOutDirName, inOutDirName)
         verifyResultContainsText(
             result2, """
+            > Task :basic-repeated:templatesDebugIdentifier UP-TO-DATE
             > Task :basic-repeated:gatherDebugStringTemplates UP-TO-DATE
             > Task :basic-repeated:resolveDebugPlaceholders UP-TO-DATE
         """.trimIndent()
@@ -77,6 +79,7 @@ class CheckOutputsTest : AndroidProjectTest() {
         val result1 = buildProject(commandList, inOutDirName)
         verifyResultContainsText(
             result1, """
+            > Task :$inOutDirName:templatesDebugIdentifier
             > Task :$inOutDirName:gatherDebugStringTemplates
             > Task :$inOutDirName:resolveDebugPlaceholders
         """.trimIndent()
@@ -98,6 +101,7 @@ class CheckOutputsTest : AndroidProjectTest() {
         verifyVariantResults(variantNames, inOutDirName, dirName2)
         verifyResultContainsText(
             result2, """
+            > Task :$inOutDirName:templatesDebugIdentifier
             > Task :$inOutDirName:gatherDebugStringTemplates
             > Task :$inOutDirName:resolveDebugPlaceholders
         """.trimIndent()

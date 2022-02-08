@@ -21,7 +21,7 @@ open class TemplatesIdentifierTask @Inject constructor(private val args: Args) :
     val outputFile: RegularFileProperty = project.objects.fileProperty()
 
     init {
-        outputFile.set(project.layout.buildDirectory.file("intermediates/incremental/$name"))
+        outputFile.set(project.layout.buildDirectory.file("intermediates/incremental/$name/templateNames"))
     }
 
     @TaskAction
