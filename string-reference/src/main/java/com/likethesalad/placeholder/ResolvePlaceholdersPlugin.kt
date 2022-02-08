@@ -10,10 +10,9 @@ import com.likethesalad.placeholder.providers.ProjectDirsProvider
 import com.likethesalad.placeholder.providers.TaskContainerProvider
 import com.likethesalad.placeholder.providers.TaskProvider
 import com.likethesalad.placeholder.utils.PlaceholderTasksCreator
+import com.likethesalad.tools.android.plugin.base.AndroidToolsPluginConsumer
 import com.likethesalad.tools.android.plugin.data.AndroidExtension
-import com.likethesalad.tools.android.plugin.extension.AndroidToolsPluginExtension
 import com.likethesalad.tools.resource.locator.android.extension.AndroidResourceLocatorExtension
-import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.logging.LogLevel
@@ -21,7 +20,7 @@ import org.gradle.api.tasks.TaskContainer
 import java.io.File
 
 @Suppress("UnstableApiUsage")
-class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, ProjectDirsProvider,
+class ResolvePlaceholdersPlugin : AndroidToolsPluginConsumer(), AndroidExtensionProvider, ProjectDirsProvider,
     TaskProvider, TaskContainerProvider, PluginExtensionProvider, LocatorExtensionProvider {
 
     companion object {
@@ -35,13 +34,14 @@ class ResolvePlaceholdersPlugin : Plugin<Project>, AndroidExtensionProvider, Pro
     private lateinit var stringsLocatorExtension: AndroidResourceLocatorExtension
 
     override fun apply(project: Project) {
+        super.apply(project)
         if (!project.plugins.hasPlugin("com.android.application")) {
             throw IllegalStateException("The strings placeholder resolver can only be applied to Android Application projects")
         }
         this.project = project
         AppInjector.init(this)
         project.plugins.apply(StringResourceLocatorPlugin::class.java)
-        androidExtension = project.extensions.getByType(AndroidToolsPluginExtension::class.java).androidExtension
+        androidExtension = androidTools.androidExtension
         extension = project.extensions.create(EXTENSION_NAME, PlaceholderExtension::class.java)
         stringsLocatorExtension = project.extensions.getByType(AndroidResourceLocatorExtension::class.java)
         val placeholderTasksCreator = AppInjector.getPlaceholderTasksCreator()
