@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">Library name</string>
     <string name="library_value">Some value from the library</string>
+    <string name="library_template">A template from the library that uses the app name: ${app_name}</string>
 </resources>

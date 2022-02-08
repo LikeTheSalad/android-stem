@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="welcome_message">Welcome to ${app_name} on demo variant</string>
-</resources>
