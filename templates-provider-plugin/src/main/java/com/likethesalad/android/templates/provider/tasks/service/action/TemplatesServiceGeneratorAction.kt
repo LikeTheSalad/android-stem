@@ -30,7 +30,8 @@ class TemplatesServiceGeneratorAction @AssistedInject constructor(
     interface Factory {
         fun create(
             projectName: String,
-            outputDir: File
+            outputDir: File,
+            rawResources: ResourcesProvider
         ): TemplatesServiceGeneratorAction
     }
 

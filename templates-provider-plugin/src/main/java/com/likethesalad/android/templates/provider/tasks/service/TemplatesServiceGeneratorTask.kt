@@ -24,7 +24,7 @@ open class TemplatesServiceGeneratorTask @Inject constructor(private val args: A
 
     @TaskAction
     fun execute() {
-        val action = args.actionFactory.create(project.name, outputDir.get().asFile)
+        val action = args.actionFactory.create(project.name, outputDir.get().asFile, args.rawResources)
         action.execute()
     }
 
