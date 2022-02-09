@@ -1,7 +1,6 @@
 package com.likethesalad.android.templates.common.tasks.identifier
 
 import com.likethesalad.android.templates.common.tasks.identifier.action.TemplatesIdentifierAction
-import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer
 import com.likethesalad.tools.resource.locator.android.extension.configuration.data.ResourcesProvider
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
@@ -26,16 +25,15 @@ open class TemplatesIdentifierTask @Inject constructor(private val args: Args) :
 
     @TaskAction
     fun execute() {
-        val action = TemplatesIdentifierAction(
+        val action = args.actionFactory.create(
             args.localResources,
-            outputFile.get().asFile,
-            args.templateItemsSerializer
+            outputFile.get().asFile
         )
         action.execute()
     }
 
     data class Args(
         val localResources: ResourcesProvider,
-        val templateItemsSerializer: TemplateItemsSerializer
+        val actionFactory: TemplatesIdentifierAction.Factory
     )
 }
