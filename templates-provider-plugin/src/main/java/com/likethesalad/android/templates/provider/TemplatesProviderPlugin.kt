@@ -1,16 +1,16 @@
 package com.likethesalad.android.templates.provider
 
+import com.likethesalad.android.templates.common.plugins.BaseTemplatesProcessorPlugin
 import com.likethesalad.android.templates.provider.di.TemplatesProviderComponent
 import com.likethesalad.android.templates.provider.di.TemplatesProviderInjector
 import com.likethesalad.android.templates.provider.tasks.metainf.ServiceMetaInfGeneratorTask
 import com.likethesalad.android.templates.provider.tasks.service.TemplatesServiceGeneratorTask
-import com.likethesalad.tools.android.plugin.base.AndroidToolsPluginConsumer
 import com.likethesalad.tools.android.plugin.data.AndroidVariantData
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskProvider
 
 @Suppress("UnstableApiUsage")
-class TemplatesProviderPlugin : AndroidToolsPluginConsumer() {
+class TemplatesProviderPlugin : BaseTemplatesProcessorPlugin() {
 
     companion object {
         private const val SERVICE_GENERATOR_TASK_TEMPLATE = "templateProvider%sGenerateService"
@@ -62,4 +62,8 @@ class TemplatesProviderPlugin : AndroidToolsPluginConsumer() {
             ServiceMetaInfGeneratorTask::class.java
         )
     }
+
+    override fun getValidProjectPluginName(): String = "com.android.library"
+
+    override fun getDisplayName(): String = "Templates provider"
 }
