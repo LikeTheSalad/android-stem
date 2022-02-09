@@ -71,7 +71,7 @@ class TemplatesServiceGeneratorAction @AssistedInject constructor(
     private fun getTemplates(): String {
         val stringResources = getRawStringResources()
         val templateIds = stringResources.map {
-            TemplateItem(it.name(), it.stringValue())
+            TemplateItem(it.name(), it.type().getName())
         }
 
         return templateItemsSerializer.serialize(templateIds)
