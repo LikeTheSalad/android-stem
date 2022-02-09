@@ -1,5 +1,6 @@
 package com.likethesalad.placeholder.modules.common.models
 
+import com.likethesalad.android.templates.common.tasks.identifier.TemplatesIdentifierTask
 import com.likethesalad.tools.android.plugin.data.AndroidVariantData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -13,7 +14,6 @@ class TasksNamesModel @AssistedInject constructor(@Assisted androidVariantData: 
     }
 
     companion object {
-        private const val TEMPLATES_IDENTIFIER_NAME_FORMAT = "templates%sIdentifier"
         private const val GATHER_STRING_TEMPLATES_NAME_FORMAT = "gather%sStringTemplates"
         private const val RESOLVE_PLACEHOLDERS_NAME_FORMAT = "resolve%sPlaceholders"
         private const val ANDROID_MERGE_RESOURCES_TASK_NAME_FORMAT = "merge%sResources"
@@ -22,7 +22,7 @@ class TasksNamesModel @AssistedInject constructor(@Assisted androidVariantData: 
     private val capitalizedBuildVariant = androidVariantData.getVariantName().capitalize()
 
     val templatesIdentifierName: String by lazy {
-        TEMPLATES_IDENTIFIER_NAME_FORMAT.format(capitalizedBuildVariant)
+        TemplatesIdentifierTask.generateTaskName(capitalizedBuildVariant)
     }
 
     val gatherStringTemplatesName: String by lazy {

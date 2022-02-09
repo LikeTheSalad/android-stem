@@ -18,7 +18,11 @@ class TemplatesProviderPlugin : BaseTemplatesProcessorPlugin() {
         stringsLocatorExtension.registerLocator(
             "template",
             TemplateResourcesProviderEntryPoint(stringsLocatorExtension.getCommonSourceConfigurationCreator()),
-            TemplatesProviderTaskCreator(project, component.templatesServiceGeneratorActionFactory())
+            TemplatesProviderTaskCreator(
+                project,
+                component.templatesServiceGeneratorActionFactory(),
+                component.templatesIdentifierActionFactory()
+            )
         )
     }
 

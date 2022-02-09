@@ -1,14 +1,8 @@
 package com.likethesalad.android.templates.provider.tasks.service.action
 
-import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItem
-import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer
 import com.likethesalad.android.templates.provider.api.TemplatesProvider
 import com.likethesalad.android.templates.provider.tasks.service.action.helpers.ClassNameGenerator
 import com.likethesalad.tools.plugin.metadata.api.PluginMetadata
-import com.likethesalad.tools.resource.api.android.data.AndroidResourceType
-import com.likethesalad.tools.resource.api.android.environment.Language
-import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
-import com.likethesalad.tools.resource.locator.android.extension.configuration.data.ResourcesProvider
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -20,10 +14,9 @@ import java.io.File
 class TemplatesServiceGeneratorAction @AssistedInject constructor(
     @Assisted private val projectName: String,
     @Assisted private val outputDir: File,
-    @Assisted private val rawResources: ResourcesProvider,
+    @Assisted("templates") private val templatesInfoFile: File,
     private val classNameGenerator: ClassNameGenerator,
-    private val pluginMetadata: PluginMetadata,
-    private val templateItemsSerializer: TemplateItemsSerializer
+    private val pluginMetadata: PluginMetadata
 ) {
 
     @AssistedFactory
@@ -31,7 +24,7 @@ class TemplatesServiceGeneratorAction @AssistedInject constructor(
         fun create(
             projectName: String,
             outputDir: File,
-            rawResources: ResourcesProvider
+            @Assisted("templates") templatesInfoFile: File
         ): TemplatesServiceGeneratorAction
     }
 
@@ -69,19 +62,6 @@ class TemplatesServiceGeneratorAction @AssistedInject constructor(
     }
 
     private fun getTemplates(): String {
-        val stringResources = getRawStringResources()
-        val templateIds = stringResources.map {
-            TemplateItem(it.name(), it.type().getName())
-        }
-
-        return templateItemsSerializer.serialize(templateIds)
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    private fun getRawStringResources(): List<StringAndroidResource> {
-        val collection = rawResources.resources.getMergedResourcesForLanguage(Language.Default)
-        val stringResources = collection.getResourcesByType(AndroidResourceType.StringType)
-
-        return stringResources as List<StringAndroidResource>
+        return templatesInfoFile.readText()
     }
 }

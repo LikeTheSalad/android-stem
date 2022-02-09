@@ -13,6 +13,14 @@ import javax.inject.Inject
 @Suppress("UnstableApiUsage")
 open class TemplatesIdentifierTask @Inject constructor(private val args: Args) : DefaultTask() {
 
+    companion object {
+        private const val TEMPLATES_IDENTIFIER_NAME_FORMAT = "templates%sIdentifier"
+
+        fun generateTaskName(variantName: String): String {
+            return TEMPLATES_IDENTIFIER_NAME_FORMAT.format(variantName.capitalize())
+        }
+    }
+
     @InputDirectory
     val localResourcesDir: DirectoryProperty = project.objects.directoryProperty()
 

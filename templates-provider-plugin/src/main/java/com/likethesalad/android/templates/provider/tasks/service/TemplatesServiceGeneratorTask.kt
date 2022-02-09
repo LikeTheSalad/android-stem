@@ -1,10 +1,10 @@
 package com.likethesalad.android.templates.provider.tasks.service
 
 import com.likethesalad.android.templates.provider.tasks.service.action.TemplatesServiceGeneratorAction
-import com.likethesalad.tools.resource.locator.android.extension.configuration.data.ResourcesProvider
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
-import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import javax.inject.Inject
@@ -12,8 +12,8 @@ import javax.inject.Inject
 @Suppress("UnstableApiUsage")
 open class TemplatesServiceGeneratorTask @Inject constructor(private val args: Args) : DefaultTask() {
 
-    @InputDirectory
-    val rawResourcesDir: DirectoryProperty = project.objects.directoryProperty()
+    @InputFile
+    val templateIdsFile: RegularFileProperty = project.objects.fileProperty()
 
     @OutputDirectory
     val outputDir: DirectoryProperty = project.objects.directoryProperty()
@@ -24,12 +24,11 @@ open class TemplatesServiceGeneratorTask @Inject constructor(private val args: A
 
     @TaskAction
     fun execute() {
-        val action = args.actionFactory.create(project.name, outputDir.get().asFile, args.rawResources)
+        val action = args.actionFactory.create(project.name, outputDir.get().asFile, templateIdsFile.get().asFile)
         action.execute()
     }
 
     data class Args(
-        val actionFactory: TemplatesServiceGeneratorAction.Factory,
-        val rawResources: ResourcesProvider
+        val actionFactory: TemplatesServiceGeneratorAction.Factory
     )
 }
