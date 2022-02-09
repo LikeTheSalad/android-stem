@@ -1,6 +1,6 @@
 package com.likethesalad.placeholder
 
-import com.likethesalad.android.string.resources.locator.StringResourceLocatorPlugin
+import com.likethesalad.android.templates.common.plugins.BaseTemplatesProcessorPlugin
 import com.likethesalad.placeholder.di.AppInjector
 import com.likethesalad.placeholder.locator.listener.TypeLocatorCreationListener
 import com.likethesalad.placeholder.providers.AndroidExtensionProvider
@@ -10,7 +10,6 @@ import com.likethesalad.placeholder.providers.ProjectDirsProvider
 import com.likethesalad.placeholder.providers.TaskContainerProvider
 import com.likethesalad.placeholder.providers.TaskProvider
 import com.likethesalad.placeholder.utils.PlaceholderTasksCreator
-import com.likethesalad.tools.android.plugin.base.AndroidToolsPluginConsumer
 import com.likethesalad.tools.android.plugin.data.AndroidExtension
 import com.likethesalad.tools.resource.locator.android.extension.AndroidResourceLocatorExtension
 import org.gradle.api.Project
@@ -20,7 +19,7 @@ import org.gradle.api.tasks.TaskContainer
 import java.io.File
 
 @Suppress("UnstableApiUsage")
-class ResolvePlaceholdersPlugin : AndroidToolsPluginConsumer(), AndroidExtensionProvider, ProjectDirsProvider,
+class ResolvePlaceholdersPlugin : BaseTemplatesProcessorPlugin(), AndroidExtensionProvider, ProjectDirsProvider,
     TaskProvider, TaskContainerProvider, PluginExtensionProvider, LocatorExtensionProvider {
 
     companion object {
@@ -31,19 +30,13 @@ class ResolvePlaceholdersPlugin : AndroidToolsPluginConsumer(), AndroidExtension
     private lateinit var project: Project
     private lateinit var extension: PlaceholderExtension
     private lateinit var androidExtension: AndroidExtension
-    private lateinit var stringsLocatorExtension: AndroidResourceLocatorExtension
 
     override fun apply(project: Project) {
         super.apply(project)
-        if (!project.plugins.hasPlugin("com.android.application")) {
-            throw IllegalStateException("The strings placeholder resolver can only be applied to Android Application projects")
-        }
         this.project = project
         AppInjector.init(this)
-        project.plugins.apply(StringResourceLocatorPlugin::class.java)
         androidExtension = androidTools.androidExtension
         extension = project.extensions.create(EXTENSION_NAME, PlaceholderExtension::class.java)
-        stringsLocatorExtension = project.extensions.getByType(AndroidResourceLocatorExtension::class.java)
         val placeholderTasksCreator = AppInjector.getPlaceholderTasksCreator()
         val commonResourcesEntryPointFactory = AppInjector.getCommonResourcesEntryPointFactory()
         val templateResourcesEntryPointFactory = AppInjector.getTemplateResourcesEntryPointFactory()
@@ -67,6 +60,10 @@ class ResolvePlaceholdersPlugin : AndroidToolsPluginConsumer(), AndroidExtension
 
         checkForDeprecatedConfigs()
     }
+
+    override fun getValidProjectPluginName() = "com.android.application"
+
+    override fun getDisplayName(): String = "strings placeholder resolver"
 
     private fun checkForDeprecatedConfigs() {
         if (extension.keepResolvedFiles != null) {
