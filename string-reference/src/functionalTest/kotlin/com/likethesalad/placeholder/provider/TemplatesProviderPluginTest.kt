@@ -60,6 +60,21 @@ class TemplatesProviderPluginTest : BaseGradleTest() {
         )
     }
 
+    @Test
+    fun `Take only templates from main strings`() {
+        val projectName = "multi-language"
+        setUpProject(projectName)
+
+        runCommand("assembleDebug")
+
+        val provider = getTemplatesProvider("debug")
+        commonVerification(provider, projectName)
+        assertTemplatesContainExactly(
+            provider,
+            TemplateItem("someTemplate", "string")
+        )
+    }
+
     private fun getTemplatesProvider(variantName: String): TemplatesProvider {
         val aarFile = getAarFile(variantName)
         val jarFile = extractJar(aarFile)
