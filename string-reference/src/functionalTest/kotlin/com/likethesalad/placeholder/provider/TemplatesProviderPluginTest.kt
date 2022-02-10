@@ -10,11 +10,8 @@ import com.likethesalad.tools.plugin.metadata.consumer.PluginMetadataProvider
 import net.lingala.zip4j.ZipFile
 import org.junit.Test
 import java.io.File
-import java.lang.reflect.Method
-import java.net.URL
 import java.net.URLClassLoader
 import java.util.ServiceLoader
-import java.util.jar.JarFile
 
 class TemplatesProviderPluginTest : BaseGradleTest() {
 
@@ -66,11 +63,9 @@ class TemplatesProviderPluginTest : BaseGradleTest() {
     private fun getTemplatesProvider(variantName: String): TemplatesProvider {
         val aarFile = getAarFile(variantName)
         val jarFile = extractJar(aarFile)
-        val url = jarFile.toURI().toURL()
-        val templateProviders = extractProviders(url)
+        val templateProviders = extractProviders(jarFile)
         Truth.assertThat(templateProviders.size).isEqualTo(1)
         val provider = templateProviders.first()
-        closeJar(url)
         jarFile.delete()
         return provider
     }
@@ -88,14 +83,14 @@ class TemplatesProviderPluginTest : BaseGradleTest() {
         Truth.assertThat(templates).containsExactly(*templateItems)
     }
 
-    private fun extractProviders(url: URL): List<TemplatesProvider> {
-        val classLoader = getClassLoader(url)
+    private fun extractProviders(jarFile: File): List<TemplatesProvider> {
+        val classLoader = getClassLoader(jarFile)
         val serviceLoader = ServiceLoader.load(TemplatesProvider::class.java, classLoader)
         return serviceLoader.toList()
     }
 
-    private fun getClassLoader(url: URL): ClassLoader {
-        val urls = arrayOf(url)
+    private fun getClassLoader(jarFile: File): ClassLoader {
+        val urls = arrayOf(jarFile.toURI().toURL())
         return URLClassLoader(urls, javaClass.classLoader)
     }
 
@@ -118,26 +113,5 @@ class TemplatesProviderPluginTest : BaseGradleTest() {
 
     private fun getProviderVersion(): String {
         return PluginMetadataProvider.getInstance(BuildConfig.METADATA_PROPERTIES_ID).provide().version
-    }
-
-    private fun closeJar(url: URL?) {
-        // JarFileFactory jarFactory = JarFileFactory.getInstance();
-        val jarFactoryClazz = Class.forName("sun.net.www.protocol.jar.JarFileFactory")
-        val getInstance: Method = jarFactoryClazz.getMethod("getInstance")
-        getInstance.isAccessible = true
-        val jarFactory: Any = getInstance.invoke(jarFactoryClazz)
-
-        // JarFile jarFile = jarFactory.get(url);
-        val get: Method = jarFactoryClazz.getMethod("get", URL::class.java)
-        get.isAccessible = true
-        val jarFile: Any = get.invoke(jarFactory, url)
-
-        // jarFactory.close(jarFile);
-        val close: Method = jarFactoryClazz.getMethod("close", JarFile::class.java)
-        close.isAccessible = true
-        close.invoke(jarFactory, jarFile)
-
-        // jarFile.close();
-        (jarFile as JarFile).close()
     }
 }
