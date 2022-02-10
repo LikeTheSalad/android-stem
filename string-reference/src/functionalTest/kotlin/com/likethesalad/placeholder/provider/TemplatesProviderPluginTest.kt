@@ -10,8 +10,11 @@ import com.likethesalad.tools.plugin.metadata.consumer.PluginMetadataProvider
 import net.lingala.zip4j.ZipFile
 import org.junit.Test
 import java.io.File
+import java.lang.reflect.Method
+import java.net.URL
 import java.net.URLClassLoader
 import java.util.ServiceLoader
+import java.util.jar.JarFile
 
 class TemplatesProviderPluginTest : BaseGradleTest() {
 
@@ -23,17 +26,58 @@ class TemplatesProviderPluginTest : BaseGradleTest() {
 
         runCommand("assembleDebug")
 
-        val aarFile = getAarFile("debug")
-        val jarFile = extractJar(aarFile)
-        val templateProviders = extractProviders(jarFile)
-        Truth.assertThat(templateProviders.size).isEqualTo(1)
-        val provider = templateProviders.first()
-        Truth.assertThat(provider.getId()).isEqualTo("basic")
-        Truth.assertThat(provider.getPluginVersion()).isEqualTo(getProviderVersion())
+        val provider = getTemplatesProvider("debug")
+        commonVerification(provider, "basic")
         assertTemplatesContainExactly(
             provider,
             TemplateItem("someTemplate", "string")
         )
+    }
+
+    @Test
+    fun `Keep only one service per project after re-running it`() {
+        val projectName = "basic"
+        setUpProject(projectName)
+
+        runCommand("assembleDebug")
+
+        val provider = getTemplatesProvider("debug")
+        commonVerification(provider, projectName)
+        assertTemplatesContainExactly(
+            provider,
+            TemplateItem("someTemplate", "string")
+        )
+
+        // Second run
+        removeTestAssetsFromProject()
+        setUpProject(projectName, "basic-modified")
+
+        runCommand("assembleDebug")
+
+        val provider2 = getTemplatesProvider("debug")
+        commonVerification(provider2, projectName)
+        assertTemplatesContainExactly(
+            provider2,
+            TemplateItem("someTemplate", "string"),
+            TemplateItem("someTemplate2", "string")
+        )
+    }
+
+    private fun getTemplatesProvider(variantName: String): TemplatesProvider {
+        val aarFile = getAarFile(variantName)
+        val jarFile = extractJar(aarFile)
+        val url = jarFile.toURI().toURL()
+        val templateProviders = extractProviders(url)
+        Truth.assertThat(templateProviders.size).isEqualTo(1)
+        val provider = templateProviders.first()
+        closeJar(url)
+        jarFile.delete()
+        return provider
+    }
+
+    private fun commonVerification(provider: TemplatesProvider, projectId: String) {
+        Truth.assertThat(provider.getId()).isEqualTo(projectId)
+        Truth.assertThat(provider.getPluginVersion()).isEqualTo(getProviderVersion())
     }
 
     private fun assertTemplatesContainExactly(
@@ -44,14 +88,14 @@ class TemplatesProviderPluginTest : BaseGradleTest() {
         Truth.assertThat(templates).containsExactly(*templateItems)
     }
 
-    private fun extractProviders(jarFile: File): List<TemplatesProvider> {
-        val classLoader = getClassLoader(jarFile)
+    private fun extractProviders(url: URL): List<TemplatesProvider> {
+        val classLoader = getClassLoader(url)
         val serviceLoader = ServiceLoader.load(TemplatesProvider::class.java, classLoader)
         return serviceLoader.toList()
     }
 
-    private fun getClassLoader(jarFile: File): ClassLoader {
-        val urls = arrayOf(jarFile.toURI().toURL())
+    private fun getClassLoader(url: URL): ClassLoader {
+        val urls = arrayOf(url)
         return URLClassLoader(urls, javaClass.classLoader)
     }
 
@@ -74,5 +118,26 @@ class TemplatesProviderPluginTest : BaseGradleTest() {
 
     private fun getProviderVersion(): String {
         return PluginMetadataProvider.getInstance(BuildConfig.METADATA_PROPERTIES_ID).provide().version
+    }
+
+    private fun closeJar(url: URL?) {
+        // JarFileFactory jarFactory = JarFileFactory.getInstance();
+        val jarFactoryClazz = Class.forName("sun.net.www.protocol.jar.JarFileFactory")
+        val getInstance: Method = jarFactoryClazz.getMethod("getInstance")
+        getInstance.isAccessible = true
+        val jarFactory: Any = getInstance.invoke(jarFactoryClazz)
+
+        // JarFile jarFile = jarFactory.get(url);
+        val get: Method = jarFactoryClazz.getMethod("get", URL::class.java)
+        get.isAccessible = true
+        val jarFile: Any = get.invoke(jarFactory, url)
+
+        // jarFactory.close(jarFile);
+        val close: Method = jarFactoryClazz.getMethod("close", JarFile::class.java)
+        close.isAccessible = true
+        close.invoke(jarFactory, jarFile)
+
+        // jarFile.close();
+        (jarFile as JarFile).close()
     }
 }

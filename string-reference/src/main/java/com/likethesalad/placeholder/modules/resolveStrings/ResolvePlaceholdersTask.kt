@@ -1,7 +1,7 @@
 package com.likethesalad.placeholder.modules.resolveStrings
 
 import com.likethesalad.placeholder.modules.resolveStrings.data.ResolvePlaceholdersArgs
-import com.likethesalad.placeholder.utils.DirectoryUtils
+import com.likethesalad.android.templates.common.utils.DirectoryUtils
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.tasks.InputDirectory

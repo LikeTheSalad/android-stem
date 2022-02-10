@@ -1,5 +1,6 @@
 package com.likethesalad.android.templates.provider.tasks.service
 
+import com.likethesalad.android.templates.common.utils.DirectoryUtils
 import com.likethesalad.android.templates.provider.tasks.service.action.TemplatesServiceGeneratorAction
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
@@ -24,7 +25,9 @@ open class TemplatesServiceGeneratorTask @Inject constructor(private val args: A
 
     @TaskAction
     fun execute() {
-        val action = args.actionFactory.create(project.name, outputDir.get().asFile, templateIdsFile.get().asFile)
+        val outputDir = outputDir.get().asFile
+        DirectoryUtils.clearIfNeeded(outputDir)
+        val action = args.actionFactory.create(project.name, outputDir, templateIdsFile.get().asFile)
         action.execute()
     }
 

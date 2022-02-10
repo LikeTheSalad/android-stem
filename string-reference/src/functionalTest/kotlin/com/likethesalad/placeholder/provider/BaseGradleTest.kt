@@ -12,6 +12,7 @@ abstract class BaseGradleTest {
     val testFolder = TemporaryFolder()
 
     protected lateinit var projectDir: File
+    private val filesMovedFromTestAssets = mutableListOf<File>()
 
     protected fun runCommand(commandStr: String): BuildResult {
         val arguments = getCommandArgs(commandStr).plus(listOf("--info", "--stacktrace"))
@@ -28,10 +29,18 @@ abstract class BaseGradleTest {
         return commandStr.split(Regex("[\\s\\t]+"))
     }
 
-    protected fun setUpProject(projectName: String) {
-        val sourceProjectDir = getSourceDir(projectName)
-        projectDir = testFolder.newFolder(projectName)
+    protected fun setUpProject(projectName: String, sourceDirName: String = projectName) {
+        val sourceProjectDir = getSourceDir(sourceDirName)
+        projectDir = getFolder(projectName)
         moveFilesToDir(sourceProjectDir.listFiles(), projectDir)
+    }
+
+    private fun getFolder(projectName: String): File {
+        val folder = File(testFolder.root, projectName)
+        if (folder.exists()) {
+            return folder
+        }
+        return testFolder.newFolder(projectName)
     }
 
     private fun moveFilesToDir(files: Array<File>?, destinationDir: File) {
@@ -40,8 +49,15 @@ abstract class BaseGradleTest {
                 moveFilesToDir(it.listFiles(), File(destinationDir, it.name))
             } else {
                 val target = File(destinationDir, it.name)
+                filesMovedFromTestAssets.add(target)
                 it.copyTo(target)
             }
+        }
+    }
+
+    protected fun removeTestAssetsFromProject() {
+        filesMovedFromTestAssets.forEach {
+            it.delete()
         }
     }
 

@@ -1,7 +1,7 @@
 package com.likethesalad.placeholder.modules.templateStrings
 
 import com.likethesalad.placeholder.modules.templateStrings.data.GatherTemplatesArgs
-import com.likethesalad.placeholder.utils.DirectoryUtils
+import com.likethesalad.android.templates.common.utils.DirectoryUtils
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty

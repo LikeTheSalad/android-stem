@@ -1,4 +1,4 @@
-package com.likethesalad.placeholder.utils
+package com.likethesalad.android.templates.common.utils
 
 import java.io.File
 
