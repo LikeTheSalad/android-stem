@@ -5,13 +5,12 @@ import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateI
 import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer
 import com.likethesalad.android.templates.provider.api.TemplatesProvider
 import com.likethesalad.android_templates.provider.plugin.generated.BuildConfig
+import com.likethesalad.placeholder.utils.TemplatesProviderLoader
 import com.likethesalad.tools.functional.testing.utils.TestAssetsProvider
 import com.likethesalad.tools.plugin.metadata.consumer.PluginMetadataProvider
 import net.lingala.zip4j.ZipFile
 import org.junit.Test
 import java.io.File
-import java.net.URLClassLoader
-import java.util.ServiceLoader
 
 class TemplatesProviderPluginTest : BaseGradleTest() {
 
@@ -99,14 +98,7 @@ class TemplatesProviderPluginTest : BaseGradleTest() {
     }
 
     private fun extractProviders(jarFile: File): List<TemplatesProvider> {
-        val classLoader = getClassLoader(jarFile)
-        val serviceLoader = ServiceLoader.load(TemplatesProvider::class.java, classLoader)
-        return serviceLoader.toList()
-    }
-
-    private fun getClassLoader(jarFile: File): ClassLoader {
-        val urls = arrayOf(jarFile.toURI().toURL())
-        return URLClassLoader(urls, javaClass.classLoader)
+        return TemplatesProviderLoader.load(listOf(jarFile))
     }
 
     private fun extractJar(aarFile: File): File {

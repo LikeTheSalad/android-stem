@@ -2,7 +2,6 @@ package com.likethesalad.android.templates.provider.locator.listener
 
 import com.likethesalad.android.templates.common.tasks.identifier.TemplatesIdentifierTask
 import com.likethesalad.android.templates.common.tasks.identifier.action.TemplatesIdentifierAction
-import com.likethesalad.android.templates.provider.tasks.metainf.ServiceMetaInfGeneratorTask
 import com.likethesalad.android.templates.provider.tasks.service.TemplatesServiceGeneratorTask
 import com.likethesalad.android.templates.provider.tasks.service.action.TemplatesServiceGeneratorAction
 import com.likethesalad.tools.android.plugin.data.AndroidVariantData
@@ -31,19 +30,12 @@ class TemplatesProviderTaskCreator(
     private fun attachTasks(variant: AndroidVariantData, resourcesInfo: ResourceLocatorInfo) {
         val serviceGenerator = createServiceGeneratorTask(project, variant.getVariantName())
         val templatesIdentifier = createTemplatesIdentifierTask(variant.getVariantName(), resourcesInfo)
-        val metaInfGenerator = createMetaInfGeneratorTask(project, variant.getVariantName())
 
         serviceGenerator.configure {
             it.templateIdsFile.set(templatesIdentifier.flatMap { templatesIdentifier -> templatesIdentifier.outputFile })
         }
-        metaInfGenerator.configure { task ->
-            task.generatedClasspath.set(serviceGenerator.flatMap { it.outputDir })
-        }
 
         variant.registerGeneratedJavaBinaries(serviceGenerator, serviceGenerator.flatMap { it.outputDir })
-        variant.getProcessJavaResourcesProvider().configure {
-            it.from(metaInfGenerator)
-        }
     }
 
     private fun createServiceGeneratorTask(
@@ -54,16 +46,6 @@ class TemplatesProviderTaskCreator(
             SERVICE_GENERATOR_TASK_TEMPLATE.format(variantName.capitalize()),
             TemplatesServiceGeneratorTask::class.java,
             TemplatesServiceGeneratorTask.Args(taskServiceGeneratorActionFactory)
-        )
-    }
-
-    private fun createMetaInfGeneratorTask(
-        project: Project,
-        variantName: String
-    ): TaskProvider<ServiceMetaInfGeneratorTask> {
-        return project.tasks.register(
-            META_INF_GENERATOR_TASK_TEMPLATE.format(variantName.capitalize()),
-            ServiceMetaInfGeneratorTask::class.java
         )
     }
 
