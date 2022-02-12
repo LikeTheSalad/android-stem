@@ -7,11 +7,11 @@ import com.likethesalad.tools.functional.testing.AndroidProjectTest
 import com.likethesalad.tools.functional.testing.app.content.ValuesResFoldersPlacer
 import com.likethesalad.tools.functional.testing.app.layout.AndroidAppProjectDescriptor
 import com.likethesalad.tools.functional.testing.app.layout.AndroidBlockItem
-import com.likethesalad.tools.functional.testing.app.layout.GradleBlockItem
 import com.likethesalad.tools.functional.testing.app.layout.items.DefaultConfigAndroidBlockItem
 import com.likethesalad.tools.functional.testing.app.layout.items.FlavorAndroidBlockItem
 import com.likethesalad.tools.functional.testing.layout.AndroidLibProjectDescriptor
 import com.likethesalad.tools.functional.testing.layout.ProjectDescriptor
+import com.likethesalad.tools.functional.testing.layout.items.GradleBlockItem
 import com.likethesalad.tools.functional.testing.utils.TestAssetsProvider
 import org.gradle.testkit.runner.BuildResult
 import org.junit.Test
@@ -157,6 +157,8 @@ class CheckOutputsTest : AndroidProjectTest() {
         // Create library
         val libName = "mylibrary"
         val libDescriptor = AndroidLibProjectDescriptor(libName)
+        libDescriptor.pluginsBlock.addPluginId("resource.templates.provider")
+        libDescriptor.dependenciesBlock.addDependency("implementation 'com.android.support:recyclerview-v7:28.0.0'")
         libDescriptor.projectDirectoryBuilder
             .register(ValuesResFoldersPlacer(getInputTestAsset(libName)))
         createProject(libDescriptor)

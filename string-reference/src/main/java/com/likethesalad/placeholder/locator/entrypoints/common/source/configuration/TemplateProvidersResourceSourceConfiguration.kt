@@ -8,6 +8,7 @@ import com.likethesalad.tools.resource.locator.android.extension.configuration.s
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import org.gradle.api.file.FileCollection
 import java.io.File
 
 class TemplateProvidersResourceSourceConfiguration @AssistedInject constructor(
@@ -33,8 +34,8 @@ class TemplateProvidersResourceSourceConfiguration @AssistedInject constructor(
         return filterTemplateProviderResDirs(allResDirs)
     }
 
-    override fun getSourceFiles(): Iterable<File> {
-        return super.getSourceFiles().plus(templatesProviderJarsFinder.allJarFiles)
+    override fun getLibrariesResourcesFileCollection(): FileCollection {
+        return super.getLibrariesResourcesFileCollection().plus(templatesProviderJarsFinder.allJarFiles)
     }
 
     private fun filterTemplateProviderResDirs(allResDirs: List<ResDir>): List<ResDir> {
@@ -50,11 +51,12 @@ class TemplateProvidersResourceSourceConfiguration @AssistedInject constructor(
         val externalJars = templatesProviderJars.minus(localJars)
 
         val resDirPatterns = getLocalResDirPatterns(localJars) + getExternalResDirPatterns(externalJars)
+
         return Regex(resDirPatterns.joinToString("|"))
     }
 
     private fun getExternalResDirPatterns(externalJars: List<File>): List<String> {
-        val fileNames = externalJars.map { it.nameWithoutExtension.substringBeforeLast("-runtime") }
+        val fileNames = externalJars.map { it.name.substringBeforeLast("-runtime") }.distinct()
         return fileNames.map { ".+/${it}/res\$" }
     }
 

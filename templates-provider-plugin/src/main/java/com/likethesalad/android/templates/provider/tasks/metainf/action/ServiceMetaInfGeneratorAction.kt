@@ -1,7 +1,7 @@
 package com.likethesalad.android.templates.provider.tasks.metainf.action
 
+import com.likethesalad.android.templates.common.utils.CommonConstants
 import com.likethesalad.android.templates.provider.api.TemplatesProvider
-import com.likethesalad.android.templates.provider.tasks.service.action.helpers.ClassNameGenerator
 import java.io.File
 
 class ServiceMetaInfGeneratorAction(
@@ -35,6 +35,6 @@ class ServiceMetaInfGeneratorAction(
     }
 
     private fun convertToClassFullName(classFile: File): String {
-        return "${ClassNameGenerator.PACKAGE_NAME}.${classFile.nameWithoutExtension}"
+        return "${CommonConstants.PROVIDER_PACKAGE_NAME}.${classFile.nameWithoutExtension}"
     }
 }

@@ -1,6 +1,6 @@
 package com.likethesalad.placeholder.data
 
-import com.likethesalad.tools.functional.testing.app.layout.GradleBlockItem
+import com.likethesalad.tools.functional.testing.layout.items.GradleBlockItem
 
 class ResolverPluginConfigBlock(private val resolverPluginConfig: ResolverPluginConfig) : GradleBlockItem {
 

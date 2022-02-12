@@ -17,7 +17,7 @@ class TemplatesProviderJarsFinder(val allJarFiles: FileCollection) {
         val scanResult = scanJars(allJars)
 
         return scanResult.use {
-            scanResult.getClassesImplementing(TemplatesProvider::class.java).map { info ->
+            scanResult.getClassesImplementing(TemplatesProvider::class.java.name).map { info ->
                 info.classpathElementFile
             }
         }
