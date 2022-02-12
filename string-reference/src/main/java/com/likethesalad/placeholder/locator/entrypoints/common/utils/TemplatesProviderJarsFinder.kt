@@ -14,7 +14,7 @@ class TemplatesProviderJarsFinder(val allJarFiles: FileCollection) {
     }
 
     private fun findTemplateProviderJars(allJars: Set<File>): List<File> {
-        val scanResult = scanJars(allJars)
+        val scanResult = scanJars(allJars) ?: return emptyList()
 
         return scanResult.use {
             scanResult.getClassesImplementing(TemplatesProvider::class.java.name).map { info ->
@@ -23,7 +23,10 @@ class TemplatesProviderJarsFinder(val allJarFiles: FileCollection) {
         }
     }
 
-    private fun scanJars(jarFiles: Set<File>): ScanResult {
+    private fun scanJars(jarFiles: Set<File>): ScanResult? {
+        if (jarFiles.isEmpty()) {
+            return null
+        }
         return ClassGraph()
             .acceptPackages(PROVIDER_PACKAGE_NAME)
             .overrideClasspath(jarFiles)

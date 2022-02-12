@@ -39,14 +39,20 @@ class TemplateProvidersResourceSourceConfiguration @AssistedInject constructor(
     }
 
     private fun filterTemplateProviderResDirs(allResDirs: List<ResDir>): List<ResDir> {
-        val templatesProvidersPattern = createTemplatesProviderPathStartPattern()
+        val templatesProvidersPattern = createTemplatesProviderPathStartPattern() ?: return emptyList()
+
         return allResDirs.filter {
             templatesProvidersPattern.matches(it.dir.absolutePath)
         }
     }
 
-    private fun createTemplatesProviderPathStartPattern(): Regex {
+    private fun createTemplatesProviderPathStartPattern(): Regex? {
         val templatesProviderJars = templatesProviderJarsFinder.templateProviderJars
+
+        if (templatesProviderJars.isEmpty()) {
+            return null
+        }
+
         val localJars = filterLocalJars(templatesProviderJars)
         val externalJars = templatesProviderJars.minus(localJars)
 
