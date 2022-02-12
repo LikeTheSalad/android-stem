@@ -3,10 +3,10 @@ package com.likethesalad.placeholder.modules.templateStrings
 import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItem
 import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer
 import com.likethesalad.android.templates.common.utils.CommonConstants
-import com.likethesalad.android.templates.provider.api.TemplatesProvider
 import com.likethesalad.placeholder.locator.entrypoints.common.utils.TemplatesProviderJarsFinder
 import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
+import com.likethesalad.placeholder.utils.TemplatesProviderLoader
 import com.likethesalad.tools.resource.api.android.data.AndroidResourceType
 import com.likethesalad.tools.resource.api.android.environment.Language
 import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
@@ -15,10 +15,7 @@ import com.likethesalad.tools.resource.locator.android.extension.configuration.d
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.github.classgraph.ClassGraph
-import io.github.classgraph.ScanResult
 import java.io.File
-import java.net.URLClassLoader
 
 class GatherTemplatesAction @AssistedInject constructor(
     @Assisted private val androidVariantContext: AndroidVariantContext,
@@ -65,29 +62,8 @@ class GatherTemplatesAction @AssistedInject constructor(
     }
 
     private fun getTemplateIdsFromDependencies(): List<TemplateItem> {
-        val templatesProviders = extractTemplatesProviders(templatesProviderJarsFinder.templateProviderJars)
+        val templatesProviders = TemplatesProviderLoader.load(templatesProviderJarsFinder.templateProviderJars)
         return templatesProviders.map { templateItemsSerializer.deserialize(it.getTemplates()) }.flatten()
-    }
-
-    private fun extractTemplatesProviders(jars: List<File>): List<TemplatesProvider> {
-        val scanResult = scanJars(jars.toSet())
-        return scanResult.use { result ->
-            result.getClassesImplementing(TemplatesProvider::class.java).loadClasses().map {
-                it.newInstance()
-            }
-        } as List<TemplatesProvider>
-    }
-
-    private fun scanJars(jarFiles: Set<File>): ScanResult {
-        return ClassGraph()
-            .acceptPackages(CommonConstants.PROVIDER_PACKAGE_NAME)
-            .overrideClassLoaders(createLocalClassloader(jarFiles))
-            .scan()
-    }
-
-    private fun createLocalClassloader(jarFiles: Set<File>): ClassLoader {
-        val urls = jarFiles.map { it.toURI().toURL() }
-        return URLClassLoader(urls.toTypedArray(), javaClass.classLoader)
     }
 
     private fun gatheredStringsToTemplateStrings(
