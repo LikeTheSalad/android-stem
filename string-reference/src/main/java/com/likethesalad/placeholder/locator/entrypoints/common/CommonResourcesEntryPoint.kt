@@ -1,6 +1,8 @@
 package com.likethesalad.placeholder.locator.entrypoints.common
 
-import com.likethesalad.placeholder.locator.entrypoints.common.source.ResolvedXmlSourceFilterRule
+import com.likethesalad.placeholder.locator.entrypoints.common.source.configuration.TemplateProvidersResourceSourceConfiguration
+import com.likethesalad.placeholder.locator.entrypoints.common.source.rules.ResolvedXmlSourceFilterRule
+import com.likethesalad.placeholder.locator.entrypoints.common.utils.TemplatesProviderJarsFinder
 import com.likethesalad.tools.resource.collector.android.data.variant.VariantTree
 import com.likethesalad.tools.resource.locator.android.extension.configuration.ResourceLocatorEntryPoint
 import com.likethesalad.tools.resource.locator.android.extension.configuration.data.ResourceLocatorInfo
@@ -12,7 +14,8 @@ import dagger.assisted.AssistedInject
 
 class CommonResourcesEntryPoint @AssistedInject constructor(
     @Assisted private val commonSourceConfigurationCreator: CommonSourceConfigurationCreator,
-    private val resolvedXmlSourceFilterRule: ResolvedXmlSourceFilterRule
+    private val resolvedXmlSourceFilterRule: ResolvedXmlSourceFilterRule,
+    private val templateProvidersResourceSourceConfigurationFactory: TemplateProvidersResourceSourceConfiguration.Factory
 ) : ResourceLocatorEntryPoint {
 
     @AssistedFactory
@@ -22,11 +25,12 @@ class CommonResourcesEntryPoint @AssistedInject constructor(
 
     override fun getResourceSourceConfigurations(variantTree: VariantTree): List<ResourceSourceConfiguration> {
         val rawConfiguration = commonSourceConfigurationCreator.createAndroidRawConfiguration(variantTree)
+        val templatesProviderJarsFinder = TemplatesProviderJarsFinder(variantTree.androidVariantData.getLibrariesJars())
         addExclusionRules(rawConfiguration)
         return listOf(
             rawConfiguration,
             commonSourceConfigurationCreator.createAndroidGeneratedResConfiguration(variantTree),
-            commonSourceConfigurationCreator.createAndroidAndroidLibrariesConfiguration(variantTree)
+            templateProvidersResourceSourceConfigurationFactory.create(variantTree, templatesProviderJarsFinder)
         )
     }
 

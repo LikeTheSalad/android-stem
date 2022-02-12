@@ -1,6 +1,6 @@
 package com.likethesalad.placeholder.locator.entrypoints.templates
 
-import com.likethesalad.placeholder.locator.entrypoints.common.source.ResolvedXmlSourceFilterRule
+import com.likethesalad.placeholder.locator.entrypoints.common.source.rules.ResolvedXmlSourceFilterRule
 import com.likethesalad.tools.resource.collector.android.data.variant.VariantTree
 import com.likethesalad.tools.resource.locator.android.extension.configuration.ResourceLocatorEntryPoint
 import com.likethesalad.tools.resource.locator.android.extension.configuration.data.ResourceLocatorInfo

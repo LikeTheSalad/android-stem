@@ -82,6 +82,10 @@ class ResolvePlaceholdersPlugin : BaseTemplatesProcessorPlugin(), AndroidExtensi
         return project.projectDir
     }
 
+    override fun getRootProjectDir(): File {
+        return project.rootDir
+    }
+
     override fun getBuildDir(): File {
         return project.buildDir
     }

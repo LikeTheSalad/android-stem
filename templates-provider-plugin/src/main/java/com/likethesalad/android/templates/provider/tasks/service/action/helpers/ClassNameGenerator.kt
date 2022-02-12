@@ -1,5 +1,6 @@
 package com.likethesalad.android.templates.provider.tasks.service.action.helpers
 
+import com.likethesalad.android.templates.common.utils.CommonConstants.PROVIDER_PACKAGE_NAME
 import java.util.Base64
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -11,7 +12,6 @@ class ClassNameGenerator @Inject constructor(
 ) {
 
     companion object {
-        const val PACKAGE_NAME = "com.likethesalad.android.templates.provider.implementation"
         private const val NAME_PREFIX = "A_"
         private val BASE64_TO_JAVA_IDENTIFIER = mapOf(
             "=" to "_",
@@ -25,7 +25,7 @@ class ClassNameGenerator @Inject constructor(
         val encoded = base64Encoder.encodeToString(raw.toByteArray())
         val curated = clearBase64NonAlphanumerics(encoded)
 
-        return "$PACKAGE_NAME.$NAME_PREFIX$curated"
+        return "$PROVIDER_PACKAGE_NAME.$NAME_PREFIX$curated"
     }
 
     private fun clearBase64NonAlphanumerics(encoded: String): String {

@@ -1,4 +1,4 @@
-package com.likethesalad.placeholder.locator.entrypoints.common.source
+package com.likethesalad.placeholder.locator.entrypoints.common.source.rules
 
 import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantBuildResolvedDir
 import com.likethesalad.placeholder.providers.ProjectDirsProvider
