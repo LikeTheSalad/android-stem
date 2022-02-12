@@ -12,6 +12,7 @@ import com.likethesalad.tools.functional.testing.app.layout.items.FlavorAndroidB
 import com.likethesalad.tools.functional.testing.layout.AndroidLibProjectDescriptor
 import com.likethesalad.tools.functional.testing.layout.ProjectDescriptor
 import com.likethesalad.tools.functional.testing.layout.items.GradleBlockItem
+import com.likethesalad.tools.functional.testing.layout.items.impl.plugins.GradlePluginDeclaration
 import com.likethesalad.tools.functional.testing.utils.TestAssetsProvider
 import org.gradle.testkit.runner.BuildResult
 import org.junit.Test
@@ -21,6 +22,8 @@ class CheckOutputsTest : AndroidProjectTest() {
 
     companion object {
         private const val PLUGIN_ID = "placeholder-resolver"
+        private const val ANDROID_PLUGIN_VERSION = "7.1.0"
+        private const val GRADLE_VERSION = "7.2"
     }
 
     private val inputAssetsProvider = TestAssetsProvider("functionalTest", "inputs")
@@ -156,8 +159,8 @@ class CheckOutputsTest : AndroidProjectTest() {
     fun `verify app that takes resources from libraries`() {
         // Create library
         val libName = "mylibrary"
-        val libDescriptor = AndroidLibProjectDescriptor(libName)
-        libDescriptor.pluginsBlock.addPluginId("resource.templates.provider")
+        val libDescriptor = AndroidLibProjectDescriptor(libName, ANDROID_PLUGIN_VERSION)
+        libDescriptor.pluginsBlock.addPlugin(GradlePluginDeclaration("resource.templates.provider"))
         libDescriptor.dependenciesBlock.addDependency("implementation 'com.android.support:recyclerview-v7:28.0.0'")
         libDescriptor.projectDirectoryBuilder
             .register(ValuesResFoldersPlacer(getInputTestAsset(libName)))
@@ -196,7 +199,9 @@ class CheckOutputsTest : AndroidProjectTest() {
     ): AndroidAppProjectDescriptor {
         val blockItems = mutableListOf<GradleBlockItem>(ResolverPluginConfigBlock(resolverPluginConfig))
         blockItems.addAll(androidBlockItems)
-        return AndroidAppProjectDescriptor(inOutDirName, PLUGIN_ID, blockItems, dependencies)
+        val descriptor = AndroidAppProjectDescriptor(inOutDirName, ANDROID_PLUGIN_VERSION, blockItems, dependencies)
+        descriptor.pluginsBlock.addPlugin(GradlePluginDeclaration(PLUGIN_ID))
+        return descriptor
     }
 
     private fun verifyVariantResults(variantNames: List<String>, projectName: String, outputDirName: String) {
@@ -273,5 +278,5 @@ class CheckOutputsTest : AndroidProjectTest() {
         Truth.assertThat(fileWithSameName.readText()).isEqualTo(file.readText())
     }
 
-    override fun getGradleVersion(): String = "6.5"
+    override fun getGradleVersion(): String = GRADLE_VERSION
 }
