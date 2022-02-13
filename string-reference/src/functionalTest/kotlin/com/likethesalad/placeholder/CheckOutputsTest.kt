@@ -35,6 +35,65 @@ class CheckOutputsTest : AndroidProjectTest() {
     }
 
     @Test
+    fun `verify nothing happens when there are no templates available`() {
+        val variantNames = listOf("debug")
+        val inOutDirName = "no-templates-available"
+        val descriptor = createAndroidAppProjectDescriptor(inOutDirName)
+        val inputDir = getInputTestAsset(inOutDirName)
+        descriptor.projectDirectoryBuilder.register(ValuesResFoldersPlacer(inputDir))
+        val commandList = variantNamesToResolveCommands(variantNames)
+        createProject(descriptor)
+
+        val result = buildProject(commandList, inOutDirName)
+
+        verifyResultContainsText(
+            result, """
+            > Task :$inOutDirName:templatesDebugIdentifier
+            > Task :$inOutDirName:gatherDebugStringTemplates
+            > Task :$inOutDirName:resolveDebugPlaceholders NO-SOURCE
+        """.trimIndent()
+        )
+        verifyEmptyOutput(inOutDirName, "debug")
+    }
+
+    @Test
+    fun `verify prevous outputs cleared when templates are deleted afterwards`() {
+        val variantNames = listOf("debug")
+        val projectName = "no-templates-available-afterwards"
+        val withTemplatesDir = "basic"
+        val descriptor = createAndroidAppProjectDescriptor(projectName)
+        val inputDir = getInputTestAsset(withTemplatesDir)
+        val resFoldersPlacer = ValuesResFoldersPlacer(inputDir)
+        descriptor.projectDirectoryBuilder.register(resFoldersPlacer)
+        val commandList = variantNamesToResolveCommands(variantNames)
+        createProject(descriptor)
+
+        val result = buildProject(commandList, projectName)
+
+        verifyResultContainsText(
+            result, """
+            > Task :$projectName:templatesDebugIdentifier
+            > Task :$projectName:gatherDebugStringTemplates
+            > Task :$projectName:resolveDebugPlaceholders
+        """.trimIndent()
+        )
+        verifyVariantResults(variantNames, projectName, withTemplatesDir)
+
+        // After removing templates:
+        val withoutTemplatesDir = "no-templates-available"
+        val descriptor2 = createAndroidAppProjectDescriptor(projectName)
+        val inputDir2 = getInputTestAsset(withoutTemplatesDir)
+        descriptor2.projectDirectoryBuilder.register(ValuesResFoldersPlacer(inputDir2))
+        val projectDir = getProjectDir(projectName)
+        resFoldersPlacer.getFilesCreated().forEach { it.delete() }
+        descriptor2.projectDirectoryBuilder.buildDirectory(projectDir)
+
+        buildProject(commandList, projectName)
+
+        verifyEmptyOutput(projectName, "debug")
+    }
+
+    @Test
     fun `verify basic app outputs are generated only once if the inputs don't change`() {
         val variantNames = listOf("debug")
         val inOutDirName = "basic-repeated"
@@ -238,6 +297,12 @@ class CheckOutputsTest : AndroidProjectTest() {
         val resultDir = File(projectDir, "build/generated/resolved/$variantName")
         Truth.assertThat(resultDir.exists()).isTrue()
         verifyDirsContentsAreEqual(getExpectedOutputDir(outputDirName, variantName), resultDir)
+    }
+
+    private fun verifyEmptyOutput(projectName: String, variantName: String) {
+        val projectDir = getProjectDir(projectName)
+        val resultDir = File(projectDir, "build/generated/resolved/$variantName")
+        Truth.assertThat(resultDir.exists()).isFalse()
     }
 
     private fun getExpectedOutputDir(inOutDirName: String, variantName: String): File {

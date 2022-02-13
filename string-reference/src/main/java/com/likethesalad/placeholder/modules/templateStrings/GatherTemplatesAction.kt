@@ -38,6 +38,11 @@ class GatherTemplatesAction @AssistedInject constructor(
     ) {
         val commonHandler = commonResources.resources
         val templateIds = getTemplateIds(templateIdsContainer)
+
+        if (templateIds.isEmpty()) {
+            return
+        }
+
         for (language in commonHandler.listLanguages()) {
             val allResources = asStringResources(commonHandler.getMergedResourcesForLanguage(language))
             val templates = getTemplatesFromResources(templateIds, allResources)
