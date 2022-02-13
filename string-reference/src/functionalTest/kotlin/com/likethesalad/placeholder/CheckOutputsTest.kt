@@ -241,7 +241,7 @@ class CheckOutputsTest : AndroidProjectTest() {
     @Test
     fun `verify app that takes resources from multiple libraries`() {
         // Create library
-        val libName1 = "mylibrary"
+        val libName1 = "my_first_library"
         val libName2 = "my_other_library"
         setUpLibraryModule(libName1)
         setUpLibraryModule(libName2)
