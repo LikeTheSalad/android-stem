@@ -235,6 +235,17 @@ class CheckOutputsTest : AndroidProjectTest() {
     }
 
     @Test
+    fun `verify app that takes resources from an aar file`() {
+        val appName = "with-aar-file-library"
+        val appDescriptor = createAndroidAppProjectDescriptor(
+            appName,
+            dependencies = listOf("implementation fileTree(dir: 'src/libs', include: ['*.aar'])")
+        )
+
+        runInputOutputComparisonTest(appName, listOf("debug"), appDescriptor)
+    }
+
+    @Test
     fun `verify app that takes resources from multiple libraries`() {
         // Create library
         val libName1 = "my_first_library"
