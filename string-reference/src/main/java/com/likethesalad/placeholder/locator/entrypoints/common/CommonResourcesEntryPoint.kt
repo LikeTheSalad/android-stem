@@ -5,7 +5,6 @@ import com.likethesalad.placeholder.locator.entrypoints.common.source.rules.Reso
 import com.likethesalad.placeholder.locator.entrypoints.common.utils.TemplatesProviderJarsFinder
 import com.likethesalad.tools.resource.collector.android.data.variant.VariantTree
 import com.likethesalad.tools.resource.locator.android.extension.configuration.ResourceLocatorEntryPoint
-import com.likethesalad.tools.resource.locator.android.extension.configuration.data.ResourceLocatorInfo
 import com.likethesalad.tools.resource.locator.android.extension.configuration.source.ResourceSourceConfiguration
 import com.likethesalad.tools.resource.locator.android.extension.configuration.source.utils.CommonSourceConfigurationCreator
 import dagger.assisted.Assisted
@@ -32,10 +31,6 @@ class CommonResourcesEntryPoint @AssistedInject constructor(
             commonSourceConfigurationCreator.createAndroidGeneratedResConfiguration(variantTree),
             templateProvidersResourceSourceConfigurationFactory.create(variantTree, templatesProviderJarsFinder)
         )
-    }
-
-    override fun onLocatorCreated(variantTree: VariantTree, info: ResourceLocatorInfo) {
-        // No operation
     }
 
     private fun addExclusionRules(configuration: ResourceSourceConfiguration) {

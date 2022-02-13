@@ -3,7 +3,6 @@ package com.likethesalad.placeholder.locator.entrypoints.templates
 import com.likethesalad.placeholder.locator.entrypoints.common.source.rules.ResolvedXmlSourceFilterRule
 import com.likethesalad.tools.resource.collector.android.data.variant.VariantTree
 import com.likethesalad.tools.resource.locator.android.extension.configuration.ResourceLocatorEntryPoint
-import com.likethesalad.tools.resource.locator.android.extension.configuration.data.ResourceLocatorInfo
 import com.likethesalad.tools.resource.locator.android.extension.configuration.source.ResourceSourceConfiguration
 import com.likethesalad.tools.resource.locator.android.extension.configuration.source.utils.CommonSourceConfigurationCreator
 import dagger.assisted.Assisted
@@ -25,9 +24,5 @@ class TemplateResourcesEntryPoint @AssistedInject constructor(
         rawConfiguration.addFilterRule(resolvedXmlSourceFilterRule)
 
         return listOf(rawConfiguration)
-    }
-
-    override fun onLocatorCreated(variantTree: VariantTree, info: ResourceLocatorInfo) {
-        // No operation
     }
 }
