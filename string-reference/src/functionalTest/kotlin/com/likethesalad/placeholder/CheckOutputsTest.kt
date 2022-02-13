@@ -246,6 +246,29 @@ class CheckOutputsTest : AndroidProjectTest() {
     }
 
     @Test
+    fun `verify app that takes resources from both local and external libraries`() {
+        // Create library
+        val libName = "my_local_library"
+        val libDescriptor = AndroidLibProjectDescriptor(libName, ANDROID_PLUGIN_VERSION)
+        libDescriptor.pluginsBlock.addPlugin(GradlePluginDeclaration(PROVIDER_PLUGIN_ID))
+        libDescriptor.projectDirectoryBuilder
+            .register(ValuesResFoldersPlacer(getInputTestAsset(libName)))
+        createProject(libDescriptor)
+
+        // Set up app
+        val appName = "with-aar-and-local-libraries"
+        val appDescriptor = createAndroidAppProjectDescriptor(
+            appName,
+            dependencies = listOf(
+                "implementation fileTree(dir: 'src/libs', include: ['*.aar'])",
+                "implementation project(':$libName')"
+            )
+        )
+
+        runInputOutputComparisonTest(appName, listOf("debug"), appDescriptor)
+    }
+
+    @Test
     fun `verify app that takes resources from multiple libraries`() {
         // Create library
         val libName1 = "my_first_library"
