@@ -1,8 +1,6 @@
 package com.likethesalad.placeholder
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.data.ResolverPluginConfig
-import com.likethesalad.placeholder.data.ResolverPluginConfigBlock
 import com.likethesalad.tools.functional.testing.AndroidProjectTest
 import com.likethesalad.tools.functional.testing.app.content.ValuesResFoldersPlacer
 import com.likethesalad.tools.functional.testing.app.layout.AndroidAppProjectDescriptor
@@ -228,11 +226,9 @@ class CheckOutputsTest : AndroidProjectTest() {
 
         // Set up app
         val appName = "with-library"
-        val appConfig = ResolverPluginConfig(useDependenciesRes = true)
         val appDescriptor = createAndroidAppProjectDescriptor(
             appName,
-            dependencies = listOf("implementation project(':$libName')"),
-            resolverPluginConfig = appConfig
+            dependencies = listOf("implementation project(':$libName')")
         )
 
         runInputOutputComparisonTest(appName, listOf("debug"), appDescriptor)
@@ -248,14 +244,12 @@ class CheckOutputsTest : AndroidProjectTest() {
 
         // Set up app
         val appName = "with-multiple-libraries"
-        val appConfig = ResolverPluginConfig(useDependenciesRes = true)
         val appDescriptor = createAndroidAppProjectDescriptor(
             appName,
             dependencies = listOf(
                 "implementation project(':$libName1')",
                 "implementation project(':$libName2')"
-            ),
-            resolverPluginConfig = appConfig
+            )
         )
 
         runInputOutputComparisonTest(appName, listOf("debug"), appDescriptor)
@@ -285,10 +279,9 @@ class CheckOutputsTest : AndroidProjectTest() {
     private fun createAndroidAppProjectDescriptor(
         inOutDirName: String,
         androidBlockItems: List<AndroidBlockItem> = emptyList(),
-        dependencies: List<String> = emptyList(),
-        resolverPluginConfig: ResolverPluginConfig = ResolverPluginConfig()
+        dependencies: List<String> = emptyList()
     ): AndroidAppProjectDescriptor {
-        val blockItems = mutableListOf<GradleBlockItem>(ResolverPluginConfigBlock(resolverPluginConfig))
+        val blockItems = mutableListOf<GradleBlockItem>()
         blockItems.addAll(androidBlockItems)
         val descriptor = AndroidAppProjectDescriptor(inOutDirName, ANDROID_PLUGIN_VERSION, blockItems, dependencies)
         descriptor.pluginsBlock.addPlugin(GradlePluginDeclaration(RESOLVER_PLUGIN_ID))

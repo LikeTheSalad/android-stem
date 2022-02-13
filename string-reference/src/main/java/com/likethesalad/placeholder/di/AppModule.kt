@@ -2,7 +2,6 @@ package com.likethesalad.placeholder.di
 
 import com.likethesalad.placeholder.ResolvePlaceholdersPlugin
 import com.likethesalad.placeholder.providers.AndroidExtensionProvider
-import com.likethesalad.placeholder.providers.PluginExtensionProvider
 import com.likethesalad.placeholder.providers.ProjectDirsProvider
 import com.likethesalad.placeholder.providers.TaskContainerProvider
 import com.likethesalad.placeholder.providers.TaskProvider
@@ -35,12 +34,6 @@ class AppModule(private val resolvePlaceholdersPlugin: ResolvePlaceholdersPlugin
     @Provides
     @Singleton
     fun provideTaskContainerProvider(): TaskContainerProvider {
-        return resolvePlaceholdersPlugin
-    }
-
-    @Provides
-    @Singleton
-    fun providePluginExtensionProvider(): PluginExtensionProvider {
         return resolvePlaceholdersPlugin
     }
 
