@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="other_library_value">Some value from the other library</string>
+    <string name="other_library_template">Another template from a library that uses the app name: ${app_name}</string>
+</resources>

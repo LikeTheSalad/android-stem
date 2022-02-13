@@ -21,7 +21,8 @@ import java.io.File
 class CheckOutputsTest : AndroidProjectTest() {
 
     companion object {
-        private const val PLUGIN_ID = "placeholder-resolver"
+        private const val RESOLVER_PLUGIN_ID = "placeholder-resolver"
+        private const val PROVIDER_PLUGIN_ID = "resource.templates.provider"
         private const val ANDROID_PLUGIN_VERSION = "7.1.0"
         private const val GRADLE_VERSION = "7.2"
     }
@@ -215,11 +216,11 @@ class CheckOutputsTest : AndroidProjectTest() {
     }
 
     @Test
-    fun `verify app that takes resources from libraries`() {
+    fun `verify app that takes resources from a library`() {
         // Create library
         val libName = "mylibrary"
         val libDescriptor = AndroidLibProjectDescriptor(libName, ANDROID_PLUGIN_VERSION)
-        libDescriptor.pluginsBlock.addPlugin(GradlePluginDeclaration("resource.templates.provider"))
+        libDescriptor.pluginsBlock.addPlugin(GradlePluginDeclaration(PROVIDER_PLUGIN_ID))
         libDescriptor.dependenciesBlock.addDependency("implementation 'com.android.support:recyclerview-v7:28.0.0'")
         libDescriptor.projectDirectoryBuilder
             .register(ValuesResFoldersPlacer(getInputTestAsset(libName)))
@@ -235,6 +236,37 @@ class CheckOutputsTest : AndroidProjectTest() {
         )
 
         runInputOutputComparisonTest(appName, listOf("debug"), appDescriptor)
+    }
+
+    @Test
+    fun `verify app that takes resources from multiple libraries`() {
+        // Create library
+        val libName1 = "mylibrary"
+        val libName2 = "my_other_library"
+        setUpLibraryModule(libName1)
+        setUpLibraryModule(libName2)
+
+        // Set up app
+        val appName = "with-multiple-libraries"
+        val appConfig = ResolverPluginConfig(useDependenciesRes = true)
+        val appDescriptor = createAndroidAppProjectDescriptor(
+            appName,
+            dependencies = listOf(
+                "implementation project(':$libName1')",
+                "implementation project(':$libName2')"
+            ),
+            resolverPluginConfig = appConfig
+        )
+
+        runInputOutputComparisonTest(appName, listOf("debug"), appDescriptor)
+    }
+
+    private fun setUpLibraryModule(libName: String) {
+        val libDescriptor = AndroidLibProjectDescriptor(libName, ANDROID_PLUGIN_VERSION)
+        libDescriptor.pluginsBlock.addPlugin(GradlePluginDeclaration(PROVIDER_PLUGIN_ID))
+        libDescriptor.projectDirectoryBuilder
+            .register(ValuesResFoldersPlacer(getInputTestAsset(libName)))
+        createProject(libDescriptor)
     }
 
     private fun runInputOutputComparisonTest(
@@ -259,7 +291,7 @@ class CheckOutputsTest : AndroidProjectTest() {
         val blockItems = mutableListOf<GradleBlockItem>(ResolverPluginConfigBlock(resolverPluginConfig))
         blockItems.addAll(androidBlockItems)
         val descriptor = AndroidAppProjectDescriptor(inOutDirName, ANDROID_PLUGIN_VERSION, blockItems, dependencies)
-        descriptor.pluginsBlock.addPlugin(GradlePluginDeclaration(PLUGIN_ID))
+        descriptor.pluginsBlock.addPlugin(GradlePluginDeclaration(RESOLVER_PLUGIN_ID))
         return descriptor
     }
 
