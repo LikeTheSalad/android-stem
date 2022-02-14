@@ -2,7 +2,6 @@ package com.likethesalad.placeholder
 
 import com.google.common.truth.Truth
 import com.likethesalad.tools.functional.testing.AndroidProjectTest
-import com.likethesalad.tools.functional.testing.app.content.ValuesResFoldersPlacer
 import com.likethesalad.tools.functional.testing.app.layout.AndroidAppProjectDescriptor
 import com.likethesalad.tools.functional.testing.app.layout.AndroidBlockItem
 import com.likethesalad.tools.functional.testing.app.layout.items.DefaultConfigAndroidBlockItem
@@ -38,8 +37,6 @@ class CheckOutputsTest : AndroidProjectTest() {
         val variantNames = listOf("debug")
         val inOutDirName = "no-templates-available"
         val descriptor = createAndroidAppProjectDescriptor(inOutDirName)
-        val inputDir = getInputTestAsset(inOutDirName)
-        descriptor.projectDirectoryBuilder.register(ValuesResFoldersPlacer(inputDir))
         val commandList = variantNamesToResolveCommands(variantNames)
         createProject(descriptor)
 
@@ -60,10 +57,7 @@ class CheckOutputsTest : AndroidProjectTest() {
         val variantNames = listOf("debug")
         val projectName = "no-templates-available-afterwards"
         val withTemplatesDir = "basic"
-        val descriptor = createAndroidAppProjectDescriptor(projectName)
-        val inputDir = getInputTestAsset(withTemplatesDir)
-        val resFoldersPlacer = ValuesResFoldersPlacer(inputDir)
-        descriptor.projectDirectoryBuilder.register(resFoldersPlacer)
+        val descriptor = createAndroidAppProjectDescriptor(projectName, withTemplatesDir)
         val commandList = variantNamesToResolveCommands(variantNames)
         createProject(descriptor)
 
@@ -80,12 +74,10 @@ class CheckOutputsTest : AndroidProjectTest() {
 
         // After removing templates:
         val withoutTemplatesDir = "no-templates-available"
-        val descriptor2 = createAndroidAppProjectDescriptor(projectName)
-        val inputDir2 = getInputTestAsset(withoutTemplatesDir)
-        descriptor2.projectDirectoryBuilder.register(ValuesResFoldersPlacer(inputDir2))
+        val descriptor2 = createAndroidAppProjectDescriptor(projectName, withoutTemplatesDir)
         val projectDir = getProjectDir(projectName)
-        resFoldersPlacer.getFilesCreated().forEach { it.delete() }
-        descriptor2.projectDirectoryBuilder.buildDirectory(projectDir)
+        descriptor.projectDirBuilder.clearFilesCreated()
+        descriptor2.projectDirBuilder.buildDirectory(projectDir)
 
         buildProject(commandList, projectName)
 
@@ -97,8 +89,6 @@ class CheckOutputsTest : AndroidProjectTest() {
         val variantNames = listOf("debug")
         val inOutDirName = "basic-repeated"
         val descriptor = createAndroidAppProjectDescriptor(inOutDirName)
-        val inputDir = getInputTestAsset(inOutDirName)
-        descriptor.projectDirectoryBuilder.register(ValuesResFoldersPlacer(inputDir))
         val commandList = variantNamesToResolveCommands(variantNames)
 
         createProject(descriptor)
@@ -131,9 +121,6 @@ class CheckOutputsTest : AndroidProjectTest() {
         val variantNames = listOf("debug")
         val inOutDirName = "multi-languages-changed-before"
         val descriptor = createAndroidAppProjectDescriptor(inOutDirName)
-        val inputDir = getInputTestAsset(inOutDirName)
-        val resFoldersPlacer = ValuesResFoldersPlacer(inputDir)
-        descriptor.projectDirectoryBuilder.register(resFoldersPlacer)
         val commandList = variantNamesToResolveCommands(variantNames)
 
         createProject(descriptor)
@@ -150,12 +137,10 @@ class CheckOutputsTest : AndroidProjectTest() {
 
         // Second time
         val dirName2 = "multi-languages-changed-after"
-        val descriptor2 = createAndroidAppProjectDescriptor(inOutDirName)
-        val inputDir2 = getInputTestAsset(dirName2)
-        descriptor2.projectDirectoryBuilder.register(ValuesResFoldersPlacer(inputDir2))
+        val descriptor2 = createAndroidAppProjectDescriptor(inOutDirName, dirName2)
         val projectDir = getProjectDir(inOutDirName)
-        resFoldersPlacer.getFilesCreated().forEach { it.delete() }
-        descriptor2.projectDirectoryBuilder.buildDirectory(projectDir)
+        descriptor.projectDirBuilder.clearFilesCreated()
+        descriptor2.projectDirBuilder.buildDirectory(projectDir)
 
         val result2 = buildProject(commandList, inOutDirName)
 
@@ -182,7 +167,7 @@ class CheckOutputsTest : AndroidProjectTest() {
         val gradleStrings = mapOf("my_app_id" to "APP ID")
         val appDescriptor = createAndroidAppProjectDescriptor(
             appName,
-            listOf(DefaultConfigAndroidBlockItem(gradleStrings))
+            androidBlockItems = listOf(DefaultConfigAndroidBlockItem(gradleStrings))
         )
 
         runInputOutputComparisonTest(appName, listOf("debug"), appDescriptor)
@@ -198,7 +183,7 @@ class CheckOutputsTest : AndroidProjectTest() {
         flavors.add(FlavorAndroidBlockItem.FlavorDescriptor("environment", environmentFlavors))
         val flavoredDescriptor = createAndroidAppProjectDescriptor(
             inOutDirName,
-            listOf(FlavorAndroidBlockItem(flavors))
+            androidBlockItems = listOf(FlavorAndroidBlockItem(flavors))
         )
 
         runInputOutputComparisonTest(
@@ -217,11 +202,9 @@ class CheckOutputsTest : AndroidProjectTest() {
     fun `verify app that takes resources from a library`() {
         // Create library
         val libName = "mylibrary"
-        val libDescriptor = AndroidLibProjectDescriptor(libName, ANDROID_PLUGIN_VERSION)
+        val libDescriptor = createAndroidLibProjectDescriptor(libName)
         libDescriptor.pluginsBlock.addPlugin(GradlePluginDeclaration(PROVIDER_PLUGIN_ID))
         libDescriptor.dependenciesBlock.addDependency("implementation 'com.android.support:recyclerview-v7:28.0.0'")
-        libDescriptor.projectDirectoryBuilder
-            .register(ValuesResFoldersPlacer(getInputTestAsset(libName)))
         createProject(libDescriptor)
 
         // Set up app
@@ -249,10 +232,8 @@ class CheckOutputsTest : AndroidProjectTest() {
     fun `verify app that takes resources from both local and external libraries`() {
         // Create library
         val libName = "my_local_library"
-        val libDescriptor = AndroidLibProjectDescriptor(libName, ANDROID_PLUGIN_VERSION)
+        val libDescriptor = createAndroidLibProjectDescriptor(libName)
         libDescriptor.pluginsBlock.addPlugin(GradlePluginDeclaration(PROVIDER_PLUGIN_ID))
-        libDescriptor.projectDirectoryBuilder
-            .register(ValuesResFoldersPlacer(getInputTestAsset(libName)))
         createProject(libDescriptor)
 
         // Set up app
@@ -290,10 +271,8 @@ class CheckOutputsTest : AndroidProjectTest() {
     }
 
     private fun setUpLibraryModule(libName: String) {
-        val libDescriptor = AndroidLibProjectDescriptor(libName, ANDROID_PLUGIN_VERSION)
+        val libDescriptor = createAndroidLibProjectDescriptor(libName)
         libDescriptor.pluginsBlock.addPlugin(GradlePluginDeclaration(PROVIDER_PLUGIN_ID))
-        libDescriptor.projectDirectoryBuilder
-            .register(ValuesResFoldersPlacer(getInputTestAsset(libName)))
         createProject(libDescriptor)
     }
 
@@ -302,22 +281,33 @@ class CheckOutputsTest : AndroidProjectTest() {
         variantNames: List<String>,
         descriptor: AndroidAppProjectDescriptor = createAndroidAppProjectDescriptor(inOutDirName)
     ) {
-        val inputDir = getInputTestAsset(inOutDirName)
-        descriptor.projectDirectoryBuilder.register(ValuesResFoldersPlacer(inputDir))
-
         createProjectAndRunStringResolver(descriptor, variantNames)
 
         verifyVariantResults(variantNames, inOutDirName, inOutDirName)
     }
 
+    private fun createAndroidLibProjectDescriptor(
+        libName: String,
+        inputDirName: String = libName
+    ): AndroidLibProjectDescriptor {
+        val inputDir = getInputTestAsset(inputDirName)
+        return AndroidLibProjectDescriptor(libName, inputDir, ANDROID_PLUGIN_VERSION)
+    }
+
     private fun createAndroidAppProjectDescriptor(
-        inOutDirName: String,
+        projectName: String,
+        inputDirName: String = projectName,
         androidBlockItems: List<AndroidBlockItem> = emptyList(),
         dependencies: List<String> = emptyList()
     ): AndroidAppProjectDescriptor {
+        val inputDir = getInputTestAsset(inputDirName)
         val blockItems = mutableListOf<GradleBlockItem>()
         blockItems.addAll(androidBlockItems)
-        val descriptor = AndroidAppProjectDescriptor(inOutDirName, ANDROID_PLUGIN_VERSION, blockItems, dependencies)
+        val descriptor =
+            AndroidAppProjectDescriptor(projectName, inputDir, ANDROID_PLUGIN_VERSION, blockItems)
+        dependencies.forEach { dependency ->
+            descriptor.dependenciesBlock.addDependency(dependency)
+        }
         descriptor.pluginsBlock.addPlugin(GradlePluginDeclaration(RESOLVER_PLUGIN_ID))
         return descriptor
     }

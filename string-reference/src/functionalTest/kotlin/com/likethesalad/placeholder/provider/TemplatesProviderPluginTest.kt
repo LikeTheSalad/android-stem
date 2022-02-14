@@ -6,23 +6,31 @@ import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateI
 import com.likethesalad.android.templates.provider.api.TemplatesProvider
 import com.likethesalad.android_templates.provider.plugin.generated.BuildConfig
 import com.likethesalad.placeholder.utils.TemplatesProviderLoader
+import com.likethesalad.tools.functional.testing.AndroidProjectTest
+import com.likethesalad.tools.functional.testing.layout.AndroidLibProjectDescriptor
+import com.likethesalad.tools.functional.testing.layout.ProjectDescriptor
+import com.likethesalad.tools.functional.testing.layout.items.impl.plugins.GradlePluginDeclaration
 import com.likethesalad.tools.functional.testing.utils.TestAssetsProvider
 import com.likethesalad.tools.plugin.metadata.consumer.PluginMetadataProvider
 import net.lingala.zip4j.ZipFile
 import org.junit.Test
 import java.io.File
 
-class TemplatesProviderPluginTest : BaseGradleTest() {
+class TemplatesProviderPluginTest : AndroidProjectTest() {
+
+    companion object {
+        private const val ANDROID_PLUGIN_VERSION = "7.1.0"
+    }
 
     private val inputAssetsRoot = TestAssetsProvider("functionalTest", "provider")
 
     @Test
     fun `Create service for basic project`() {
-        setUpProject("basic")
+        val project = setUpProject("basic")
 
-        runCommand("assembleDebug")
+        runCommand(project, "assembleDebug")
 
-        val provider = getTemplatesProvider("debug")
+        val provider = getTemplatesProvider(project, "debug")
         commonVerification(provider, "basic")
         assertTemplatesContainExactly(
             provider,
@@ -32,12 +40,12 @@ class TemplatesProviderPluginTest : BaseGradleTest() {
 
     @Test
     fun `Keep only one service per project after re-running it`() {
-        val projectName = "basic"
-        setUpProject(projectName)
+        val projectName = "basic_modified_before"
+        val basicProject = setUpProject(projectName)
 
-        runCommand("assembleDebug")
+        runCommand(basicProject, "assembleDebug")
 
-        val provider = getTemplatesProvider("debug")
+        val provider = getTemplatesProvider(basicProject, "debug")
         commonVerification(provider, projectName)
         assertTemplatesContainExactly(
             provider,
@@ -45,12 +53,13 @@ class TemplatesProviderPluginTest : BaseGradleTest() {
         )
 
         // Second run
-        removeTestAssetsFromProject()
-        setUpProject(projectName, "basic-modified")
+        val secondBasicProject = setUpProject(projectName, "basic_modified_after")
+        basicProject.projectDirBuilder.clearFilesCreated()
+        secondBasicProject.projectDirBuilder.buildDirectory(getProjectDir(projectName))
 
-        runCommand("assembleDebug")
+        buildProject(getCommandArgs("assembleDebug"), projectName)
 
-        val provider2 = getTemplatesProvider("debug")
+        val provider2 = getTemplatesProvider(secondBasicProject, "debug")
         commonVerification(provider2, projectName)
         assertTemplatesContainExactly(
             provider2,
@@ -61,12 +70,12 @@ class TemplatesProviderPluginTest : BaseGradleTest() {
 
     @Test
     fun `Take only templates from main strings`() {
-        val projectName = "multi-language"
-        setUpProject(projectName)
+        val projectName = "multi_language"
+        val project = setUpProject(projectName)
 
-        runCommand("assembleDebug")
+        runCommand(project, "assembleDebug")
 
-        val provider = getTemplatesProvider("debug")
+        val provider = getTemplatesProvider(project, "debug")
         commonVerification(provider, projectName)
         assertTemplatesContainExactly(
             provider,
@@ -74,8 +83,8 @@ class TemplatesProviderPluginTest : BaseGradleTest() {
         )
     }
 
-    private fun getTemplatesProvider(variantName: String): TemplatesProvider {
-        val aarFile = getAarFile(variantName)
+    private fun getTemplatesProvider(project: ProjectDescriptor, variantName: String): TemplatesProvider {
+        val aarFile = getAarFile(project.projectName, variantName)
         val jarFile = extractJar(aarFile)
         val templateProviders = extractProviders(jarFile)
         Truth.assertThat(templateProviders.size).isEqualTo(1)
@@ -109,16 +118,32 @@ class TemplatesProviderPluginTest : BaseGradleTest() {
         return File(destinationDir, jarFileName)
     }
 
-    private fun getAarFile(variantName: String): File {
-        val projectName = projectDir.name
+    private fun getAarFile(projectName: String, variantName: String): File {
+        val projectDir = getProjectDir(projectName)
         return File(projectDir, "build/outputs/aar/$projectName-${variantName}.aar")
-    }
-
-    override fun getSourceDir(name: String): File {
-        return inputAssetsRoot.getAssetFile(name)
     }
 
     private fun getProviderVersion(): String {
         return PluginMetadataProvider.getInstance(BuildConfig.METADATA_PROPERTIES_ID).provide().version
+    }
+
+    private fun runCommand(projectDescriptor: ProjectDescriptor, command: String) {
+        createProjectAndBuild(projectDescriptor, getCommandArgs(command))
+    }
+
+    private fun getCommandArgs(commandStr: String): List<String> {
+        return commandStr.split(Regex("[\\s\\t]+"))
+    }
+
+    private fun setUpProject(projectName: String, sourceDirName: String = projectName): ProjectDescriptor {
+        val inputDir = inputAssetsRoot.getAssetFile(sourceDirName)
+
+        val libProjectDescriptor = AndroidLibProjectDescriptor(projectName, inputDir, ANDROID_PLUGIN_VERSION)
+        libProjectDescriptor.pluginsBlock.addPlugin(GradlePluginDeclaration("resource.templates.provider"))
+        return libProjectDescriptor
+    }
+
+    override fun getGradleVersion(): String {
+        return "7.2"
     }
 }
