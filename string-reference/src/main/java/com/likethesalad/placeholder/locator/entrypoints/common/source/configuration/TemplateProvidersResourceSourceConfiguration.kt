@@ -1,5 +1,6 @@
 package com.likethesalad.placeholder.locator.entrypoints.common.source.configuration
 
+import com.likethesalad.android.templates.common.utils.Logger
 import com.likethesalad.placeholder.locator.entrypoints.common.utils.TemplatesProviderJarsFinder
 import com.likethesalad.placeholder.providers.ProjectDirsProvider
 import com.likethesalad.tools.resource.collector.android.data.resdir.ResDir
@@ -14,8 +15,13 @@ import java.io.File
 class TemplateProvidersResourceSourceConfiguration @AssistedInject constructor(
     @Assisted variantTree: VariantTree,
     @Assisted private val templatesProviderJarsFinder: TemplatesProviderJarsFinder,
-    private val projectDirsProvider: ProjectDirsProvider
+    private val projectDirsProvider: ProjectDirsProvider,
+    private val loggerFactory: Logger.Factory
 ) : AndroidLibrariesSourceConfiguration(variantTree) {
+
+    private val logger by lazy {
+        loggerFactory.create(javaClass)
+    }
 
     @AssistedFactory
     interface Factory {
@@ -50,15 +56,20 @@ class TemplateProvidersResourceSourceConfiguration @AssistedInject constructor(
         val templatesProviderJars = templatesProviderJarsFinder.templateProviderJars
 
         if (templatesProviderJars.isEmpty()) {
+            logger.debug("No templates provider jars found")
             return null
         }
 
         val localJars = filterLocalJars(templatesProviderJars)
+        logger.debug("Local templates provider jars: {}", localJars)
         val externalJars = templatesProviderJars.minus(localJars)
+        logger.debug("External templates provider jars: {}", externalJars)
 
         val resDirPatterns = getLocalResDirPatterns(localJars) + getExternalResDirPatterns(externalJars)
 
-        return Regex(resDirPatterns.joinToString("|"))
+        val pattern = resDirPatterns.joinToString("|")
+        logger.debug("Template providers pattern: {}", pattern)
+        return Regex(pattern)
     }
 
     private fun getExternalResDirPatterns(externalJars: List<File>): List<String> {
