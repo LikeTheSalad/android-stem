@@ -8,6 +8,7 @@ import com.likethesalad.placeholder.providers.TaskProvider
 import com.likethesalad.tools.resource.serializer.ResourceSerializer
 import dagger.Module
 import dagger.Provides
+import org.gradle.api.logging.Logger
 import javax.inject.Singleton
 
 @Module
@@ -41,5 +42,11 @@ class AppModule(private val resolvePlaceholdersPlugin: ResolvePlaceholdersPlugin
     @Singleton
     fun provideResourceSerializer(): ResourceSerializer {
         return resolvePlaceholdersPlugin.getLocatorExtension().getResourceSerializer()
+    }
+
+    @Provides
+    @Singleton
+    fun provideGradleLogger(): Logger {
+        return resolvePlaceholdersPlugin.getGradleLogger()
     }
 }

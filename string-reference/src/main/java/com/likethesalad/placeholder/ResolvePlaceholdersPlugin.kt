@@ -13,6 +13,7 @@ import com.likethesalad.tools.android.plugin.data.AndroidExtension
 import com.likethesalad.tools.resource.locator.android.extension.AndroidResourceLocatorExtension
 import org.gradle.api.Project
 import org.gradle.api.Task
+import org.gradle.api.logging.Logger
 import org.gradle.api.tasks.TaskContainer
 import java.io.File
 
@@ -52,6 +53,10 @@ class ResolvePlaceholdersPlugin : BaseTemplatesProcessorPlugin(), AndroidExtensi
             templateResourcesEntryPointFactory.create(commonSourceConfigurationCreator),
             creationListener
         )
+    }
+
+    fun getGradleLogger(): Logger {
+        return project.logger
     }
 
     override fun getValidProjectPluginName() = "com.android.application"
