@@ -1,8 +1,8 @@
 package com.likethesalad.placeholder.modules.templateStrings
 
+import com.likethesalad.android.templates.common.tasks.BaseTask
 import com.likethesalad.android.templates.common.utils.DirectoryUtils
 import com.likethesalad.placeholder.modules.templateStrings.data.GatherTemplatesArgs
-import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.InputDirectory
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @Suppress("UnstableApiUsage")
 open class GatherTemplatesTask
-@Inject constructor(private val args: GatherTemplatesArgs) : DefaultTask() {
+@Inject constructor(private val args: GatherTemplatesArgs) : BaseTask() {
 
     @InputDirectory
     val commonResourcesDir: DirectoryProperty = project.objects.directoryProperty()

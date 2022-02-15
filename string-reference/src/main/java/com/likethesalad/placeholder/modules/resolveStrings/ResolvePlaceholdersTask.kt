@@ -1,8 +1,8 @@
 package com.likethesalad.placeholder.modules.resolveStrings
 
+import com.likethesalad.android.templates.common.tasks.BaseTask
 import com.likethesalad.android.templates.common.utils.DirectoryUtils
 import com.likethesalad.placeholder.modules.resolveStrings.data.ResolvePlaceholdersArgs
-import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.OutputDirectory
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @Suppress("UnstableApiUsage")
 open class ResolvePlaceholdersTask
-@Inject constructor(private val args: ResolvePlaceholdersArgs) : DefaultTask() {
+@Inject constructor(private val args: ResolvePlaceholdersArgs) : BaseTask() {
 
     @SkipWhenEmpty
     @InputDirectory

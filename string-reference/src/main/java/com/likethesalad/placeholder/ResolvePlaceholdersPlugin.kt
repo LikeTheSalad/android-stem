@@ -21,7 +21,6 @@ class ResolvePlaceholdersPlugin : BaseTemplatesProcessorPlugin(), AndroidExtensi
     TaskProvider, TaskContainerProvider, LocatorExtensionProvider {
 
     companion object {
-        const val RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME = "resolver"
         const val EXTENSION_NAME = "stringXmlReference"
     }
 

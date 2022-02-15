@@ -1,8 +1,8 @@
 package com.likethesalad.android.templates.common.tasks.identifier
 
+import com.likethesalad.android.templates.common.tasks.BaseTask
 import com.likethesalad.android.templates.common.tasks.identifier.action.TemplatesIdentifierAction
 import com.likethesalad.tools.resource.locator.android.extension.configuration.data.ResourcesProvider
-import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.InputDirectory
@@ -11,7 +11,7 @@ import org.gradle.api.tasks.TaskAction
 import javax.inject.Inject
 
 @Suppress("UnstableApiUsage")
-open class TemplatesIdentifierTask @Inject constructor(private val args: Args) : DefaultTask() {
+open class TemplatesIdentifierTask @Inject constructor(private val args: Args) : BaseTask() {
 
     companion object {
         private const val TEMPLATES_IDENTIFIER_NAME_FORMAT = "templates%sIdentifier"

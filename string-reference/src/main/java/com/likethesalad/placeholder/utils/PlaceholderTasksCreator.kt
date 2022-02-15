@@ -2,7 +2,6 @@ package com.likethesalad.placeholder.utils
 
 import com.likethesalad.android.templates.common.tasks.identifier.TemplatesIdentifierTask
 import com.likethesalad.android.templates.common.tasks.identifier.action.TemplatesIdentifierAction
-import com.likethesalad.placeholder.ResolvePlaceholdersPlugin
 import com.likethesalad.placeholder.locator.listener.TypeLocatorCreationListener
 import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.placeholder.modules.common.models.TasksNamesModel
@@ -63,7 +62,6 @@ class PlaceholderTasksCreator @Inject constructor(
         )
 
         gatherTemplatesTask.configure {
-            it.group = ResolvePlaceholdersPlugin.RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME
             it.commonResourcesDir.set(commonResourcesInfo.taskInfo.outputDirectoryProvider.getOutputDirProperty())
             it.templateIdsFile.set(templatesIdentifierTask.flatMap { identifierTask -> identifierTask.outputFile })
         }
@@ -75,7 +73,6 @@ class PlaceholderTasksCreator @Inject constructor(
         )
 
         resolvePlaceholdersTask.configure {
-            it.group = ResolvePlaceholdersPlugin.RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME
             it.templatesDir.set(gatherTemplatesTask.flatMap { gatherTemplates -> gatherTemplates.outDir })
             it.outputDir.set(androidVariantContext.variantBuildResolvedDir.resolvedDir)
         }
@@ -95,7 +92,6 @@ class PlaceholderTasksCreator @Inject constructor(
         )
 
         provider.configure {
-            it.group = ResolvePlaceholdersPlugin.RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME
             it.localResourcesDir.set(localResourcesInfo.taskInfo.outputDirectoryProvider.getOutputDirProperty())
         }
 
