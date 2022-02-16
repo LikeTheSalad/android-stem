@@ -76,6 +76,10 @@ class PlaceholderTasksCreator @Inject constructor(
             it.templatesDir.set(gatherTemplatesTask.flatMap { gatherTemplates -> gatherTemplates.outDir })
             it.outputDir.set(androidVariantContext.variantBuildResolvedDir.resolvedDir)
         }
+
+        androidVariantContext.androidVariantData.getMergeResourcesProvider().configure {
+            it.dependsOn(resolvePlaceholdersTask)
+        }
     }
 
     private fun createTemplatesIdentifierTaskProvider(
