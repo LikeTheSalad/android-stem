@@ -35,7 +35,7 @@ class CheckOutputsTest : AndroidProjectTest() {
     @Test
     fun `verify nothing happens when there are no templates available`() {
         val variantNames = listOf("debug")
-        val inOutDirName = "no-templates-available"
+        val inOutDirName = "no_templates_available"
         val descriptor = createAndroidAppProjectDescriptor(inOutDirName)
         val commandList = variantNamesToResolveCommands(variantNames)
         createProject(descriptor)
@@ -55,7 +55,7 @@ class CheckOutputsTest : AndroidProjectTest() {
     @Test
     fun `verify prevous outputs cleared when templates are deleted afterwards`() {
         val variantNames = listOf("debug")
-        val projectName = "no-templates-available-afterwards"
+        val projectName = "no_templates_available_afterwards"
         val withTemplatesDir = "basic"
         val descriptor = createAndroidAppProjectDescriptor(projectName, withTemplatesDir)
         val commandList = variantNamesToResolveCommands(variantNames)
@@ -73,7 +73,7 @@ class CheckOutputsTest : AndroidProjectTest() {
         verifyVariantResults(variantNames, projectName, withTemplatesDir)
 
         // After removing templates:
-        val withoutTemplatesDir = "no-templates-available"
+        val withoutTemplatesDir = "no_templates_available"
         val descriptor2 = createAndroidAppProjectDescriptor(projectName, withoutTemplatesDir)
         val projectDir = getProjectDir(projectName)
         descriptor.projectDirBuilder.clearFilesCreated()
@@ -87,7 +87,7 @@ class CheckOutputsTest : AndroidProjectTest() {
     @Test
     fun `verify basic app outputs are generated only once if the inputs don't change`() {
         val variantNames = listOf("debug")
-        val inOutDirName = "basic-repeated"
+        val inOutDirName = "basic_repeated"
         val descriptor = createAndroidAppProjectDescriptor(inOutDirName)
         val commandList = variantNamesToResolveCommands(variantNames)
 
@@ -119,7 +119,7 @@ class CheckOutputsTest : AndroidProjectTest() {
     @Test
     fun `verify multi languages clean up after changes`() {
         val variantNames = listOf("debug")
-        val inOutDirName = "multi-languages-changed-before"
+        val inOutDirName = "multi_languages_changed_before"
         val descriptor = createAndroidAppProjectDescriptor(inOutDirName)
         val commandList = variantNamesToResolveCommands(variantNames)
 
@@ -136,7 +136,7 @@ class CheckOutputsTest : AndroidProjectTest() {
         verifyVariantResults(variantNames, inOutDirName, inOutDirName)
 
         // Second time
-        val dirName2 = "multi-languages-changed-after"
+        val dirName2 = "multi_languages_changed_after"
         val descriptor2 = createAndroidAppProjectDescriptor(inOutDirName, dirName2)
         val projectDir = getProjectDir(inOutDirName)
         descriptor.projectDirBuilder.clearFilesCreated()
@@ -157,13 +157,13 @@ class CheckOutputsTest : AndroidProjectTest() {
     @Test
     fun `verify multi-languages app outputs`() {
         runInputOutputComparisonTest(
-            "multi-languages", listOf("debug")
+            "multi_languages", listOf("debug")
         )
     }
 
     @Test
     fun `verify app with gradle-generated strings outputs`() {
-        val appName = "with-gradle-strings"
+        val appName = "with_gradle_strings"
         val gradleStrings = mapOf("my_app_id" to "APP ID")
         val appDescriptor = createAndroidAppProjectDescriptor(
             appName,
@@ -175,7 +175,7 @@ class CheckOutputsTest : AndroidProjectTest() {
 
     @Test
     fun `verify flavored app outputs`() {
-        val inOutDirName = "flavored-app"
+        val inOutDirName = "flavored_app"
         val flavors = mutableListOf<FlavorAndroidBlockItem.FlavorDescriptor>()
         val modeFlavors = listOf("demo", "full")
         val environmentFlavors = listOf("stable", "prod")
@@ -208,7 +208,7 @@ class CheckOutputsTest : AndroidProjectTest() {
         createProject(libDescriptor)
 
         // Set up app
-        val appName = "with-library"
+        val appName = "with_library"
         val appDescriptor = createAndroidAppProjectDescriptor(
             appName,
             dependencies = listOf("implementation project(':$libName')")
@@ -219,7 +219,7 @@ class CheckOutputsTest : AndroidProjectTest() {
 
     @Test
     fun `verify app that takes resources from an aar file`() {
-        val appName = "with-aar-file-library"
+        val appName = "with_aar_file_library"
         val appDescriptor = createAndroidAppProjectDescriptor(
             appName,
             dependencies = listOf("implementation fileTree(dir: 'src/libs', include: ['*.aar'])")
@@ -237,7 +237,7 @@ class CheckOutputsTest : AndroidProjectTest() {
         createProject(libDescriptor)
 
         // Set up app
-        val appName = "with-aar-and-local-libraries"
+        val appName = "with_aar_and_local_libraries"
         val appDescriptor = createAndroidAppProjectDescriptor(
             appName,
             dependencies = listOf(
@@ -258,7 +258,7 @@ class CheckOutputsTest : AndroidProjectTest() {
         setUpLibraryModule(libName2)
 
         // Set up app
-        val appName = "with-multiple-libraries"
+        val appName = "with_multiple_libraries"
         val appDescriptor = createAndroidAppProjectDescriptor(
             appName,
             dependencies = listOf(
@@ -327,7 +327,7 @@ class CheckOutputsTest : AndroidProjectTest() {
     }
 
     private fun variantNamesToResolveCommands(variantNames: List<String>) =
-        variantNames.map { "resolve${it.capitalize()}Placeholders" }
+        variantNames.map { "assemble${it.capitalize()}" }
 
     private fun getInputTestAsset(inputDirName: String): File {
         return inputAssetsProvider.getAssetFile(inputDirName)
