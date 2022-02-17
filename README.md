@@ -61,8 +61,8 @@ How to use
 ### 1.- Templates
 All you have to do is to define string templates inside your XML values' files,
 the file to add these templates to can be any file inside your values folders,
-not necessarily the "strings.xml" file but *any other XML file within the same directory will
-work too*.
+not necessarily the "strings.xml" file but **any other XML file within the same directory will
+work too**.
 
 In order to create a template all you need to do is to add references to other strings in the form
 of "placeholders" into the string you want to use as template, the placeholder format is `${another_string_name}` where
