@@ -243,6 +243,7 @@ this plugin work, those are:
 
 - **Root's** `build.gradle`
 - **App's** `build.gradle`
+- **Android libraries** `build.gradle` (Optional - If you want to define templates in your own android libraries)
 
 ### 1.- Where to find the build.gradle files
 To get a better idea of where you can find these files, take a look at this Android Studio
@@ -252,7 +253,7 @@ screenshot below:
 
 - The **number 1** selection is to make sure that you've selected the "Project"
 view in order to see the `build.gradle` files as shown on this image.
-- The **number 2** selection represents your **App's build.gradle** file.
+- The **number 2** selection represents your **App's build.gradle** file, and it should look similar for Android libraries, if you happen to have any in your project.
 - The **number 3** selection represents your **Root's build.gradle** file.
 
 ### 2.- What to add to the build.gradle files
@@ -304,7 +305,24 @@ android {
   //...
 }
 ```
-### 2.3- Sync your project
+### 2.3- Adding it to your own Android Libraries (Optional)
+
+If you have parts of your project split into multiple android libraries where you'd like to define templates, you
+can do so by applying a "producer" version of TBD into them like so:
+
+```groovy
+// App's build.gradle file
+apply plugin: 'com.android.library'
+apply plugin: 'tbd-library'
+
+android {
+    //...
+}
+```
+Please bear in mind that the "producer" plugin doesn't resolve templates, it only provides them along with values
+needed to resolve those, so that the "consumer" (application) can use them later on when building the final app.
+
+### 2.4- Sync your project
 
 ![Sync button](./assets/sync_now.png "Sync button")
 
