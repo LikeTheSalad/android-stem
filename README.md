@@ -93,8 +93,8 @@ your app's compilation process, based on that, there's many ways of running it, 
 
 ### 2.1- How to know if it worked?
 
-After the task has run, now you will be able to access to the "resolved" strings where you'll that your placeholders
-have been replaced by the actual referenced values.
+After the task has run, now you will be able to access to the "resolved" strings where you'll see that your
+placeholders have been replaced by the actual referenced values.
 
 ### 2.2- Where can I find the resolved strings in my project?
 
@@ -335,7 +335,7 @@ the templates without having to build your project, you can do so
 by running: `resolve[BUILD_VARIANT]Placeholders` depending
 on your build configuration. For example, to run it for the debug variant,
 you'll have to run: `resolveDebugPlaceholders`, or if you have flavors
-setup in your application, e.g. say you have 'demo' as a flavor defined,
+set up in your application, e.g. say you have 'demo' as a flavor defined,
 then you can run `resolveDemoDebugPlaceholders` to generate the strings
 for the demo flavor on the debug variant and so on.
 
