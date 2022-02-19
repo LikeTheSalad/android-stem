@@ -346,7 +346,7 @@ for the demo flavor on the debug variant and so on.
 Donations ♥
 ---
 If this plugin is useful for you, and if it's within your possibilities, please consider making a one-off donation that
-will help keeping the development of bug support and new features! And if you can't make a donation right now,
+will help keeping the development of new features and bug support. And if you can't make a donation right now,
 you could also support this plugin by sharing it with your dev friends and colleagues!
 
 ```xml
