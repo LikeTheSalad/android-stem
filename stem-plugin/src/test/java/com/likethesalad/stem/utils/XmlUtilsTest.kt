@@ -1,7 +1,7 @@
-package com.likethesalad.placeholder.utils
+package com.likethesalad.stem.utils
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.modules.common.helpers.resources.utils.XmlUtils
+import com.likethesalad.stem.modules.common.helpers.resources.utils.XmlUtils
 import com.likethesalad.tools.resource.api.android.AndroidResourceScope
 import com.likethesalad.tools.resource.api.android.environment.Language
 import com.likethesalad.tools.resource.api.android.environment.Variant

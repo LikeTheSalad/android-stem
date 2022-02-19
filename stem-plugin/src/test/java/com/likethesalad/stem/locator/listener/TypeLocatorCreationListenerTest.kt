@@ -1,4 +1,4 @@
-package com.likethesalad.placeholder.locator.listener
+package com.likethesalad.stem.locator.listener
 
 import com.google.common.truth.Truth
 import com.likethesalad.tools.android.plugin.data.AndroidVariantData

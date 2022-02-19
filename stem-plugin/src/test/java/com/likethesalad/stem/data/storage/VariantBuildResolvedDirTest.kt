@@ -1,9 +1,9 @@
-package com.likethesalad.placeholder.data.storage
+package com.likethesalad.stem.data.storage
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.modules.common.helpers.dirs.SourceSetsHandler
-import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantBuildResolvedDir
-import com.likethesalad.placeholder.providers.ProjectDirsProvider
+import com.likethesalad.stem.modules.common.helpers.dirs.SourceSetsHandler
+import com.likethesalad.stem.modules.common.helpers.dirs.VariantBuildResolvedDir
+import com.likethesalad.stem.providers.ProjectDirsProvider
 import com.likethesalad.tools.android.plugin.data.AndroidVariantData
 import io.mockk.Runs
 import io.mockk.every

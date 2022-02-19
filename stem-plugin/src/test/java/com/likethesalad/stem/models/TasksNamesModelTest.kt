@@ -1,7 +1,7 @@
-package com.likethesalad.placeholder.models
+package com.likethesalad.stem.models
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.modules.common.models.TasksNamesModel
+import com.likethesalad.stem.modules.common.models.TasksNamesModel
 import com.likethesalad.tools.android.plugin.data.AndroidVariantData
 import io.mockk.every
 import io.mockk.mockk

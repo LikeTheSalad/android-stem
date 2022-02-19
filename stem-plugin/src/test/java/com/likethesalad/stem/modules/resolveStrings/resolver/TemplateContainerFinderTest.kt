@@ -1,4 +1,4 @@
-package com.likethesalad.placeholder.modules.resolveStrings.resolver
+package com.likethesalad.stem.modules.resolveStrings.resolver
 
 import com.google.common.truth.Truth
 import org.junit.Test

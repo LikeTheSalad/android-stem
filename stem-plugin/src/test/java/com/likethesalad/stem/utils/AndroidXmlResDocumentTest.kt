@@ -1,7 +1,7 @@
-package com.likethesalad.placeholder.utils
+package com.likethesalad.stem.utils
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.modules.common.helpers.files.AndroidXmlResDocument
+import com.likethesalad.stem.modules.common.helpers.files.AndroidXmlResDocument
 import com.likethesalad.tools.resource.api.android.AndroidResourceScope
 import com.likethesalad.tools.resource.api.android.environment.Language
 import com.likethesalad.tools.resource.api.android.environment.Variant
@@ -31,8 +31,7 @@ class AndroidXmlResDocumentTest {
     @Test
     fun checkEmptyConstructor_should_create_resources() {
         // When
-        val androidXmlResDocument =
-            AndroidXmlResDocument()
+        val androidXmlResDocument = AndroidXmlResDocument()
 
         // Then
         val resourcesList = androidXmlResDocument.document.getElementsByTagName("resources")

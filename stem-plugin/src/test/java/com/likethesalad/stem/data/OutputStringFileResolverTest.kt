@@ -1,7 +1,7 @@
-package com.likethesalad.placeholder.data
+package com.likethesalad.stem.data
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.modules.common.helpers.files.OutputStringFileResolver
+import com.likethesalad.stem.modules.common.helpers.files.OutputStringFileResolver
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

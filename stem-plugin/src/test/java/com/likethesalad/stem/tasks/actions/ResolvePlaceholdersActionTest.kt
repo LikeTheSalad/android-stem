@@ -1,10 +1,10 @@
-package com.likethesalad.placeholder.tasks.actions
+package com.likethesalad.stem.tasks.actions
 
-import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
-import com.likethesalad.placeholder.modules.common.helpers.resources.ResourcesHandler
-import com.likethesalad.placeholder.modules.resolveStrings.ResolvePlaceholdersAction
-import com.likethesalad.placeholder.modules.resolveStrings.resolver.TemplateResolver
-import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
+import com.likethesalad.stem.modules.common.helpers.android.AndroidVariantContext
+import com.likethesalad.stem.modules.common.helpers.resources.ResourcesHandler
+import com.likethesalad.stem.modules.resolveStrings.ResolvePlaceholdersAction
+import com.likethesalad.stem.modules.resolveStrings.resolver.TemplateResolver
+import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesModel
 import com.likethesalad.tools.resource.api.android.AndroidResourceScope
 import com.likethesalad.tools.resource.api.android.environment.Language
 import com.likethesalad.tools.resource.api.android.environment.Variant

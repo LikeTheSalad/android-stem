@@ -1,6 +1,6 @@
-package com.likethesalad.placeholder.modules.common.helpers.dirs
+package com.likethesalad.stem.modules.common.helpers.dirs
 
-import com.likethesalad.placeholder.providers.AndroidExtensionProvider
+import com.likethesalad.stem.providers.AndroidExtensionProvider
 import com.likethesalad.tools.android.plugin.data.AndroidExtension
 import com.likethesalad.tools.testing.BaseMockable
 import io.mockk.Runs

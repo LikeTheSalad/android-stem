@@ -1,8 +1,8 @@
-package com.likethesalad.placeholder.resolver
+package com.likethesalad.stem.resolver
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.modules.resolveStrings.resolver.RecursiveLevelDetector
-import com.likethesalad.placeholder.modules.resolveStrings.resolver.TemplateContainerFinder
+import com.likethesalad.stem.modules.resolveStrings.resolver.RecursiveLevelDetector
+import com.likethesalad.stem.modules.resolveStrings.resolver.TemplateContainerFinder
 import com.likethesalad.tools.resource.api.android.AndroidResourceScope
 import com.likethesalad.tools.resource.api.android.environment.Language
 import com.likethesalad.tools.resource.api.android.environment.Variant

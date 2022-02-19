@@ -1,10 +1,10 @@
-package com.likethesalad.placeholder.data.resources
+package com.likethesalad.stem.data.resources
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.modules.common.helpers.files.OutputStringFileResolver
-import com.likethesalad.placeholder.modules.common.helpers.resources.AndroidResourcesHandler
-import com.likethesalad.placeholder.modules.templateStrings.models.StringsTemplatesModel
 import com.likethesalad.resource.serializer.android.AndroidResourceSerializer
+import com.likethesalad.stem.modules.common.helpers.files.OutputStringFileResolver
+import com.likethesalad.stem.modules.common.helpers.resources.AndroidResourcesHandler
+import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesModel
 import com.likethesalad.tools.resource.api.android.AndroidResourceScope
 import com.likethesalad.tools.resource.api.android.environment.Language
 import com.likethesalad.tools.resource.api.android.environment.Variant

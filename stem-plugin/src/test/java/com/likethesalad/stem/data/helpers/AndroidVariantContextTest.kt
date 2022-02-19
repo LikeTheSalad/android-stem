@@ -1,11 +1,11 @@
-package com.likethesalad.placeholder.data.helpers
+package com.likethesalad.stem.data.helpers
 
 import com.google.common.truth.Truth
-import com.likethesalad.placeholder.modules.common.helpers.android.AndroidVariantContext
-import com.likethesalad.placeholder.modules.common.helpers.dirs.VariantBuildResolvedDir
-import com.likethesalad.placeholder.modules.common.models.TasksNamesModel
-import com.likethesalad.placeholder.providers.ProjectDirsProvider
-import com.likethesalad.placeholder.providers.TaskProvider
+import com.likethesalad.stem.modules.common.helpers.android.AndroidVariantContext
+import com.likethesalad.stem.modules.common.helpers.dirs.VariantBuildResolvedDir
+import com.likethesalad.stem.modules.common.models.TasksNamesModel
+import com.likethesalad.stem.providers.ProjectDirsProvider
+import com.likethesalad.stem.providers.TaskProvider
 import com.likethesalad.tools.android.plugin.data.AndroidVariantData
 import com.likethesalad.tools.resource.collector.android.data.variant.VariantTree
 import com.likethesalad.tools.resource.serializer.ResourceSerializer
