@@ -21,10 +21,10 @@ buildscript {
 apply plugin: "artifact-publisher"
 
 artifactPublisher {
-    displayName = "Android String XML Reference"
-    url = "https://github.com/LikeTheSalad/android-string-reference"
-    vcsUrl = "https://github.com/LikeTheSalad/android-string-reference.git"
-    issueTrackerUrl = "https://github.com/LikeTheSalad/android-string-reference/issues"
+    displayName = "Android Stem"
+    url = "https://github.com/LikeTheSalad/android-stem"
+    vcsUrl = "https://github.com/LikeTheSalad/android-stem"
+    issueTrackerUrl = "https://github.com/LikeTheSalad/android-stem/issues"
 }
 
 description = "This is a Gradle plugin for Android applications which resolves XML string references in other XML strings."
