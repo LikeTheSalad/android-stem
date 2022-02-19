@@ -1,7 +1,7 @@
 buildscript {
     ext {
         kotlin_version = '1.5.10'
-        pluginMetadataTool_version = '1.0.0-SNAPSHOT6'
+        pluginMetadataTool_version = '1.0.0'
     }
     repositories {
         mavenLocal()
@@ -34,9 +34,9 @@ version = '2.0.0-SNAPSHOT3'
 ext {
     dagger_version = '2.39.1'
     androidBuild_version = '7.1.0'
-    testingUtilities_version = '1.0.7-SNAPSHOT8'
-    resourceLocator_version = '1.1.0-SNAPSHOT16'
-    androidTools_version = "1.1.0-SNAPSHOT20"
+    testingUtilities_version = '1.0.7'
+    resourceLocator_version = '1.1.0'
+    androidTools_version = "1.1.0"
 }
 
 allprojects {
