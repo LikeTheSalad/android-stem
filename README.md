@@ -346,7 +346,7 @@ will help keeping the development of bug support and new features! And if you ca
 you could also support this plugin by sharing it with your dev friends and colleagues!
 
 ```xml
-<string>Thanks for your support! ${supporting_person}</string>
+<string>Thanks for your support! ${your_beautiful_name}</string>
 ```
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=VJWEQ767PEYCA)
