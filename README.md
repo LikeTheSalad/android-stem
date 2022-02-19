@@ -1,7 +1,10 @@
-![version](https://img.shields.io/maven-central/v/com.likethesalad.android/string-reference)
+![version](https://img.shields.io/maven-central/v/com.likethesalad.android/stem-plugin)
 [![Android Arsenal]( https://img.shields.io/badge/Android%20Arsenal-Android%20String%20XML%20Reference-green.svg?style=flat )]( https://android-arsenal.com/details/1/7967 )
 
-# Android String XML Reference
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=VJWEQ767PEYCA)
+[<img src="https://cdn.ko-fi.com/cdn/kofi2.png?v=3" alt="ko-fi" width="100px"/>](https://ko-fi.com/N4N31QU53)
+
+# Android Stem
 
 Table of Contents
 ---
@@ -10,10 +13,7 @@ Table of Contents
      * [1.- Templates](#1--templates)
      * [2.- Running it](#2--running-it)
      * [2.1- How to know if it worked?](#21--how-to-know-if-it-worked)
-     * [2.2- Where do resolved strings go to?](#22--where-do-resolved-strings-go-to)
-     * [3- Configurable options](#3--configurable-options)
-     * [3.1- Available configuration parameters](#31--available-configuration-parameters)
-     * [3.2- How to change a configuration parameter?](#32--how-to-change-a-configuration-parameter)
+     * [2.2- Where can I find the resolved strings in my project?](#22--where-can-i-find-the-resolved-strings-in-my-project)
   * [Use case examples](#use-case-examples)
      * [1.- Simple use case](#1--simple-use-case)
      * [2.- Multi files use case](#2--multi-files-use-case)
@@ -24,17 +24,19 @@ Table of Contents
      * [2.- What to add to the build.gradle files](#2--what-to-add-to-the-buildgradle-files)
      * [2.1- Changes to your Root's build.gradle file](#21--changes-to-your-roots-buildgradle-file)
      * [2.2- Changes to your App's build.gradle file](#22--changes-to-your-apps-buildgradle-file)
-     * [2.3- Sync your project](#23--sync-your-project)
+     * [2.3- Adding it to your own Android Libraries (Optional)](#23--adding-it-to-your-own-android-libraries-optional)
+     * [2.4- Sync your project](#24--sync-your-project)
   * [Running it manually](#running-it-manually)
+  * [Donations](#donations-)
   * [License](#license)
 
 
 What is it
 ---
-Android String XML Reference is a Gradle plugin which resolves placeholders
+Android Stem is a Gradle plugin that resolves placeholders
 of XML strings referenced into other XML strings
-at buildtime. You won't have to write any Java or Kotlin code into your
-project to make it work and you will still be able to access to the 'resolved'
+at build time. You won't have to write any Java or Kotlin code into your
+project to make it work, and you will still be able to access to the 'resolved'
 strings the same way as with any other manually added string to your
 XML files.
 
@@ -44,61 +46,50 @@ In other words, if you're looking to do something like this:
 ```xml
 <resources>
     <string name="app_name">My App Name</string>
-    <string name="template_welcome_message">Welcome to ${app_name}</string>
+    <string name="welcome_message">Welcome to ${app_name}</string>
 </resources>
 ```
 #### Output:
 ```xml
-<!-- Auto generated -->
+<!-- Auto generated during compilation -->
 <resources>
     <string name="welcome_message">Welcome to My App Name</string>
 </resources>
 ```
-Without having to write any Java or Kotlin code, then this plugin might help you.
+Without having to write any Java or Kotlin code, then Android Stem might help you.
 
 How to use
 ---
 ### 1.- Templates
-All you have to do is to define string templates inside your XML string files,
+All you have to do is to define string templates inside your XML values' files,
 the file to add these templates to can be any file inside your values folders,
-not necessarily the "strings.xml" file but any other within the same directory will
-work too.
-In order to create a template all you need to do is to set its name with the
-`template_` prefix. So for example, if you want your final "resolved" string name
-to be "my_message", then its template name will be like so:
+not necessarily the "strings.xml" file but **any other XML file within the same directory will
+work too**.
 
-```xml
-<string name="template_my_message">
- ```
+In order to create a template all you need to do is to add references to other strings in the form
+of "placeholders" into the string you want to use as template, the placeholder format is `${another_string_name}` where
+"another_string_name" will be the name of any other string you have in your project or in a library of yours that
+serves as a "Stem provider" one, more on it below.
 
-Your templates will contain references to other strings in the form
-of "placeholders", the placeholder format is `${another_string_name}` where
-"another_string_name" will be the name of any other string you have in your project.
-
-Following our example above for our "template_my_message" template, let's say that
-we have another string in our project named "app_name" (which content is "My app name") and we want to place it inside our "template_my_message" template, we can do it like so:
+Following our example above for our "my_message" template, let's say that
+we have another string in our project named "app_name" (which content is "My app name") and we want to place it inside our "my_message" template, we can do it like so:
 
 ```xml 
-<string name="template_my_message">Welcome to ${app_name}</string>
+<string name="my_message">Welcome to ${app_name}</string>
 ```
 
-A template can contain from zero to any amount of placeholders. Any string within your values folder (even other templates) can be referenced inside a placeholder.
-And that's it, we've defined a template with a placeholder inside. Meaning that
-when we run the plugin, we'll get as a result the following "resolved" string:
+A template can contain from one to any amount of placeholders. Any string within your values' folder (even other templates) can be referenced inside a placeholder.
+And that's it, we've defined a template. Meaning that
+when we compile, we'll get as a result the following "resolved" string:
 
 ```xml 
-<!-- Auto generated -->
+<!-- Auto generated during compilation -->
 <string name="my_message">Welcome to My app name</string>
 ```
 
-Notice that for the final "resolved" string name, the `template_` prefix has been removed.
-
 ### 2.- Running it
-By default, the task that resolves the string templates will run during
-your app's build process, unless you want to change this and rather
-running it manually, which is explained below under `Running it manually`.
-
-Since it runs by default during your project's build, then there's many ways of running it, some of those could be:
+The process that resolves the string templates will run during
+your app's compilation process, based on that, there's many ways of running it, some of those could be:
 
 - By pressing on the "play" button of Android Studio: ![Play button](./assets/run_button.png "Play button")
 - Or, by pressing on the "make" button on Android Studio: ![Make button](./assets/make_button.png "Make button")
@@ -106,21 +97,19 @@ Since it runs by default during your project's build, then there's many ways of 
 
 ### 2.1- How to know if it worked?
 
-After the task has run, now you will be able to access to the "resolved" strings,
-which are the previously defined "templates" but without the `template_` prefix.
-So following our previous example of our template "template_my_message", we now
-will be able to access to the new auto-generated resolved string: `my_message`, the
-same way as with any other string, e.g. This way for Java and Kotlin: `R.string.my_message` and this way for XML layouts: `@string/my_message`.
+After the task has run, now you will be able to access to the "resolved" strings where you'll see that your
+placeholders have been replaced by the actual referenced values.
 
-### 2.2- Where do resolved strings go to?
-The resolved strings go into your app's `build` folder, specifically under the `build/generated/resolved` path. That's where this plugin places them into when it is run.
+### 2.2- Where can I find the resolved strings in my project?
+
+The resolved strings go into your app's `build` folder, specifically under the `build/generated/resolved` path. That's where Android Stem places them into when it is run.
 
 The following cases are supported:
 
-- Regular base strings.
-- Multi-language strings.
+- Regular main strings.
+- Localized (language-specific) strings.
 - Flavor specific strings.
-- Flavor specific with multi-language strings.
+- Flavor specific with localized strings.
 
 
 > Both **values and templates** can be overridden for a different **language** and
@@ -128,50 +117,17 @@ The following cases are supported:
 > project which contain the app name placeholder (e.g. ${app_name}) then if you
 > need to create a flavor with a different app name value, you just have
 > to override the '*app_name*' string inside the flavor's 'values' folder
-> and that's it, now for this flavor you'll get all of the old strings but with
+> and that's it, now for this flavor you'll get all the old strings but with
 > the new app_name.
 
 > Same for languages, based on the example above, if you need to translate your
 > '*my_message*' string to spanish for example, you just have to override the template
-> '*template_my_message*' inside the 'values-es' folder and you'll get the
+> '*my_message*', inside the 'values-es' folder, and you'll get the
 > translated '*my_message*' string in the 'resolved.xml' file inside the 'values-es' folder.
-
-### 3- Configurable options
-
-This plugin has a default configuration that will work just fine for most projects, but if you think there are some aspects
-of it that you need to change based on the requirements and/or limitations on your project, you might find useful the following
-configuration params that are available for it.
-
-### 3.1- Available configuration parameters
-
-- **resolveOnBuild** (Boolean, default is `true`, added in version 1.0.0). When true, this plugin will automatically resolve your app's templates (only if it's needed to) during your app's build process. When false
-this plugin won't run automatically during your app's build process and instead you'd have to run it manually by calling the
-proper Gradle commands depending on the build variant you'd want to resolve the strings for. More info on this below under
-"Running it manually".
-
-### 3.2- How to change a configuration parameter?
-
-In order to set any of the configuration parameters available, you'll have to add to your app's `build.gradle` file
-the block **stringXmlReference**, and inside it you can add all of the params you'd want to change and make them
-equal to the values you'd like to set for them.
-
-Here's an example of how to change the params
-
-```groovy
-// App's build.gradle file
-android {
-  //...
-}
-
-// Example of how to change some config flags
-stringXmlReference {
-    resolveOnBuild = false // Its default value is true.
-}
-```
 
 Use case examples
 ---
-Here's a couple of examples for some of the use cases supported by this plugin
+Here's a couple of examples for some of the use cases supported by Android Stem
 
 ### 1.- Simple use case
 Within our `app/main/res/values` folder, we have the following file:
@@ -179,12 +135,12 @@ Within our `app/main/res/values` folder, we have the following file:
 <!--strings.xml-->
 <resources>
     <string name="app_name">Test</string>
-    <string name="template_welcome_message">Welcome to ${app_name}</string>
+    <string name="welcome_message">Welcome to ${app_name}</string>
 </resources>
 ```
 After building our project we get:
 ```xml
-<!--Auto generated-->
+<!--Auto generated during compilation-->
 <resources>
     <string name="welcome_message">Welcome to Test</string>
 </resources>
@@ -195,8 +151,8 @@ Within our `app/main/res/values` folder, we have the following files:
 <!--strings.xml-->
 <resources>
     <string name="app_name">Test</string>
-    <string name="template_welcome_message">Welcome to ${app_name}</string>
-    <string name="template_app_version_name">The version for ${app_name} is ${my_version}</string>
+    <string name="welcome_message">Welcome to ${app_name}</string>
+    <string name="app_version_name">The version for ${app_name} is ${my_version}</string>
 </resources>
 ```
 ```xml
@@ -207,6 +163,7 @@ Within our `app/main/res/values` folder, we have the following files:
 ```
 After building our project we get:
 ```xml
+<!--Auto generated during compilation-->
 <resources>
     <string name="app_version_name">The version for Test is 1.0.0</string>
     <string name="welcome_message">Welcome to Test</string>
@@ -219,26 +176,26 @@ Within our `app/main/res/values` folder, we have the following file:
 <!--strings.xml-->
 <resources>
     <string name="app_name">Test</string>
-    <string name="template_welcome_message">Welcome to ${app_name}</string>
+    <string name="welcome_message">Welcome to ${app_name}</string>
 </resources>
 ```
 Then, Within our `app/main/res/values-es` folder, we have the following file:
 ```xml
 <!--any_file.xml-->
 <resources>
-    <string name="template_welcome_message">Bienvenido a ${app_name}</string>
+    <string name="welcome_message">Bienvenido a ${app_name}</string>
 </resources>
 ```
 After building our project, what we get for our default `values` folder is:
 ```xml
-<!--Auto generated-->
+<!--Auto generated during compilation-->
 <resources>
     <string name="welcome_message">Welcome to Test</string>
 </resources>
 ```
 And then what we get for our spanish `values-es` folder is:
 ```xml
-<!--Auto generated-->
+<!--Auto generated during compilation-->
 <resources>
     <string name="welcome_message">Bienvenido a Test</string>
 </resources>
@@ -251,8 +208,8 @@ Within our `app/main/res/values` folder, we have the following files:
 <!--strings.xml-->
 <resources>
     <string name="app_name">Test</string>
-    <string name="template_welcome_message">Welcome to ${app_name}</string>
-    <string name="template_app_version_name">The version for ${app_name} is ${my_version}</string>
+    <string name="welcome_message">Welcome to ${app_name}</string>
+    <string name="app_version_name">The version for ${app_name} is ${my_version}</string>
 </resources>
 ```
 ```xml
@@ -270,7 +227,7 @@ And for our `app/demo/res/values` folder we add the following file:
 ```
 After building the `demo` variant of our project, we'll get for such variant:
 ```xml
-<!--Auto generated-->
+<!--Auto generated during compilation-->
 <resources>
     <string name="app_version_name">The version for Demo app is 1.0.0</string>
     <string name="welcome_message">Welcome to Demo app</string>
@@ -278,20 +235,17 @@ After building the `demo` variant of our project, we'll get for such variant:
 ```
 So we see that the `app_name` value has been overridden by the demo's app_name, this doesn't only happen for values but also for templates, we can also override templates within our demo's resources.
 
-> Those were some of the use cases that you can achieve using this plugin, there's more of them such as overriding flavor's multi languages from the base values folder and also working with multi-dimension flavors. You can play around with it, it all should work the way you'd expect it to work.
+> Those were some of the use cases that you can achieve using Android Stem, there's more of them such as overriding flavors' multi languages from the base values folder and also working with multi-dimension flavors. You can play around with it, it all should work the way you'd expect it to work.
 
 Adding it to your project
 ---
 
-> Note: If you're migrating from version `1.0.0` the only change is that now the `resolved.xml` files go by default
-> to the `app/build` folder to keep them hidden from your working dir and the VCS, if you still want to keep these files then you can configure this
-> behavior as explained above in `Where do resolved strings go to?`.
-
 We're going to need to modify two `build.gradle` files in our project in order to make
-this plugin work, those are:
+Android Stem work, those are:
 
 - **Root's** `build.gradle`
 - **App's** `build.gradle`
+- **Android libraries** `build.gradle` (Optional - If you want to define templates in your own android libraries)
 
 ### 1.- Where to find the build.gradle files
 To get a better idea of where you can find these files, take a look at this Android Studio
@@ -301,7 +255,7 @@ screenshot below:
 
 - The **number 1** selection is to make sure that you've selected the "Project"
 view in order to see the `build.gradle` files as shown on this image.
-- The **number 2** selection represents your **App's build.gradle** file.
+- The **number 2** selection represents your **App's build.gradle** file, and it should look similar for Android libraries, if you happen to have any in your project.
 - The **number 3** selection represents your **Root's build.gradle** file.
 
 ### 2.- What to add to the build.gradle files
@@ -311,7 +265,7 @@ First, in your `Root's build.gradle` file, you'll need to add this
 line into your `buildscript` dependencies block:
 
 ```groovy
-classpath "com.likethesalad.android:string-reference:1.3.0"
+classpath "com.likethesalad.android:stem-plugin:2.0.0"
 ```
 Example:
 
@@ -323,7 +277,7 @@ buildscript {
     }
     dependencies {
         //...
-        classpath "com.likethesalad.android:string-reference:1.3.0"
+        classpath "com.likethesalad.android:stem-plugin:2.0.0"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -339,7 +293,7 @@ In your `App's build.gradle` file you have to add the following line below the `
 one:
 
 ```groovy
-apply plugin: 'placeholder-resolver'
+apply plugin: 'com.likethesalad.stem'
 ```
 
 Example:
@@ -347,13 +301,30 @@ Example:
 ```groovy
 // App's build.gradle file
 apply plugin: 'com.android.application'
-apply plugin: 'placeholder-resolver'
+apply plugin: 'com.likethesalad.stem'
 
 android {
   //...
 }
 ```
-### 2.3- Sync your project
+### 2.3- Adding it to your own Android Libraries (Optional)
+
+If you have parts of your project split into multiple android libraries where you'd like to define templates, you
+can do so by applying a "producer" version of Stem into them like so:
+
+```groovy
+// App's build.gradle file
+apply plugin: 'com.android.library'
+apply plugin: 'com.likethesalad.stem-library'
+
+android {
+    //...
+}
+```
+Please bear in mind that the "producer" plugin doesn't resolve templates, it only provides them along with values
+needed to resolve those, so that the "consumer" (application) can use them later on when building the final app.
+
+### 2.4- Sync your project
 
 ![Sync button](./assets/sync_now.png "Sync button")
 
@@ -363,27 +334,27 @@ sync is done, you'll be ready to go! you can start adding your string templates 
 
 Running it manually
 ---
-If you want to avoid running the templates resolver task
-automatically during the build process of your project and rather running it manually, then
-you can turn it off by adding the following into your `App's build.gradle` file, where you've added this plugin to:
-```groovy
-// Optional
-stringXmlReference {
-  resolveOnBuild = false // By default it is true.
-  // If true: The templates resolver task will run automatically during your project's build.
-  // If false: The templates resolver task won't run automatically, you'll have to run it by explicitly calling
-  // it as explained below.
-}
-```
-
-And that's it, now you'll have to make sure to trigger the task
-manually whenever you need your resolved strings to get
-updated by running: `resolve[BUILD_VARIANT]Placeholders` depending
+If you want to just run the gradle task that resolves
+the templates without having to build your project, you can do so
+by running: `resolve[BUILD_VARIANT]Placeholders` depending
 on your build configuration. For example, to run it for the debug variant,
 you'll have to run: `resolveDebugPlaceholders`, or if you have flavors
-setup in your application, e.g. say you have 'demo' as a flavor defined,
+set up in your application, e.g. say you have 'demo' as a flavor defined,
 then you can run `resolveDemoDebugPlaceholders` to generate the strings
 for the demo flavor on the debug variant and so on.
+
+Donations ♥
+---
+If this plugin is useful for you, and if it's within your possibilities, please consider making a one-off donation that
+will help keeping the development of new features and bug support. And if you can't make a donation right now,
+you could also support this plugin by sharing it with your dev friends and colleagues!
+
+```xml
+<string>"Thanks for your support, ${your_beautiful_name}!"</string>
+```
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=VJWEQ767PEYCA)
+[<img src="https://cdn.ko-fi.com/cdn/kofi2.png?v=3" alt="ko-fi" width="100px"/>](https://ko-fi.com/N4N31QU53)
 
 License
 ---

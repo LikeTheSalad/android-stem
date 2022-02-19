@@ -1,0 +1,37 @@
+plugins {
+    id 'java-library'
+    id 'org.jetbrains.kotlin.jvm'
+    id 'kotlin-kapt'
+    id 'plugin-metadata-producer'
+    id 'com.github.gmazzo.buildconfig'
+}
+
+dependencies {
+    api gradleApi()
+    api project(':templates-provider-api')
+    implementation project(':common-tools')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "com.google.dagger:dagger:$dagger_version"
+    implementation "com.likethesalad.tools:plugin-metadata-consumer:$pluginMetadataTool_version"
+    implementation "net.bytebuddy:byte-buddy:1.12.7"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    testImplementation "com.likethesalad.tools.testing:unit-testing:$testingUtilities_version"
+}
+
+def metadataPropertiesId = "${rootProject.group}_${name}"
+
+pluginMetadataConfiguration {
+    id = metadataPropertiesId
+}
+
+buildConfig {
+    packageName("${metadataPropertiesId.replaceAll("-", ".")}.generated")
+    buildConfigField('String', 'METADATA_PROPERTIES_ID', "\"$metadataPropertiesId\"")
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}

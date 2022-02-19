@@ -1,0 +1,7 @@
+<resources>
+    <string name="library_template">A template from the library that uses the app name: With library app</string>
+    <string name="other_library_template">Another template from a library that uses the app name: With library app</string>
+    <string name="welcome_message">Welcome to With library app, we use the libraries values: Some value from the library and
+        Some value from the other library
+    </string>
+</resources>

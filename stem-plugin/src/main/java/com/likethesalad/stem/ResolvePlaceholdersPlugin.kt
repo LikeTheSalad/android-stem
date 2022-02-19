@@ -1,0 +1,90 @@
+package com.likethesalad.stem
+
+import com.likethesalad.android.templates.common.plugins.BaseTemplatesProcessorPlugin
+import com.likethesalad.stem.di.AppInjector
+import com.likethesalad.stem.locator.listener.TypeLocatorCreationListener
+import com.likethesalad.stem.providers.AndroidExtensionProvider
+import com.likethesalad.stem.providers.LocatorExtensionProvider
+import com.likethesalad.stem.providers.ProjectDirsProvider
+import com.likethesalad.stem.providers.TaskContainerProvider
+import com.likethesalad.stem.providers.TaskProvider
+import com.likethesalad.stem.utils.PlaceholderTasksCreator
+import com.likethesalad.tools.android.plugin.data.AndroidExtension
+import com.likethesalad.tools.resource.locator.android.extension.AndroidResourceLocatorExtension
+import org.gradle.api.Project
+import org.gradle.api.Task
+import org.gradle.api.logging.Logger
+import org.gradle.api.tasks.TaskContainer
+import java.io.File
+
+@Suppress("UnstableApiUsage")
+class ResolvePlaceholdersPlugin : BaseTemplatesProcessorPlugin(), AndroidExtensionProvider, ProjectDirsProvider,
+    TaskProvider, TaskContainerProvider, LocatorExtensionProvider {
+
+    private lateinit var project: Project
+    private lateinit var androidExtension: AndroidExtension
+
+    override fun apply(project: Project) {
+        super.apply(project)
+        this.project = project
+        AppInjector.init(this)
+        androidExtension = androidTools.androidExtension
+        val placeholderTasksCreator = AppInjector.getPlaceholderTasksCreator()
+        val commonResourcesEntryPointFactory = AppInjector.getCommonResourcesEntryPointFactory()
+        val templateResourcesEntryPointFactory = AppInjector.getTemplateResourcesEntryPointFactory()
+
+        val typeCommon = PlaceholderTasksCreator.RESOURCE_TYPE_COMMON
+        val typeTemplate = PlaceholderTasksCreator.RESOURCE_TYPE_TEMPLATE
+        val creationListener = TypeLocatorCreationListener(setOf(typeCommon, typeTemplate), placeholderTasksCreator)
+
+        val commonSourceConfigurationCreator = stringsLocatorExtension.getCommonSourceConfigurationCreator()
+
+        stringsLocatorExtension.registerLocator(
+            typeCommon,
+            commonResourcesEntryPointFactory.create(commonSourceConfigurationCreator),
+            creationListener
+        )
+        stringsLocatorExtension.registerLocator(
+            typeTemplate,
+            templateResourcesEntryPointFactory.create(commonSourceConfigurationCreator),
+            creationListener
+        )
+    }
+
+    fun getGradleLogger(): Logger {
+        return project.logger
+    }
+
+    override fun getValidProjectPluginName() = "com.android.application"
+
+    override fun getDisplayName(): String = "strings placeholder resolver"
+
+    override fun getExtension(): AndroidExtension {
+        return androidExtension
+    }
+
+    override fun getProjectDir(): File {
+        return project.projectDir
+    }
+
+    override fun getRootProjectDir(): File {
+        return project.rootDir
+    }
+
+    override fun getBuildDir(): File {
+        return project.buildDir
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : Task> findTaskByName(name: String): T {
+        return project.tasks.findByName(name) as T
+    }
+
+    override fun getTaskContainer(): TaskContainer {
+        return project.tasks
+    }
+
+    override fun getLocatorExtension(): AndroidResourceLocatorExtension {
+        return stringsLocatorExtension
+    }
+}

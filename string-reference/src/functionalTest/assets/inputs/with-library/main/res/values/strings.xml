@@ -1,4 +1,0 @@
-<resources>
-    <string name="app_name">With library app</string>
-    <string name="template_welcome_message">Welcome to ${app_name}, we use the library value: ${library_value}</string>
-</resources>

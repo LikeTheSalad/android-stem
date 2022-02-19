@@ -1,0 +1,4 @@
+<resources>
+    <string name="someTemplate">Some template holding Some value</string>
+    <string name="welcome_message">Welcome to With library app, we use the library value: Some value</string>
+</resources>

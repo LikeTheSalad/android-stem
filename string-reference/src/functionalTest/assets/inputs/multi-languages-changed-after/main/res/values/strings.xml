@@ -1,6 +1,0 @@
-<resources>
-    <string name="app_name">Different Languages</string>
-    <string name="app_international_name" translatable="false">Babel</string>
-    <string name="template_welcome_message">Welcome to ${app_name}</string>
-    <string name="template_international_welcome_message">Welcome to ${app_name} also known as ${app_international_name}</string>
-</resources>
