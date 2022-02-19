@@ -59,7 +59,7 @@ gradlePlugin {
         placeholderResolverPlugin {
             id = 'placeholder-resolver'
             displayName = rootProject.artifactPublisher.displayName.get()
-            implementationClass = 'com.likethesalad.placeholder.ResolvePlaceholdersPlugin'
+            implementationClass = 'com.likethesalad.stem.ResolvePlaceholdersPlugin'
         }
         templatesProvider {
             id = 'resource.templates.provider'

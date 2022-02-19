@@ -1,11 +1,11 @@
-package com.likethesalad.placeholder.provider
+package com.likethesalad.stem.provider
 
 import com.google.common.truth.Truth
 import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItem
 import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer
 import com.likethesalad.android.templates.provider.api.TemplatesProvider
 import com.likethesalad.android_templates.provider.plugin.generated.BuildConfig
-import com.likethesalad.placeholder.utils.TemplatesProviderLoader
+import com.likethesalad.stem.utils.TemplatesProviderLoader
 import com.likethesalad.tools.functional.testing.AndroidProjectTest
 import com.likethesalad.tools.functional.testing.layout.AndroidLibProjectDescriptor
 import com.likethesalad.tools.functional.testing.layout.ProjectDescriptor

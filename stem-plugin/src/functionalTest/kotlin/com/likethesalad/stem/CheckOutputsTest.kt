@@ -1,4 +1,4 @@
-package com.likethesalad.placeholder
+package com.likethesalad.stem
 
 import com.google.common.truth.Truth
 import com.likethesalad.tools.functional.testing.AndroidProjectTest
