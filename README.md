@@ -339,6 +339,19 @@ set up in your application, e.g. say you have 'demo' as a flavor defined,
 then you can run `resolveDemoDebugPlaceholders` to generate the strings
 for the demo flavor on the debug variant and so on.
 
+Donations ♥
+---
+If this plugin is useful for you, and if it's within your possibilities, please consider making a one-off donation that
+will help keeping the development of bug support and new features! And if you can't make a donation right now,
+you could also support this plugin by sharing it with your dev friends and colleagues!
+
+```xml
+<string>Thanks for your support! ${supporting_person}</string>
+```
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=VJWEQ767PEYCA)
+[![ko-fi](https://cdn.ko-fi.com/cdn/kofi2.png?v=3)](https://ko-fi.com/N4N31QU53)
+
 License
 ---
     MIT License
