@@ -29,7 +29,7 @@ Table of Contents
 
 What is it
 ---
-Android Stem is a Gradle plugin which resolves placeholders
+Android Stem is a Gradle plugin that resolves placeholders
 of XML strings referenced into other XML strings
 at build time. You won't have to write any Java or Kotlin code into your
 project to make it work, and you will still be able to access to the 'resolved'
