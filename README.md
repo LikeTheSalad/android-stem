@@ -29,7 +29,7 @@ Table of Contents
 
 What is it
 ---
-Stem is a Gradle plugin which resolves placeholders
+Android Stem is a Gradle plugin which resolves placeholders
 of XML strings referenced into other XML strings
 at build time. You won't have to write any Java or Kotlin code into your
 project to make it work, and you will still be able to access to the 'resolved'
@@ -52,7 +52,7 @@ In other words, if you're looking to do something like this:
     <string name="welcome_message">Welcome to My App Name</string>
 </resources>
 ```
-Without having to write any Java or Kotlin code, then this plugin might help you.
+Without having to write any Java or Kotlin code, then Android Stem might help you.
 
 How to use
 ---
@@ -98,7 +98,7 @@ placeholders have been replaced by the actual referenced values.
 
 ### 2.2- Where can I find the resolved strings in my project?
 
-The resolved strings go into your app's `build` folder, specifically under the `build/generated/resolved` path. That's where this plugin places them into when it is run.
+The resolved strings go into your app's `build` folder, specifically under the `build/generated/resolved` path. That's where Android Stem places them into when it is run.
 
 The following cases are supported:
 
@@ -123,7 +123,7 @@ The following cases are supported:
 
 Use case examples
 ---
-Here's a couple of examples for some of the use cases supported by this plugin
+Here's a couple of examples for some of the use cases supported by Android Stem
 
 ### 1.- Simple use case
 Within our `app/main/res/values` folder, we have the following file:
@@ -231,13 +231,13 @@ After building the `demo` variant of our project, we'll get for such variant:
 ```
 So we see that the `app_name` value has been overridden by the demo's app_name, this doesn't only happen for values but also for templates, we can also override templates within our demo's resources.
 
-> Those were some of the use cases that you can achieve using this plugin, there's more of them such as overriding flavors' multi languages from the base values folder and also working with multi-dimension flavors. You can play around with it, it all should work the way you'd expect it to work.
+> Those were some of the use cases that you can achieve using Android Stem, there's more of them such as overriding flavors' multi languages from the base values folder and also working with multi-dimension flavors. You can play around with it, it all should work the way you'd expect it to work.
 
 Adding it to your project
 ---
 
 We're going to need to modify two `build.gradle` files in our project in order to make
-this plugin work, those are:
+Android Stem work, those are:
 
 - **Root's** `build.gradle`
 - **App's** `build.gradle`
@@ -289,7 +289,7 @@ In your `App's build.gradle` file you have to add the following line below the `
 one:
 
 ```groovy
-apply plugin: 'placeholder-resolver'
+apply plugin: 'com.likethesalad.stem'
 ```
 
 Example:
@@ -297,7 +297,7 @@ Example:
 ```groovy
 // App's build.gradle file
 apply plugin: 'com.android.application'
-apply plugin: 'placeholder-resolver'
+apply plugin: 'com.likethesalad.stem'
 
 android {
   //...
@@ -311,7 +311,7 @@ can do so by applying a "producer" version of Stem into them like so:
 ```groovy
 // App's build.gradle file
 apply plugin: 'com.android.library'
-apply plugin: 'stem-library'
+apply plugin: 'com.likethesalad.stem-library'
 
 android {
     //...
