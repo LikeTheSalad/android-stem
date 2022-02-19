@@ -1,5 +1,7 @@
 ![version](https://img.shields.io/maven-central/v/com.likethesalad.android/stem-plugin)
 [![Android Arsenal]( https://img.shields.io/badge/Android%20Arsenal-Android%20String%20XML%20Reference-green.svg?style=flat )]( https://android-arsenal.com/details/1/7967 )
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=VJWEQ767PEYCA)
+[<img src="https://cdn.ko-fi.com/cdn/kofi2.png?v=3" alt="ko-fi" width="100px"/>](https://ko-fi.com/N4N31QU53)
 
 # Android Stem
 
@@ -24,6 +26,7 @@ Table of Contents
      * [2.3- Adding it to your own Android Libraries (Optional)](#23--adding-it-to-your-own-android-libraries-optional)
      * [2.4- Sync your project](#24--sync-your-project)
   * [Running it manually](#running-it-manually)
+  * [Donations](#donations-)
   * [License](#license)
 
 
