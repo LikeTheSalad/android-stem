@@ -1,6 +1,14 @@
 Change Log
 ==========
 
+Version 2.0.0 *(19-02-2022)*
+---
+
+* Rebrand to "Stem".
+* Removed "template_" prefix.
+* Created library templates provider plugin.
+* Removed configuration params.
+
 Version 1.3.0 *(19-12-2021)*
 ---
 
