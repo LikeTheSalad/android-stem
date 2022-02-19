@@ -57,12 +57,12 @@ pluginBundle {
 gradlePlugin {
     plugins {
         placeholderResolverPlugin {
-            id = 'placeholder-resolver'
+            id = 'com.likethesalad.stem'
             displayName = rootProject.artifactPublisher.displayName.get()
             implementationClass = 'com.likethesalad.stem.ResolvePlaceholdersPlugin'
         }
         templatesProvider {
-            id = 'resource.templates.provider'
+            id = 'com.likethesalad.stem-library'
             implementationClass = 'com.likethesalad.android.templates.provider.TemplatesProviderPlugin'
         }
     }

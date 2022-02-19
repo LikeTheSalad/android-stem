@@ -18,8 +18,8 @@ import java.io.File
 class CheckOutputsTest : AndroidProjectTest() {
 
     companion object {
-        private const val RESOLVER_PLUGIN_ID = "placeholder-resolver"
-        private const val PROVIDER_PLUGIN_ID = "resource.templates.provider"
+        private const val RESOLVER_PLUGIN_ID = "com.likethesalad.stem"
+        private const val PROVIDER_PLUGIN_ID = "com.likethesalad.stem-library"
         private const val ANDROID_PLUGIN_VERSION = "7.1.0"
         private const val GRADLE_VERSION = "7.2"
     }

@@ -139,7 +139,7 @@ class TemplatesProviderPluginTest : AndroidProjectTest() {
         val inputDir = inputAssetsRoot.getAssetFile(sourceDirName)
 
         val libProjectDescriptor = AndroidLibProjectDescriptor(projectName, inputDir, ANDROID_PLUGIN_VERSION)
-        libProjectDescriptor.pluginsBlock.addPlugin(GradlePluginDeclaration("resource.templates.provider"))
+        libProjectDescriptor.pluginsBlock.addPlugin(GradlePluginDeclaration("com.likethesalad.stem-library"))
         return libProjectDescriptor
     }
 
