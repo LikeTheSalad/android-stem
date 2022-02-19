@@ -29,7 +29,7 @@ Table of Contents
 
 What is it
 ---
-TBD is a Gradle plugin which resolves placeholders
+Stem is a Gradle plugin which resolves placeholders
 of XML strings referenced into other XML strings
 at build time. You won't have to write any Java or Kotlin code into your
 project to make it work, and you will still be able to access to the 'resolved'
@@ -65,7 +65,7 @@ work too**.
 In order to create a template all you need to do is to add references to other strings in the form
 of "placeholders" into the string you want to use as template, the placeholder format is `${another_string_name}` where
 "another_string_name" will be the name of any other string you have in your project or in a library of yours that
-serves as a "tbd provider" one, more on it below.
+serves as a "Stem provider" one, more on it below.
 
 Following our example above for our "my_message" template, let's say that
 we have another string in our project named "app_name" (which content is "My app name") and we want to place it inside our "my_message" template, we can do it like so:
@@ -306,12 +306,12 @@ android {
 ### 2.3- Adding it to your own Android Libraries (Optional)
 
 If you have parts of your project split into multiple android libraries where you'd like to define templates, you
-can do so by applying a "producer" version of TBD into them like so:
+can do so by applying a "producer" version of Stem into them like so:
 
 ```groovy
 // App's build.gradle file
 apply plugin: 'com.android.library'
-apply plugin: 'tbd-library'
+apply plugin: 'stem-library'
 
 android {
     //...

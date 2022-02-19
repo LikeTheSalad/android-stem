@@ -15,7 +15,7 @@ class Logger @AssistedInject constructor(
     }
 
     private val prefix by lazy {
-        "[TBD] - ${javaClass.name} - "
+        "[STEM] - ${javaClass.name} - "
     }
 
     fun debug(message: String, vararg args: Any) {
