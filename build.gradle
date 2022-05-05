@@ -34,7 +34,7 @@ version = '2.0.0'
 ext {
     dagger_version = '2.39.1'
     androidBuild_version = '7.1.0'
-    testingUtilities_version = '1.0.7'
+    testingUtilities_version = '1.0.8-SNAPSHOT1'
     resourceLocator_version = '1.1.0'
     androidTools_version = "1.1.0"
 }
