@@ -9,7 +9,7 @@ import org.gradle.api.Project
 abstract class BaseTemplatesProcessorPlugin : AndroidToolsPluginConsumer() {
 
     protected lateinit var stringsLocatorExtension: AndroidResourceLocatorExtension
-    protected lateinit var extension: StemExtension
+    lateinit var extension: StemExtension
 
     companion object {
         private const val EXTENSION_NAME = "androidStem"
