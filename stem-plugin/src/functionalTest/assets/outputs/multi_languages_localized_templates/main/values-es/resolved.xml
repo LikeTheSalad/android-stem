@@ -1,0 +1,4 @@
+<resources>
+    <string name="language_only_template">Language only template with app name: Idiomas diferentes</string>
+    <string name="welcome_message">Bienvenido a Idiomas diferentes</string>
+</resources>

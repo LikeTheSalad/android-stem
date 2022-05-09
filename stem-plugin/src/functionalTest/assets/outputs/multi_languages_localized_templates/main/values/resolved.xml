@@ -1,0 +1,5 @@
+<resources>
+    <string name="international_welcome_message">Welcome to Different Languages also known as Babel</string>
+    <string name="language_only_template">This is not a template for main</string>
+    <string name="welcome_message">Welcome to Different Languages</string>
+</resources>
