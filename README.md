@@ -152,7 +152,7 @@ androidStem {
     // could enable this flag so that Stem looks for templates within string resources within the "values" dir
     // and also within any language-specific values folders as well.
     // Please bear in mind that this might cause performance penalties.
-    includeLocalizedOnlyTemplates = false
+    includeLocalizedOnlyTemplates = false // disabled by default
 }
 
 ```
