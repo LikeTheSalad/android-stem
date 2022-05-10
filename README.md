@@ -14,6 +14,7 @@ Table of Contents
      * [2.- Running it](#2--running-it)
      * [2.1- How to know if it worked?](#21--how-to-know-if-it-worked)
      * [2.2- Where can I find the resolved strings in my project?](#22--where-can-i-find-the-resolved-strings-in-my-project)
+     * [3.- Configuration](#3--configuration)
   * [Use case examples](#use-case-examples)
      * [1.- Simple use case](#1--simple-use-case)
      * [2.- Multi files use case](#2--multi-files-use-case)
@@ -125,7 +126,7 @@ The following cases are supported:
 > '*my_message*', inside the 'values-es' folder, and you'll get the
 > translated '*my_message*' string in the 'resolved.xml' file inside the 'values-es' folder.
 
-### 3- Configuration
+### 3.- Configuration
 
 Stem should work out of the box as you'd expect it to, however, depending on each case, some projects
 might have special needs for which some parts of how Stem works might need to be adjusted to meet those needs.
