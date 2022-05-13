@@ -76,8 +76,8 @@ class ResolvePlaceholdersPlugin : BaseTemplatesProcessorPlugin(), AndroidExtensi
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : Task> findTaskByName(name: String): T {
-        return project.tasks.findByName(name) as T
+    override fun <T : Task> findTaskByName(name: String): T? {
+        return project.tasks.findByName(name) as? T
     }
 
     override fun getTaskContainer(): TaskContainer {

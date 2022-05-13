@@ -79,7 +79,7 @@ class PlaceholderTasksCreator @Inject constructor(
         }
 
         androidVariantContext.mergeResourcesTask.dependsOn(resolvePlaceholdersTask)
-        androidVariantContext.packageResourcesTask.dependsOn(resolvePlaceholdersTask)
+        androidVariantContext.packageResourcesTask?.dependsOn(resolvePlaceholdersTask)
     }
 
     private fun createTemplatesIdentifierTaskProvider(
