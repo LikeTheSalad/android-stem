@@ -45,8 +45,6 @@ sourceSets {
 task functionalTest(type: Test) {
     testClassesDirs = sourceSets.functionalTest.output.classesDirs
     classpath = sourceSets.functionalTest.runtimeClasspath
-
-    dependsOn("pluginUnderTestMetadata")
 }
 
 pluginBundle {
