@@ -15,10 +15,12 @@ buildscript {
         classpath "com.likethesalad.tools:plugin-metadata-producer:$pluginMetadataTool_version"
         classpath "com.github.gmazzo:gradle-buildconfig-plugin:3.0.3"
         classpath 'com.likethesalad.tools:artifact-publisher:1.1.1'
+        classpath 'com.likethesalad.dagger:remapper-plugin:1.0.1'
     }
 }
 
 apply plugin: "artifact-publisher"
+apply plugin: "com.likethesalad.dagger-remapper"
 
 artifactPublisher {
     displayName = "Android Stem"
@@ -34,8 +36,8 @@ version = '2.0.0'
 ext {
     dagger_version = '2.39.1'
     androidBuild_version = '7.1.0'
-    testingUtilities_version = '1.0.8-SNAPSHOT1'
-    resourceLocator_version = '1.1.0'
+    testingUtilities_version = '1.0.8'
+    resourceLocator_version = '1.1.1'
     androidTools_version = "1.2.0"
 }
 
