@@ -1,6 +1,7 @@
 package com.likethesalad.stem
 
 import com.google.common.truth.Truth
+import com.likethesalad.stem.testtools.StemConfigBlock
 import com.likethesalad.tools.functional.testing.AndroidProjectTest
 import com.likethesalad.tools.functional.testing.app.layout.AndroidAppProjectDescriptor
 import com.likethesalad.tools.functional.testing.app.layout.AndroidBlockItem
@@ -162,6 +163,18 @@ class CheckOutputsTest : AndroidProjectTest() {
     }
 
     @Test
+    fun `verify multi-languages app outputs with localized-only templates`() {
+        val inOutDirName = "multi_languages_localized_templates"
+        val androidProjectDescriptor = createAndroidAppProjectDescriptor(
+            inOutDirName,
+            config = StemConfigBlock(true)
+        )
+        runInputOutputComparisonTest(
+            inOutDirName, listOf("debug"), androidProjectDescriptor
+        )
+    }
+
+    @Test
     fun `verify app with gradle-generated strings outputs`() {
         val appName = "with_gradle_strings"
         val gradleStrings = mapOf("my_app_id" to "APP ID")
@@ -298,11 +311,15 @@ class CheckOutputsTest : AndroidProjectTest() {
         projectName: String,
         inputDirName: String = projectName,
         androidBlockItems: List<AndroidBlockItem> = emptyList(),
-        dependencies: List<String> = emptyList()
+        dependencies: List<String> = emptyList(),
+        config: StemConfigBlock? = null
     ): AndroidAppProjectDescriptor {
         val inputDir = getInputTestAsset(inputDirName)
         val blockItems = mutableListOf<GradleBlockItem>()
         blockItems.addAll(androidBlockItems)
+        if (config != null) {
+            blockItems.add(config)
+        }
         val descriptor =
             AndroidAppProjectDescriptor(projectName, inputDir, ANDROID_PLUGIN_VERSION, blockItems)
         dependencies.forEach { dependency ->

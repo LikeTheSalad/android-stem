@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+Version 2.1.0 *(16-05-2022)*
+---
+
+* Added configuration param `includeLocalizedOnlyTemplates` ref #21.
+* Fix #20.
+* Fix #22.
+
 Version 2.0.0 *(19-02-2022)*
 ---
 

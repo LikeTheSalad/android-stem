@@ -1,5 +1,6 @@
 package com.likethesalad.stem.di
 
+import com.likethesalad.android.templates.common.plugins.extension.StemExtension
 import com.likethesalad.stem.ResolvePlaceholdersPlugin
 import com.likethesalad.stem.providers.AndroidExtensionProvider
 import com.likethesalad.stem.providers.ProjectDirsProvider
@@ -48,5 +49,11 @@ class AppModule(private val resolvePlaceholdersPlugin: ResolvePlaceholdersPlugin
     @Singleton
     fun provideGradleLogger(): Logger {
         return resolvePlaceholdersPlugin.getGradleLogger()
+    }
+
+    @Provides
+    @Singleton
+    fun provideExtension(): StemExtension {
+        return resolvePlaceholdersPlugin.extension
     }
 }

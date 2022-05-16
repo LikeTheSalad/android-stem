@@ -1,7 +1,6 @@
 package com.likethesalad.stem.modules.common.helpers.dirs
 
 import com.likethesalad.stem.providers.AndroidExtensionProvider
-import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -10,8 +9,7 @@ class SourceSetsHandler @Inject constructor(androidExtensionProvider: AndroidExt
 
     private val androidExtension by lazy { androidExtensionProvider.getExtension() }
 
-    fun addToSourceSets(dir: File, variantName: String) {
-        val variantSrcDirs = androidExtension.getVariantSrcDirs(variantName)
-        androidExtension.setVariantSrcDirs(variantName, variantSrcDirs + dir)
+    fun addToSourceSets(dir: Any, variantName: String) {
+        androidExtension.addVariantSrcDir(variantName, dir)
     }
 }

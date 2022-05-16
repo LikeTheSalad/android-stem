@@ -5,6 +5,7 @@ import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateI
 import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer
 import com.likethesalad.android.templates.provider.api.TemplatesProvider
 import com.likethesalad.android_templates.provider.plugin.generated.BuildConfig
+import com.likethesalad.stem.testtools.StemConfigBlock
 import com.likethesalad.stem.utils.TemplatesProviderLoader
 import com.likethesalad.tools.functional.testing.AndroidProjectTest
 import com.likethesalad.tools.functional.testing.layout.AndroidLibProjectDescriptor
@@ -83,6 +84,22 @@ class TemplatesProviderPluginTest : AndroidProjectTest() {
         )
     }
 
+    @Test
+    fun `Take templates from all languages and main strings if feature enabled`() {
+        val projectName = "multi_language_all"
+        val project = setUpProject(projectName, config = StemConfigBlock(true))
+
+        runCommand(project, "assembleDebug")
+
+        val provider = getTemplatesProvider(project, "debug")
+        commonVerification(provider, projectName)
+        assertTemplatesContainExactly(
+            provider,
+            TemplateItem("someTemplate", "string"),
+            TemplateItem("someLanguageOnlyTemplate", "string")
+        )
+    }
+
     private fun getTemplatesProvider(project: ProjectDescriptor, variantName: String): TemplatesProvider {
         val aarFile = getAarFile(project.projectName, variantName)
         val jarFile = extractJar(aarFile)
@@ -135,10 +152,18 @@ class TemplatesProviderPluginTest : AndroidProjectTest() {
         return commandStr.split(Regex("[\\s\\t]+"))
     }
 
-    private fun setUpProject(projectName: String, sourceDirName: String = projectName): ProjectDescriptor {
+    private fun setUpProject(
+        projectName: String,
+        sourceDirName: String = projectName,
+        config: StemConfigBlock? = null
+    ): ProjectDescriptor {
         val inputDir = inputAssetsRoot.getAssetFile(sourceDirName)
 
-        val libProjectDescriptor = AndroidLibProjectDescriptor(projectName, inputDir, ANDROID_PLUGIN_VERSION)
+        val blockItems = if (config != null) listOf(config) else emptyList()
+        val libProjectDescriptor = AndroidLibProjectDescriptor(
+            projectName, inputDir, ANDROID_PLUGIN_VERSION,
+            blockItems
+        )
         libProjectDescriptor.pluginsBlock.addPlugin(GradlePluginDeclaration("com.likethesalad.stem-library"))
         return libProjectDescriptor
     }

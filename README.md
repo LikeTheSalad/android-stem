@@ -14,6 +14,7 @@ Table of Contents
      * [2.- Running it](#2--running-it)
      * [2.1- How to know if it worked?](#21--how-to-know-if-it-worked)
      * [2.2- Where can I find the resolved strings in my project?](#22--where-can-i-find-the-resolved-strings-in-my-project)
+     * [3.- Configuration](#3--configuration)
   * [Use case examples](#use-case-examples)
      * [1.- Simple use case](#1--simple-use-case)
      * [2.- Multi files use case](#2--multi-files-use-case)
@@ -124,6 +125,37 @@ The following cases are supported:
 > '*my_message*' string to spanish for example, you just have to override the template
 > '*my_message*', inside the 'values-es' folder, and you'll get the
 > translated '*my_message*' string in the 'resolved.xml' file inside the 'values-es' folder.
+
+### 3.- Configuration
+
+Stem should work out of the box as you'd expect it to, however, depending on each case, some projects
+might have special needs for which some parts of how Stem works might need to be adjusted to meet those needs.
+Stem can be configured in your `build.gradle` file where Stem is applied, as shown below along with the currently
+available configurable parameters.
+
+```groovy
+// build.gradle file where "com.likethesalad.stem" or "com.likethesalad.stem-library" is applied.
+
+androidStem {
+    // Even though Stem resolves your templates no matter their localization, it searches for templates amongst your 
+    // string resources within the folder "values" only by default (which will be taken as reference for other languages 
+    // when resolving them).
+    // This is because, ideally, if you have a string that will need a ${placeholder} in it, it should have it
+    // inside any of that same string's different languages, including the default one ("values"). 
+    // So in order to avoid checking for the same strings across different languages looking for ${placeholders}, which could mean
+    // an expensive processing operation depending on the project, Stem by default only checks the default
+    // strings when looking for templates, and then based on what it finds within the default strings, it applies
+    // the placeholder resolving process to all other languages.
+    //
+    // However, in some cases some projects might have a string withing the "values" folder that has no ${placeholders}
+    // in it, but its translations might have them instead (check issue #21 for context). For those cases, you
+    // could enable this flag so that Stem looks for templates within string resources within the "values" dir
+    // and also within any language-specific values folders as well.
+    // Please bear in mind that this might cause performance penalties.
+    includeLocalizedOnlyTemplates = false // disabled by default
+}
+
+```
 
 Use case examples
 ---

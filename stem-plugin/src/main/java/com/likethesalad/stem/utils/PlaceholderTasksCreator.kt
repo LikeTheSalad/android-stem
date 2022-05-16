@@ -4,6 +4,7 @@ import com.likethesalad.android.templates.common.tasks.identifier.TemplatesIdent
 import com.likethesalad.android.templates.common.tasks.identifier.action.TemplatesIdentifierAction
 import com.likethesalad.stem.locator.listener.TypeLocatorCreationListener
 import com.likethesalad.stem.modules.common.helpers.android.AndroidVariantContext
+import com.likethesalad.stem.modules.common.helpers.dirs.SourceSetsHandler
 import com.likethesalad.stem.modules.common.models.TasksNamesModel
 import com.likethesalad.stem.modules.resolveStrings.ResolvePlaceholdersTask
 import com.likethesalad.stem.modules.resolveStrings.data.ResolvePlaceholdersArgs
@@ -77,9 +78,8 @@ class PlaceholderTasksCreator @Inject constructor(
             it.outputDir.set(androidVariantContext.variantBuildResolvedDir.resolvedDir)
         }
 
-        androidVariantContext.androidVariantData.getMergeResourcesProvider().configure {
-            it.dependsOn(resolvePlaceholdersTask)
-        }
+        androidVariantContext.mergeResourcesTask.dependsOn(resolvePlaceholdersTask)
+        androidVariantContext.packageResourcesTask?.dependsOn(resolvePlaceholdersTask)
     }
 
     private fun createTemplatesIdentifierTaskProvider(

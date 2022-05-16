@@ -13,6 +13,7 @@ class TemplatesProviderPlugin : BaseTemplatesProcessorPlugin() {
 
     override fun apply(project: Project) {
         super.apply(project)
+        TemplatesProviderInjector.init(this)
         component = TemplatesProviderInjector.getComponent()
 
         stringsLocatorExtension.registerLocator(
