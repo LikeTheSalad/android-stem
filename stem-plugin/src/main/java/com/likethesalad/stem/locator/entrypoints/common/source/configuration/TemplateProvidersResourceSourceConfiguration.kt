@@ -75,7 +75,7 @@ class TemplateProvidersResourceSourceConfiguration @AssistedInject constructor(
 
     private fun getExternalResDirPatterns(externalJars: List<File>): List<String> {
         val fileNames = externalJars.map { it.name.substringBeforeLast("-runtime") }.distinct()
-        return fileNames.map { ".+/${it}/res\$" }
+        return fileNames.map { ".+${FILE_SEPARATOR}${it}${FILE_SEPARATOR}res\$" }
     }
 
     private fun getLocalResDirPatterns(localJars: List<File>): List<String> {
