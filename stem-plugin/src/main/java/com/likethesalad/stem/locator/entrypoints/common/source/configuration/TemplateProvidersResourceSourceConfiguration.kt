@@ -32,7 +32,8 @@ class TemplateProvidersResourceSourceConfiguration @AssistedInject constructor(
     }
 
     companion object {
-        private val LOCAL_BUILD_DIR_PATTERN = Regex("^.+/build/")
+        private val FILE_SEPARATOR = File.separator
+        private val LOCAL_BUILD_DIR_PATTERN = Regex("^.+" + FILE_SEPARATOR + "build" + FILE_SEPARATOR)
     }
 
     override fun getResDirs(): List<ResDir> {
