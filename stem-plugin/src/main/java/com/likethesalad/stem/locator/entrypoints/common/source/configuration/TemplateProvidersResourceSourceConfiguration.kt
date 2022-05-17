@@ -1,5 +1,6 @@
 package com.likethesalad.stem.locator.entrypoints.common.source.configuration
 
+import com.likethesalad.android.templates.common.utils.CommonConstants.FILE_SEPARATOR
 import com.likethesalad.android.templates.common.utils.Logger
 import com.likethesalad.stem.locator.entrypoints.common.utils.TemplatesProviderJarsFinder
 import com.likethesalad.stem.providers.ProjectDirsProvider
@@ -32,7 +33,6 @@ class TemplateProvidersResourceSourceConfiguration @AssistedInject constructor(
     }
 
     companion object {
-        private val FILE_SEPARATOR = File.separator
         private val LOCAL_BUILD_DIR_PATTERN = Regex("^.+" + FILE_SEPARATOR + "build" + FILE_SEPARATOR)
     }
 
