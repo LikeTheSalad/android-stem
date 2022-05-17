@@ -1,6 +1,6 @@
 package com.likethesalad.stem.locator.entrypoints.common.source.configuration
 
-import com.likethesalad.android.templates.common.utils.CommonConstants.FILE_SEPARATOR
+import com.likethesalad.android.templates.common.utils.CommonConstants.FILE_SEPARATOR_MATCHER
 import com.likethesalad.android.templates.common.utils.Logger
 import com.likethesalad.stem.locator.entrypoints.common.utils.TemplatesProviderJarsFinder
 import com.likethesalad.stem.providers.ProjectDirsProvider
@@ -33,7 +33,7 @@ class TemplateProvidersResourceSourceConfiguration @AssistedInject constructor(
     }
 
     companion object {
-        private val LOCAL_BUILD_DIR_PATTERN = Regex("^.+" + FILE_SEPARATOR + "build" + FILE_SEPARATOR)
+        private val LOCAL_BUILD_DIR_PATTERN = Regex("^.+" + FILE_SEPARATOR_MATCHER + "build" + FILE_SEPARATOR_MATCHER)
     }
 
     override fun getResDirs(): List<ResDir> {
@@ -75,7 +75,7 @@ class TemplateProvidersResourceSourceConfiguration @AssistedInject constructor(
 
     private fun getExternalResDirPatterns(externalJars: List<File>): List<String> {
         val fileNames = externalJars.map { it.name.substringBeforeLast("-runtime") }.distinct()
-        return fileNames.map { ".+${FILE_SEPARATOR}${it}${FILE_SEPARATOR}res\$" }
+        return fileNames.map { ".+${FILE_SEPARATOR_MATCHER}${it}${FILE_SEPARATOR_MATCHER}res\$" }
     }
 
     private fun getLocalResDirPatterns(localJars: List<File>): List<String> {
