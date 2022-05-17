@@ -12,6 +12,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.gradle.api.file.FileCollection
 import java.io.File
+import java.util.regex.Pattern
 
 class TemplateProvidersResourceSourceConfiguration @AssistedInject constructor(
     @Assisted variantTree: VariantTree,
@@ -75,12 +76,12 @@ class TemplateProvidersResourceSourceConfiguration @AssistedInject constructor(
 
     private fun getExternalResDirPatterns(externalJars: List<File>): List<String> {
         val fileNames = externalJars.map { it.name.substringBeforeLast("-runtime") }.distinct()
-        return fileNames.map { ".+${FILE_SEPARATOR_MATCHER}${it}${FILE_SEPARATOR_MATCHER}res\$" }
+        return fileNames.map { ".+${FILE_SEPARATOR_MATCHER}${Pattern.quote(it)}${FILE_SEPARATOR_MATCHER}res\$" }
     }
 
     private fun getLocalResDirPatterns(localJars: List<File>): List<String> {
         val localBuildPaths = localJars.map { getBuildDir(it) }.distinct()
-        return localBuildPaths.map { "^${it}.+" }
+        return localBuildPaths.map { "^${Pattern.quote(it)}.+" }
     }
 
     private fun getBuildDir(localJarFile: File): String {
@@ -89,7 +90,7 @@ class TemplateProvidersResourceSourceConfiguration @AssistedInject constructor(
 
     private fun filterLocalJars(templatesProviderJars: List<File>): List<File> {
         val rootProjectDirPath = projectDirsProvider.getRootProjectDir().absolutePath
-        val localJarPattern = Regex("^$rootProjectDirPath.+")
+        val localJarPattern = Regex("^${Pattern.quote(rootProjectDirPath)}.+")
         return templatesProviderJars.filter { localJarPattern.matches(it.absolutePath) }
     }
 }
