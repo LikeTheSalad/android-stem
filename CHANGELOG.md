@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 2.1.1 *(17-05-2022)*
+---
+
+* Fix #24 by supporting Windows path separators on regexes.
+
 Version 2.1.0 *(16-05-2022)*
 ---
 
