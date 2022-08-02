@@ -5,11 +5,12 @@ import com.likethesalad.stem.modules.common.helpers.resources.ResourcesHandler
 import com.likethesalad.stem.modules.resolveStrings.ResolvePlaceholdersAction
 import com.likethesalad.stem.modules.resolveStrings.resolver.TemplateResolver
 import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesModel
-import com.likethesalad.tools.resource.api.android.AndroidResourceScope
+import com.likethesalad.tools.resource.api.android.attributes.plain
 import com.likethesalad.tools.resource.api.android.environment.Language
 import com.likethesalad.tools.resource.api.android.environment.Variant
+import com.likethesalad.tools.resource.api.android.impl.AndroidResourceScope
 import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
-import com.likethesalad.tools.resource.api.data.AttributeContainer
+import com.likethesalad.tools.resource.api.attributes.AttributeContainer
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -113,7 +114,7 @@ class ResolvePlaceholdersActionTest {
         for (it in 0 until count) {
             val string = mockk<StringAndroidResource>()
             val attributes = mockk<AttributeContainer>()
-            every { attributes.get("translatable") }.returns(translatable.toString())
+            every { attributes.get(plain("translatable")) }.returns(translatable.toString())
             every { string.attributes() }.returns(attributes)
             every { string.getAndroidScope() }.returns(scope)
             strings.add(string)

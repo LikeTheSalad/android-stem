@@ -2,9 +2,10 @@ package com.likethesalad.stem.utils
 
 import com.google.common.truth.Truth
 import com.likethesalad.stem.modules.common.helpers.resources.utils.XmlUtils
-import com.likethesalad.tools.resource.api.android.AndroidResourceScope
+import com.likethesalad.tools.resource.api.android.attributes.plain
 import com.likethesalad.tools.resource.api.android.environment.Language
 import com.likethesalad.tools.resource.api.android.environment.Variant
+import com.likethesalad.tools.resource.api.android.impl.AndroidResourceScope
 import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
 import org.junit.Test
 import javax.xml.parsers.DocumentBuilderFactory
@@ -20,8 +21,8 @@ class XmlUtilsTest {
         val stringResourceModel =
             StringAndroidResource(
                 mapOf(
-                    "name" to "some_name",
-                    "extra" to "some extra attr"
+                    plain("name") to "some_name",
+                    plain("extra") to "some extra attr"
                 ), "some content", scope
             )
 

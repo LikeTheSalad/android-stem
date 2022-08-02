@@ -5,9 +5,10 @@ import com.likethesalad.resource.serializer.android.AndroidResourceSerializer
 import com.likethesalad.stem.modules.common.helpers.files.OutputStringFileResolver
 import com.likethesalad.stem.modules.common.helpers.resources.AndroidResourcesHandler
 import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesModel
-import com.likethesalad.tools.resource.api.android.AndroidResourceScope
+import com.likethesalad.tools.resource.api.android.attributes.plain
 import com.likethesalad.tools.resource.api.android.environment.Language
 import com.likethesalad.tools.resource.api.android.environment.Variant
+import com.likethesalad.tools.resource.api.android.impl.AndroidResourceScope
 import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
 import com.likethesalad.tools.resource.serializer.ResourceSerializer
 import io.mockk.every
@@ -56,8 +57,8 @@ class AndroidResourcesHandlerTest {
         val stringResourceModel2 =
             StringAndroidResource(
                 mapOf(
-                    "name" to "message_non_translatable",
-                    "translatable" to "false"
+                    plain("name") to "message_non_translatable",
+                    plain("translatable") to "false"
                 ),
                 "Non translatable TesT",
                 androidScope
@@ -119,8 +120,8 @@ class AndroidResourcesHandlerTest {
         )
         val template2 = StringAndroidResource(
             mapOf(
-                "name" to "template_message_non_translatable",
-                "translatable" to "false"
+                plain("name") to "template_message_non_translatable",
+                plain("translatable") to "false"
             ), "Non translatable \${app_name}",
             androidScope
         )
