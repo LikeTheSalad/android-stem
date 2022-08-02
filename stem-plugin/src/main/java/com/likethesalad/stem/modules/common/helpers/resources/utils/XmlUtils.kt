@@ -12,7 +12,7 @@ class XmlUtils {
             val strElement = document.createElement(XML_STRING_TAG)
             strElement.textContent = stringResourceModel.stringValue()
             for (it in stringResourceModel.attributes().asMap()) {
-                strElement.setAttribute(it.key, it.value)
+                strElement.setAttribute(it.key.value(), it.value)
             }
             return strElement
         }

@@ -2,6 +2,7 @@ package com.likethesalad.stem.modules.resolveStrings
 
 import com.likethesalad.stem.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.stem.modules.resolveStrings.resolver.TemplateResolver
+import com.likethesalad.tools.resource.api.android.attributes.plain
 import com.likethesalad.tools.resource.api.android.environment.Language
 import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
 import dagger.assisted.Assisted
@@ -54,7 +55,7 @@ class ResolvePlaceholdersAction @AssistedInject constructor(
     }
 
     private fun isTranslatable(stringResource: StringAndroidResource): Boolean {
-        val translatable = stringResource.attributes().get("translatable") ?: return true
+        val translatable = stringResource.attributes().get(plain("translatable")) ?: return true
         return translatable.toBoolean()
     }
 }
