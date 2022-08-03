@@ -2,9 +2,10 @@ package com.likethesalad.stem.utils
 
 import com.google.common.truth.Truth
 import com.likethesalad.stem.modules.common.helpers.files.AndroidXmlResDocument
-import com.likethesalad.tools.resource.api.android.AndroidResourceScope
+import com.likethesalad.tools.resource.api.android.attributes.namespaced
 import com.likethesalad.tools.resource.api.android.environment.Language
 import com.likethesalad.tools.resource.api.android.environment.Variant
+import com.likethesalad.tools.resource.api.android.impl.AndroidResourceScope
 import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
 import io.mockk.Runs
 import io.mockk.every
@@ -271,6 +272,27 @@ class AndroidXmlResDocumentTest {
               <string name="some_name3">some content3</string>
             </resources>
             
+            """.trimIndent()
+        )
+    }
+
+    @Test
+    fun `verify custom prefixes`() {
+        val document = AndroidXmlResDocument()
+        val outputFile = temporaryFolder.newFile()
+        val resource = StringAndroidResource("someName", "someValue", scope)
+        val namespace = "http://some.namespace.com/"
+        resource.attributes().set(namespaced("someAttr", namespace), "someAttrValue")
+        document.appendStringResource(resource)
+
+        document.saveToFile(outputFile, 2)
+
+        Truth.assertThat(outputFile.readText()).isEqualTo(
+            """
+                <resources xmlns:ns1="$namespace">
+                  <string name="someName" ns1:someAttr="someAttrValue">someValue</string>
+                </resources>
+                
             """.trimIndent()
         )
     }

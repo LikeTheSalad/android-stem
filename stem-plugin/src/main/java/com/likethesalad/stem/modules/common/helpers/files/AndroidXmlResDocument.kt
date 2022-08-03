@@ -20,11 +20,13 @@ class AndroidXmlResDocument(
     val document: Document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument().apply {
         xmlStandalone = true
     }
-) {
+) : XmlUtils.NamespaceNameProvider {
 
     val resources: Element = getOrCreateResources()
+    private val namespacesToNames = mutableMapOf<String, String>()
 
     fun saveToFile(file: File, indentSpaces: Int = 4) {
+        addNamespacesToRoot()
         val transformerFactory = TransformerFactory.newInstance()
         val transformer = transformerFactory.newTransformer()
         transformer.setOutputProperty(OutputKeys.INDENT, "yes")
@@ -48,7 +50,8 @@ class AndroidXmlResDocument(
         append(
             XmlUtils.stringResourceModelToElement(
                 document,
-                stringResourceModel
+                stringResourceModel,
+                this
             )
         )
     }
@@ -77,5 +80,23 @@ class AndroidXmlResDocument(
         val resources = document.createElement(XML_RESOURCES_TAG)
         document.appendChild(resources)
         return resources
+    }
+
+    private fun addNamespacesToRoot() {
+        namespacesToNames.forEach { (value, name) ->
+            resources.setAttribute("xmlns:$name", value)
+        }
+    }
+
+    override fun getNameFor(namespaceValue: String): String {
+        val existingName = namespacesToNames[namespaceValue]
+
+        if (existingName == null) {
+            val name = "ns1"
+            namespacesToNames[namespaceValue] = name
+            return name
+        }
+
+        return existingName
     }
 }
