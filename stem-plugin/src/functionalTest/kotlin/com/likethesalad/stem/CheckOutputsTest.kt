@@ -34,6 +34,11 @@ class CheckOutputsTest : AndroidProjectTest() {
     }
 
     @Test
+    fun `verify basic app outputs with namespaces`() {
+        runInputOutputComparisonTest("basic_with_namespace", listOf("debug"))
+    }
+
+    @Test
     fun `verify nothing happens when there are no templates available`() {
         val variantNames = listOf("debug")
         val inOutDirName = "no_templates_available"
@@ -222,6 +227,25 @@ class CheckOutputsTest : AndroidProjectTest() {
 
         // Set up app
         val appName = "with_library"
+        val appDescriptor = createAndroidAppProjectDescriptor(
+            appName,
+            dependencies = listOf("implementation project(':$libName')")
+        )
+
+        runInputOutputComparisonTest(appName, listOf("debug"), appDescriptor)
+    }
+
+    @Test
+    fun `verify app that takes resources from a library with namespaces`() {
+        // Create library
+        val libName = "mylibrary_with_namespaces"
+        val libDescriptor = createAndroidLibProjectDescriptor(libName)
+        libDescriptor.pluginsBlock.addPlugin(GradlePluginDeclaration(PROVIDER_PLUGIN_ID))
+        libDescriptor.dependenciesBlock.addDependency("implementation 'com.android.support:recyclerview-v7:28.0.0'")
+        createProject(libDescriptor)
+
+        // Set up app
+        val appName = "with_library_with_namespaces"
         val appDescriptor = createAndroidAppProjectDescriptor(
             appName,
             dependencies = listOf("implementation project(':$libName')")

@@ -1,0 +1,4 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Strings playground</string>
+    <string name="welcome_message" tools:someKey="some ns value">Welcome to ${app_name}</string>
+</resources>
