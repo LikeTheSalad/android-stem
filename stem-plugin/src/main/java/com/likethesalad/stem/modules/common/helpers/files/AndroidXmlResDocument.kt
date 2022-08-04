@@ -25,6 +25,10 @@ class AndroidXmlResDocument(
     val resources: Element = getOrCreateResources()
     private val namespacesToNames = mutableMapOf<String, String>()
 
+    companion object {
+        private const val NS_ALIAS_FORMAT = "ns%d"
+    }
+
     fun saveToFile(file: File, indentSpaces: Int = 4) {
         addNamespacesToRoot()
         val transformerFactory = TransformerFactory.newInstance()
@@ -92,7 +96,7 @@ class AndroidXmlResDocument(
         val existingName = namespacesToNames[namespaceValue]
 
         if (existingName == null) {
-            val name = "ns1"
+            val name = NS_ALIAS_FORMAT.format(namespacesToNames.size + 1)
             namespacesToNames[namespaceValue] = name
             return name
         }
