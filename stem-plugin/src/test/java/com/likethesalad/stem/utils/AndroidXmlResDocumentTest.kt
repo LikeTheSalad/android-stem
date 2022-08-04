@@ -297,6 +297,32 @@ class AndroidXmlResDocumentTest {
         )
     }
 
+    @Test
+    fun `verify custom prefixes reused`() {
+        val document = AndroidXmlResDocument()
+        val outputFile = temporaryFolder.newFile()
+        val resource = StringAndroidResource("someName", "someValue", scope)
+        val resource2 = StringAndroidResource("someOtherName", "someOtherValue", scope)
+        val namespace = "http://some.namespace.com/"
+        resource.attributes().set(namespaced("someAttr", namespace), "someAttrValue")
+        resource.attributes().set(namespaced("someAttr2", namespace), "someOtherAttrValue")
+        resource2.attributes().set(namespaced("someAttr3", namespace), "Some attr3 value")
+        document.appendStringResource(resource)
+        document.appendStringResource(resource2)
+
+        document.saveToFile(outputFile, 2)
+
+        Truth.assertThat(outputFile.readText()).isEqualTo(
+            """
+                <resources xmlns:ns1="$namespace">
+                  <string name="someName" ns1:someAttr="someAttrValue" ns1:someAttr2="someOtherAttrValue">someValue</string>
+                  <string name="someOtherName" ns1:someAttr3="Some attr3 value">someOtherValue</string>
+                </resources>
+                
+            """.trimIndent()
+        )
+    }
+
     private fun createStringNode(name: String, content: String, document: Document): Node {
         val node = document.createElement("string")
         node.setAttribute("name", name)
