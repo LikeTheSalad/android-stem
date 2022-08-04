@@ -99,10 +99,10 @@ class TemplateResolverTest {
         val first = result.first()
         Truth.assertThat(first.name()).isEqualTo("the_name")
         Truth.assertThat(first.stringValue()).isEqualTo("This is the name: The name")
-        Truth.assertThat(first.attributes().asMap()).containsExactly(
-            "one_attr", "one_value",
-            "other_attr", "other value",
-            "name", "the_name"
+        Truth.assertThat(first.attributes().asMap().mapKeys { it.key.getName() }).containsExactly(
+            "plain|one_attr|", "one_value",
+            "plain|other_attr|", "other value",
+            "plain|name|", "the_name"
         )
     }
 
