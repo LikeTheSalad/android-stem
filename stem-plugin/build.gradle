@@ -44,24 +44,14 @@ task functionalTest(type: Test) {
     classpath = sourceSets.functionalTest.runtimeClasspath
 }
 
-pluginBundle {
-    website = rootProject.artifactPublisher.url.get()
-    vcsUrl = rootProject.artifactPublisher.vcsUrl.get()
-    description = rootProject.description
-    tags = ['android', 'resolved-strings', 'xml-strings']
-}
-version = rootProject.version
-
 gradlePlugin {
     plugins {
         placeholderResolverPlugin {
             id = 'com.likethesalad.stem'
-            displayName = rootProject.artifactPublisher.displayName.get()
             implementationClass = 'com.likethesalad.stem.ResolvePlaceholdersPlugin'
         }
         templatesProvider {
             id = 'com.likethesalad.stem-library'
-            displayName = "Android Stem library"
             implementationClass = 'com.likethesalad.android.templates.provider.TemplatesProviderPlugin'
         }
     }

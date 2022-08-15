@@ -14,7 +14,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.likethesalad.tools:plugin-metadata-producer:$pluginMetadataTool_version"
         classpath "com.github.gmazzo:gradle-buildconfig-plugin:3.0.3"
-        classpath 'com.likethesalad.tools:artifact-publisher:1.1.1'
+        classpath 'com.likethesalad.tools:artifact-publisher:1.2.1'
     }
 }
 
@@ -25,6 +25,7 @@ artifactPublisher {
     url = "https://github.com/LikeTheSalad/android-stem"
     vcsUrl = "https://github.com/LikeTheSalad/android-stem"
     issueTrackerUrl = "https://github.com/LikeTheSalad/android-stem/issues"
+    tags = ["android", "stem", "xml", "strings"]
 }
 
 description = "This is a Gradle plugin for Android applications which resolves XML string references in other XML strings."
