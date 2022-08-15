@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-Version 2.? *(?-?-2022)*
+Version 2.2.0 *(15-08-2022)*
 ---
 
 * Fix #26 by supporting string resources with custom namespaces.
