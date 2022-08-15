@@ -4,8 +4,8 @@ import com.likethesalad.android.templates.common.configuration.StemConfiguration
 import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItem
 import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer
 import com.likethesalad.android.templates.common.utils.CommonConstants
-import com.likethesalad.tools.resource.api.android.data.AndroidResourceType
 import com.likethesalad.tools.resource.api.android.environment.Language
+import com.likethesalad.tools.resource.api.android.impl.AndroidResourceType
 import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
 import com.likethesalad.tools.resource.api.collection.ResourceCollection
 import com.likethesalad.tools.resource.locator.android.extension.configuration.data.ResourcesProvider

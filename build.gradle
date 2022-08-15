@@ -14,30 +14,29 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.likethesalad.tools:plugin-metadata-producer:$pluginMetadataTool_version"
         classpath "com.github.gmazzo:gradle-buildconfig-plugin:3.0.3"
-        classpath 'com.likethesalad.tools:artifact-publisher:1.1.1'
-        classpath 'com.likethesalad.dagger:remapper-plugin:1.0.1'
+        classpath 'com.likethesalad.tools:artifact-publisher:1.2.1'
     }
 }
 
 apply plugin: "artifact-publisher"
-apply plugin: "com.likethesalad.dagger-remapper"
 
 artifactPublisher {
     displayName = "Android Stem"
     url = "https://github.com/LikeTheSalad/android-stem"
     vcsUrl = "https://github.com/LikeTheSalad/android-stem"
     issueTrackerUrl = "https://github.com/LikeTheSalad/android-stem/issues"
+    tags = ["android", "stem", "xml", "strings"]
 }
 
 description = "This is a Gradle plugin for Android applications which resolves XML string references in other XML strings."
 group = 'com.likethesalad.android'
-version = '2.1.1'
+version = '2.2.0'
 
 ext {
     dagger_version = '2.39.1'
     androidBuild_version = '7.1.0'
     testingUtilities_version = '1.0.8'
-    resourceLocator_version = '1.1.1'
+    resourceLocator_version = '2.0.0'
     androidTools_version = "1.2.0"
 }
 

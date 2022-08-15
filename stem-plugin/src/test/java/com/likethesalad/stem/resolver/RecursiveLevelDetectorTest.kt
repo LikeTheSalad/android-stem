@@ -3,9 +3,9 @@ package com.likethesalad.stem.resolver
 import com.google.common.truth.Truth
 import com.likethesalad.stem.modules.resolveStrings.resolver.RecursiveLevelDetector
 import com.likethesalad.stem.modules.resolveStrings.resolver.TemplateContainerFinder
-import com.likethesalad.tools.resource.api.android.AndroidResourceScope
 import com.likethesalad.tools.resource.api.android.environment.Language
 import com.likethesalad.tools.resource.api.android.environment.Variant
+import com.likethesalad.tools.resource.api.android.impl.AndroidResourceScope
 import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
 import junit.framework.TestCase.fail
 import org.junit.Test

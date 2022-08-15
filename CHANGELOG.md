@@ -1,10 +1,10 @@
 Change Log
 ==========
 
-Version 2.1.1 *(17-05-2022)*
+Version 2.2.0 *(15-08-2022)*
 ---
 
-* Fix #24 by supporting Windows path separators on regexes.
+* Fix #26 by supporting string resources with custom namespaces.
 
 Version 2.1.0 *(16-05-2022)*
 ---
@@ -38,15 +38,17 @@ Version 1.2.2 *(11-04-2021)*
 Version 1.2.1 *(25-08-2020)*
 ---
 
- * New: Added support for gradle generated strings.
+* New: Added support for gradle generated strings.
 
 Version 1.2.0 *(09-05-2020)*
 ---
 
- * New: Added new configuration parameter `useDependenciesRes` that allows to gather strings from the app's dependencies when resolving strings.
+* New: Added new configuration parameter `useDependenciesRes` that allows to gather strings from the app's dependencies
+  when resolving strings.
 
 Version 1.1.0 *(05-01-2020)*
 ---
 
- * New: Generating resolved.xml files inside the `app/build` folder by default and so keeping them hidden from the working dir and the VCS.
- * New: Improved flavors support to now work with multi-dimensional flavors.
+* New: Generating resolved.xml files inside the `app/build` folder by default and so keeping them hidden from the
+  working dir and the VCS.
+* New: Improved flavors support to now work with multi-dimensional flavors.

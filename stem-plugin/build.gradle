@@ -2,16 +2,13 @@ plugins {
     id 'java-gradle-plugin'
     id 'org.jetbrains.kotlin.jvm'
     id 'kotlin-kapt'
-    id 'com.gradle.plugin-publish' version '0.18.0'
 }
 
 dependencies {
-    api gradleApi()
+    embedded "com.google.dagger:dagger:$dagger_version"
+    embedded project(':templates-provider-plugin')
     implementation project(':common-tools')
-    implementation project(':templates-provider-plugin')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation "com.google.dagger:dagger:$dagger_version"
     implementation 'io.github.classgraph:classgraph:4.8.138'
     compileOnly "com.android.tools.build:gradle:$androidBuild_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
@@ -47,18 +44,10 @@ task functionalTest(type: Test) {
     classpath = sourceSets.functionalTest.runtimeClasspath
 }
 
-pluginBundle {
-    website = rootProject.artifactPublisher.url.get()
-    vcsUrl = rootProject.artifactPublisher.vcsUrl.get()
-    description = rootProject.description
-    tags = ['android', 'resolved-strings', 'xml-strings']
-}
-
 gradlePlugin {
     plugins {
         placeholderResolverPlugin {
             id = 'com.likethesalad.stem'
-            displayName = rootProject.artifactPublisher.displayName.get()
             implementationClass = 'com.likethesalad.stem.ResolvePlaceholdersPlugin'
         }
         templatesProvider {

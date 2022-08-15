@@ -35,19 +35,15 @@ class SourceSetsHandlerTest : BaseMockable() {
     @Test
     fun `Add dir to variant sourceSets`() {
         val variantName = "someVariant"
-        val oldSrcDir = temporaryFolder.newFolder("res")
-        val oldSrcDir2 = temporaryFolder.newFolder("res2")
         val newSrcDir = temporaryFolder.newFolder("newRes")
-        val variantSourceSets = setOf(oldSrcDir, oldSrcDir2)
-        every { androidExtension.getVariantSrcDirs(variantName) }.returns(variantSourceSets)
-        every { androidExtension.setVariantSrcDirs(any(), any()) } just Runs
+        every { androidExtension.addVariantSrcDir(any(), any()) } just Runs
 
         sourceSetsHandler.addToSourceSets(newSrcDir, variantName)
 
         verify {
-            androidExtension.setVariantSrcDirs(
+            androidExtension.addVariantSrcDir(
                 variantName,
-                setOf(oldSrcDir, oldSrcDir2, newSrcDir)
+                newSrcDir
             )
         }
     }

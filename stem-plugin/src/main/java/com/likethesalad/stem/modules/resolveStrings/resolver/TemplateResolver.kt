@@ -2,6 +2,7 @@ package com.likethesalad.stem.modules.resolveStrings.resolver
 
 import com.likethesalad.android.templates.common.utils.CommonConstants
 import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesModel
+import com.likethesalad.tools.resource.api.android.attributes.plain
 import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -69,7 +70,7 @@ class TemplateResolver @Inject constructor(private val recursiveLevelDetector: R
     private fun getResolvedStringResourceModel(original: StringAndroidResource, values: Map<String, String>)
             : StringAndroidResource {
         val attrs = original.attributes().asMap().toMutableMap()
-        attrs["name"] = original.name()
+        attrs[plain("name")] = original.name()
         return StringAndroidResource(
             attrs,
             resolve(original.stringValue(), values),

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:someNs="http://schemas2.android.com/tools">
+    <string name="app_name">Library name</string>
+    <string name="library_value">Some value from the library</string>
+    <string name="library_template" tools:someTools="Some tools value" someNs:nsKey="Some someNs value">A template from
+        the library that uses the app name: ${app_name}
+    </string>
+</resources>

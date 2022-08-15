@@ -4,10 +4,12 @@ import com.google.common.truth.Truth
 import com.likethesalad.stem.modules.resolveStrings.resolver.RecursiveLevelDetector
 import com.likethesalad.stem.modules.resolveStrings.resolver.TemplateResolver
 import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesModel
-import com.likethesalad.tools.resource.api.android.AndroidResourceScope
+import com.likethesalad.tools.resource.api.android.attributes.plain
 import com.likethesalad.tools.resource.api.android.environment.Language
 import com.likethesalad.tools.resource.api.android.environment.Variant
+import com.likethesalad.tools.resource.api.android.impl.AndroidResourceScope
 import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
+import com.likethesalad.tools.resource.api.attributes.AttributeKey
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.Before
@@ -69,10 +71,10 @@ class TemplateResolverTest {
     @Test
     fun check_resolveTemplates_simple_keep_attrs() {
         // Given:
-        val attrs = mapOf(
-            "one_attr" to "one_value",
-            "other_attr" to "other value",
-            "name" to "the_name"
+        val attrs = mapOf<AttributeKey, String>(
+            plain("one_attr") to "one_value",
+            plain("other_attr") to "other value",
+            plain("name") to "the_name"
         )
         val templates = listOf(
             StringAndroidResource(
@@ -97,10 +99,10 @@ class TemplateResolverTest {
         val first = result.first()
         Truth.assertThat(first.name()).isEqualTo("the_name")
         Truth.assertThat(first.stringValue()).isEqualTo("This is the name: The name")
-        Truth.assertThat(first.attributes().asMap()).containsExactly(
-            "one_attr", "one_value",
-            "other_attr", "other value",
-            "name", "the_name"
+        Truth.assertThat(first.attributes().asMap().mapKeys { it.key.getName() }).containsExactly(
+            "plain|one_attr|", "one_value",
+            "plain|other_attr|", "other value",
+            "plain|name|", "the_name"
         )
     }
 
