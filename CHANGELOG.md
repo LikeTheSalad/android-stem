@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 2.2.2 *(31-08-2022)*
+---
+
+* Fix #27 by supporting Windows' File path separators when filtering input resources.
+
 Version 2.2.1 *(27-08-2022)*
 ---
 
