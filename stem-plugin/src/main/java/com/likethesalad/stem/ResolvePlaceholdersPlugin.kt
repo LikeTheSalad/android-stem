@@ -1,8 +1,11 @@
 package com.likethesalad.stem
 
+import com.android.build.api.AndroidPluginVersion
+import com.android.build.api.variant.AndroidComponentsExtension
 import com.likethesalad.android.templates.common.plugins.BaseTemplatesProcessorPlugin
 import com.likethesalad.stem.di.AppInjector
 import com.likethesalad.stem.locator.listener.TypeLocatorCreationListener
+import com.likethesalad.stem.modules.common.helpers.dirs.VariantBuildResolvedDir.Companion.getBuildRelativeResolvedDir
 import com.likethesalad.stem.providers.AndroidExtensionProvider
 import com.likethesalad.stem.providers.LocatorExtensionProvider
 import com.likethesalad.stem.providers.ProjectDirsProvider
@@ -49,6 +52,24 @@ class ResolvePlaceholdersPlugin : BaseTemplatesProcessorPlugin(), AndroidExtensi
             templateResourcesEntryPointFactory.create(commonSourceConfigurationCreator),
             creationListener
         )
+        validateAgp73AddingSrcDirs(project)
+    }
+
+    private fun validateAgp73AddingSrcDirs(project: Project) {
+        val androidComponentsExtension = project.extensions.getByType(AndroidComponentsExtension::class.java)
+        if (androidComponentsExtension.pluginVersion >= AndroidPluginVersion(7, 3)) {
+            addSrcDirsBeforeVariants(androidComponentsExtension, project)
+        }
+    }
+
+    private fun addSrcDirsBeforeVariants(extension: AndroidComponentsExtension<*, *, *>, project: Project) {
+        extension.onVariants {
+            val variantName = it.name
+            androidExtension.addVariantSrcDir(
+                variantName,
+                project.layout.buildDirectory.dir(getBuildRelativeResolvedDir(variantName))
+            )
+        }
     }
 
     fun getGradleLogger(): Logger {
