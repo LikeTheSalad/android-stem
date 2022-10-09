@@ -38,6 +38,7 @@ ext {
     testingUtilities_version = '1.0.8'
     resourceLocator_version = '2.0.0'
     androidTools_version = "1.2.0"
+    androidBuild_test_version = '7.1.0'
 }
 
 allprojects {

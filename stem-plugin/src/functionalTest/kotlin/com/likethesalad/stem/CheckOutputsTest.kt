@@ -21,8 +21,8 @@ class CheckOutputsTest : AndroidProjectTest() {
     companion object {
         private const val RESOLVER_PLUGIN_ID = "com.likethesalad.stem"
         private const val PROVIDER_PLUGIN_ID = "com.likethesalad.stem-library"
-        private const val ANDROID_PLUGIN_VERSION = "7.1.0"
         private const val GRADLE_VERSION = "7.2"
+        private val ANDROID_PLUGIN_VERSION = System.getProperty("agpVersion")
     }
 
     private val inputAssetsProvider = TestAssetsProvider("functionalTest", "inputs")
