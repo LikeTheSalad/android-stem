@@ -56,19 +56,19 @@ class ResolvePlaceholdersPlugin : BaseTemplatesProcessorPlugin(), AndroidExtensi
     }
 
     private fun validateAgp73AddingSrcDirs(project: Project) {
-        val androidComponentsExtension = project.extensions.getByType(AndroidComponentsExtension::class.java)
-        if (androidComponentsExtension.pluginVersion >= AndroidPluginVersion(7, 3)) {
-            addSrcDirsBeforeVariants(androidComponentsExtension, project)
-        }
-    }
-
-    private fun addSrcDirsBeforeVariants(extension: AndroidComponentsExtension<*, *, *>, project: Project) {
-        extension.onVariants {
-            val variantName = it.name
-            androidExtension.addVariantSrcDir(
-                variantName,
-                project.layout.buildDirectory.dir(getBuildRelativeResolvedDir(variantName))
-            )
+        try {
+            val androidComponentsExtension = project.extensions.getByType(AndroidComponentsExtension::class.java)
+            if (androidComponentsExtension.pluginVersion >= AndroidPluginVersion(7, 3)) {
+                androidComponentsExtension.onVariants {
+                    val variantName = it.name
+                    androidExtension.addVariantSrcDir(
+                        variantName,
+                        project.layout.buildDirectory.dir(getBuildRelativeResolvedDir(variantName))
+                    )
+                }
+            }
+        } catch (ignored: NoClassDefFoundError) {
+            // When AGP < 7
         }
     }
 
