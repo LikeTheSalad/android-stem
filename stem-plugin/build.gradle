@@ -4,6 +4,18 @@ plugins {
     id 'kotlin-kapt'
 }
 
+configurations {
+    testPluginDependency {
+        canBeResolved(false)
+        canBeConsumed(false)
+    }
+    testPluginClasspath {
+        canBeConsumed(false)
+        canBeResolved(true)
+        extendsFrom(testPluginDependency)
+    }
+}
+
 dependencies {
     embedded "com.google.dagger:dagger:$dagger_version"
     embedded project(':templates-provider-plugin')
@@ -14,12 +26,16 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     testImplementation "com.likethesalad.tools.testing:android-gradle:$testingUtilities_version"
     testImplementation "com.likethesalad.tools.testing:unit-testing:$testingUtilities_version"
-    testImplementation "com.android.tools.build:gradle:$androidBuild_version"
     testImplementation "net.lingala.zip4j:zip4j:2.9.1"
+    testPluginDependency "com.android.tools.build:gradle:$androidBuild_test_version"
 }
 
 tasks.withType(PluginUnderTestMetadata).configureEach {
-    pluginClasspath.from(configurations.compileOnly)
+    pluginClasspath.from(configurations.testPluginClasspath)
+}
+
+tasks.withType(Test) {
+    systemProperty "agpVersion", androidBuild_test_version
 }
 
 kapt {

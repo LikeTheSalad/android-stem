@@ -312,7 +312,8 @@ So we see that the `app_name` value has been overridden by the demo's app_name, 
 also for templates, we can also override templates within our demo's resources.
 
 > Those were some of the use cases that you can achieve using Android Stem, there's more of them such as overriding
-> flavors' multi languages from the base values folder and also working with multi-dimension flavors. You can play around
+> flavors' multi languages from the base values folder and also working with multi-dimension flavors. You can play
+> around
 > with it, it all should work the way you'd expect it to work.
 
 Adding it to your project
@@ -346,7 +347,7 @@ First, in your `Root's build.gradle` file, you'll need to add this
 line into your `buildscript` dependencies block:
 
 ```groovy
-classpath "com.likethesalad.android:stem-plugin:2.2.2"
+classpath "com.likethesalad.android:stem-plugin:2.2.3"
 ```
 
 Example:
@@ -359,7 +360,7 @@ buildscript {
     }
     dependencies {
         //...
-        classpath "com.likethesalad.android:stem-plugin:2.2.2"
+        classpath "com.likethesalad.android:stem-plugin:2.2.3"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
