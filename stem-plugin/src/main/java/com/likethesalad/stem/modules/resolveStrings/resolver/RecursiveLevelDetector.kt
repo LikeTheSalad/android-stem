@@ -68,7 +68,7 @@ class RecursiveLevelDetector @Inject constructor() {
             }
 
             // Grab the highest level, that will be this current template level
-            levels.max()!!
+            levels.maxOrNull()!!
         } else {
             0
         }
