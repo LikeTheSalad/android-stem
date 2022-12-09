@@ -2,3 +2,16 @@ plugins {
     id "com.android.application" version "7.2.0"
     id "com.likethesalad.stem"
 }
+
+android {
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.robolectric:robolectric:4.8'
+}
