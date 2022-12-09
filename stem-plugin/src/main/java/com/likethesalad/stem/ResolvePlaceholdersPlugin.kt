@@ -1,19 +1,18 @@
 package com.likethesalad.stem
 
-import com.android.build.api.AndroidPluginVersion
-import com.android.build.api.variant.AndroidComponentsExtension
 import com.likethesalad.android.templates.common.plugins.BaseTemplatesProcessorPlugin
 import com.likethesalad.stem.di.AppInjector
 import com.likethesalad.stem.locator.listener.TypeLocatorCreationListener
-import com.likethesalad.stem.modules.common.helpers.dirs.VariantBuildResolvedDir.Companion.getBuildRelativeResolvedDir
 import com.likethesalad.stem.providers.AndroidExtensionProvider
 import com.likethesalad.stem.providers.LocatorExtensionProvider
+import com.likethesalad.stem.providers.PostConfigurationProvider
 import com.likethesalad.stem.providers.ProjectDirsProvider
 import com.likethesalad.stem.providers.TaskContainerProvider
 import com.likethesalad.stem.providers.TaskProvider
 import com.likethesalad.stem.utils.PlaceholderTasksCreator
 import com.likethesalad.tools.android.plugin.data.AndroidExtension
 import com.likethesalad.tools.resource.locator.android.extension.AndroidResourceLocatorExtension
+import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.logging.Logger
@@ -22,7 +21,7 @@ import java.io.File
 
 @Suppress("UnstableApiUsage")
 class ResolvePlaceholdersPlugin : BaseTemplatesProcessorPlugin(), AndroidExtensionProvider, ProjectDirsProvider,
-    TaskProvider, TaskContainerProvider, LocatorExtensionProvider {
+    TaskProvider, TaskContainerProvider, LocatorExtensionProvider, PostConfigurationProvider {
 
     private lateinit var project: Project
     private lateinit var androidExtension: AndroidExtension
@@ -52,24 +51,6 @@ class ResolvePlaceholdersPlugin : BaseTemplatesProcessorPlugin(), AndroidExtensi
             templateResourcesEntryPointFactory.create(commonSourceConfigurationCreator),
             creationListener
         )
-        validateAgp73AddingSrcDirs(project)
-    }
-
-    private fun validateAgp73AddingSrcDirs(project: Project) {
-        try {
-            val androidComponentsExtension = project.extensions.getByType(AndroidComponentsExtension::class.java)
-            if (androidComponentsExtension.pluginVersion >= AndroidPluginVersion(7, 3)) {
-                androidComponentsExtension.onVariants {
-                    val variantName = it.name
-                    androidExtension.addVariantSrcDir(
-                        variantName,
-                        project.layout.buildDirectory.dir(getBuildRelativeResolvedDir(variantName))
-                    )
-                }
-            }
-        } catch (ignored: NoClassDefFoundError) {
-            // When AGP < 7
-        }
     }
 
     fun getGradleLogger(): Logger {
@@ -107,5 +88,9 @@ class ResolvePlaceholdersPlugin : BaseTemplatesProcessorPlugin(), AndroidExtensi
 
     override fun getLocatorExtension(): AndroidResourceLocatorExtension {
         return stringsLocatorExtension
+    }
+
+    override fun executeAfterEvaluate(action: Action<in Project>) {
+        project.afterEvaluate(action)
     }
 }

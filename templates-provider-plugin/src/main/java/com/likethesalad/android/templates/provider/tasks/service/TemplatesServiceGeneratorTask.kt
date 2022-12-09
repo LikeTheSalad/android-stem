@@ -1,25 +1,22 @@
 package com.likethesalad.android.templates.provider.tasks.service
 
-import com.likethesalad.android.templates.common.tasks.BaseTask
+import com.likethesalad.android.templates.common.utils.CommonConstants
 import com.likethesalad.android.templates.common.utils.DirectoryUtils
 import com.likethesalad.android.templates.provider.tasks.service.action.TemplatesServiceGeneratorAction
-import org.gradle.api.file.DirectoryProperty
+import com.likethesalad.tools.android.plugin.base.BaseJavaBytecodeGeneratorTask
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.InputFile
-import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import javax.inject.Inject
 
 @Suppress("UnstableApiUsage")
-open class TemplatesServiceGeneratorTask @Inject constructor(private val args: Args) : BaseTask() {
+open class TemplatesServiceGeneratorTask @Inject constructor(private val args: Args) : BaseJavaBytecodeGeneratorTask() {
 
     @InputFile
     val templateIdsFile: RegularFileProperty = project.objects.fileProperty()
 
-    @OutputDirectory
-    val outputDir: DirectoryProperty = project.objects.directoryProperty()
-
     init {
+        group = CommonConstants.RESOLVE_PLACEHOLDERS_TASKS_GROUP_NAME
         outputDir.set(project.layout.buildDirectory.dir("intermediates/incremental/$name"))
     }
 

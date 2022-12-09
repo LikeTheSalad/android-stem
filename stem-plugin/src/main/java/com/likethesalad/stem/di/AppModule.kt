@@ -3,6 +3,7 @@ package com.likethesalad.stem.di
 import com.likethesalad.android.templates.common.plugins.extension.StemExtension
 import com.likethesalad.stem.ResolvePlaceholdersPlugin
 import com.likethesalad.stem.providers.AndroidExtensionProvider
+import com.likethesalad.stem.providers.PostConfigurationProvider
 import com.likethesalad.stem.providers.ProjectDirsProvider
 import com.likethesalad.stem.providers.TaskContainerProvider
 import com.likethesalad.stem.providers.TaskProvider
@@ -55,5 +56,11 @@ class AppModule(private val resolvePlaceholdersPlugin: ResolvePlaceholdersPlugin
     @Singleton
     fun provideExtension(): StemExtension {
         return resolvePlaceholdersPlugin.extension
+    }
+
+    @Provides
+    @Singleton
+    fun providePostConfigurationProvider(): PostConfigurationProvider {
+        return resolvePlaceholdersPlugin
     }
 }

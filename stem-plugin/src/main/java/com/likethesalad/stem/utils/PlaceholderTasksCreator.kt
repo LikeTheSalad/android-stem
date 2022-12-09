@@ -9,6 +9,7 @@ import com.likethesalad.stem.modules.resolveStrings.ResolvePlaceholdersTask
 import com.likethesalad.stem.modules.resolveStrings.data.ResolvePlaceholdersArgs
 import com.likethesalad.stem.modules.templateStrings.GatherTemplatesTask
 import com.likethesalad.stem.modules.templateStrings.data.GatherTemplatesArgs
+import com.likethesalad.stem.providers.PostConfigurationProvider
 import com.likethesalad.stem.providers.TaskContainerProvider
 import com.likethesalad.tools.resource.collector.android.data.variant.VariantTree
 import com.likethesalad.tools.resource.locator.android.extension.configuration.data.ResourceLocatorInfo
@@ -22,7 +23,8 @@ class PlaceholderTasksCreator @Inject constructor(
     taskContainerProvider: TaskContainerProvider,
     private val androidVariantContextFactory: AndroidVariantContext.Factory,
     private val taskActionProviderHolder: TaskActionProviderHolder,
-    private val templatesIdentifierActionFactory: TemplatesIdentifierAction.Factory
+    private val templatesIdentifierActionFactory: TemplatesIdentifierAction.Factory,
+    private val postConfigurationProvider: PostConfigurationProvider
 ) : TypeLocatorCreationListener.Callback {
 
     companion object {
@@ -77,8 +79,10 @@ class PlaceholderTasksCreator @Inject constructor(
             it.outputDir.set(androidVariantContext.variantBuildResolvedDir.resolvedDir)
         }
 
-        androidVariantContext.mergeResourcesTask.dependsOn(resolvePlaceholdersTask)
-        androidVariantContext.packageResourcesTask?.dependsOn(resolvePlaceholdersTask)
+        postConfigurationProvider.executeAfterEvaluate {
+            androidVariantContext.mergeResourcesTask.dependsOn(resolvePlaceholdersTask)
+            androidVariantContext.packageResourcesTask?.dependsOn(resolvePlaceholdersTask)
+        }
     }
 
     private fun createTemplatesIdentifierTaskProvider(
