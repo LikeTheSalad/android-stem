@@ -142,7 +142,7 @@ class TemplatesProviderPluginTest : AndroidProjectTest() {
     }
 
     private fun runCommand(projectDescriptor: ProjectDescriptor, command: String) {
-        val buildResult = createProjectAndBuild(projectDescriptor, getCommandArgs(command))
+        createProjectAndBuild(projectDescriptor, getCommandArgs(command))
     }
 
     private fun getCommandArgs(commandStr: String): List<String> {
