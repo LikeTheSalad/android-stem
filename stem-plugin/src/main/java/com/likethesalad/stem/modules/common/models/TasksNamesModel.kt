@@ -18,6 +18,7 @@ class TasksNamesModel @AssistedInject constructor(@Assisted androidVariantData: 
         private const val RESOLVE_PLACEHOLDERS_NAME_FORMAT = "resolve%sPlaceholders"
         private const val ANDROID_MERGE_RESOURCES_TASK_NAME_FORMAT = "merge%sResources"
         private const val ANDROID_PACKAGE_RESOURCES_TASK_NAME_FORMAT = "package%sResources"
+        private const val ANDROID_EXTRACT_DEEPLINKS_TASK_NAME_FORMAT = "extractDeepLinks%s"
     }
 
     private val capitalizedBuildVariant = androidVariantData.getVariantName().capitalize()
@@ -40,5 +41,9 @@ class TasksNamesModel @AssistedInject constructor(@Assisted androidVariantData: 
 
     val packageResourcesName: String by lazy {
         ANDROID_PACKAGE_RESOURCES_TASK_NAME_FORMAT.format(capitalizedBuildVariant)
+    }
+
+    val extractDeeplinksName: String by lazy {
+        ANDROID_EXTRACT_DEEPLINKS_TASK_NAME_FORMAT.format(capitalizedBuildVariant)
     }
 }

@@ -82,6 +82,7 @@ class PlaceholderTasksCreator @Inject constructor(
         postConfigurationProvider.executeAfterEvaluate {
             androidVariantContext.mergeResourcesTask.dependsOn(resolvePlaceholdersTask)
             androidVariantContext.packageResourcesTask?.dependsOn(resolvePlaceholdersTask)
+            androidVariantContext.extractDeeplinksTask?.dependsOn(resolvePlaceholdersTask)
         }
     }
 
