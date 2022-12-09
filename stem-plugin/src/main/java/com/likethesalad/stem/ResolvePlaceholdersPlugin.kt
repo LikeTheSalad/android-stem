@@ -3,6 +3,7 @@ package com.likethesalad.stem
 import com.likethesalad.android.templates.common.plugins.BaseTemplatesProcessorPlugin
 import com.likethesalad.stem.di.AppInjector
 import com.likethesalad.stem.locator.listener.TypeLocatorCreationListener
+import com.likethesalad.stem.modules.common.helpers.dirs.VariantBuildResolvedDir.Companion.getBuildRelativeResolvedDir
 import com.likethesalad.stem.providers.AndroidExtensionProvider
 import com.likethesalad.stem.providers.LocatorExtensionProvider
 import com.likethesalad.stem.providers.PostConfigurationProvider
@@ -51,6 +52,17 @@ class ResolvePlaceholdersPlugin : BaseTemplatesProcessorPlugin(), AndroidExtensi
             templateResourcesEntryPointFactory.create(commonSourceConfigurationCreator),
             creationListener
         )
+
+        addResolvedResDirs()
+    }
+
+    private fun addResolvedResDirs() {
+        androidTools.onVariant {
+            androidExtension.addVariantSrcDir(
+                it.getVariantName(),
+                project.layout.buildDirectory.dir(getBuildRelativeResolvedDir(it.getVariantName()))
+            )
+        }
     }
 
     fun getGradleLogger(): Logger {

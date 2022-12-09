@@ -9,7 +9,6 @@ import java.io.File
 
 class VariantBuildResolvedDir @AssistedInject constructor(
     projectDirsProvider: ProjectDirsProvider,
-    sourceSetsHandler: SourceSetsHandler,
     @Assisted androidVariantData: AndroidVariantData
 ) {
     @AssistedFactory
@@ -28,8 +27,6 @@ class VariantBuildResolvedDir @AssistedInject constructor(
     private val variantName by lazy { androidVariantData.getVariantName() }
 
     val resolvedDir: File by lazy {
-        val dir = File(projectDirsProvider.getBuildDir(), getBuildRelativeResolvedDir(variantName))
-        sourceSetsHandler.addToSourceSets(dir, variantName)
-        dir
+        File(projectDirsProvider.getBuildDir(), getBuildRelativeResolvedDir(variantName))
     }
 }
