@@ -1,5 +1,5 @@
 plugins {
-    id "com.android.application" version "7.2.0"
+    id "com.android.application" version "$agpTest_version"
     id "com.likethesalad.stem"
 }
 
