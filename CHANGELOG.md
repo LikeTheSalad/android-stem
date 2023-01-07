@@ -1,6 +1,14 @@
 Change Log
 ==========
 
+Version 2.3.0 *(07-01-2023)*
+---
+
+* Made Stem aware of extractDeeplinks task
+* Improving AGP 7.3+ sourceSet set up
+* Improving tests
+* Clean up deprecated code
+
 Version 2.2.3 *(09-10-2022)*
 ---
 

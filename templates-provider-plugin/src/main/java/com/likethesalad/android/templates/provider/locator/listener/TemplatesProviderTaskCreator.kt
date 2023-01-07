@@ -2,6 +2,7 @@ package com.likethesalad.android.templates.provider.locator.listener
 
 import com.likethesalad.android.templates.common.tasks.identifier.TemplatesIdentifierTask
 import com.likethesalad.android.templates.common.tasks.identifier.action.TemplatesIdentifierAction
+import com.likethesalad.android.templates.common.utils.upperFirst
 import com.likethesalad.android.templates.provider.tasks.service.TemplatesServiceGeneratorTask
 import com.likethesalad.android.templates.provider.tasks.service.action.TemplatesServiceGeneratorAction
 import com.likethesalad.tools.android.plugin.data.AndroidVariantData
@@ -20,7 +21,6 @@ class TemplatesProviderTaskCreator(
 
     companion object {
         private const val SERVICE_GENERATOR_TASK_TEMPLATE = "templateProvider%sGenerateService"
-        private const val META_INF_GENERATOR_TASK_TEMPLATE = "templateProvider%sGenerateMetadata"
     }
 
     override fun onLocatorReady(type: String, variantTree: VariantTree, info: ResourceLocatorInfo) {
@@ -43,7 +43,7 @@ class TemplatesProviderTaskCreator(
         variantName: String
     ): TaskProvider<TemplatesServiceGeneratorTask> {
         return project.tasks.register(
-            SERVICE_GENERATOR_TASK_TEMPLATE.format(variantName.capitalize()),
+            SERVICE_GENERATOR_TASK_TEMPLATE.format(variantName.upperFirst()),
             TemplatesServiceGeneratorTask::class.java,
             TemplatesServiceGeneratorTask.Args(taskServiceGeneratorActionFactory)
         )

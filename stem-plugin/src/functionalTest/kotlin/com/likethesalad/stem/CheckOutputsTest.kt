@@ -1,7 +1,9 @@
 package com.likethesalad.stem
 
 import com.google.common.truth.Truth
+import com.likethesalad.android.templates.common.utils.upperFirst
 import com.likethesalad.stem.testtools.StemConfigBlock
+import com.likethesalad.stem.testtools.TestConstants.GRADLE_VERSION
 import com.likethesalad.tools.functional.testing.AndroidProjectTest
 import com.likethesalad.tools.functional.testing.app.layout.AndroidAppProjectDescriptor
 import com.likethesalad.tools.functional.testing.app.layout.AndroidBlockItem
@@ -21,7 +23,6 @@ class CheckOutputsTest : AndroidProjectTest() {
     companion object {
         private const val RESOLVER_PLUGIN_ID = "com.likethesalad.stem"
         private const val PROVIDER_PLUGIN_ID = "com.likethesalad.stem-library"
-        private const val GRADLE_VERSION = "7.2"
         private val ANDROID_PLUGIN_VERSION = System.getProperty("agpVersion")
     }
 
@@ -368,7 +369,7 @@ class CheckOutputsTest : AndroidProjectTest() {
     }
 
     private fun variantNamesToResolveCommands(variantNames: List<String>) =
-        variantNames.map { "merge${it.capitalize()}Resources" }
+        variantNames.map { "merge${it.upperFirst()}Resources" }
 
     private fun getInputTestAsset(inputDirName: String): File {
         return inputAssetsProvider.getAssetFile(inputDirName)

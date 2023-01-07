@@ -6,6 +6,7 @@ import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateI
 import com.likethesalad.android.templates.provider.api.TemplatesProvider
 import com.likethesalad.android_templates.provider.plugin.generated.BuildConfig
 import com.likethesalad.stem.testtools.StemConfigBlock
+import com.likethesalad.stem.testtools.TestConstants.GRADLE_VERSION
 import com.likethesalad.stem.utils.TemplatesProviderLoader
 import com.likethesalad.tools.functional.testing.AndroidProjectTest
 import com.likethesalad.tools.functional.testing.layout.AndroidLibProjectDescriptor
@@ -18,10 +19,6 @@ import org.junit.Test
 import java.io.File
 
 class TemplatesProviderPluginTest : AndroidProjectTest() {
-
-    companion object {
-        private const val ANDROID_PLUGIN_VERSION = "7.1.0"
-    }
 
     private val inputAssetsRoot = TestAssetsProvider("functionalTest", "provider")
 
@@ -161,7 +158,7 @@ class TemplatesProviderPluginTest : AndroidProjectTest() {
 
         val blockItems = if (config != null) listOf(config) else emptyList()
         val libProjectDescriptor = AndroidLibProjectDescriptor(
-            projectName, inputDir, ANDROID_PLUGIN_VERSION,
+            projectName, inputDir, "0.0.0",
             blockItems
         )
         libProjectDescriptor.pluginsBlock.addPlugin(GradlePluginDeclaration("com.likethesalad.stem-library"))
@@ -169,6 +166,6 @@ class TemplatesProviderPluginTest : AndroidProjectTest() {
     }
 
     override fun getGradleVersion(): String {
-        return "7.2"
+        return GRADLE_VERSION
     }
 }
