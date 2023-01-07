@@ -20,7 +20,6 @@ class TemplatesProviderTaskCreator(
 
     companion object {
         private const val SERVICE_GENERATOR_TASK_TEMPLATE = "templateProvider%sGenerateService"
-        private const val META_INF_GENERATOR_TASK_TEMPLATE = "templateProvider%sGenerateMetadata"
     }
 
     override fun onLocatorReady(type: String, variantTree: VariantTree, info: ResourceLocatorInfo) {
