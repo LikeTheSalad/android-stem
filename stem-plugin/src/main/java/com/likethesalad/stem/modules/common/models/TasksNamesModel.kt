@@ -1,6 +1,7 @@
 package com.likethesalad.stem.modules.common.models
 
 import com.likethesalad.android.templates.common.tasks.identifier.TemplatesIdentifierTask
+import com.likethesalad.android.templates.common.utils.upperFirst
 import com.likethesalad.tools.android.plugin.data.AndroidVariantData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -21,7 +22,7 @@ class TasksNamesModel @AssistedInject constructor(@Assisted androidVariantData: 
         private const val ANDROID_EXTRACT_DEEPLINKS_TASK_NAME_FORMAT = "extractDeepLinks%s"
     }
 
-    private val capitalizedBuildVariant = androidVariantData.getVariantName().capitalize()
+    private val capitalizedBuildVariant = androidVariantData.getVariantName().upperFirst()
 
     val templatesIdentifierName: String by lazy {
         TemplatesIdentifierTask.generateTaskName(capitalizedBuildVariant)

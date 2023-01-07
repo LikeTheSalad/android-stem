@@ -2,6 +2,7 @@ package com.likethesalad.android.templates.common.tasks.identifier
 
 import com.likethesalad.android.templates.common.tasks.BaseTask
 import com.likethesalad.android.templates.common.tasks.identifier.action.TemplatesIdentifierAction
+import com.likethesalad.android.templates.common.utils.upperFirst
 import com.likethesalad.tools.resource.locator.android.extension.configuration.data.ResourcesProvider
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
@@ -17,7 +18,7 @@ open class TemplatesIdentifierTask @Inject constructor(private val args: Args) :
         private const val TEMPLATES_IDENTIFIER_NAME_FORMAT = "templates%sIdentifier"
 
         fun generateTaskName(variantName: String): String {
-            return TEMPLATES_IDENTIFIER_NAME_FORMAT.format(variantName.capitalize())
+            return TEMPLATES_IDENTIFIER_NAME_FORMAT.format(variantName.upperFirst())
         }
     }
 

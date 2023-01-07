@@ -1,6 +1,7 @@
 package com.likethesalad.stem
 
 import com.google.common.truth.Truth
+import com.likethesalad.android.templates.common.utils.upperFirst
 import com.likethesalad.stem.testtools.StemConfigBlock
 import com.likethesalad.stem.testtools.TestConstants.GRADLE_VERSION
 import com.likethesalad.tools.functional.testing.AndroidProjectTest
@@ -368,7 +369,7 @@ class CheckOutputsTest : AndroidProjectTest() {
     }
 
     private fun variantNamesToResolveCommands(variantNames: List<String>) =
-        variantNames.map { "merge${it.capitalize()}Resources" }
+        variantNames.map { "merge${it.upperFirst()}Resources" }
 
     private fun getInputTestAsset(inputDirName: String): File {
         return inputAssetsProvider.getAssetFile(inputDirName)
