@@ -47,4 +47,8 @@ class TasksNamesModel @AssistedInject constructor(@Assisted androidVariantData: 
     val extractDeeplinksName: String by lazy {
         ANDROID_EXTRACT_DEEPLINKS_TASK_NAME_FORMAT.format(capitalizedBuildVariant)
     }
+
+    fun resolveTaskName(template: String): String {
+        return template.format(capitalizedBuildVariant)
+    }
 }
