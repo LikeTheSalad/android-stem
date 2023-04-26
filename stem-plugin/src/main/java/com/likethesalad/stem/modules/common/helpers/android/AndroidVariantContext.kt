@@ -35,12 +35,6 @@ class AndroidVariantContext @AssistedInject constructor(
     val mergeResourcesTask: Task by lazy {
         taskProvider.findTaskByName(tasksNames.mergeResourcesName)!!
     }
-    val packageResourcesTask: Task? by lazy {
-        taskProvider.findTaskByName(tasksNames.packageResourcesName)
-    }
-    val extractDeeplinksTask: Task? by lazy {
-        taskProvider.findTaskByName(tasksNames.extractDeeplinksName)
-    }
     val incrementalDir: String by lazy {
         projectDirsProvider.getBuildDir().absolutePath + "/intermediates/incremental/" + tasksNames.resolvePlaceholdersName
     }
@@ -51,4 +45,8 @@ class AndroidVariantContext @AssistedInject constructor(
         outputStringFileResolver,
         resourceSerializer
     )
+
+    fun findVariantTask(template: String): Task? {
+        return taskProvider.findTaskByName(tasksNames.resolveTaskName(template))
+    }
 }

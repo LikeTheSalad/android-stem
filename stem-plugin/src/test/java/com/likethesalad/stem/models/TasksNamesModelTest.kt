@@ -39,6 +39,14 @@ class TasksNamesModelTest {
         Truth.assertThat(tasksNamesModel.mergeResourcesName).isEqualTo("mergeResources")
     }
 
+    @Test
+    fun check_genericTaskName() {
+        val tasksNamesModel = getTasksNamesFor("debug")
+
+        Truth.assertThat(tasksNamesModel.resolveTaskName("package%sResources")).isEqualTo("packageDebugResources")
+        Truth.assertThat(tasksNamesModel.resolveTaskName("extractDeepLinks%s")).isEqualTo("extractDeepLinksDebug")
+    }
+
     private fun getTasksNamesFor(variantName: String): TasksNamesModel {
         val androidVariantData = mockk<AndroidVariantData>()
         every { androidVariantData.getVariantName() }.returns(variantName)
