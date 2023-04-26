@@ -81,8 +81,21 @@ class PlaceholderTasksCreator @Inject constructor(
 
         postConfigurationProvider.executeAfterEvaluate {
             androidVariantContext.mergeResourcesTask.dependsOn(resolvePlaceholdersTask)
-            androidVariantContext.packageResourcesTask?.dependsOn(resolvePlaceholdersTask)
-            androidVariantContext.extractDeeplinksTask?.dependsOn(resolvePlaceholdersTask)
+            addExplicitDependencies(
+                androidVariantContext,
+                resolvePlaceholdersTask,
+                listOf("map%sSourceSetPaths", "package%sResources", "extractDeepLinks%s")
+            )
+        }
+    }
+
+    private fun addExplicitDependencies(
+        androidVariantContext: AndroidVariantContext,
+        resolvePlaceholdersTask: TaskProvider<ResolvePlaceholdersTask>,
+        dependantTaskNames: List<String>
+    ) {
+        dependantTaskNames.forEach { nameTemplate ->
+            androidVariantContext.findVariantTask(nameTemplate)?.mustRunAfter(resolvePlaceholdersTask)
         }
     }
 
