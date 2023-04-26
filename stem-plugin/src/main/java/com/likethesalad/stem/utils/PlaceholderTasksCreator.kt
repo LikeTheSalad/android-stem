@@ -84,7 +84,11 @@ class PlaceholderTasksCreator @Inject constructor(
             addExplicitDependencies(
                 androidVariantContext,
                 resolvePlaceholdersTask,
-                listOf("map%sSourceSetPaths", "package%sResources", "extractDeepLinks%s")
+                listOf(
+                    "map%sSourceSetPaths",
+                    "package%sResources",
+                    "extractDeepLinks%s"
+                )
             )
         }
     }
