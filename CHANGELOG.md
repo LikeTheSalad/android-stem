@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 2.4.0 *(26-04-2023)*
+---
+
+* Made Stem aware of mapSourceSetPaths task (Fix #39)
+
 Version 2.3.0 *(07-01-2023)*
 ---
 
