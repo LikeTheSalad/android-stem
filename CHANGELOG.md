@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 2.4.1 *(20-05-2023)*
+---
+
+* Updating resource locator to gather generated resources lazily.
+
 Version 2.4.0 *(26-04-2023)*
 ---
 
