@@ -30,13 +30,13 @@ artifactPublisher {
 
 description = "This is a Gradle plugin for Android applications which resolves XML string references in other XML strings."
 group = 'com.likethesalad.android'
-version = "2.4.0"
+version = "2.4.1"
 
 ext {
     dagger_version = '2.39.1'
     androidBuild_version = '7.1.0'
     testingUtilities_version = '1.0.8'
-    resourceLocator_version = '2.0.1'
+    resourceLocator_version = '2.0.2'
     androidTools_version = "1.3.0"
     androidBuild_test_version = '7.1.0'
 }
