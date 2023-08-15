@@ -1,6 +1,6 @@
 package com.likethesalad.stem.providers
 
-import com.likethesalad.tools.android.plugin.data.AndroidExtension
+import com.likethesalad.tools.agpcompat.api.bridges.AndroidExtension
 
 interface AndroidExtensionProvider {
 

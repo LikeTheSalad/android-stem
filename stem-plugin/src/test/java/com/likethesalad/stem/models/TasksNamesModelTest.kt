@@ -2,7 +2,7 @@ package com.likethesalad.stem.models
 
 import com.google.common.truth.Truth
 import com.likethesalad.stem.modules.common.models.TasksNamesModel
-import com.likethesalad.tools.android.plugin.data.AndroidVariantData
+import com.likethesalad.tools.agpcompat.api.bridges.AndroidVariantData
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Test

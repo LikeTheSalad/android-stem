@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 2.5.0 *(15-08-2023)*
+---
+
+* Fix #43 by adding support to AGP's 7.4.0+ APIs.
+
 Version 2.4.1 *(20-05-2023)*
 ---
 

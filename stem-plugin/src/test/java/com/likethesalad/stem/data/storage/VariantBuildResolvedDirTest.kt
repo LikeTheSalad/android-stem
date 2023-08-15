@@ -3,7 +3,7 @@ package com.likethesalad.stem.data.storage
 import com.google.common.truth.Truth
 import com.likethesalad.stem.modules.common.helpers.dirs.VariantBuildResolvedDir
 import com.likethesalad.stem.providers.ProjectDirsProvider
-import com.likethesalad.tools.android.plugin.data.AndroidVariantData
+import com.likethesalad.tools.agpcompat.api.bridges.AndroidVariantData
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Rule

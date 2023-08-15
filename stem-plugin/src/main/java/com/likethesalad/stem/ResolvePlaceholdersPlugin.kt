@@ -11,7 +11,7 @@ import com.likethesalad.stem.providers.ProjectDirsProvider
 import com.likethesalad.stem.providers.TaskContainerProvider
 import com.likethesalad.stem.providers.TaskProvider
 import com.likethesalad.stem.utils.PlaceholderTasksCreator
-import com.likethesalad.tools.android.plugin.data.AndroidExtension
+import com.likethesalad.tools.agpcompat.api.bridges.AndroidExtension
 import com.likethesalad.tools.resource.locator.android.extension.AndroidResourceLocatorExtension
 import org.gradle.api.Action
 import org.gradle.api.Project

@@ -6,7 +6,7 @@ import com.likethesalad.stem.modules.common.helpers.dirs.VariantBuildResolvedDir
 import com.likethesalad.stem.modules.common.models.TasksNamesModel
 import com.likethesalad.stem.providers.ProjectDirsProvider
 import com.likethesalad.stem.providers.TaskProvider
-import com.likethesalad.tools.android.plugin.data.AndroidVariantData
+import com.likethesalad.tools.agpcompat.api.bridges.AndroidVariantData
 import com.likethesalad.tools.resource.collector.android.data.variant.VariantTree
 import com.likethesalad.tools.resource.serializer.ResourceSerializer
 import io.mockk.every
