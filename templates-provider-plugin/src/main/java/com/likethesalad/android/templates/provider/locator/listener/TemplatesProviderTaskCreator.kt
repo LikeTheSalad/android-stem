@@ -5,7 +5,7 @@ import com.likethesalad.android.templates.common.tasks.identifier.action.Templat
 import com.likethesalad.android.templates.common.utils.upperFirst
 import com.likethesalad.android.templates.provider.tasks.service.TemplatesServiceGeneratorTask
 import com.likethesalad.android.templates.provider.tasks.service.action.TemplatesServiceGeneratorAction
-import com.likethesalad.tools.android.plugin.data.AndroidVariantData
+import com.likethesalad.tools.agpcompat.api.bridges.AndroidVariantData
 import com.likethesalad.tools.resource.collector.android.data.variant.VariantTree
 import com.likethesalad.tools.resource.locator.android.extension.configuration.data.ResourceLocatorInfo
 import com.likethesalad.tools.resource.locator.android.extension.listener.ResourceLocatorCreationListener

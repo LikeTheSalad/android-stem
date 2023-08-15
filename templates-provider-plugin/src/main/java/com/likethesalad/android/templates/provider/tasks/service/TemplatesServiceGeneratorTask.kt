@@ -3,14 +3,14 @@ package com.likethesalad.android.templates.provider.tasks.service
 import com.likethesalad.android.templates.common.utils.CommonConstants
 import com.likethesalad.android.templates.common.utils.DirectoryUtils
 import com.likethesalad.android.templates.provider.tasks.service.action.TemplatesServiceGeneratorAction
-import com.likethesalad.tools.android.plugin.base.BaseJavaBytecodeGeneratorTask
+import com.likethesalad.tools.agpcompat.api.tasks.DirProducerTask
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.TaskAction
 import javax.inject.Inject
 
 @Suppress("UnstableApiUsage")
-open class TemplatesServiceGeneratorTask @Inject constructor(private val args: Args) : BaseJavaBytecodeGeneratorTask() {
+open class TemplatesServiceGeneratorTask @Inject constructor(private val args: Args) : DirProducerTask() {
 
     @InputFile
     val templateIdsFile: RegularFileProperty = project.objects.fileProperty()

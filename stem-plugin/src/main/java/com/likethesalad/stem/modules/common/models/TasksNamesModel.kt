@@ -2,7 +2,7 @@ package com.likethesalad.stem.modules.common.models
 
 import com.likethesalad.android.templates.common.tasks.identifier.TemplatesIdentifierTask
 import com.likethesalad.android.templates.common.utils.upperFirst
-import com.likethesalad.tools.android.plugin.data.AndroidVariantData
+import com.likethesalad.tools.agpcompat.api.bridges.AndroidVariantData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

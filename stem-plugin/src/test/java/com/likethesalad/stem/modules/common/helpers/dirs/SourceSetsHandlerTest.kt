@@ -1,7 +1,7 @@
 package com.likethesalad.stem.modules.common.helpers.dirs
 
 import com.likethesalad.stem.providers.AndroidExtensionProvider
-import com.likethesalad.tools.android.plugin.data.AndroidExtension
+import com.likethesalad.tools.agpcompat.api.bridges.AndroidExtension
 import com.likethesalad.tools.testing.BaseMockable
 import io.mockk.Runs
 import io.mockk.every

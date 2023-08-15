@@ -1,7 +1,7 @@
 package com.likethesalad.stem.locator.listener
 
 import com.google.common.truth.Truth
-import com.likethesalad.tools.android.plugin.data.AndroidVariantData
+import com.likethesalad.tools.agpcompat.api.bridges.AndroidVariantData
 import com.likethesalad.tools.resource.collector.android.data.variant.VariantTree
 import com.likethesalad.tools.resource.locator.android.extension.configuration.data.ResourceLocatorInfo
 import com.likethesalad.tools.testing.BaseMockable

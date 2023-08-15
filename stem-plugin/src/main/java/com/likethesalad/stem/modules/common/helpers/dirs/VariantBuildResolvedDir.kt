@@ -1,7 +1,7 @@
 package com.likethesalad.stem.modules.common.helpers.dirs
 
 import com.likethesalad.stem.providers.ProjectDirsProvider
-import com.likethesalad.tools.android.plugin.data.AndroidVariantData
+import com.likethesalad.tools.agpcompat.api.bridges.AndroidVariantData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
