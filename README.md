@@ -24,10 +24,9 @@ Table of Contents
 * [Adding it to your project](#adding-it-to-your-project)
     * [1.- Where to find the build.gradle files](#1--where-to-find-the-buildgradle-files)
     * [2.- What to add to the build.gradle files](#2--what-to-add-to-the-buildgradle-files)
-    * [2.1- Changes to your Root's build.gradle file](#21--changes-to-your-roots-buildgradle-file)
-    * [2.2- Changes to your App's build.gradle file](#22--changes-to-your-apps-buildgradle-file)
-    * [2.3- Adding it to your own Android Libraries (Optional)](#23--adding-it-to-your-own-android-libraries-optional)
-    * [2.4- Sync your project](#24--sync-your-project)
+    * [2.1- Changes to your App's build.gradle file](#22--changes-to-your-apps-buildgradle-file)
+    * [2.2- Adding it to your own Android Libraries (Optional)](#23--adding-it-to-your-own-android-libraries-optional)
+    * [2.3- Sync your project](#24--sync-your-project)
 * [Running it manually](#running-it-manually)
 * [Donations](#donations-)
 * [License](#license)
@@ -341,66 +340,40 @@ screenshot below:
 
 ### 2.- What to add to the build.gradle files
 
-### 2.1- Changes to your Root's build.gradle file
+### 2.1- Changes to your App's build.gradle file
 
-First, in your `Root's build.gradle` file, you'll need to add this
-line into your `buildscript` dependencies block:
-
-```groovy
-classpath "com.likethesalad.android:stem-plugin:2.4.1"
-```
-
-Example:
-
-```groovy
-// Root's build.gradle file
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        //...
-        classpath "com.likethesalad.android:stem-plugin:2.4.1"
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }
-}
-```
-
-> Please note that you must also add (if not there already) `mavenCentral()`
-> to your buildscript's repositories block as shown above.
-
-### 2.2- Changes to your App's build.gradle file
-
-In your `App's build.gradle` file you have to add the following line below the `apply plugin: 'com.android.application'`
+In your `App's build.gradle` file you have to add the following line after the android's app plugin `com.android.application`
 one:
 
 ```groovy
-apply plugin: 'com.likethesalad.stem'
+id "com.likethesalad.stem" version "2.5.0"
 ```
 
 Example:
 
 ```groovy
 // App's build.gradle file
-apply plugin: 'com.android.application'
-apply plugin: 'com.likethesalad.stem'
+plugins {
+  id "com.android.application"
+  id "com.likethesalad.stem" version "2.5.0"
+}
 
 android {
     //...
 }
 ```
 
-### 2.3- Adding it to your own Android Libraries (Optional)
+### 2.2- Adding it to your own Android Libraries (Optional)
 
 If you have parts of your project split into multiple android libraries where you'd like to define templates, you
 can do so by applying a "producer" version of Stem into them like so:
 
 ```groovy
-// App's build.gradle file
-apply plugin: 'com.android.library'
-apply plugin: 'com.likethesalad.stem-library'
+// Android library's build.gradle file
+plugins {
+  id "com.android.library"
+  id "com.likethesalad.stem-library" version "2.5.0"
+}
 
 android {
     //...
@@ -410,7 +383,7 @@ android {
 Please bear in mind that the "producer" plugin doesn't resolve templates, it only provides them along with values
 needed to resolve those, so that the "consumer" (application) can use them later on when building the final app.
 
-### 2.4- Sync your project
+### 2.3- Sync your project
 
 ![Sync button](./assets/sync_now.png "Sync button")
 
