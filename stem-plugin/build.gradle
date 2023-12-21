@@ -20,13 +20,13 @@ dependencies {
     embedded "com.google.dagger:dagger:$dagger_version"
     embedded project(':templates-provider-plugin')
     implementation project(':common-tools')
-    implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'io.github.classgraph:classgraph:4.8.138'
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'io.github.classgraph:classgraph:4.8.165'
     compileOnly "com.android.tools.build:gradle:$androidBuild_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     testImplementation "com.likethesalad.tools.testing:android-gradle:$testingUtilities_version"
     testImplementation "com.likethesalad.tools.testing:unit-testing:$testingUtilities_version"
-    testImplementation "net.lingala.zip4j:zip4j:2.9.1"
+    testImplementation "net.lingala.zip4j:zip4j:2.11.5"
     testPluginDependency "com.android.tools.build:gradle:$androidBuild_test_version"
 }
 

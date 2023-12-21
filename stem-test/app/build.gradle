@@ -4,20 +4,20 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 34
     namespace "com.likethesalad.stem.test"
 
     defaultConfig {
         applicationId "com.likethesalad.stem.test"
         minSdk 26
-        targetSdk 32
+        targetSdk 34
         versionCode 1
         versionName "1.0"
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     testOptions {
@@ -29,5 +29,5 @@ android {
 
 dependencies {
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.robolectric:robolectric:4.8'
+    testImplementation 'org.robolectric:robolectric:4.11.1'
 }
