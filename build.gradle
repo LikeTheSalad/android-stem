@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        kotlin_version = '1.5.10'
+        kotlin_version = '1.9.21'
         pluginMetadataTool_version = '1.0.0'
     }
     repositories {
@@ -13,7 +13,7 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.likethesalad.tools:plugin-metadata-producer:$pluginMetadataTool_version"
-        classpath "com.github.gmazzo:gradle-buildconfig-plugin:3.0.3"
+        classpath "com.github.gmazzo.buildconfig:plugin:5.1.0"
         classpath 'com.likethesalad.tools:artifact-publisher:1.2.2'
     }
 }
@@ -30,21 +30,22 @@ artifactPublisher {
 
 description = "This is a Gradle plugin for Android applications which resolves XML string references in other XML strings."
 group = 'com.likethesalad.android'
-version = "2.6.0"
+version = "2.6.1"
 
 ext {
-    dagger_version = '2.39.1'
-    androidBuild_version = '7.1.0'
+    dagger_version = '2.50'
+    androidBuild_version = '8.2.0'
     testingUtilities_version = '1.0.8'
     resourceLocator_version = '2.1.0'
     androidTools_version = "1.5.1"
-    androidBuild_test_version = '7.1.0'
+    androidBuild_test_version = '8.2.0'
 }
 
 allprojects {
     repositories {
         mavenLocal()
         mavenCentral()
+        gradlePluginPortal()
         google()
     }
 }

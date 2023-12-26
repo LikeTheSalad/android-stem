@@ -13,7 +13,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "com.google.dagger:dagger:$dagger_version"
     implementation "com.likethesalad.tools:plugin-metadata-consumer:$pluginMetadataTool_version"
-    implementation "net.bytebuddy:byte-buddy:1.12.7"
+    implementation "net.bytebuddy:byte-buddy:1.14.11"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     testImplementation "com.likethesalad.tools.testing:unit-testing:$testingUtilities_version"
 }
