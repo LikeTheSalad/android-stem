@@ -13,7 +13,7 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.likethesalad.tools:plugin-metadata-producer:$pluginMetadataTool_version"
-        classpath "com.github.gmazzo.buildconfig:plugin:5.1.0"
+        classpath "com.github.gmazzo.buildconfig:plugin:5.2.0"
         classpath 'com.likethesalad.tools:artifact-publisher:1.2.2'
     }
 }
