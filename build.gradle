@@ -34,11 +34,11 @@ version = "2.6.1"
 
 ext {
     dagger_version = '2.50'
-    androidBuild_version = '8.2.0'
+    androidBuild_version = '8.2.1'
     testingUtilities_version = '1.0.8'
     resourceLocator_version = '2.1.0'
     androidTools_version = "1.5.1"
-    androidBuild_test_version = '8.2.0'
+    androidBuild_test_version = '8.2.1'
 }
 
 allprojects {
