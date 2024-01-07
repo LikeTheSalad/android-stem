@@ -1,6 +1,7 @@
 [versions]
 project-utilities = "3.1.0"
 dagger = "2.50"
+android = "8.2.0"
 
 [libraries]
 resourceLocator = "com.likethesalad.tools.resources:string-android-resource-locator:2.1.0"
@@ -10,7 +11,7 @@ dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = 
 metadataConsumer = "com.likethesalad.tools:plugin-metadata-consumer:1.0.0"
 unitTesting = { module = "com.likethesalad.tools:unit-testing", version.ref = "project-utilities" }
 byteBuddy = "net.bytebuddy:byte-buddy:1.14.11"
-android-plugin = "com.android.tools.build:gradle:8.2.0"
+android-plugin = { module = "com.android.tools.build:gradle", version.ref = "android" }
 classGraph = "io.github.classgraph:classgraph:4.8.165"
 gson = "com.google.code.gson:gson:2.10.1"
 zip4j = "net.lingala.zip4j:zip4j:2.11.5"
@@ -20,3 +21,4 @@ java-library = { id = "com.likethesalad.tools.java-library", version.ref = "proj
 artifactPublisher = { id = "com.likethesalad.artifact-publisher", version = "3.0.0" }
 buildConfig = { id = "com.github.gmazzo.buildconfig", version = "5.2.0" }
 androidTestTools = { id = "com.likethesalad.tools.android-compilation-testing", version.ref = "project-utilities" }
+android-application = { id = "com.android.application", version.ref = "android" }
