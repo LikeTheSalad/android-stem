@@ -19,7 +19,7 @@ dependencies {
 }
 
 shadowExtension {
-    relocate("dagger", "${group}.stem")
+    relocate("dagger", "${group}.stem.dagger")
 }
 
 libConventions {
