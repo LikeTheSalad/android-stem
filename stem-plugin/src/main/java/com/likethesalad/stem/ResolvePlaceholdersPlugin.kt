@@ -31,7 +31,7 @@ class ResolvePlaceholdersPlugin : BaseTemplatesProcessorPlugin(), AndroidExtensi
         super.apply(project)
         this.project = project
         AppInjector.init(this)
-        androidExtension = androidTools.androidExtension
+        androidExtension = androidBridge.androidExtension
         val placeholderTasksCreator = AppInjector.getPlaceholderTasksCreator()
         val commonResourcesEntryPointFactory = AppInjector.getCommonResourcesEntryPointFactory()
         val templateResourcesEntryPointFactory = AppInjector.getTemplateResourcesEntryPointFactory()
@@ -57,7 +57,7 @@ class ResolvePlaceholdersPlugin : BaseTemplatesProcessorPlugin(), AndroidExtensi
     }
 
     private fun addResolvedResDirs() {
-        androidTools.onVariant {
+        androidBridge.onVariant {
             androidExtension.addVariantSrcDir(
                 it.getVariantName(),
                 project.layout.buildDirectory.dir(getBuildRelativeResolvedDir(it.getVariantName()))

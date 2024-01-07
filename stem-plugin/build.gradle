@@ -1,63 +1,33 @@
 plugins {
+    alias(libs.plugins.java.library)
+    alias(libs.plugins.androidTestTools)
     id 'java-gradle-plugin'
-    id 'org.jetbrains.kotlin.jvm'
     id 'kotlin-kapt'
 }
 
-configurations {
-    testPluginDependency {
-        canBeResolved(false)
-        canBeConsumed(false)
-    }
-    testPluginClasspath {
-        canBeConsumed(false)
-        canBeResolved(true)
-        extendsFrom(testPluginDependency)
-    }
-}
-
 dependencies {
-    embedded "com.google.dagger:dagger:$dagger_version"
+    embedded libs.dagger
     embedded project(':templates-provider-plugin')
     implementation project(':common-tools')
-    implementation 'com.google.code.gson:gson:2.10.1'
-    implementation 'io.github.classgraph:classgraph:4.8.165'
-    compileOnly "com.android.tools.build:gradle:$androidBuild_version"
-    kapt "com.google.dagger:dagger-compiler:$dagger_version"
-    testImplementation "com.likethesalad.tools.testing:android-gradle:$testingUtilities_version"
-    testImplementation "com.likethesalad.tools.testing:unit-testing:$testingUtilities_version"
-    testImplementation "net.lingala.zip4j:zip4j:2.11.5"
-    testPluginDependency "com.android.tools.build:gradle:$androidBuild_test_version"
+    implementation libs.gson
+    implementation libs.classGraph
+    compileOnly libs.android.plugin
+    kapt libs.dagger.compiler
+    testImplementation libs.unitTesting
+    testImplementation libs.zip4j
+    testPluginDependency "com.android.tools.build:gradle:7.4.0"
 }
 
-tasks.withType(PluginUnderTestMetadata).configureEach {
-    pluginClasspath.from(configurations.testPluginClasspath)
+shadowExtension {
+    relocate("dagger", "${group}.stem.dagger")
 }
 
-tasks.withType(Test) {
-    systemProperty "agpVersion", androidBuild_test_version
+libConventions {
+    setJavaVersion("11")
 }
 
 kapt {
     correctErrorTypes = true
-}
-
-sourceSets {
-    functionalTest {
-        java {
-            srcDir file('src/functionalTest/java')
-        }
-        resources {
-            srcDir file('src/functionalTest/resources')
-        }
-        compileClasspath += sourceSets.main.output + configurations.testRuntimeClasspath
-        runtimeClasspath += output + compileClasspath
-    }
-}
-
-task functionalTest(type: Test) {
-    testClassesDirs = sourceSets.functionalTest.output.classesDirs
-    classpath = sourceSets.functionalTest.runtimeClasspath
 }
 
 gradlePlugin {
@@ -71,11 +41,4 @@ gradlePlugin {
             implementationClass = 'com.likethesalad.android.templates.provider.TemplatesProviderPlugin'
         }
     }
-}
-
-compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
-}
-compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
 }

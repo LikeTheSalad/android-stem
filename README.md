@@ -346,7 +346,7 @@ In your `App's build.gradle` file you have to add the following line after the a
 one:
 
 ```groovy
-id "com.likethesalad.stem" version "2.5.0"
+id "com.likethesalad.stem" version "2.7.0"
 ```
 
 Example:
@@ -355,7 +355,7 @@ Example:
 // App's build.gradle file
 plugins {
   id "com.android.application"
-  id "com.likethesalad.stem" version "2.5.0"
+  id "com.likethesalad.stem" version "2.7.0"
 }
 
 android {
@@ -372,7 +372,7 @@ can do so by applying a "producer" version of Stem into them like so:
 // Android library's build.gradle file
 plugins {
   id "com.android.library"
-  id "com.likethesalad.stem-library" version "2.5.0"
+  id "com.likethesalad.stem-library" version "2.7.0"
 }
 
 android {

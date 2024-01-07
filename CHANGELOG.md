@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+Version 2.7.0 *(07-01-2024)*
+---
+
+* Updating utilities.
+* Refactor to adapt to new utilities.
+* Using version catalogs.
+
 Version 2.5.0 *(15-08-2023)*
 ---
 

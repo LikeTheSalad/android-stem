@@ -1,7 +1,7 @@
 package com.likethesalad.android.templates.provider.locator.listener
 
+import com.likethesalad.android.templates.common.plugins.extension.StemExtension
 import com.likethesalad.android.templates.common.tasks.identifier.TemplatesIdentifierTask
-import com.likethesalad.android.templates.common.tasks.identifier.action.TemplatesIdentifierAction
 import com.likethesalad.android.templates.common.utils.upperFirst
 import com.likethesalad.android.templates.provider.tasks.service.TemplatesServiceGeneratorTask
 import com.likethesalad.android.templates.provider.tasks.service.action.TemplatesServiceGeneratorAction
@@ -16,7 +16,7 @@ import org.gradle.api.tasks.TaskProvider
 class TemplatesProviderTaskCreator(
     private val project: Project,
     private val taskServiceGeneratorActionFactory: TemplatesServiceGeneratorAction.Factory,
-    private val templatesIdentifierActionFactory: TemplatesIdentifierAction.Factory
+    private val stemExtension: StemExtension
 ) : ResourceLocatorCreationListener {
 
     companion object {
@@ -58,7 +58,7 @@ class TemplatesProviderTaskCreator(
             TemplatesIdentifierTask::class.java,
             TemplatesIdentifierTask.Args(
                 localResourcesInfo.resourcesProvider,
-                templatesIdentifierActionFactory
+                stemExtension
             )
         )
 

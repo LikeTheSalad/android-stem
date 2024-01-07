@@ -1,5 +1,6 @@
 package com.likethesalad.android.templates.common.tasks.identifier
 
+import com.likethesalad.android.templates.common.plugins.extension.StemExtension
 import com.likethesalad.android.templates.common.tasks.BaseTask
 import com.likethesalad.android.templates.common.tasks.identifier.action.TemplatesIdentifierAction
 import com.likethesalad.android.templates.common.utils.upperFirst
@@ -34,7 +35,8 @@ open class TemplatesIdentifierTask @Inject constructor(private val args: Args) :
 
     @TaskAction
     fun execute() {
-        val action = args.actionFactory.create(
+        val action = TemplatesIdentifierAction.create(
+            args.stemExtension,
             args.localResources,
             outputFile.get().asFile
         )
@@ -43,6 +45,6 @@ open class TemplatesIdentifierTask @Inject constructor(private val args: Args) :
 
     data class Args(
         val localResources: ResourcesProvider,
-        val actionFactory: TemplatesIdentifierAction.Factory
+        val stemExtension: StemExtension
     )
 }

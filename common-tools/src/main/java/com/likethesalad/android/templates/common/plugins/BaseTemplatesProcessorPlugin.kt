@@ -2,11 +2,12 @@ package com.likethesalad.android.templates.common.plugins
 
 import com.likethesalad.android.string.resources.locator.StringResourceLocatorPlugin
 import com.likethesalad.android.templates.common.plugins.extension.StemExtension
-import com.likethesalad.tools.android.plugin.base.AndroidToolsPluginConsumer
+import com.likethesalad.android.templates.common.utils.Logger
+import com.likethesalad.plugins.agpbrigde.base.AndroidBridgePluginConsumer
 import com.likethesalad.tools.resource.locator.android.extension.AndroidResourceLocatorExtension
 import org.gradle.api.Project
 
-abstract class BaseTemplatesProcessorPlugin : AndroidToolsPluginConsumer() {
+abstract class BaseTemplatesProcessorPlugin : AndroidBridgePluginConsumer() {
 
     protected lateinit var stringsLocatorExtension: AndroidResourceLocatorExtension
     lateinit var extension: StemExtension
@@ -18,6 +19,7 @@ abstract class BaseTemplatesProcessorPlugin : AndroidToolsPluginConsumer() {
     override fun apply(project: Project) {
         validateHostProjectValidForThisPlugin(project)
         super.apply(project)
+        Logger.init(project.logger)
         project.plugins.apply(StringResourceLocatorPlugin::class.java)
         extension = createExtension(project)
         stringsLocatorExtension = project.extensions.getByType(AndroidResourceLocatorExtension::class.java)

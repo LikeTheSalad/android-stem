@@ -18,11 +18,10 @@ class TemplateProvidersResourceSourceConfiguration @AssistedInject constructor(
     @Assisted variantTree: VariantTree,
     @Assisted private val templatesProviderJarsFinder: TemplatesProviderJarsFinder,
     private val projectDirsProvider: ProjectDirsProvider,
-    private val loggerFactory: Logger.Factory
 ) : AndroidLibrariesSourceConfiguration(variantTree) {
 
     private val logger by lazy {
-        loggerFactory.create(javaClass)
+        Logger.create(javaClass)
     }
 
     @AssistedFactory
