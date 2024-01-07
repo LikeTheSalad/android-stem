@@ -1,0 +1,15 @@
+name: PR build
+
+on: pull_request
+
+jobs:
+  pr-checks:
+    name: "pr-checks"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Run tests
+        run: ./tests.sh
