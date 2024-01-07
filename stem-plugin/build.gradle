@@ -5,7 +5,6 @@ plugins {
     id 'kotlin-kapt'
 }
 
-def agpTest_version = '7.4.0'
 dependencies {
     embedded libs.dagger
     embedded project(':templates-provider-plugin')
@@ -16,7 +15,7 @@ dependencies {
     kapt libs.dagger.compiler
     testImplementation libs.unitTesting
     testImplementation libs.zip4j
-    testPluginDependency "com.android.tools.build:gradle:$agpTest_version"
+    testPluginDependency "com.android.tools.build:gradle:7.4.0"
 }
 
 shadowExtension {
