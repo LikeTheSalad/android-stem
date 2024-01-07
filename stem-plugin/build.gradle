@@ -1,19 +1,8 @@
 plugins {
     alias(libs.plugins.java.library)
+    alias(libs.plugins.androidTestTools)
     id 'java-gradle-plugin'
     id 'kotlin-kapt'
-}
-
-configurations {
-    testPluginDependency {
-        canBeResolved(false)
-        canBeConsumed(false)
-    }
-    testPluginClasspath {
-        canBeConsumed(false)
-        canBeResolved(true)
-        extendsFrom(testPluginDependency)
-    }
 }
 
 def agpTest_version = '7.4.0'
@@ -25,7 +14,6 @@ dependencies {
     implementation libs.classGraph
     compileOnly libs.android.plugin
     kapt libs.dagger.compiler
-    testImplementation "com.likethesalad.tools.testing:android-gradle:1.0.8"
     testImplementation libs.unitTesting
     testImplementation libs.zip4j
     testPluginDependency "com.android.tools.build:gradle:$agpTest_version"
@@ -39,34 +27,8 @@ libConventions {
     setJavaVersion("11")
 }
 
-tasks.withType(PluginUnderTestMetadata).configureEach {
-    pluginClasspath.from(configurations.testPluginClasspath)
-}
-
-tasks.withType(Test) {
-    systemProperty "agpVersion", agpTest_version
-}
-
 kapt {
     correctErrorTypes = true
-}
-
-sourceSets {
-    functionalTest {
-        java {
-            srcDir file('src/functionalTest/java')
-        }
-        resources {
-            srcDir file('src/functionalTest/resources')
-        }
-        compileClasspath += sourceSets.main.output + configurations.testRuntimeClasspath
-        runtimeClasspath += output + compileClasspath
-    }
-}
-
-task functionalTest(type: Test) {
-    testClassesDirs = sourceSets.functionalTest.output.classesDirs
-    classpath = sourceSets.functionalTest.runtimeClasspath
 }
 
 gradlePlugin {

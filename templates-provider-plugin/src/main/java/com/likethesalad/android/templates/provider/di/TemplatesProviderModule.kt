@@ -2,7 +2,7 @@ package com.likethesalad.android.templates.provider.di
 
 import com.likethesalad.android.templates.common.plugins.extension.StemExtension
 import com.likethesalad.android.templates.provider.TemplatesProviderPlugin
-import com.likethesalad.android_templates.provider.plugin.generated.BuildConfig
+import com.likethesalad.android.templates.provider.generated.BuildConfig
 import com.likethesalad.tools.plugin.metadata.api.PluginMetadata
 import com.likethesalad.tools.plugin.metadata.consumer.PluginMetadataProvider
 import dagger.Module

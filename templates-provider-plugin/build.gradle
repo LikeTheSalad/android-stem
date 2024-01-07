@@ -27,6 +27,7 @@ pluginMetadataConfiguration {
 }
 
 buildConfig {
-    packageName("${metadataPropertiesId.replaceAll("-", ".")}.generated")
+    packageName("${rootProject.group}.templates.provider.generated")
     buildConfigField('String', 'METADATA_PROPERTIES_ID', "\"$metadataPropertiesId\"")
+    useJavaOutput()
 }

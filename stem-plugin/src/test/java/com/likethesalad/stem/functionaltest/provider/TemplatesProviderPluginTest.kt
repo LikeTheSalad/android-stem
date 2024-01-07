@@ -1,35 +1,39 @@
-package com.likethesalad.stem.provider
+package com.likethesalad.stem.functionaltest.provider
 
 import com.google.common.truth.Truth
 import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItem
 import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer
 import com.likethesalad.android.templates.provider.api.TemplatesProvider
-import com.likethesalad.android_templates.provider.plugin.generated.BuildConfig
-import com.likethesalad.stem.testtools.StemConfigBlock
-import com.likethesalad.stem.testtools.TestConstants.GRADLE_VERSION
+import com.likethesalad.stem.functionaltest.testtools.StemConfigBlock
 import com.likethesalad.stem.utils.TemplatesProviderLoader
-import com.likethesalad.tools.functional.testing.AndroidProjectTest
-import com.likethesalad.tools.functional.testing.layout.AndroidLibProjectDescriptor
-import com.likethesalad.tools.functional.testing.layout.ProjectDescriptor
-import com.likethesalad.tools.functional.testing.layout.items.impl.plugins.GradlePluginDeclaration
+import com.likethesalad.tools.functional.testing.AndroidTestProject
+import com.likethesalad.tools.functional.testing.android.descriptor.AndroidLibProjectDescriptor
+import com.likethesalad.tools.functional.testing.blocks.impl.plugins.GradlePluginDeclaration
+import com.likethesalad.tools.functional.testing.descriptor.ProjectDescriptor
 import com.likethesalad.tools.functional.testing.utils.TestAssetsProvider
 import com.likethesalad.tools.plugin.metadata.consumer.PluginMetadataProvider
 import net.lingala.zip4j.ZipFile
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TemporaryFolder
 import java.io.File
 
-class TemplatesProviderPluginTest : AndroidProjectTest() {
+class TemplatesProviderPluginTest {
 
-    private val inputAssetsRoot = TestAssetsProvider("functionalTest", "provider")
+    @get:Rule
+    val temporaryFolder = TemporaryFolder()
+    private val inputAssetsRoot = TestAssetsProvider("provider")
 
     @Test
     fun `Create service for basic project`() {
-        val project = setUpProject("basic")
+        val projectName = "basic"
+        val projectDescriptor = setUpProjectDescriptor(projectName)
+        val project = createProject(projectDescriptor)
 
-        runCommand(project, "assembleDebug")
+        project.runGradle(projectName, "assembleDebug")
 
-        val provider = getTemplatesProvider(project, "debug")
-        commonVerification(provider, "basic")
+        val provider = getTemplatesProvider(projectDescriptor, "debug")
+        commonVerification(provider, projectName)
         assertTemplatesContainExactly(
             provider,
             TemplateItem("someTemplate", "string")
@@ -39,11 +43,12 @@ class TemplatesProviderPluginTest : AndroidProjectTest() {
     @Test
     fun `Keep only one service per project after re-running it`() {
         val projectName = "basic_modified_before"
-        val basicProject = setUpProject(projectName)
+        val basicProjectDescriptor = setUpProjectDescriptor(projectName)
+        val project = createProject(basicProjectDescriptor)
 
-        runCommand(basicProject, "assembleDebug")
+        project.runGradle(projectName, "assembleDebug")
 
-        val provider = getTemplatesProvider(basicProject, "debug")
+        val provider = getTemplatesProvider(basicProjectDescriptor, "debug")
         commonVerification(provider, projectName)
         assertTemplatesContainExactly(
             provider,
@@ -51,13 +56,14 @@ class TemplatesProviderPluginTest : AndroidProjectTest() {
         )
 
         // Second run
-        val secondBasicProject = setUpProject(projectName, "basic_modified_after")
-        basicProject.projectDirBuilder.clearFilesCreated()
-        secondBasicProject.projectDirBuilder.buildDirectory(getProjectDir(projectName))
+        val secondBasicProjectDescriptor =
+            setUpProjectDescriptor(projectName, getInputTestAsset("basic_modified_after"))
+        basicProjectDescriptor.projectDirBuilder.clearFilesCreated()
+        secondBasicProjectDescriptor.projectDirBuilder.buildDirectory(getTempFile(projectName))
 
-        buildProject(getCommandArgs("assembleDebug"), projectName)
+        project.runGradle(projectName, "assembleDebug")
 
-        val provider2 = getTemplatesProvider(secondBasicProject, "debug")
+        val provider2 = getTemplatesProvider(secondBasicProjectDescriptor, "debug")
         commonVerification(provider2, projectName)
         assertTemplatesContainExactly(
             provider2,
@@ -69,11 +75,12 @@ class TemplatesProviderPluginTest : AndroidProjectTest() {
     @Test
     fun `Take only templates from main strings`() {
         val projectName = "multi_language"
-        val project = setUpProject(projectName)
+        val projectDescriptor = setUpProjectDescriptor(projectName)
+        val project = createProject(projectDescriptor)
 
-        runCommand(project, "assembleDebug")
+        project.runGradle(projectName, "assembleDebug")
 
-        val provider = getTemplatesProvider(project, "debug")
+        val provider = getTemplatesProvider(projectDescriptor, "debug")
         commonVerification(provider, projectName)
         assertTemplatesContainExactly(
             provider,
@@ -84,11 +91,12 @@ class TemplatesProviderPluginTest : AndroidProjectTest() {
     @Test
     fun `Take templates from all languages and main strings if feature enabled`() {
         val projectName = "multi_language_all"
-        val project = setUpProject(projectName, config = StemConfigBlock(true))
+        val projectDescriptor = setUpProjectDescriptor(projectName, config = StemConfigBlock(true))
+        val project = createProject(projectDescriptor)
 
-        runCommand(project, "assembleDebug")
+        project.runGradle(projectName, "assembleDebug")
 
-        val provider = getTemplatesProvider(project, "debug")
+        val provider = getTemplatesProvider(projectDescriptor, "debug")
         commonVerification(provider, projectName)
         assertTemplatesContainExactly(
             provider,
@@ -133,39 +141,45 @@ class TemplatesProviderPluginTest : AndroidProjectTest() {
     }
 
     private fun getAarFile(projectName: String, variantName: String): File {
-        val projectDir = getProjectDir(projectName)
+        val projectDir = getTempFile(projectName)
         return File(projectDir, "build/outputs/aar/$projectName-${variantName}.aar")
     }
 
     private fun getProviderVersion(): String {
-        return PluginMetadataProvider.getInstance(BuildConfig.METADATA_PROPERTIES_ID).provide().version
+        return PluginMetadataProvider.getInstance("com.likethesalad.android_templates-provider-plugin")
+            .provide().version
     }
 
-    private fun runCommand(projectDescriptor: ProjectDescriptor, command: String) {
-        createProjectAndBuild(projectDescriptor, getCommandArgs(command))
-    }
-
-    private fun getCommandArgs(commandStr: String): List<String> {
-        return commandStr.split(Regex("[\\s\\t]+"))
-    }
-
-    private fun setUpProject(
+    private fun setUpProjectDescriptor(
         projectName: String,
-        sourceDirName: String = projectName,
+        inputDir: File = inputAssetsRoot.getFile(projectName),
         config: StemConfigBlock? = null
     ): ProjectDescriptor {
-        val inputDir = inputAssetsRoot.getAssetFile(sourceDirName)
-
         val blockItems = if (config != null) listOf(config) else emptyList()
         val libProjectDescriptor = AndroidLibProjectDescriptor(
-            projectName, inputDir, "0.0.0",
-            blockItems
+            projectName, inputDir, blockItems
         )
         libProjectDescriptor.pluginsBlock.addPlugin(GradlePluginDeclaration("com.likethesalad.stem-library"))
         return libProjectDescriptor
     }
 
-    override fun getGradleVersion(): String {
-        return GRADLE_VERSION
+    private fun getTempFile(vararg paths: String): File {
+        return if (paths.isEmpty()) {
+            temporaryFolder.root
+        } else {
+            File(temporaryFolder.root, paths.joinToString("/"))
+        }
+    }
+
+    private fun getInputTestAsset(inputDirName: String): File {
+        return inputAssetsRoot.getFile(inputDirName)
+    }
+
+    private fun createProject(vararg descriptors: ProjectDescriptor): AndroidTestProject {
+        val project = AndroidTestProject(getTempFile())
+        descriptors.forEach {
+            project.addSubproject(it)
+        }
+        return project
     }
 }

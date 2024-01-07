@@ -19,3 +19,4 @@ zip4j = "net.lingala.zip4j:zip4j:2.11.5"
 java-library = { id = "com.likethesalad.tools.java-library", version.ref = "project-utilities" }
 artifactPublisher = { id = "com.likethesalad.artifact-publisher", version = "3.0.0" }
 buildConfig = { id = "com.github.gmazzo.buildconfig", version = "5.2.0" }
+androidTestTools = { id = "com.likethesalad.tools.android-compilation-testing", version.ref = "project-utilities" }
