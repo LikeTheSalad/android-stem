@@ -2,11 +2,11 @@ package com.likethesalad.android.templates.common.plugins
 
 import com.likethesalad.android.string.resources.locator.StringResourceLocatorPlugin
 import com.likethesalad.android.templates.common.plugins.extension.StemExtension
-import com.likethesalad.tools.android.plugin.base.AndroidToolsPluginConsumer
+import com.likethesalad.plugins.agpbrigde.base.AndroidBridgePluginConsumer
 import com.likethesalad.tools.resource.locator.android.extension.AndroidResourceLocatorExtension
 import org.gradle.api.Project
 
-abstract class BaseTemplatesProcessorPlugin : AndroidToolsPluginConsumer() {
+abstract class BaseTemplatesProcessorPlugin : AndroidBridgePluginConsumer() {
 
     protected lateinit var stringsLocatorExtension: AndroidResourceLocatorExtension
     lateinit var extension: StemExtension
