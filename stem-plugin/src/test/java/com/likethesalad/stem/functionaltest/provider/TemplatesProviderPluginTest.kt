@@ -4,24 +4,20 @@ import com.google.common.truth.Truth
 import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItem
 import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer
 import com.likethesalad.android.templates.provider.api.TemplatesProvider
+import com.likethesalad.stem.functionaltest.testtools.BasePluginTest
 import com.likethesalad.stem.functionaltest.testtools.StemConfigBlock
 import com.likethesalad.stem.utils.TemplatesProviderLoader
-import com.likethesalad.tools.functional.testing.AndroidTestProject
 import com.likethesalad.tools.functional.testing.android.descriptor.AndroidLibProjectDescriptor
 import com.likethesalad.tools.functional.testing.blocks.impl.plugins.GradlePluginDeclaration
 import com.likethesalad.tools.functional.testing.descriptor.ProjectDescriptor
 import com.likethesalad.tools.functional.testing.utils.TestAssetsProvider
 import com.likethesalad.tools.plugin.metadata.consumer.PluginMetadataProvider
 import net.lingala.zip4j.ZipFile
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TemporaryFolder
 import java.io.File
 
-class TemplatesProviderPluginTest {
+class TemplatesProviderPluginTest : BasePluginTest() {
 
-    @get:Rule
-    val temporaryFolder = TemporaryFolder()
     private val inputAssetsRoot = TestAssetsProvider("provider")
 
     @Test
@@ -163,23 +159,7 @@ class TemplatesProviderPluginTest {
         return libProjectDescriptor
     }
 
-    private fun getTempFile(vararg paths: String): File {
-        return if (paths.isEmpty()) {
-            temporaryFolder.root
-        } else {
-            File(temporaryFolder.root, paths.joinToString("/"))
-        }
-    }
-
     private fun getInputTestAsset(inputDirName: String): File {
         return inputAssetsRoot.getFile(inputDirName)
-    }
-
-    private fun createProject(vararg descriptors: ProjectDescriptor): AndroidTestProject {
-        val project = AndroidTestProject(getTempFile())
-        descriptors.forEach {
-            project.addSubproject(it)
-        }
-        return project
     }
 }
