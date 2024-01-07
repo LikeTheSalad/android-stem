@@ -1,6 +1,6 @@
 plugins {
+    alias(libs.plugins.java.library)
     id 'java-gradle-plugin'
-    id 'org.jetbrains.kotlin.jvm'
     id 'kotlin-kapt'
 }
 
@@ -16,18 +16,27 @@ configurations {
     }
 }
 
+def agpTest_version = '7.4.0'
 dependencies {
-    embedded "com.google.dagger:dagger:$dagger_version"
+    embedded libs.dagger
     embedded project(':templates-provider-plugin')
     implementation project(':common-tools')
-    implementation 'com.google.code.gson:gson:2.10.1'
-    implementation 'io.github.classgraph:classgraph:4.8.165'
-    compileOnly "com.android.tools.build:gradle:$androidBuild_version"
-    kapt "com.google.dagger:dagger-compiler:$dagger_version"
-    testImplementation "com.likethesalad.tools.testing:android-gradle:$testingUtilities_version"
-    testImplementation "com.likethesalad.tools.testing:unit-testing:$testingUtilities_version"
-    testImplementation "net.lingala.zip4j:zip4j:2.11.5"
-    testPluginDependency "com.android.tools.build:gradle:$androidBuild_test_version"
+    implementation libs.gson
+    implementation libs.classGraph
+    compileOnly libs.android.plugin
+    kapt libs.dagger.compiler
+    testImplementation "com.likethesalad.tools.testing:android-gradle:1.0.8"
+    testImplementation libs.unitTesting
+    testImplementation libs.zip4j
+    testPluginDependency "com.android.tools.build:gradle:$agpTest_version"
+}
+
+shadowExtension {
+    relocate("dagger", "${group}.stem")
+}
+
+libConventions {
+    setJavaVersion("11")
 }
 
 tasks.withType(PluginUnderTestMetadata).configureEach {
@@ -35,7 +44,7 @@ tasks.withType(PluginUnderTestMetadata).configureEach {
 }
 
 tasks.withType(Test) {
-    systemProperty "agpVersion", androidBuild_test_version
+    systemProperty "agpVersion", agpTest_version
 }
 
 kapt {
@@ -71,11 +80,4 @@ gradlePlugin {
             implementationClass = 'com.likethesalad.android.templates.provider.TemplatesProviderPlugin'
         }
     }
-}
-
-compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
-}
-compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
 }

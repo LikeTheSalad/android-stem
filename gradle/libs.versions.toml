@@ -1,0 +1,21 @@
+[versions]
+project-utilities = "3.1.0"
+dagger = "2.50"
+
+[libraries]
+resourceLocator = "com.likethesalad.tools.resources:string-android-resource-locator:2.1.0"
+androidToolsPlugin = "com.likethesalad.tools:android-tools-plugin:1.5.1"
+dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
+dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
+metadataConsumer = "com.likethesalad.tools:plugin-metadata-consumer:1.0.0"
+unitTesting = { module = "com.likethesalad.tools:unit-testing", version.ref = "project-utilities" }
+byteBuddy = "net.bytebuddy:byte-buddy:1.14.11"
+android-plugin = "com.android.tools.build:gradle:8.2.0"
+classGraph = "io.github.classgraph:classgraph:4.8.165"
+gson = "com.google.code.gson:gson:2.10.1"
+zip4j = "net.lingala.zip4j:zip4j:2.11.5"
+
+[plugins]
+java-library = { id = "com.likethesalad.tools.java-library", version.ref = "project-utilities" }
+artifactPublisher = { id = "com.likethesalad.artifact-publisher", version = "3.0.0" }
+buildConfig = { id = "com.github.gmazzo.buildconfig", version = "5.2.0" }

@@ -1,24 +1,6 @@
-buildscript {
-    ext {
-        kotlin_version = '1.9.22'
-        pluginMetadataTool_version = '1.0.0'
-    }
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        gradlePluginPortal()
-        google()
-    }
-
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "com.likethesalad.tools:plugin-metadata-producer:$pluginMetadataTool_version"
-        classpath "com.github.gmazzo.buildconfig:plugin:5.1.0"
-        classpath 'com.likethesalad.tools:artifact-publisher:2.0.2'
-    }
+plugins {
+    alias(libs.plugins.artifactPublisher)
 }
-
-apply plugin: "artifact-publisher"
 
 artifactPublisher {
     displayName = "Android Stem"
@@ -29,23 +11,3 @@ artifactPublisher {
 }
 
 description = "This is a Gradle plugin for Android applications which resolves XML string references in other XML strings."
-group = 'com.likethesalad.android'
-version = "2.6.1"
-
-ext {
-    dagger_version = '2.50'
-    androidBuild_version = '8.2.0'
-    testingUtilities_version = '1.0.8'
-    resourceLocator_version = '2.1.0'
-    androidTools_version = "1.5.1"
-    androidBuild_test_version = '8.2.0'
-}
-
-allprojects {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        gradlePluginPortal()
-        google()
-    }
-}
