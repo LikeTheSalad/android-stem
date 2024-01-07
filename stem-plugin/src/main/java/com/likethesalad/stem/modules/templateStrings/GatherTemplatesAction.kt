@@ -18,8 +18,7 @@ import dagger.assisted.AssistedInject
 import java.io.File
 
 class GatherTemplatesAction @AssistedInject constructor(
-    @Assisted private val androidVariantContext: AndroidVariantContext,
-    private val templateItemsSerializer: TemplateItemsSerializer
+    @Assisted private val androidVariantContext: AndroidVariantContext
 ) {
 
     @AssistedFactory
@@ -63,12 +62,12 @@ class GatherTemplatesAction @AssistedInject constructor(
 
     private fun getTemplateIds(localTemplateIdsContainer: File): List<TemplateItem> {
         val templateIdsFromDependencies = getTemplateIdsFromDependencies()
-        return templateItemsSerializer.deserialize(localTemplateIdsContainer.readText()) + templateIdsFromDependencies
+        return TemplateItemsSerializer.deserialize(localTemplateIdsContainer.readText()) + templateIdsFromDependencies
     }
 
     private fun getTemplateIdsFromDependencies(): List<TemplateItem> {
         val templatesProviders = TemplatesProviderLoader.load(templatesProviderJarsFinder.templateProviderJars)
-        return templatesProviders.map { templateItemsSerializer.deserialize(it.getTemplates()) }.flatten()
+        return templatesProviders.map { TemplateItemsSerializer.deserialize(it.getTemplates()) }.flatten()
     }
 
     private fun gatheredStringsToTemplateStrings(

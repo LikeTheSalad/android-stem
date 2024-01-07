@@ -120,7 +120,7 @@ class TemplatesProviderPluginTest : BasePluginTest() {
         provider: TemplatesProvider,
         vararg templateItems: TemplateItem
     ) {
-        val templates = TemplateItemsSerializer().deserialize(provider.getTemplates())
+        val templates = TemplateItemsSerializer.deserialize(provider.getTemplates())
         Truth.assertThat(templates).containsExactly(*templateItems)
     }
 

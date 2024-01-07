@@ -22,7 +22,7 @@ class TemplatesProviderPlugin : BaseTemplatesProcessorPlugin() {
             TemplatesProviderTaskCreator(
                 project,
                 component.templatesServiceGeneratorActionFactory(),
-                component.templatesIdentifierActionFactory()
+                extension
             )
         )
     }
