@@ -1,14 +1,11 @@
 plugins {
     alias(libs.plugins.java.library)
-    id 'kotlin-kapt'
 }
 
 dependencies {
     api gradleApi()
     api libs.resourceLocator
-    implementation libs.dagger
     implementation libs.androidCompatApi
-    kapt libs.dagger.compiler
     testImplementation libs.unitTesting
 }
 

@@ -1,6 +1,7 @@
 package com.likethesalad.android.templates.common.tasks.identifier.action
 
 import com.likethesalad.android.templates.common.configuration.StemConfiguration
+import com.likethesalad.android.templates.common.plugins.extension.StemExtension
 import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItem
 import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer
 import com.likethesalad.android.templates.common.utils.CommonConstants
@@ -9,26 +10,27 @@ import com.likethesalad.tools.resource.api.android.impl.AndroidResourceType
 import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
 import com.likethesalad.tools.resource.api.collection.ResourceCollection
 import com.likethesalad.tools.resource.locator.android.extension.configuration.data.ResourcesProvider
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import java.io.File
 
-class TemplatesIdentifierAction @AssistedInject constructor(
-    @Assisted private val localResources: ResourcesProvider,
-    @Assisted private val outputFile: File,
-    private val configuration: StemConfiguration,
-    private val templateItemsSerializer: TemplateItemsSerializer
+class TemplatesIdentifierAction private constructor(
+    private val localResources: ResourcesProvider,
+    private val outputFile: File,
+    private val configuration: StemConfiguration
 ) {
 
-    @AssistedFactory
-    interface Factory {
-        fun create(localResources: ResourcesProvider, outputFile: File): TemplatesIdentifierAction
+    companion object {
+        fun create(
+            stemExtension: StemExtension,
+            localResources: ResourcesProvider,
+            outputFile: File
+        ): TemplatesIdentifierAction {
+            return TemplatesIdentifierAction(localResources, outputFile, StemConfiguration(stemExtension))
+        }
     }
 
     fun execute() {
         val templates = getTemplatesFromResources()
-        outputFile.writeText(templateItemsSerializer.serialize(templates))
+        outputFile.writeText(TemplateItemsSerializer.serialize(templates))
     }
 
     private fun getTemplatesFromResources(): List<TemplateItem> {

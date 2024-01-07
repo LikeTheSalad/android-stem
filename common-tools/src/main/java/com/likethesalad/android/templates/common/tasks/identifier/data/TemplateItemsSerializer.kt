@@ -1,15 +1,9 @@
 package com.likethesalad.android.templates.common.tasks.identifier.data
 
-import javax.inject.Inject
-import javax.inject.Singleton
+object TemplateItemsSerializer {
 
-@Singleton
-class TemplateItemsSerializer @Inject constructor() {
-
-    companion object {
-        private const val LIST_SEPARATOR = ","
-        private const val SINGLE_ITEM_VALUES_SEPARATOR = ":"
-    }
+    private const val LIST_SEPARATOR = ","
+    private const val SINGLE_ITEM_VALUES_SEPARATOR = ":"
 
     fun serialize(templates: List<TemplateItem>): String {
         return templates.distinct()

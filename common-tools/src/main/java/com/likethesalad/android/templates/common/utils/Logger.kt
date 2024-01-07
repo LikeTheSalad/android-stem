@@ -1,21 +1,24 @@
 package com.likethesalad.android.templates.common.utils
 
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
-
-class Logger @AssistedInject constructor(
-    @Assisted private val javaClass: Class<out Any>,
-    private val gradleLogger: org.gradle.api.logging.Logger
+class Logger private constructor(
+    private val gradleLogger: org.gradle.api.logging.Logger,
+    private val hostClass: Class<out Any>
 ) {
 
-    @AssistedFactory
-    interface Factory {
-        fun create(javaClass: Class<out Any>): Logger
+    companion object {
+        private var gradleLogger: org.gradle.api.logging.Logger? = null
+
+        fun init(gradleLogger: org.gradle.api.logging.Logger) {
+            this.gradleLogger = gradleLogger
+        }
+
+        fun create(hostClass: Class<out Any>): Logger {
+            return Logger(gradleLogger!!, hostClass)
+        }
     }
 
     private val prefix by lazy {
-        "[STEM] - ${javaClass.name} - "
+        "[STEM] - ${hostClass.name} - "
     }
 
     fun debug(message: String, vararg args: Any) {
