@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 2.8.0 *(15-03-2024)*
+---
+
+* Supporting tasks added in AGP 8.3.0
+
 Version 2.7.0 *(07-01-2024)*
 ---
 
