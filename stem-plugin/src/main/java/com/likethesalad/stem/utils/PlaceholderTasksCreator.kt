@@ -87,7 +87,8 @@ class PlaceholderTasksCreator @Inject constructor(
                 listOf(
                     "map%sSourceSetPaths",
                     "package%sResources",
-                    "extractDeepLinks%s"
+                    "extractDeepLinks%s",
+                    "generate%sResources"
                 )
             )
         }
