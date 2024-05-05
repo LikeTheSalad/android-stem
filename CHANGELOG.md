@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 2.9.0 *(05-05-2024)*
+---
+
+* Adding explicit dependency on ExtractSupportedLocalesTask.
+
 Version 2.8.0 *(15-03-2024)*
 ---
 
