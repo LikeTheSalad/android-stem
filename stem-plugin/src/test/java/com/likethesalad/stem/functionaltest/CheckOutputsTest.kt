@@ -13,7 +13,10 @@ import com.likethesalad.tools.functional.testing.android.descriptor.AndroidLibPr
 import com.likethesalad.tools.functional.testing.blocks.GradleBlockItem
 import com.likethesalad.tools.functional.testing.blocks.impl.plugins.GradlePluginDeclaration
 import com.likethesalad.tools.functional.testing.utils.TestAssetsProvider
+import junit.framework.TestCase.fail
 import org.junit.Test
+import org.xmlunit.builder.DiffBuilder.compare
+import org.xmlunit.builder.Input
 import java.io.File
 
 class CheckOutputsTest : BasePluginTest() {
@@ -434,6 +437,13 @@ class CheckOutputsTest : BasePluginTest() {
 
     private fun checkIfFileIsInList(file: File, list: List<File>) {
         val fileWithSameName = list.first { it.name == file.name }
-        Truth.assertThat(fileWithSameName.readText()).isEqualTo(file.readText())
+        val generated = Input.fromFile(fileWithSameName)
+        val control = Input.fromFile(file)
+        val diff = compare(generated).withTest(control).ignoreWhitespace().build()
+        if (diff.hasDifferences()) {
+            println("Control:\n" + file.readText())
+            println("Generated:\n" + fileWithSameName.readText())
+            fail(diff.fullDescription())
+        }
     }
 }

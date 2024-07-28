@@ -53,7 +53,6 @@ class AndroidXmlResDocument(
     fun appendStringResource(stringResourceModel: StringAndroidResource) {
         append(
             XmlUtils.stringResourceModelToElement(
-                document,
                 stringResourceModel,
                 this
             )
