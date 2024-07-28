@@ -1,5 +1,9 @@
 Change Log
 ==========
+Version 2.10.0 *(28-07-2024)*
+---
+
+* Keeping string body html tags.
 
 Version 2.9.0 *(05-05-2024)*
 ---
