@@ -49,6 +49,12 @@ public class StringResolvingTest {
         for (int i = 0; i < expectedSpans.length; i++) {
             StyleSpan expectedSpan = (StyleSpan) expectedSpans[i];
             StyleSpan actualSpan = (StyleSpan) actualSpans[i];
+            int expectedStart = expected.getSpanStart(expectedSpan);
+            int expectedEnd = expected.getSpanEnd(expectedSpan);
+            int actualStart = actual.getSpanStart(actualSpan);
+            int actualEnd = actual.getSpanEnd(actualSpan);
+            assertEquals(expectedStart, actualStart);
+            assertEquals(expectedEnd, actualEnd);
             assertEquals(expectedSpan.getSpanTypeId(), actualSpan.getSpanTypeId());
             assertEquals(expectedSpan.describeContents(), actualSpan.describeContents());
             assertEquals(expectedSpan.getFontWeightAdjustment(), actualSpan.getFontWeightAdjustment());
