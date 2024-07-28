@@ -4,7 +4,7 @@ dagger = "2.51.1"
 android = "8.2.1"
 
 [libraries]
-resourceLocator = "com.likethesalad.tools.resources:string-android-resource-locator:2.2.2"
+resourceLocator = "com.likethesalad.tools.resources:string-android-resource-locator:2.3.0"
 androidCompatApi = { module = "com.likethesalad.tools:agp-compatibility-api", version.ref = "project-utilities" }
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
@@ -16,6 +16,7 @@ classGraph = "io.github.classgraph:classgraph:4.8.174"
 gson = "com.google.code.gson:gson:2.10.1"
 zip4j = "net.lingala.zip4j:zip4j:2.11.5"
 robolectric = "org.robolectric:robolectric:4.13"
+xmlUnit = "org.xmlunit:xmlunit-core:2.10.0"
 
 [plugins]
 java-library = { id = "com.likethesalad.tools.java-library", version.ref = "project-utilities" }

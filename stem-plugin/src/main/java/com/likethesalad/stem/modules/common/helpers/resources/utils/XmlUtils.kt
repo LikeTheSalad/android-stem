@@ -1,19 +1,25 @@
 package com.likethesalad.stem.modules.common.helpers.resources.utils
 
-import com.likethesalad.stem.modules.common.Constants.Companion.XML_STRING_TAG
 import com.likethesalad.tools.resource.api.android.attributes.AndroidAttributeKey
 import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
-import org.w3c.dom.Document
 import org.w3c.dom.Element
+import org.xml.sax.InputSource
+import java.io.StringReader
+import javax.xml.parsers.DocumentBuilderFactory
 
 object XmlUtils {
+    private val docBuilder by lazy {
+        DocumentBuilderFactory
+            .newInstance()
+            .newDocumentBuilder()
+    }
 
     fun stringResourceModelToElement(
-        document: Document, stringResourceModel: StringAndroidResource,
+        stringResourceModel: StringAndroidResource,
         namespaceNameProvider: NamespaceNameProvider
     ): Element {
-        val strElement = document.createElement(XML_STRING_TAG)
-        strElement.textContent = stringResourceModel.stringValue()
+        val reader = StringReader("<string>${stringResourceModel.stringValue()}</string>")
+        val strElement = docBuilder.parse(InputSource(reader)).documentElement
         for (it in stringResourceModel.attributes().asMap()) {
             when (it.key) {
                 is AndroidAttributeKey.Plain -> strElement.setAttribute(it.key.value(), it.value)

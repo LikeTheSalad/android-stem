@@ -29,13 +29,12 @@ class AndroidXmlResDocument(
         private const val NS_ALIAS_FORMAT = "ns%d"
     }
 
-    fun saveToFile(file: File, indentSpaces: Int = 4) {
+    fun saveToFile(file: File) {
         addNamespacesToRoot()
         val transformerFactory = TransformerFactory.newInstance()
         val transformer = transformerFactory.newTransformer()
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes")
+        transformer.setOutputProperty(OutputKeys.INDENT, "no")
         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes")
-        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", indentSpaces.toString())
         val domSource = DOMSource(document)
         val streamResult = StreamResult(file)
 
@@ -53,7 +52,6 @@ class AndroidXmlResDocument(
     fun appendStringResource(stringResourceModel: StringAndroidResource) {
         append(
             XmlUtils.stringResourceModelToElement(
-                document,
                 stringResourceModel,
                 this
             )

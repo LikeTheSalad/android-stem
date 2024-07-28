@@ -11,7 +11,6 @@ import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidR
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Test
-import javax.xml.parsers.DocumentBuilderFactory
 
 class XmlUtilsTest {
 
@@ -20,7 +19,6 @@ class XmlUtilsTest {
     @Test
     fun checkStringResourceModelToElement() {
         // Given:
-        val document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument()
         val stringResourceModel =
             StringAndroidResource(
                 mapOf(
@@ -36,7 +34,6 @@ class XmlUtilsTest {
 
         // When:
         val result = XmlUtils.stringResourceModelToElement(
-            document,
             stringResourceModel,
             noOpNsProvider
         )
@@ -49,9 +46,38 @@ class XmlUtilsTest {
     }
 
     @Test
+    fun checkStringResourceModelWithTagsToElement() {
+        // Given:
+        val stringResourceModel =
+            StringAndroidResource(
+                mapOf(
+                    plain("name") to "some_name",
+                    plain("extra") to "some extra attr"
+                ), "some content <b>something bold</b>", scope
+            )
+        val noOpNsProvider = object : XmlUtils.NamespaceNameProvider {
+            override fun getNameFor(namespaceValue: String): String {
+                throw UnsupportedOperationException()
+            }
+        }
+
+        // When:
+        val result = XmlUtils.stringResourceModelToElement(
+            stringResourceModel,
+            noOpNsProvider
+        )
+
+        // Then:
+        Truth.assertThat(com.likethesalad.tools.resource.collector.android.data.xml.XmlUtils.getContents(result))
+            .isEqualTo("some content <b>something bold</b>")
+        Truth.assertThat(result.attributes.length).isEqualTo(2)
+        Truth.assertThat(result.attributes.getNamedItem("name").textContent).isEqualTo("some_name")
+        Truth.assertThat(result.attributes.getNamedItem("extra").textContent).isEqualTo("some extra attr")
+    }
+
+    @Test
     fun checkNamespacedStringResourceModelToElement() {
         // Given:
-        val document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument()
         val namespaceValue = "http://some.namespace"
         val stringResourceModel =
             StringAndroidResource(
@@ -65,7 +91,7 @@ class XmlUtilsTest {
         every { nsNameProvider.getNameFor(namespaceValue) }.returns("ns1")
 
         // When:
-        val result = XmlUtils.stringResourceModelToElement(document, stringResourceModel, nsNameProvider)
+        val result = XmlUtils.stringResourceModelToElement(stringResourceModel, nsNameProvider)
 
         // Then:
         Truth.assertThat(result.textContent).isEqualTo("some content")
