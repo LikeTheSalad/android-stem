@@ -1,3 +1,4 @@
 <resources>
     <string name="welcome_message">Welcome to Strings playground</string>
+    <string name="welcome_message_bold">Welcome to <b>Strings playground</b></string>
 </resources>
