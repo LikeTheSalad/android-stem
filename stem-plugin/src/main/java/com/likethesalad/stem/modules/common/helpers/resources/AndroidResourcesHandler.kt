@@ -19,6 +19,7 @@ class AndroidResourcesHandler(
 
     private val gson by lazy {
         GsonBuilder()
+            .disableHtmlEscaping()
             .registerTypeAdapter(Language::class.java, LanguageTypeAdapter())
             .registerTypeAdapter(StringAndroidResource::class.java, StringResourceTypeAdapter(resourceSerializer))
             .create()

@@ -222,12 +222,7 @@ class AndroidXmlResDocumentTest {
         // Then
         Truth.assertThat(file.readText()).isEqualTo(
             """
-            <resources>
-                <string name="some_name1">some content1</string>
-                <string name="some_name2">some content2</string>
-                <string name="some_name3">some content3</string>
-            </resources>
-            
+            <resources><string name="some_name1">some content1</string><string name="some_name2">some content2</string><string name="some_name3">some content3</string></resources>
             """.trimIndent()
         )
     }
@@ -261,17 +256,12 @@ class AndroidXmlResDocumentTest {
         )
 
         // When
-        androidXmlResDocument.saveToFile(file, 2)
+        androidXmlResDocument.saveToFile(file)
 
         // Then
         Truth.assertThat(file.readText()).isEqualTo(
             """
-            <resources>
-              <string name="some_name1">some content1</string>
-              <string name="some_name2">some content2</string>
-              <string name="some_name3">some content3</string>
-            </resources>
-            
+            <resources><string name="some_name1">some content1</string><string name="some_name2">some content2</string><string name="some_name3">some content3</string></resources>
             """.trimIndent()
         )
     }
@@ -285,14 +275,11 @@ class AndroidXmlResDocumentTest {
         resource.attributes().set(namespaced("someAttr", namespace), "someAttrValue")
         document.appendStringResource(resource)
 
-        document.saveToFile(outputFile, 2)
+        document.saveToFile(outputFile)
 
         Truth.assertThat(outputFile.readText()).isEqualTo(
             """
-                <resources xmlns:ns1="$namespace">
-                  <string name="someName" ns1:someAttr="someAttrValue">someValue</string>
-                </resources>
-                
+                <resources xmlns:ns1="$namespace"><string name="someName" ns1:someAttr="someAttrValue">someValue</string></resources>
             """.trimIndent()
         )
     }
@@ -310,15 +297,11 @@ class AndroidXmlResDocumentTest {
         document.appendStringResource(resource)
         document.appendStringResource(resource2)
 
-        document.saveToFile(outputFile, 2)
+        document.saveToFile(outputFile)
 
         Truth.assertThat(outputFile.readText()).isEqualTo(
             """
-                <resources xmlns:ns1="$namespace">
-                  <string name="someName" ns1:someAttr="someAttrValue" ns1:someAttr2="someOtherAttrValue">someValue</string>
-                  <string name="someOtherName" ns1:someAttr3="Some attr3 value">someOtherValue</string>
-                </resources>
-                
+                <resources xmlns:ns1="$namespace"><string name="someName" ns1:someAttr="someAttrValue" ns1:someAttr2="someOtherAttrValue">someValue</string><string name="someOtherName" ns1:someAttr3="Some attr3 value">someOtherValue</string></resources>
             """.trimIndent()
         )
     }
@@ -338,15 +321,11 @@ class AndroidXmlResDocumentTest {
         document.appendStringResource(resource)
         document.appendStringResource(resource2)
 
-        document.saveToFile(outputFile, 2)
+        document.saveToFile(outputFile)
 
         Truth.assertThat(outputFile.readText()).isEqualTo(
             """
-                <resources xmlns:ns1="$namespace" xmlns:ns2="$namespace2">
-                  <string name="someName" ns1:someAttr="someAttrValue" ns1:someAttr2="someOtherAttrValue">someValue</string>
-                  <string name="someOtherName" ns1:someAttr3="Some attr3 value" ns2:someAttr3="Some attr3 namespace2 value">someOtherValue</string>
-                </resources>
-                
+                <resources xmlns:ns1="$namespace" xmlns:ns2="$namespace2"><string name="someName" ns1:someAttr="someAttrValue" ns1:someAttr2="someOtherAttrValue">someValue</string><string name="someOtherName" ns1:someAttr3="Some attr3 value" ns2:someAttr3="Some attr3 namespace2 value">someOtherValue</string></resources>
             """.trimIndent()
         )
     }

@@ -2,4 +2,6 @@
 <resources>
     <string name="app_name">Stem Test</string>
     <string name="welcome_message">Welcome to ${app_name}</string>
+    <string name="welcome_message_bold">Welcome to <b>${app_name}</b></string>
+    <string name="tag_control">Welcome to <b>something bold</b></string>
 </resources>
