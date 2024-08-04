@@ -1,5 +1,11 @@
 Change Log
 ==========
+Version 2.10.1 *(04-08-2024)*
+---
+
+* Supporting strings with html tags that contain quotes.
+* Keeping quotes as they are defined in the original strings.
+
 Version 2.10.0 *(28-07-2024)*
 ---
 

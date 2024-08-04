@@ -4,7 +4,7 @@ dagger = "2.51.1"
 android = "8.2.1"
 
 [libraries]
-resourceLocator = "com.likethesalad.tools.resources:string-android-resource-locator:2.3.0"
+resourceLocator = "com.likethesalad.tools.resources:string-android-resource-locator:2.3.1"
 androidCompatApi = { module = "com.likethesalad.tools:agp-compatibility-api", version.ref = "project-utilities" }
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
