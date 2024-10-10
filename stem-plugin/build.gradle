@@ -16,7 +16,7 @@ dependencies {
     testImplementation libs.unitTesting
     testImplementation libs.zip4j
     testImplementation libs.xmlUnit
-    testPluginDependency "com.android.tools.build:gradle:7.4.0"
+    testPluginDependency "com.android.tools.build:gradle:8.7.0"
 }
 
 shadowExtension {
