@@ -1,9 +1,9 @@
 Change Log
 ==========
-Version 2.11.0 *(15-09-2024)*
----
 
-* Allowing more "values" folder names.
+## Unreleased
+
+* Adding placeholder delimiter customization config params.
 
 Version 2.10.1 *(04-08-2024)*
 ---
