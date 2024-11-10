@@ -149,22 +149,29 @@ available configurable parameters.
 // build.gradle file where "com.likethesalad.stem" or "com.likethesalad.stem-library" is applied.
 
 androidStem {
-    // Even though Stem resolves your templates no matter their localization, it searches for templates amongst your 
-    // string resources within the folder "values" only by default (which will be taken as reference for other languages 
-    // when resolving them).
-    // This is because, ideally, if you have a string that will need a ${placeholder} in it, it should have it
-    // inside any of that same string's different languages, including the default one ("values"). 
-    // So in order to avoid checking for the same strings across different languages looking for ${placeholders}, which could mean
-    // an expensive processing operation depending on the project, Stem by default only checks the default
-    // strings when looking for templates, and then based on what it finds within the default strings, it applies
-    // the placeholder resolving process to all other languages.
-    //
-    // However, in some cases some projects might have a string withing the "values" folder that has no ${placeholders}
-    // in it, but its translations might have them instead (check issue #21 for context). For those cases, you
-    // could enable this flag so that Stem looks for templates within string resources within the "values" dir
-    // and also within any language-specific values folders as well.
-    // Please bear in mind that this might cause performance penalties.
-    includeLocalizedOnlyTemplates = false // disabled by default
+  // Even though Stem resolves your templates no matter their localization, it searches for templates amongst your 
+  // string resources within the folder "values" only by default (which will be taken as reference for other languages 
+  // when resolving them).
+  // This is because, ideally, if you have a string that will need a ${placeholder} in it, it should have it
+  // inside any of that same string's different languages, including the default one ("values"). 
+  // So in order to avoid checking for the same strings across different languages looking for ${placeholders}, which could mean
+  // an expensive processing operation depending on the project, Stem by default only checks the default
+  // strings when looking for templates, and then based on what it finds within the default strings, it applies
+  // the placeholder resolving process to all other languages.
+  //
+  // However, in some cases some projects might have a string withing the "values" folder that has no ${placeholders}
+  // in it, but its translations might have them instead (check issue #21 for context). For those cases, you
+  // could enable this flag so that Stem looks for templates within string resources within the "values" dir
+  // and also within any language-specific values folders as well.
+  // Please bear in mind that this might cause performance penalties.
+  includeLocalizedOnlyTemplates = false // disabled by default
+
+
+  // The "placeholder" config allows to change the format of placeholders which by default look like this: ${placeholder}.
+  placeholder {
+    start = '${' // This is the default value.
+    end = '}' // This is the default value
+  }
 }
 
 ```
