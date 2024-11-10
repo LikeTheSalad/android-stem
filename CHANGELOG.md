@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-## Unreleased
+## Version 2.12.0 (2024-11-10)
 
 * Adding placeholder delimiter customization config params.
 
