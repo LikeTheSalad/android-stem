@@ -5,16 +5,22 @@ import com.likethesalad.android.templates.common.plugins.BaseTemplatesProcessorP
 import com.likethesalad.stem.di.AppInjector
 import com.likethesalad.stem.locator.listener.TypeLocatorCreationListener
 import com.likethesalad.stem.modules.common.helpers.dirs.VariantBuildResolvedDir.Companion.getBuildRelativeResolvedDir
-import com.likethesalad.stem.providers.*
+import com.likethesalad.stem.providers.AndroidExtensionProvider
+import com.likethesalad.stem.providers.LocatorExtensionProvider
+import com.likethesalad.stem.providers.PostConfigurationProvider
+import com.likethesalad.stem.providers.ProjectDirsProvider
+import com.likethesalad.stem.providers.StemConfigurationProvider
+import com.likethesalad.stem.providers.TaskContainerProvider
+import com.likethesalad.stem.providers.TaskProvider
 import com.likethesalad.stem.utils.PlaceholderTasksCreator
 import com.likethesalad.tools.agpcompat.api.bridges.AndroidExtension
 import com.likethesalad.tools.resource.locator.android.extension.AndroidResourceLocatorExtension
+import java.io.File
 import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.logging.Logger
 import org.gradle.api.tasks.TaskContainer
-import java.io.File
 
 @Suppress("UnstableApiUsage")
 class ResolvePlaceholdersPlugin : BaseTemplatesProcessorPlugin(), AndroidExtensionProvider, ProjectDirsProvider,
