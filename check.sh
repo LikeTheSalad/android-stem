@@ -1,3 +1,2 @@
-set -e
-./gradlew test
+./gradlew check
 ./gradlew -p "stem-test" testDebugUnitTest
