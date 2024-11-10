@@ -1,0 +1,12 @@
+{
+  "packageRules": [
+    {
+      "matchPackageNames": [
+        "com.android.tools.build:gradle"
+      ],
+      "ignorePaths": [
+        "**/stem-plugin/**"
+      ]
+    }
+  ]
+}
