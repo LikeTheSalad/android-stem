@@ -1,10 +1,8 @@
 package com.likethesalad.android.templates.common.tasks.identifier.action
 
 import com.likethesalad.android.templates.common.configuration.StemConfiguration
-import com.likethesalad.android.templates.common.plugins.extension.StemExtension
 import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItem
 import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer
-import com.likethesalad.android.templates.common.utils.CommonConstants
 import com.likethesalad.tools.resource.api.android.environment.Language
 import com.likethesalad.tools.resource.api.android.impl.AndroidResourceType
 import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
@@ -20,11 +18,11 @@ class TemplatesIdentifierAction private constructor(
 
     companion object {
         fun create(
-            stemExtension: StemExtension,
+            stemConfiguration: StemConfiguration,
             localResources: ResourcesProvider,
             outputFile: File
         ): TemplatesIdentifierAction {
-            return TemplatesIdentifierAction(localResources, outputFile, StemConfiguration(stemExtension))
+            return TemplatesIdentifierAction(localResources, outputFile, stemConfiguration)
         }
     }
 
@@ -68,7 +66,7 @@ class TemplatesIdentifierAction private constructor(
 
     private fun filterTemplates(stringResources: List<StringAndroidResource>): List<StringAndroidResource> {
         return stringResources.filter { stringResource ->
-            CommonConstants.PLACEHOLDER_REGEX.containsMatchIn(stringResource.stringValue())
+            configuration.placeholderRegex.containsMatchIn(stringResource.stringValue())
         }
     }
 }

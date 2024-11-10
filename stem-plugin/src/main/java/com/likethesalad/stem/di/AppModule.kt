@@ -1,6 +1,6 @@
 package com.likethesalad.stem.di
 
-import com.likethesalad.android.templates.common.plugins.extension.StemExtension
+import com.likethesalad.android.templates.common.configuration.StemConfiguration
 import com.likethesalad.stem.ResolvePlaceholdersPlugin
 import com.likethesalad.stem.providers.AndroidExtensionProvider
 import com.likethesalad.stem.providers.PostConfigurationProvider
@@ -10,8 +10,8 @@ import com.likethesalad.stem.providers.TaskProvider
 import com.likethesalad.tools.resource.serializer.ResourceSerializer
 import dagger.Module
 import dagger.Provides
-import org.gradle.api.logging.Logger
 import javax.inject.Singleton
+import org.gradle.api.logging.Logger
 
 @Module
 class AppModule(private val resolvePlaceholdersPlugin: ResolvePlaceholdersPlugin) {
@@ -54,8 +54,8 @@ class AppModule(private val resolvePlaceholdersPlugin: ResolvePlaceholdersPlugin
 
     @Provides
     @Singleton
-    fun provideExtension(): StemExtension {
-        return resolvePlaceholdersPlugin.extension
+    fun provideExtension(): StemConfiguration {
+        return resolvePlaceholdersPlugin.getStemConfiguration()
     }
 
     @Provides

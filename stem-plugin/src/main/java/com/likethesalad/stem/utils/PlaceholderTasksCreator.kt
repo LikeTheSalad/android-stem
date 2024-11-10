@@ -1,6 +1,6 @@
 package com.likethesalad.stem.utils
 
-import com.likethesalad.android.templates.common.plugins.extension.StemExtension
+import com.likethesalad.android.templates.common.configuration.StemConfiguration
 import com.likethesalad.android.templates.common.tasks.identifier.TemplatesIdentifierTask
 import com.likethesalad.stem.locator.listener.TypeLocatorCreationListener
 import com.likethesalad.stem.modules.common.helpers.android.AndroidVariantContext
@@ -23,7 +23,7 @@ class PlaceholderTasksCreator @Inject constructor(
     taskContainerProvider: TaskContainerProvider,
     private val androidVariantContextFactory: AndroidVariantContext.Factory,
     private val taskActionProviderHolder: TaskActionProviderHolder,
-    private val stemExtension: StemExtension,
+    private val stemConfiguration: StemConfiguration,
     private val postConfigurationProvider: PostConfigurationProvider
 ) : TypeLocatorCreationListener.Callback {
 
@@ -114,7 +114,7 @@ class PlaceholderTasksCreator @Inject constructor(
             TemplatesIdentifierTask::class.java,
             TemplatesIdentifierTask.Args(
                 localResourcesInfo.resourcesProvider,
-                stemExtension
+                stemConfiguration
             )
         )
 

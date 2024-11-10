@@ -3,6 +3,7 @@ package com.likethesalad.stem.functionaltest
 import com.google.common.truth.Truth
 import com.likethesalad.android.templates.common.utils.upperFirst
 import com.likethesalad.stem.functionaltest.testtools.BasePluginTest
+import com.likethesalad.stem.functionaltest.testtools.PlaceholderBlock
 import com.likethesalad.stem.functionaltest.testtools.StemConfigBlock
 import com.likethesalad.tools.functional.testing.AndroidTestProject
 import com.likethesalad.tools.functional.testing.android.blocks.AndroidBlockItem
@@ -40,6 +41,69 @@ class CheckOutputsTest : BasePluginTest() {
     }
 
     @Test
+    fun `verify custom placeholder start`() {
+        val projectName = "custom_placeholder_start"
+
+        val placeholderBlock = PlaceholderBlock(start = "{{")
+
+        val project = createProject(
+            createAndroidAppProjectDescriptor(
+                projectName,
+                config = StemConfigBlock(placeholderBlock = placeholderBlock)
+            )
+        )
+
+        runInputOutputComparisonTest(
+            project,
+            projectName,
+            listOf("debug"),
+            "custom_placeholder_result"
+        )
+    }
+
+    @Test
+    fun `verify custom placeholder end`() {
+        val projectName = "custom_placeholder_end"
+
+        val placeholderBlock = PlaceholderBlock(end = "}}")
+
+        val project = createProject(
+            createAndroidAppProjectDescriptor(
+                projectName,
+                config = StemConfigBlock(placeholderBlock = placeholderBlock)
+            )
+        )
+
+        runInputOutputComparisonTest(
+            project,
+            projectName,
+            listOf("debug"),
+            "custom_placeholder_result"
+        )
+    }
+
+    @Test
+    fun `verify custom placeholder start and end`() {
+        val projectName = "custom_placeholder_both"
+
+        val placeholderBlock = PlaceholderBlock(start = "{{", end = "}}")
+
+        val project = createProject(
+            createAndroidAppProjectDescriptor(
+                projectName,
+                config = StemConfigBlock(placeholderBlock = placeholderBlock)
+            )
+        )
+
+        runInputOutputComparisonTest(
+            project,
+            projectName,
+            listOf("debug"),
+            "custom_placeholder_result"
+        )
+    }
+
+    @Test
     fun `verify nothing happens when there are no templates available`() {
         val variantNames = listOf("debug")
         val inOutDirName = "no_templates_available"
@@ -60,7 +124,7 @@ class CheckOutputsTest : BasePluginTest() {
     }
 
     @Test
-    fun `verify prevous outputs cleared when templates are deleted afterwards`() {
+    fun `verify previous outputs cleared when templates are deleted afterwards`() {
         val variantNames = listOf("debug")
         val projectName = "no_templates_available_afterwards"
         val withTemplatesDir = "basic"
@@ -317,25 +381,28 @@ class CheckOutputsTest : BasePluginTest() {
 
     private fun runInputOutputComparisonTest(
         projectName: String,
-        variantNames: List<String>
+        variantNames: List<String>,
+        outputDirName: String = projectName
     ) {
         runInputOutputComparisonTest(
             createProject(createAndroidAppProjectDescriptor(projectName)),
             projectName,
-            variantNames
+            variantNames,
+            outputDirName
         )
     }
 
     private fun runInputOutputComparisonTest(
         project: AndroidTestProject,
         projectName: String,
-        variantNames: List<String>
+        variantNames: List<String>,
+        outputDirName: String = projectName
     ) {
         val commandList = variantNamesToResolveCommands(variantNames)
 
         project.runGradle(projectName, commandList)
 
-        verifyVariantResults(variantNames, projectName, projectName)
+        verifyVariantResults(variantNames, projectName, outputDirName)
     }
 
     private fun createAndroidLibProjectDescriptor(

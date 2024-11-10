@@ -1,5 +1,6 @@
 package com.likethesalad.android.templates.provider
 
+import com.likethesalad.android.templates.common.configuration.StemConfiguration
 import com.likethesalad.android.templates.common.plugins.BaseTemplatesProcessorPlugin
 import com.likethesalad.android.templates.provider.di.TemplatesProviderComponent
 import com.likethesalad.android.templates.provider.di.TemplatesProviderInjector
@@ -22,7 +23,7 @@ class TemplatesProviderPlugin : BaseTemplatesProcessorPlugin() {
             TemplatesProviderTaskCreator(
                 project,
                 component.templatesServiceGeneratorActionFactory(),
-                extension
+                StemConfiguration.create(extension)
             )
         )
     }

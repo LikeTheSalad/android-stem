@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Strings playground</string>
+    <string name="welcome_message">Welcome to ${app_name}}</string>
+    <string name="welcome_message_control">Welcome to ${app_name}</string>
+</resources>

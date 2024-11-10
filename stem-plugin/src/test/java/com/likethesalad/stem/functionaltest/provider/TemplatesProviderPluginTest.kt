@@ -5,6 +5,7 @@ import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateI
 import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer
 import com.likethesalad.android.templates.provider.api.TemplatesProvider
 import com.likethesalad.stem.functionaltest.testtools.BasePluginTest
+import com.likethesalad.stem.functionaltest.testtools.PlaceholderBlock
 import com.likethesalad.stem.functionaltest.testtools.StemConfigBlock
 import com.likethesalad.stem.utils.TemplatesProviderLoader
 import com.likethesalad.tools.functional.testing.android.descriptor.AndroidLibProjectDescriptor
@@ -24,6 +25,25 @@ class TemplatesProviderPluginTest : BasePluginTest() {
     fun `Create service for basic project`() {
         val projectName = "basic"
         val projectDescriptor = setUpProjectDescriptor(projectName)
+        val project = createProject(projectDescriptor)
+
+        project.runGradle(projectName, "assembleDebug")
+
+        val provider = getTemplatesProvider(projectDescriptor, "debug")
+        commonVerification(provider, projectName)
+        assertTemplatesContainExactly(
+            provider,
+            TemplateItem("someTemplate", "string")
+        )
+    }
+
+    @Test
+    fun `Create service with custom placeholder delimiters`() {
+        val projectName = "custom_placeholder"
+        val projectDescriptor = setUpProjectDescriptor(
+            projectName,
+            config = StemConfigBlock(placeholderBlock = PlaceholderBlock(start = "{{", end = "}}"))
+        )
         val project = createProject(projectDescriptor)
 
         project.runGradle(projectName, "assembleDebug")

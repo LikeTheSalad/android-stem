@@ -1,8 +1,8 @@
 package com.likethesalad.stem.modules.templateStrings
 
+import com.likethesalad.android.templates.common.configuration.StemConfiguration
 import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItem
 import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer
-import com.likethesalad.android.templates.common.utils.CommonConstants
 import com.likethesalad.stem.locator.entrypoints.common.utils.TemplatesProviderJarsFinder
 import com.likethesalad.stem.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesModel
@@ -18,7 +18,8 @@ import dagger.assisted.AssistedInject
 import java.io.File
 
 class GatherTemplatesAction @AssistedInject constructor(
-    @Assisted private val androidVariantContext: AndroidVariantContext
+    @Assisted private val androidVariantContext: AndroidVariantContext,
+    private val stemConfiguration: StemConfiguration
 ) {
 
     @AssistedFactory
@@ -94,7 +95,7 @@ class GatherTemplatesAction @AssistedInject constructor(
         templates: List<StringAndroidResource>
     ): Map<String, String> {
         val stringsMap = stringResourcesToMap(strings)
-        val placeholders = templates.map { CommonConstants.PLACEHOLDER_REGEX.findAll(it.stringValue()) }
+        val placeholders = templates.map { stemConfiguration.placeholderRegex.findAll(it.stringValue()) }
             .flatMap { it.toList().map { m -> m.groupValues[1] } }.toSet()
 
         val placeholdersResolved = mutableMapOf<String, String>()
