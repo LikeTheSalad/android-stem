@@ -60,7 +60,7 @@ class CheckOutputsTest : BasePluginTest() {
     }
 
     @Test
-    fun `verify prevous outputs cleared when templates are deleted afterwards`() {
+    fun `verify previous outputs cleared when templates are deleted afterwards`() {
         val variantNames = listOf("debug")
         val projectName = "no_templates_available_afterwards"
         val withTemplatesDir = "basic"
