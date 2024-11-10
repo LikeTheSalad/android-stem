@@ -2,7 +2,7 @@ package com.likethesalad.stem.functionaltest.testtools
 
 import com.likethesalad.tools.functional.testing.blocks.GradleBlockItem
 
-class PlaceholderBlock(private val start: String?, private val end: String?) : GradleBlockItem {
+class PlaceholderBlock(private val start: String?=null, private val end: String?=null) : GradleBlockItem {
 
     override fun getItemText(): String {
         if (start == null && end == null) {
