@@ -27,13 +27,6 @@ android {
     }
 }
 
-androidStem {
-    placeholder {
-        start = '{{'
-        end = '}}'
-    }
-}
-
 dependencies {
     testImplementation libs.unitTesting
     testImplementation libs.robolectric
