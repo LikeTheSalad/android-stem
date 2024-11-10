@@ -1,8 +1,10 @@
 package com.likethesalad.stem.resolver
 
 import com.google.common.truth.Truth
+import com.likethesalad.android.templates.common.configuration.StemConfiguration
 import com.likethesalad.stem.modules.resolveStrings.resolver.RecursiveLevelDetector
 import com.likethesalad.stem.modules.resolveStrings.resolver.TemplateContainerFinder
+import com.likethesalad.stem.testutils.createForTest
 import com.likethesalad.tools.resource.api.android.environment.Language
 import com.likethesalad.tools.resource.api.android.environment.Variant
 import com.likethesalad.tools.resource.api.android.impl.AndroidResourceScope
@@ -69,7 +71,7 @@ class RecursiveLevelDetectorTest {
             levelFourTemplate2
         )
         val recursiveLevelDetector = RecursiveLevelDetector()
-        val templateContainerFinder = TemplateContainerFinder(templates.map { it.name() })
+        val templateContainerFinder = getTemplateContainerFinder(templates)
 
         // When:
         val result = recursiveLevelDetector.orderTemplatesByRecursiveLevel(templates, templateContainerFinder)
@@ -115,7 +117,7 @@ class RecursiveLevelDetectorTest {
             template3
         )
         val recursiveLevelDetector = RecursiveLevelDetector()
-        val templateContainerFinder = TemplateContainerFinder(templates.map { it.name() })
+        val templateContainerFinder = getTemplateContainerFinder(templates)
 
         // When:
         try {
@@ -125,5 +127,10 @@ class RecursiveLevelDetectorTest {
             // Then:
             Truth.assertThat(e.message).isEqualTo("Circular dependency on string templates")
         }
+    }
+
+    private fun getTemplateContainerFinder(templates: List<StringAndroidResource>): TemplateContainerFinder {
+        val configuration = StemConfiguration.createForTest()
+        return TemplateContainerFinder(configuration, templates.map { it.name() })
     }
 }

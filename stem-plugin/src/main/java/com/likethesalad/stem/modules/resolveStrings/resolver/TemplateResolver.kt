@@ -1,6 +1,6 @@
 package com.likethesalad.stem.modules.resolveStrings.resolver
 
-import com.likethesalad.android.templates.common.utils.CommonConstants
+import com.likethesalad.android.templates.common.configuration.StemConfiguration
 import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesModel
 import com.likethesalad.tools.resource.api.android.attributes.plain
 import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
@@ -8,7 +8,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TemplateResolver @Inject constructor(private val recursiveLevelDetector: RecursiveLevelDetector) {
+class TemplateResolver @Inject constructor(
+    private val configuration: StemConfiguration,
+    private val recursiveLevelDetector: RecursiveLevelDetector
+) {
 
     fun resolveTemplates(stringsTemplatesModel: StringsTemplatesModel): List<StringAndroidResource> {
         val templateContainerFinder = createTemplatesFinder(stringsTemplatesModel)
@@ -80,15 +83,14 @@ class TemplateResolver @Inject constructor(private val recursiveLevelDetector: R
 
     private fun resolve(template: String, values: Map<String, String>): String {
         var resolvedString = template
-        val occurrences =
-            CommonConstants.PLACEHOLDER_REGEX.findAll(template).toList().map { it.groupValues[1] }.toSet()
+        val occurrences = configuration.placeholderRegex.findAll(template)
         for (it in occurrences) {
-            resolvedString = resolvedString.replace("\${$it}", values.getValue(it))
+            resolvedString = resolvedString.replace(it.value, values.getValue(it.groupValues[1]))
         }
         return resolvedString
     }
 
     private fun createTemplatesFinder(stringsTemplatesModel: StringsTemplatesModel): TemplateContainerFinder {
-        return TemplateContainerFinder(stringsTemplatesModel.templates.map { it.name() })
+        return TemplateContainerFinder(configuration, stringsTemplatesModel.templates.map { it.name() })
     }
 }
