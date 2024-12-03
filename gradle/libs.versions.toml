@@ -1,7 +1,7 @@
 [versions]
 project-utilities = "3.1.0"
 dagger = "2.53"
-android = "8.7.2"
+android = "8.7.3"
 
 [libraries]
 resourceLocator = "com.likethesalad.tools.resources:string-android-resource-locator:2.4.0"
