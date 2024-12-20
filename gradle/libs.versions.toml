@@ -1,6 +1,6 @@
 [versions]
 project-utilities = "3.1.0"
-dagger = "2.53.1"
+dagger = "2.54"
 android = "8.7.3"
 
 [libraries]
