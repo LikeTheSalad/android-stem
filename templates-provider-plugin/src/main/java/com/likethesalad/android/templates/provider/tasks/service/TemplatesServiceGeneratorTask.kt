@@ -9,7 +9,6 @@ import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.TaskAction
 import javax.inject.Inject
 
-@Suppress("UnstableApiUsage")
 open class TemplatesServiceGeneratorTask @Inject constructor(private val args: Args) : DirProducerTask() {
 
     @InputFile

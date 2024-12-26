@@ -17,7 +17,6 @@ import org.gradle.api.tasks.TaskProvider
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Suppress("UnstableApiUsage")
 @Singleton
 class PlaceholderTasksCreator @Inject constructor(
     taskContainerProvider: TaskContainerProvider,

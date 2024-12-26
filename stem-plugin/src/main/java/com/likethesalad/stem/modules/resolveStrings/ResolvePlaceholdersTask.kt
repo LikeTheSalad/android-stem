@@ -10,7 +10,6 @@ import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.TaskAction
 import javax.inject.Inject
 
-@Suppress("UnstableApiUsage")
 open class ResolvePlaceholdersTask
 @Inject constructor(private val args: ResolvePlaceholdersArgs) : BaseTask() {
 
