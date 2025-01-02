@@ -11,7 +11,6 @@ import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import javax.inject.Inject
 
-@Suppress("UnstableApiUsage")
 open class GatherTemplatesTask
 @Inject constructor(private val args: GatherTemplatesArgs) : BaseTask() {
 

@@ -12,7 +12,6 @@ import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import javax.inject.Inject
 
-@Suppress("UnstableApiUsage")
 open class TemplatesIdentifierTask @Inject constructor(private val args: Args) : BaseTask() {
 
     companion object {

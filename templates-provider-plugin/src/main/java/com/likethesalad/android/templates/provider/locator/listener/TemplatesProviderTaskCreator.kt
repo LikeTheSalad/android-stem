@@ -12,7 +12,6 @@ import com.likethesalad.tools.resource.locator.android.extension.listener.Resour
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskProvider
 
-@Suppress("UnstableApiUsage")
 class TemplatesProviderTaskCreator(
     private val project: Project,
     private val taskServiceGeneratorActionFactory: TemplatesServiceGeneratorAction.Factory,

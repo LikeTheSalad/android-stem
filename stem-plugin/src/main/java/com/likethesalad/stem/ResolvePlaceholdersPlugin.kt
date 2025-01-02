@@ -22,7 +22,6 @@ import org.gradle.api.Task
 import org.gradle.api.logging.Logger
 import org.gradle.api.tasks.TaskContainer
 
-@Suppress("UnstableApiUsage")
 class ResolvePlaceholdersPlugin : BaseTemplatesProcessorPlugin(), AndroidExtensionProvider, ProjectDirsProvider,
     TaskProvider, TaskContainerProvider, LocatorExtensionProvider, PostConfigurationProvider,
     StemConfigurationProvider {
