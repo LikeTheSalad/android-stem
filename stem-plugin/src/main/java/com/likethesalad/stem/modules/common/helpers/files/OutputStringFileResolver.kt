@@ -1,7 +1,7 @@
 package com.likethesalad.stem.modules.common.helpers.files
 
-import com.likethesalad.stem.modules.common.Constants.Companion.RESOLVED_FILE_NAME
-import com.likethesalad.stem.modules.common.Constants.Companion.TEMPLATE_BASE_FILE_NAME
+import com.likethesalad.stem.modules.common.Constants.RESOLVED_FILE_NAME
+import com.likethesalad.stem.modules.common.Constants.TEMPLATE_BASE_FILE_NAME
 import java.io.File
 
 class OutputStringFileResolver {
