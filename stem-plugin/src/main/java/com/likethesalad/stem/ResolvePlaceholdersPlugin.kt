@@ -88,7 +88,7 @@ class ResolvePlaceholdersPlugin : BaseTemplatesProcessorPlugin(), AndroidExtensi
     }
 
     override fun getBuildDir(): File {
-        return project.buildDir
+        return project.layout.buildDirectory.get().asFile
     }
 
     @Suppress("UNCHECKED_CAST")
