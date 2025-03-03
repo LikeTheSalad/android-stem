@@ -10,7 +10,7 @@ dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 metadataConsumer = "com.likethesalad.tools:plugin-metadata-consumer:1.0.0"
 unitTesting = { module = "com.likethesalad.tools:unit-testing", version.ref = "project-utilities" }
-byteBuddy = "net.bytebuddy:byte-buddy:1.17.1"
+byteBuddy = "net.bytebuddy:byte-buddy:1.17.2"
 android-plugin = { module = "com.android.tools.build:gradle", version.ref = "android" }
 classGraph = "io.github.classgraph:classgraph:4.8.179"
 gson = "com.google.code.gson:gson:2.12.1"
