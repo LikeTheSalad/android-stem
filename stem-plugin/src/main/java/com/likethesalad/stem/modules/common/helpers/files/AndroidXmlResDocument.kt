@@ -1,7 +1,7 @@
 package com.likethesalad.stem.modules.common.helpers.files
 
-import com.likethesalad.stem.modules.common.Constants.Companion.XML_RESOURCES_TAG
-import com.likethesalad.stem.modules.common.Constants.Companion.XML_STRING_TAG
+import com.likethesalad.stem.modules.common.Constants.XML_RESOURCES_TAG
+import com.likethesalad.stem.modules.common.Constants.XML_STRING_TAG
 import com.likethesalad.stem.modules.common.helpers.resources.utils.XmlUtils
 import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
 import org.w3c.dom.DOMException
