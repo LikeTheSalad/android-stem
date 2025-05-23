@@ -16,7 +16,7 @@ classGraph = "io.github.classgraph:classgraph:4.8.179"
 gson = "com.google.code.gson:gson:2.13.1"
 zip4j = "net.lingala.zip4j:zip4j:2.11.5"
 robolectric = "org.robolectric:robolectric:4.14.1"
-xmlUnit = "org.xmlunit:xmlunit-core:2.10.1"
+xmlUnit = "org.xmlunit:xmlunit-core:2.10.2"
 
 [plugins]
 java-library = { id = "com.likethesalad.tools.java-library", version.ref = "project-utilities" }
