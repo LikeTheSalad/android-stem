@@ -6,7 +6,7 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.Test
 
-class VariantLayersTest {
+class VariantResTest {
 
     @Test
     fun `Get variants from empty flavors`() {
@@ -58,7 +58,7 @@ class VariantLayersTest {
         every { variant.buildType }.returns(buildType)
         every { variant.productFlavors }.returns(flavors.map { "" to it })
 
-        val layers = VariantLayers.fromAndroidVariant(variant)
+        val layers = VariantRes.forVariant(variant)
 
         Truth.assertThat(layers.names).containsExactlyElementsIn(expectedNameInOrder).inOrder()
     }
