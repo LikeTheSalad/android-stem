@@ -1,25 +1,31 @@
 package com.likethesalad.android.resources
 
+import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.variant.Variant
+import com.android.build.gradle.internal.api.DefaultAndroidSourceDirectorySet
+import java.io.File
 import org.gradle.internal.extensions.stdlib.capitalized
 
-class VariantRes(val layers: List<Layer>) {
+class VariantRes(private val androidExtension: ApplicationExtension, val layers: List<String>) {
 
-    class Layer(val name: String, private val position: Int) : Comparable<Layer> {
-        override fun compareTo(other: Layer): Int {
-            return position.compareTo(other.position)
+    fun getResDirs(): List<Collection<File>> {
+        val collections = mutableListOf<Collection<File>>()
+
+        layers.forEach { layer ->
+            val resDirs =
+                (androidExtension.sourceSets.getByName(layer).res as DefaultAndroidSourceDirectorySet).srcDirs
+            collections.add(resDirs)
         }
+
+        return collections
     }
 
     companion object {
-        fun forVariant(variant: Variant): VariantRes {
-            val layers = getNames(variant).mapIndexed { index: Int, name: String ->
-                Layer(name, index)
-            }
-            return VariantRes(layers)
+        fun forVariant(androidExtension: ApplicationExtension, variant: Variant): VariantRes {
+            return VariantRes(androidExtension, getLayerNames(variant))
         }
 
-        private fun getNames(variant: Variant): List<String> {
+        private fun getLayerNames(variant: Variant): List<String> {
             val layersNames = mutableSetOf<String>()
             val flavorNames = variant.productFlavors.map { it.second }
             layersNames.add("main")
