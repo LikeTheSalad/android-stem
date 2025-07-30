@@ -58,8 +58,9 @@ class VariantResTest {
         every { variant.buildType }.returns(buildType)
         every { variant.productFlavors }.returns(flavors.map { "" to it })
 
-        val layers = VariantRes.forVariant(variant)
+        val variantRes = VariantRes.forVariant(variant)
 
-        Truth.assertThat(layers.names).containsExactlyElementsIn(expectedNameInOrder).inOrder()
+        Truth.assertThat(variantRes.layers.map { it.name }).containsExactlyElementsIn(expectedNameInOrder).inOrder()
+        Truth.assertThat(variantRes.layers.first()).isLessThan(variantRes.layers.last())
     }
 }
