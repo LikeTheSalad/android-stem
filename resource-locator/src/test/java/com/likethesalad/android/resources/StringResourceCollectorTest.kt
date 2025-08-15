@@ -1,16 +1,13 @@
 package com.likethesalad.android.resources
 
+import com.likethesalad.android.resources.data.StringResource
 import java.io.File
 import java.nio.file.Paths
 import kotlin.io.path.absolutePathString
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.io.TempDir
 
 class StringResourceCollectorTest {
-    @TempDir
-    lateinit var outputDir: File
-
     companion object {
         private val ASSETS_DIR = File(Paths.get("src", "test", "assets").absolutePathString())
     }
@@ -20,39 +17,18 @@ class StringResourceCollectorTest {
         val resDirs = mutableListOf<File>()
         resDirs.add(getInputDir("basic/main/res"))
 
-        StringResourceCollector.collectStringResources(listOf(resDirs), outputDir)
+        val resources = StringResourceCollector.collectStringResources(listOf(resDirs))
 
-        verifyDirsContentsAreEqual(outputDir, getOutputDir("basic"))
+        assertThat(resources).containsKeys("values")
+        assertThat(resources["values"]).containsExactly(
+            createStringResource("app_name", "Strings playground"),
+            createStringResource("welcome_message", "Welcome to the app")
+        )
+    }
+
+    private fun createStringResource(name: String, value: String): StringResource {
+        return StringResource(value, listOf(StringResource.Attribute("name", name, null)))
     }
 
     private fun getInputDir(path: String) = File(ASSETS_DIR, "inputs/$path")
-
-    private fun getOutputDir(path: String) = File(ASSETS_DIR, "outputs/$path")
-
-    private fun verifyDirsContentsAreEqual(dir1: File, dir2: File) {
-        val dir1Files = dir1.listFiles()?.asList() ?: emptyList()
-        val dir2Files = dir2.listFiles()?.asList() ?: emptyList()
-        if (dir1Files.isEmpty() && dir2Files.isEmpty()) {
-            return
-        }
-        checkRootContentFileNames(dir1Files, dir2Files)
-        dir1Files.forEach { dir1File ->
-            if (dir1File.isFile) {
-                checkIfFileIsInList(dir1File, dir2Files)
-            } else {
-                verifyDirsContentsAreEqual(dir1File, dir2Files.first { it.name == dir1File.name })
-            }
-        }
-    }
-
-    private fun checkRootContentFileNames(dirFiles1: List<File>, dirFiles2: List<File>) {
-        val dirFileNames1 = dirFiles1.map { it.name }
-        val dirFileNames2 = dirFiles2.map { it.name }
-        Assertions.assertThat(dirFileNames2).containsExactlyElementsOf(dirFileNames1)
-    }
-
-    private fun checkIfFileIsInList(file: File, list: List<File>) {
-        val fileWithSameName = list.first { it.name == file.name }
-        Assertions.assertThat(fileWithSameName.readText()).isEqualTo(file.readText())
-    }
 }

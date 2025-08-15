@@ -4,11 +4,9 @@ import com.likethesalad.android.resources.data.StringResource
 import org.w3c.dom.Node
 import org.w3c.dom.NodeList
 
-class StringXmlResourceExtractor {
+object StringXmlResourceExtractor {
 
-    companion object {
-        private const val STRING_RESOURCE_PATH = "/resources/string"
-    }
+    private const val STRING_RESOURCE_PATH = "/resources/string"
 
     fun getResourcesFromAndroidDocument(document: AndroidXmlResDocument): List<StringResource> {
         val stringList = mutableListOf<StringResource>()

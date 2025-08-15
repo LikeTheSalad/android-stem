@@ -11,22 +11,11 @@ import org.w3c.dom.Node
 
 object XmlUtils {
 
-    private val XML_FORMAT = Regex(".+\\.[xX][mM][lL]\$")
     private val OUTER_XML_TAGS_PATTERN = Regex("^<[^>]*>|<[^>]*>\$")
     private val contentExtractor by lazy {
         val transformer = TransformerFactory.newInstance().newTransformer()
         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes")
         transformer
-    }
-
-    fun findXmlFiles(valueDir: File): List<File> {
-        return valueDir.listFiles { _, name ->
-            isXmlFile(name)
-        }?.toList() ?: emptyList()
-    }
-
-    private fun isXmlFile(name: String): Boolean {
-        return XML_FORMAT.matches(name)
     }
 
     fun getContents(node: Node): String {
