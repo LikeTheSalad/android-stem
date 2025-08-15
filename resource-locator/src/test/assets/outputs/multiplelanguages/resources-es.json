@@ -1,0 +1,20 @@
+{
+  "items": [
+    {
+      "attributes": {
+        "plain|name|": "app_name_es"
+      },
+      "value": "Nombre de app",
+      "scope": "main:es",
+      "type": "string"
+    },
+    {
+      "attributes": {
+        "plain|name|": "welcome_message"
+      },
+      "value": "Bienvenido a la app",
+      "scope": "main:es",
+      "type": "string"
+    }
+  ]
+}

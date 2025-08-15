@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_config_item">Config item</string>
+    <string name="some_other_config">Some other config</string>
+</resources>

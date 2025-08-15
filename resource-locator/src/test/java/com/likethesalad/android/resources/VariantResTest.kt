@@ -1,10 +1,10 @@
 package com.likethesalad.android.resources
 
 import com.android.build.api.variant.Variant
-import com.google.common.truth.Truth
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.Test
+import org.assertj.core.api.Assertions
+import org.junit.jupiter.api.Test
 
 class VariantResTest {
 
@@ -60,6 +60,6 @@ class VariantResTest {
 
         val variantRes = VariantRes.forVariant(mockk(), variant)
 
-        Truth.assertThat(variantRes.layers).containsExactlyElementsIn(expectedNameInOrder).inOrder()
+        Assertions.assertThat(variantRes.layers).containsExactlyElementsOf(expectedNameInOrder.toList())
     }
 }

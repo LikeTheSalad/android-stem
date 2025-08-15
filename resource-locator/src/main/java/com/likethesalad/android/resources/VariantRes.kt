@@ -2,24 +2,22 @@ package com.likethesalad.android.resources
 
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.variant.Variant
-import com.android.build.gradle.internal.api.DefaultAndroidSourceDirectorySet
-import java.io.File
-import org.gradle.internal.extensions.stdlib.capitalized
+import java.util.Locale
 
 class VariantRes(private val androidExtension: ApplicationExtension, val layers: List<String>) {
 
-    fun getResDirs(): List<Collection<File>> {
-        val collections = mutableListOf<Collection<File>>()
-
-        layers.forEach { layer ->
-            val resDirs =
-                (androidExtension.sourceSets.getByName(layer).res as DefaultAndroidSourceDirectorySet).srcDirs
-            collections.add(resDirs)
-        }
-
-        return collections
-    }
-
+    //    fun getResDirs(): List<Collection<File>> {
+//        val collections = mutableListOf<Collection<File>>()
+//
+//        layers.forEach { layer ->
+//            val resDirs =
+//                (androidExtension.sourceSets.getByName(layer).res as DefaultAndroidSourceDirectorySet).srcDirs
+//            collections.add(resDirs)
+//        }
+//
+//        return collections
+//    }
+//
     companion object {
         fun forVariant(androidExtension: ApplicationExtension, variant: Variant): VariantRes {
             return VariantRes(androidExtension, getLayerNames(variant))
@@ -35,7 +33,7 @@ class VariantRes(private val androidExtension: ApplicationExtension, val layers:
                     if (index == 0) {
                         item
                     } else {
-                        accumulated + item.capitalized()
+                        accumulated + item.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
                     }
                 })
             }
