@@ -15,3 +15,7 @@ dependencies {
     testImplementation(libs.assertj)
     testImplementation(gradleTestKit())
 }
+
+tasks.named<Test>("test") {
+    useJUnitPlatform()
+}
