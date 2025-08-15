@@ -18,6 +18,16 @@ zip4j = "net.lingala.zip4j:zip4j:2.11.5"
 robolectric = "org.robolectric:robolectric:4.15.1"
 xmlUnit = "org.xmlunit:xmlunit-core:2.10.3"
 
+#Testing
+junit-bom = "org.junit:junit-bom:5.13.4"
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
+junit-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine" }
+assertj = "org.assertj:assertj-core:3.27.4"
+
+[bundles]
+junit = ["junit-jupiter", "junit-launcher", "junit-engine"]
+
 [plugins]
 java-library = { id = "com.likethesalad.tools.java-library", version.ref = "project-utilities" }
 artifactPublisher = { id = "com.likethesalad.artifact-publisher", version = "3.3.0" }

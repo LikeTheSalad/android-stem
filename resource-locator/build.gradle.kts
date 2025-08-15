@@ -10,5 +10,8 @@ dependencies {
     api(gradleApi())
     compileOnly(libs.android.plugin)
     testImplementation(libs.android.plugin)
-    testImplementation(libs.unitTesting)
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.bundles.junit)
+    testImplementation(libs.assertj)
+    testImplementation(gradleTestKit())
 }
