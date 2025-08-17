@@ -6,6 +6,7 @@ import java.nio.file.Paths
 import kotlin.io.path.absolutePathString
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.fail
 
 class StringResourceCollectorTest {
     companion object {
@@ -41,6 +42,20 @@ class StringResourceCollectorTest {
             createStringResource("welcome_message", "Welcome to the app"),
             createStringResource("welcome_message_res2", "Welcome to the app 2")
         )
+    }
+
+    @Test
+    fun `Verify multiple res dirs with repeated name`() {
+        val resDirs = mutableListOf<File>()
+        resDirs.add(getInputDir("multipleresdirsconflict/main/res"))
+        resDirs.add(getInputDir("multipleresdirsconflict/main/res2"))
+
+        try {
+            StringResourceCollector.collectStringResources(listOf(resDirs))
+            fail("An exception is expected")
+        } catch (e: IllegalStateException) {
+            assertThat(e).hasMessage("Duplicate name 'app_name' in 'values'")
+        }
     }
 
     @Test
