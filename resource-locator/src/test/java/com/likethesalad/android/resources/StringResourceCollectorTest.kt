@@ -27,6 +27,23 @@ class StringResourceCollectorTest {
     }
 
     @Test
+    fun `Verify multiple res dirs`() {
+        val resDirs = mutableListOf<File>()
+        resDirs.add(getInputDir("multipleresdirs/main/res"))
+        resDirs.add(getInputDir("multipleresdirs/main/res2"))
+
+        val resources = StringResourceCollector.collectStringResources(listOf(resDirs))
+
+        assertThat(resources).containsOnlyKeys("values")
+        assertThat(resources["values"]).containsExactly(
+            createStringResource("app_name", "Strings playground"),
+            createStringResource("app_name_res2", "Strings playground 2"),
+            createStringResource("welcome_message", "Welcome to the app"),
+            createStringResource("welcome_message_res2", "Welcome to the app 2")
+        )
+    }
+
+    @Test
     fun `Verify multiple xml files in single values dir`() {
         val resDirs = mutableListOf<File>()
         resDirs.add(getInputDir("multiplefiles/main/res"))
