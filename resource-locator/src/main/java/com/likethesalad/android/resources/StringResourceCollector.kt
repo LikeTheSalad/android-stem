@@ -40,7 +40,7 @@ object StringResourceCollector {
             }
         }
 
-        return stringResources.map { it.key to it.value.values }.toMap()
+        return stringResources.map { it.key to it.value.values.sortedBy { resource -> resource.getName() } }.toMap()
     }
 
     private fun findValueDirs(resDir: File): List<ValueDir> {

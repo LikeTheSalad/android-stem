@@ -26,6 +26,22 @@ class StringResourceCollectorTest {
         )
     }
 
+    @Test
+    fun `Verify multiple xml files in single values dir`() {
+        val resDirs = mutableListOf<File>()
+        resDirs.add(getInputDir("multiplefiles/main/res"))
+
+        val resources = StringResourceCollector.collectStringResources(listOf(resDirs))
+
+        assertThat(resources).containsKeys("values")
+        assertThat(resources["values"]).containsExactly(
+            createStringResource("app_config_item", "Config item"),
+            createStringResource("app_name", "Strings playground"),
+            createStringResource("some_other_config", "Some other config"),
+            createStringResource("welcome_message", "Welcome to the app")
+        )
+    }
+
     private fun createStringResource(name: String, value: String): StringResource {
         return StringResource(value, listOf(StringResource.Attribute("name", name, null)))
     }
