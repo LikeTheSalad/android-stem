@@ -59,6 +59,23 @@ class StringResourceCollectorTest {
     }
 
     @Test
+    fun `Verify multiple layers dirs merging`() {
+        val layers = mutableListOf<Collection<File>>()
+        layers.add(listOf(getInputDir("multiplelayers/main/res")))
+        layers.add(listOf(getInputDir("multiplelayers/debug/res")))
+        layers.add(listOf(getInputDir("multiplelayers/demoDebug/res")))
+
+        val resources = StringResourceCollector.collectStringResources(layers)
+
+        assertThat(resources).containsOnlyKeys("values")
+        assertThat(resources["values"]).containsExactly(
+            createStringResource("app_name", "Demo debug playground"),
+            createStringResource("some_other", "Some main string"),
+            createStringResource("welcome_message", "Welcome to the debug app")
+        )
+    }
+
+    @Test
     fun `Verify multiple xml files in single values dir`() {
         val resDirs = mutableListOf<File>()
         resDirs.add(getInputDir("multiplefiles/main/res"))

@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Debug playground</string>
+    <string name="welcome_message">Welcome to the debug app</string>
+</resources>
