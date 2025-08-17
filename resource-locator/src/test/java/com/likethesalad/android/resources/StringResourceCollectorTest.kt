@@ -19,7 +19,7 @@ class StringResourceCollectorTest {
 
         val resources = StringResourceCollector.collectStringResources(listOf(resDirs))
 
-        assertThat(resources).containsKeys("values")
+        assertThat(resources).containsOnlyKeys("values")
         assertThat(resources["values"]).containsExactly(
             createStringResource("app_name", "Strings playground"),
             createStringResource("welcome_message", "Welcome to the app")
@@ -33,12 +33,30 @@ class StringResourceCollectorTest {
 
         val resources = StringResourceCollector.collectStringResources(listOf(resDirs))
 
-        assertThat(resources).containsKeys("values")
+        assertThat(resources).containsOnlyKeys("values")
         assertThat(resources["values"]).containsExactly(
             createStringResource("app_config_item", "Config item"),
             createStringResource("app_name", "Strings playground"),
             createStringResource("some_other_config", "Some other config"),
             createStringResource("welcome_message", "Welcome to the app")
+        )
+    }
+
+    @Test
+    fun `Verify multiple languages in single res dir`() {
+        val resDirs = mutableListOf<File>()
+        resDirs.add(getInputDir("multiplelanguages/main/res"))
+
+        val resources = StringResourceCollector.collectStringResources(listOf(resDirs))
+
+        assertThat(resources).containsOnlyKeys("values", "values-es")
+        assertThat(resources["values"]).containsExactly(
+            createStringResource("app_name", "Strings playground"),
+            createStringResource("welcome_message", "Welcome to the app")
+        )
+        assertThat(resources["values-es"]).containsExactly(
+            createStringResource("app_name_es", "Nombre de app"),
+            createStringResource("welcome_message", "Bienvenido a la app")
         )
     }
 
