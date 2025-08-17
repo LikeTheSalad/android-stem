@@ -28,6 +28,24 @@ class StringResourceCollectorTest {
     }
 
     @Test
+    fun `Verify namespaced resources`() {
+        val resDirs = mutableListOf<File>()
+        resDirs.add(getInputDir("namespaced/main/res"))
+
+        val resources = StringResourceCollector.collectStringResources(listOf(resDirs))
+
+        assertThat(resources).containsOnlyKeys("values")
+        assertThat(resources["values"]).containsExactly(
+            createStringResource("app_name", "Strings playground"),
+            createStringResource(
+                "welcome_message",
+                "Welcome to the app",
+                createAttribute("someNsKey", "someNsValue", "http://schemas.android.com/tools")
+            )
+        )
+    }
+
+    @Test
     fun `Verify multiple res dirs`() {
         val resDirs = mutableListOf<File>()
         resDirs.add(getInputDir("multipleresdirs/main/res"))
@@ -109,8 +127,17 @@ class StringResourceCollectorTest {
         )
     }
 
-    private fun createStringResource(name: String, value: String): StringResource {
-        return StringResource(value, listOf(StringResource.Attribute("name", name, null)))
+    private fun createStringResource(
+        name: String,
+        value: String,
+        vararg extraAttributes: StringResource.Attribute
+    ): StringResource {
+        val attributes = listOf(createAttribute("name", name)).plus(extraAttributes)
+        return StringResource(value, attributes)
+    }
+
+    private fun createAttribute(name: String, value: String, namespace: String? = null): StringResource.Attribute {
+        return StringResource.Attribute(name, value, namespace)
     }
 
     private fun getInputDir(path: String) = File(ASSETS_DIR, "inputs/$path")
