@@ -12,7 +12,7 @@ metadataConsumer = "com.likethesalad.tools:plugin-metadata-consumer:1.0.0"
 unitTesting = { module = "com.likethesalad.tools:unit-testing", version.ref = "project-utilities" }
 byteBuddy = "net.bytebuddy:byte-buddy:1.17.7"
 android-plugin = { module = "com.android.tools.build:gradle", version.ref = "android" }
-classGraph = "io.github.classgraph:classgraph:4.8.180"
+classGraph = "io.github.classgraph:classgraph:4.8.181"
 gson = "com.google.code.gson:gson:2.13.2"
 zip4j = "net.lingala.zip4j:zip4j:2.11.5"
 robolectric = "org.robolectric:robolectric:4.16"
