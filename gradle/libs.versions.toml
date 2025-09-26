@@ -21,6 +21,6 @@ xmlUnit = "org.xmlunit:xmlunit-core:2.10.4"
 [plugins]
 java-library = { id = "com.likethesalad.tools.java-library", version.ref = "project-utilities" }
 artifactPublisher = { id = "com.likethesalad.artifact-publisher", version = "3.3.0" }
-buildConfig = { id = "com.github.gmazzo.buildconfig", version = "5.6.7" }
+buildConfig = { id = "com.github.gmazzo.buildconfig", version = "5.6.8" }
 androidTestTools = { id = "com.likethesalad.tools.android-compilation-testing", version.ref = "project-utilities" }
 android-application = { id = "com.android.application", version.ref = "android" }
