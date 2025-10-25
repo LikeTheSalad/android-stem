@@ -9,6 +9,7 @@ dependencies {
     embedded libs.dagger
     embedded project(':templates-provider-plugin')
     implementation project(':common-tools')
+    implementation project(':resource-locator')
     implementation libs.gson
     implementation libs.classGraph
     compileOnly libs.android.plugin
@@ -17,8 +18,6 @@ dependencies {
     testImplementation libs.zip4j
     testImplementation libs.xmlUnit
     testImplementation(libs.android.plugin)
-    testImplementation(platform(libs.junit.bom))
-    testImplementation(libs.bundles.junit)
     testImplementation(libs.assertj)
     testImplementation(libs.mockk)
     testPluginDependency "com.android.tools.build:gradle:7.4.0"
@@ -34,10 +33,6 @@ libConventions {
 
 kapt {
     correctErrorTypes = true
-}
-
-tasks.named("test") {
-    useJUnitPlatform()
 }
 
 gradlePlugin {

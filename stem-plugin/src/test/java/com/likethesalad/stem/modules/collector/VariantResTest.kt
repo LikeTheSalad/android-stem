@@ -4,7 +4,7 @@ import com.android.build.api.variant.Variant
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
+import org.junit.Test
 
 class VariantResTest {
 
