@@ -18,7 +18,7 @@ class StringResourceCollectorTest {
         val resDirs = mutableListOf<File>()
         resDirs.add(getInputDir("basic/main/res"))
 
-        val resources = StringResourceCollector.collectStringResources(listOf(resDirs))
+        val resources = StringResourceCollector.collectStringResourcesPerValueDir(listOf(resDirs))
 
         assertThat(resources).containsOnlyKeys("values")
         assertThat(resources["values"]).containsExactly(
@@ -32,7 +32,7 @@ class StringResourceCollectorTest {
         val resDirs = mutableListOf<File>()
         resDirs.add(getInputDir("namespaced/main/res"))
 
-        val resources = StringResourceCollector.collectStringResources(listOf(resDirs))
+        val resources = StringResourceCollector.collectStringResourcesPerValueDir(listOf(resDirs))
 
         assertThat(resources).containsOnlyKeys("values")
         assertThat(resources["values"]).containsExactly(
@@ -51,7 +51,7 @@ class StringResourceCollectorTest {
         resDirs.add(getInputDir("multipleresdirs/main/res"))
         resDirs.add(getInputDir("multipleresdirs/main/res2"))
 
-        val resources = StringResourceCollector.collectStringResources(listOf(resDirs))
+        val resources = StringResourceCollector.collectStringResourcesPerValueDir(listOf(resDirs))
 
         assertThat(resources).containsOnlyKeys("values")
         assertThat(resources["values"]).containsExactly(
@@ -69,7 +69,7 @@ class StringResourceCollectorTest {
         resDirs.add(getInputDir("multipleresdirsconflict/main/res2"))
 
         try {
-            StringResourceCollector.collectStringResources(listOf(resDirs))
+            StringResourceCollector.collectStringResourcesPerValueDir(listOf(resDirs))
             fail("An exception is expected")
         } catch (e: IllegalStateException) {
             assertThat(e).hasMessage("Duplicate name 'app_name' in 'values'")
@@ -83,7 +83,7 @@ class StringResourceCollectorTest {
         layers.add(listOf(getInputDir("multiplelayers/debug/res")))
         layers.add(listOf(getInputDir("multiplelayers/demoDebug/res")))
 
-        val resources = StringResourceCollector.collectStringResources(layers)
+        val resources = StringResourceCollector.collectStringResourcesPerValueDir(layers)
 
         assertThat(resources).containsOnlyKeys("values")
         assertThat(resources["values"]).containsExactly(
@@ -98,7 +98,7 @@ class StringResourceCollectorTest {
         val resDirs = mutableListOf<File>()
         resDirs.add(getInputDir("multiplefiles/main/res"))
 
-        val resources = StringResourceCollector.collectStringResources(listOf(resDirs))
+        val resources = StringResourceCollector.collectStringResourcesPerValueDir(listOf(resDirs))
 
         assertThat(resources).containsOnlyKeys("values")
         assertThat(resources["values"]).containsExactly(
@@ -114,7 +114,7 @@ class StringResourceCollectorTest {
         val resDirs = mutableListOf<File>()
         resDirs.add(getInputDir("multiplelanguages/main/res"))
 
-        val resources = StringResourceCollector.collectStringResources(listOf(resDirs))
+        val resources = StringResourceCollector.collectStringResourcesPerValueDir(listOf(resDirs))
 
         assertThat(resources).containsOnlyKeys("values", "values-es")
         assertThat(resources["values"]).containsExactly(

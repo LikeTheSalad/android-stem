@@ -1,23 +1,25 @@
-package com.likethesalad.android.resources
+package com.likethesalad.stem.modules.collector
 
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.variant.Variant
+import com.android.build.gradle.internal.api.DefaultAndroidSourceDirectorySet
+import java.io.File
 import java.util.Locale
 
 class VariantRes(private val androidExtension: ApplicationExtension, val layers: List<String>) {
 
-    //    fun getResDirs(): List<Collection<File>> {
-//        val collections = mutableListOf<Collection<File>>()
-//
-//        layers.forEach { layer ->
-//            val resDirs =
-//                (androidExtension.sourceSets.getByName(layer).res as DefaultAndroidSourceDirectorySet).srcDirs
-//            collections.add(resDirs)
-//        }
-//
-//        return collections
-//    }
-//
+    fun getResDirs(): List<Collection<File>> {
+        val collections = mutableListOf<Collection<File>>()
+
+        layers.forEach { layer ->
+            val resDirs =
+                (androidExtension.sourceSets.getByName(layer).res as DefaultAndroidSourceDirectorySet).srcDirs
+            collections.add(resDirs)
+        }
+
+        return collections
+    }
+
     companion object {
         fun forVariant(androidExtension: ApplicationExtension, variant: Variant): VariantRes {
             return VariantRes(androidExtension, getLayerNames(variant))

@@ -16,6 +16,11 @@ dependencies {
     testImplementation libs.unitTesting
     testImplementation libs.zip4j
     testImplementation libs.xmlUnit
+    testImplementation(libs.android.plugin)
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.bundles.junit)
+    testImplementation(libs.assertj)
+    testImplementation(libs.mockk)
     testPluginDependency "com.android.tools.build:gradle:7.4.0"
 }
 
@@ -29,6 +34,10 @@ libConventions {
 
 kapt {
     correctErrorTypes = true
+}
+
+tasks.named("test") {
+    useJUnitPlatform()
 }
 
 gradlePlugin {

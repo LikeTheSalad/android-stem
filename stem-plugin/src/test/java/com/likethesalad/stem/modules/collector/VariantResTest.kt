@@ -1,9 +1,9 @@
-package com.likethesalad.android.resources
+package com.likethesalad.stem.modules.collector
 
 import com.android.build.api.variant.Variant
 import io.mockk.every
 import io.mockk.mockk
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class VariantResTest {
@@ -60,6 +60,6 @@ class VariantResTest {
 
         val variantRes = VariantRes.forVariant(mockk(), variant)
 
-        Assertions.assertThat(variantRes.layers).containsExactlyElementsOf(expectedNameInOrder.toList())
+        assertThat(variantRes.layers).containsExactlyElementsOf(expectedNameInOrder.toList())
     }
 }

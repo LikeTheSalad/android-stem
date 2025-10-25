@@ -14,11 +14,11 @@ import com.likethesalad.tools.functional.testing.android.descriptor.AndroidLibPr
 import com.likethesalad.tools.functional.testing.blocks.GradleBlockItem
 import com.likethesalad.tools.functional.testing.blocks.impl.plugins.GradlePluginDeclaration
 import com.likethesalad.tools.functional.testing.utils.TestAssetsProvider
+import java.io.File
 import junit.framework.TestCase.fail
 import org.junit.Test
 import org.xmlunit.builder.DiffBuilder.compare
 import org.xmlunit.builder.Input
-import java.io.File
 
 class CheckOutputsTest : BasePluginTest() {
 
