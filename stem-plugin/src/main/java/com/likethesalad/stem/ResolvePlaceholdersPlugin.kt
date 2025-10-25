@@ -1,5 +1,7 @@
 package com.likethesalad.stem
 
+import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.likethesalad.android.templates.common.configuration.StemConfiguration
 import com.likethesalad.android.templates.common.plugins.BaseTemplatesProcessorPlugin
 import com.likethesalad.stem.di.AppInjector
@@ -77,6 +79,14 @@ class ResolvePlaceholdersPlugin : BaseTemplatesProcessorPlugin(), AndroidExtensi
 
     override fun getExtension(): AndroidExtension {
         return androidExtension
+    }
+
+    override fun getApplicationExtension(): ApplicationExtension {
+        return project.extensions.getByType(ApplicationExtension::class.java)
+    }
+
+    override fun getApplicationComponents(): ApplicationAndroidComponentsExtension {
+        return project.extensions.getByType(ApplicationAndroidComponentsExtension::class.java)
     }
 
     override fun getProjectDir(): File {

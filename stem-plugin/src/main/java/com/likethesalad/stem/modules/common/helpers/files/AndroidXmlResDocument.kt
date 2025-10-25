@@ -1,20 +1,20 @@
 package com.likethesalad.stem.modules.common.helpers.files
 
+import com.likethesalad.android.resources.data.StringResource
 import com.likethesalad.stem.modules.common.Constants.Companion.XML_RESOURCES_TAG
 import com.likethesalad.stem.modules.common.Constants.Companion.XML_STRING_TAG
 import com.likethesalad.stem.modules.common.helpers.resources.utils.XmlUtils
-import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
-import org.w3c.dom.DOMException
-import org.w3c.dom.Document
-import org.w3c.dom.Element
-import org.w3c.dom.Node
-import org.w3c.dom.NodeList
 import java.io.File
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.transform.OutputKeys
 import javax.xml.transform.TransformerFactory
 import javax.xml.transform.dom.DOMSource
 import javax.xml.transform.stream.StreamResult
+import org.w3c.dom.DOMException
+import org.w3c.dom.Document
+import org.w3c.dom.Element
+import org.w3c.dom.Node
+import org.w3c.dom.NodeList
 
 class AndroidXmlResDocument(
     val document: Document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument().apply {
@@ -49,7 +49,7 @@ class AndroidXmlResDocument(
         }
     }
 
-    fun appendStringResource(stringResourceModel: StringAndroidResource) {
+    fun appendStringResource(stringResourceModel: StringResource) {
         append(
             XmlUtils.stringResourceModelToElement(
                 stringResourceModel,
@@ -64,7 +64,7 @@ class AndroidXmlResDocument(
         }
     }
 
-    fun appendAllStringResources(list: Collection<StringAndroidResource>) {
+    fun appendAllStringResources(list: Collection<StringResource>) {
         for (it in list) {
             appendStringResource(it)
         }

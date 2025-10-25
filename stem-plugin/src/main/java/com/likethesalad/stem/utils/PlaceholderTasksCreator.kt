@@ -3,19 +3,21 @@ package com.likethesalad.stem.utils
 import com.likethesalad.android.templates.common.configuration.StemConfiguration
 import com.likethesalad.android.templates.common.tasks.identifier.TemplatesIdentifierTask
 import com.likethesalad.stem.locator.listener.TypeLocatorCreationListener
+import com.likethesalad.stem.modules.collector.VariantRes
 import com.likethesalad.stem.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.stem.modules.common.models.TasksNamesModel
 import com.likethesalad.stem.modules.resolveStrings.ResolvePlaceholdersTask
 import com.likethesalad.stem.modules.resolveStrings.data.ResolvePlaceholdersArgs
 import com.likethesalad.stem.modules.templateStrings.GatherTemplatesTask
 import com.likethesalad.stem.modules.templateStrings.data.GatherTemplatesArgs
+import com.likethesalad.stem.providers.AndroidExtensionProvider
 import com.likethesalad.stem.providers.PostConfigurationProvider
 import com.likethesalad.stem.providers.TaskContainerProvider
 import com.likethesalad.tools.resource.collector.android.data.variant.VariantTree
 import com.likethesalad.tools.resource.locator.android.extension.configuration.data.ResourceLocatorInfo
-import org.gradle.api.tasks.TaskProvider
 import javax.inject.Inject
 import javax.inject.Singleton
+import org.gradle.api.tasks.TaskProvider
 
 @Singleton
 class PlaceholderTasksCreator @Inject constructor(
@@ -23,7 +25,8 @@ class PlaceholderTasksCreator @Inject constructor(
     private val androidVariantContextFactory: AndroidVariantContext.Factory,
     private val taskActionProviderHolder: TaskActionProviderHolder,
     private val stemConfiguration: StemConfiguration,
-    private val postConfigurationProvider: PostConfigurationProvider
+    private val postConfigurationProvider: PostConfigurationProvider,
+    private val androidExtensionProvider: AndroidExtensionProvider
 ) : TypeLocatorCreationListener.Callback {
 
     companion object {
@@ -32,6 +35,7 @@ class PlaceholderTasksCreator @Inject constructor(
     }
 
     private val taskContainer by lazy { taskContainerProvider.getTaskContainer() }
+    private val variantRes = VariantRes(androidExtensionProvider.getApplicationExtension())
 
     override fun onLocatorsReady(variantTree: VariantTree, locatorsByType: Map<String, ResourceLocatorInfo>) {
         val androidVariantContext = androidVariantContextFactory.create(variantTree)
@@ -58,7 +62,7 @@ class PlaceholderTasksCreator @Inject constructor(
             GatherTemplatesTask::class.java,
             GatherTemplatesArgs(
                 gatherTemplatesActionProvider.provide(androidVariantContext),
-                commonResourcesInfo.resourcesProvider
+                variantRes.getResDirs(androidVariantContext.variantTree.androidVariantData)
             )
         )
 

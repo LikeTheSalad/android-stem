@@ -32,7 +32,7 @@ open class GatherTemplatesTask
         DirectoryUtils.clearIfNeeded(outDir.get().asFile)
         args.gatherTemplatesAction.gatherTemplateStrings(
             outDir.get().asFile,
-            args.commonResourcesProvider,
+            args.variantResDirs,
             templateIdsFile.get().asFile
         )
     }

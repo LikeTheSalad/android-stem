@@ -1,5 +1,7 @@
 package com.likethesalad.stem.modules.templateStrings
 
+import com.likethesalad.android.resources.StringResourceCollector
+import com.likethesalad.android.resources.data.StringResource
 import com.likethesalad.android.templates.common.configuration.StemConfiguration
 import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItem
 import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer
@@ -8,10 +10,6 @@ import com.likethesalad.stem.modules.common.helpers.android.AndroidVariantContex
 import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesModel
 import com.likethesalad.stem.utils.TemplatesProviderLoader
 import com.likethesalad.tools.resource.api.android.environment.Language
-import com.likethesalad.tools.resource.api.android.impl.AndroidResourceType
-import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
-import com.likethesalad.tools.resource.api.collection.ResourceCollection
-import com.likethesalad.tools.resource.locator.android.extension.configuration.data.ResourcesProvider
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -21,6 +19,8 @@ class GatherTemplatesAction @AssistedInject constructor(
     @Assisted private val androidVariantContext: AndroidVariantContext,
     private val stemConfiguration: StemConfiguration
 ) {
+
+    private val VALUES_REGEX = Regex("values(?:-(.+))*")
 
     @AssistedFactory
     interface Factory {
@@ -33,31 +33,42 @@ class GatherTemplatesAction @AssistedInject constructor(
 
     fun gatherTemplateStrings(
         outputDir: File,
-        commonResources: ResourcesProvider,
+        variantResDirs: List<Collection<File>>,
         templateIdsContainer: File
     ) {
-        val commonHandler = commonResources.resources
+        val stringCollection = StringResourceCollector.collectStringResourcesPerValueDir(variantResDirs)
         val templateIds = getTemplateIds(templateIdsContainer)
 
         if (templateIds.isEmpty()) {
             return
         }
 
-        for (language in commonHandler.listLanguages()) {
-            val allResources = asStringResources(commonHandler.getMergedResourcesForLanguage(language))
-            val templates = getTemplatesFromResources(templateIds, allResources)
-            val resources = allResources.minus(templates)
+        stringCollection.forEach { (valueDirName, strings) ->
+            val language = getLanguage(valueDirName)
+            val templates = getTemplatesFromResources(templateIds, strings)
+            val resources = strings.minus(templates)
             resourcesHandler.saveTemplates(outputDir, gatheredStringsToTemplateStrings(language, resources, templates))
         }
     }
 
+    private fun getLanguage(valuesDirName: String): Language {
+        val match = VALUES_REGEX.matchEntire(valuesDirName)
+            ?: throw IllegalArgumentException("Invalid values dir name: $valuesDirName")
+
+        val languagePart = match.groupValues[1]
+        if (languagePart.isEmpty()) {
+            return Language.Default
+        }
+        return Language.Custom(languagePart)
+    }
+
     private fun getTemplatesFromResources(
         templateIds: List<TemplateItem>,
-        resources: List<StringAndroidResource>
-    ): List<StringAndroidResource> {
+        resources: Collection<StringResource>
+    ): List<StringResource> {
         val templateNames = templateIds.map { it.name }
         return resources.filter {
-            it.name() in templateNames
+            it.getName() in templateNames
         }
     }
 
@@ -73,8 +84,8 @@ class GatherTemplatesAction @AssistedInject constructor(
 
     private fun gatheredStringsToTemplateStrings(
         language: Language,
-        stringResources: List<StringAndroidResource>,
-        stringTemplates: List<StringAndroidResource>
+        stringResources: List<StringResource>,
+        stringTemplates: List<StringResource>
     ): StringsTemplatesModel {
         val placeholdersResolved = getPlaceholdersResolved(stringResources, stringTemplates)
 
@@ -85,17 +96,12 @@ class GatherTemplatesAction @AssistedInject constructor(
         )
     }
 
-    @Suppress("UNCHECKED_CAST")
-    private fun asStringResources(resources: ResourceCollection): List<StringAndroidResource> {
-        return resources.getResourcesByType(AndroidResourceType.StringType) as List<StringAndroidResource>
-    }
-
     private fun getPlaceholdersResolved(
-        strings: List<StringAndroidResource>,
-        templates: List<StringAndroidResource>
+        strings: List<StringResource>,
+        templates: List<StringResource>
     ): Map<String, String> {
         val stringsMap = stringResourcesToMap(strings)
-        val placeholders = templates.map { stemConfiguration.placeholderRegex.findAll(it.stringValue()) }
+        val placeholders = templates.map { stemConfiguration.placeholderRegex.findAll(it.value) }
             .flatMap { it.toList().map { m -> m.groupValues[1] } }.toSet()
 
         val placeholdersResolved = mutableMapOf<String, String>()
@@ -107,10 +113,10 @@ class GatherTemplatesAction @AssistedInject constructor(
         return placeholdersResolved
     }
 
-    private fun stringResourcesToMap(list: Collection<StringAndroidResource>): Map<String, String> {
+    private fun stringResourcesToMap(list: List<StringResource>): Map<String, String> {
         val map = mutableMapOf<String, String>()
         for (it in list) {
-            map[it.name()] = it.stringValue()
+            map[it.getName()] = it.value
         }
         return map
     }

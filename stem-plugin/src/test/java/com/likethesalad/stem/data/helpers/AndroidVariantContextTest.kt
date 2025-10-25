@@ -8,14 +8,13 @@ import com.likethesalad.stem.providers.ProjectDirsProvider
 import com.likethesalad.stem.providers.TaskProvider
 import com.likethesalad.tools.agpcompat.api.bridges.AndroidVariantData
 import com.likethesalad.tools.resource.collector.android.data.variant.VariantTree
-import com.likethesalad.tools.resource.serializer.ResourceSerializer
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import java.io.File
 import org.gradle.api.Task
 import org.junit.Before
 import org.junit.Test
-import java.io.File
 
 class AndroidVariantContextTest {
 
@@ -27,7 +26,6 @@ class AndroidVariantContextTest {
     private lateinit var androidVariantData: AndroidVariantData
     private lateinit var tasksNamesModelFactory: TasksNamesModel.Factory
     private lateinit var variantBuildResolvedDirFactory: VariantBuildResolvedDir.Factory
-    private lateinit var resourceSerializer: ResourceSerializer
 
     private lateinit var androidVariantContext: AndroidVariantContext
 
@@ -46,7 +44,6 @@ class AndroidVariantContextTest {
         tasksNamesModelFactory = mockk()
         variantBuildResolvedDirFactory = mockk()
         variantBuildResolvedDir = mockk()
-        resourceSerializer = mockk()
 
         every { variantTree.androidVariantData }.returns(androidVariantData)
         every { tasksNamesModelFactory.create(androidVariantData) }.returns(tasksNames)
@@ -62,7 +59,6 @@ class AndroidVariantContextTest {
             variantTree,
             tasksNamesModelFactory,
             variantBuildResolvedDirFactory,
-            resourceSerializer,
             taskProvider,
             projectDirsProvider
         )

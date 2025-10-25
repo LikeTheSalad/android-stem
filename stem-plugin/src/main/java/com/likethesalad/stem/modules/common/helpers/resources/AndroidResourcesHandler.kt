@@ -1,34 +1,30 @@
 package com.likethesalad.stem.modules.common.helpers.resources
 
 import com.google.gson.GsonBuilder
+import com.likethesalad.android.resources.data.StringResource
 import com.likethesalad.stem.modules.common.helpers.files.AndroidXmlResDocument
 import com.likethesalad.stem.modules.common.helpers.files.OutputStringFileResolver
 import com.likethesalad.stem.modules.common.helpers.resources.utils.LanguageTypeAdapter
-import com.likethesalad.stem.modules.common.helpers.resources.utils.StringResourceTypeAdapter
 import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesModel
 import com.likethesalad.tools.resource.api.android.environment.Language
-import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
-import com.likethesalad.tools.resource.serializer.ResourceSerializer
 import java.io.File
 
 
 class AndroidResourcesHandler(
-    private val outputStringFileResolver: OutputStringFileResolver,
-    resourceSerializer: ResourceSerializer
+    private val outputStringFileResolver: OutputStringFileResolver
 ) : ResourcesHandler {
 
     private val gson by lazy {
         GsonBuilder()
             .disableHtmlEscaping()
             .registerTypeAdapter(Language::class.java, LanguageTypeAdapter())
-            .registerTypeAdapter(StringAndroidResource::class.java, StringResourceTypeAdapter(resourceSerializer))
             .create()
     }
 
 
     override fun saveResolvedStringList(
         outputDir: File,
-        resolvedStrings: List<StringAndroidResource>,
+        resolvedStrings: List<StringResource>,
         language: Language
     ) {
         val resDocument = AndroidXmlResDocument()

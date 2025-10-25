@@ -58,8 +58,8 @@ class VariantResTest {
         every { variant.buildType }.returns(buildType)
         every { variant.productFlavors }.returns(flavors.map { "" to it })
 
-        val variantRes = VariantRes.forVariant(mockk(), variant)
+        val variantLayerNames = VariantRes(mockk()).getLayerNames(variant)
 
-        assertThat(variantRes.layers).containsExactlyElementsOf(expectedNameInOrder.toList())
+        assertThat(variantLayerNames).containsExactlyElementsOf(expectedNameInOrder.toList())
     }
 }

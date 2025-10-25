@@ -1,18 +1,18 @@
 package com.likethesalad.stem.utils
 
 import com.google.common.truth.Truth
+import com.likethesalad.android.resources.data.StringResource
 import com.likethesalad.stem.modules.common.helpers.files.AndroidXmlResDocument
-import com.likethesalad.tools.resource.api.android.attributes.namespaced
 import com.likethesalad.tools.resource.api.android.environment.Language
 import com.likethesalad.tools.resource.api.android.environment.Variant
 import com.likethesalad.tools.resource.api.android.impl.AndroidResourceScope
-import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
+import javax.xml.parsers.DocumentBuilderFactory
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -21,7 +21,6 @@ import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
 import org.w3c.dom.NodeList
-import javax.xml.parsers.DocumentBuilderFactory
 
 class AndroidXmlResDocumentTest {
 
@@ -110,10 +109,9 @@ class AndroidXmlResDocumentTest {
     fun checkAppendStringResource() {
         // Given
         val stringResourceModel =
-            StringAndroidResource(
+            StringResource.named(
                 "some_name",
-                "some content",
-                scope
+                "some content"
             )
         val androidXmlResDocumentSpy: AndroidXmlResDocument = spyk(
             AndroidXmlResDocument()
@@ -151,7 +149,7 @@ class AndroidXmlResDocumentTest {
         val androidXmlResDocumentSpy: AndroidXmlResDocument = spyk(
             AndroidXmlResDocument()
         )
-        val stringResources = listOf<StringAndroidResource>(mockk(), mockk(), mockk(), mockk(), mockk())
+        val stringResources = listOf<StringResource>(mockk(), mockk(), mockk(), mockk(), mockk())
         every { androidXmlResDocumentSpy.appendStringResource(any()) } just Runs
 
         // When
@@ -195,24 +193,21 @@ class AndroidXmlResDocumentTest {
             AndroidXmlResDocument()
         val file = temporaryFolder.newFile()
         androidXmlResDocument.appendStringResource(
-            StringAndroidResource(
+            StringResource.named(
                 "some_name1",
-                "some content1",
-                scope
+                "some content1"
             )
         )
         androidXmlResDocument.appendStringResource(
-            StringAndroidResource(
+            StringResource.named(
                 "some_name2",
-                "some content2",
-                scope
+                "some content2"
             )
         )
         androidXmlResDocument.appendStringResource(
-            StringAndroidResource(
+            StringResource.named(
                 "some_name3",
-                "some content3",
-                scope
+                "some content3"
             )
         )
 
@@ -234,24 +229,21 @@ class AndroidXmlResDocumentTest {
             AndroidXmlResDocument()
         val file = temporaryFolder.newFile()
         androidXmlResDocument.appendStringResource(
-            StringAndroidResource(
+            StringResource.named(
                 "some_name1",
-                "some content1",
-                scope
+                "some content1"
             )
         )
         androidXmlResDocument.appendStringResource(
-            StringAndroidResource(
+            StringResource.named(
                 "some_name2",
-                "some content2",
-                scope
+                "some content2"
             )
         )
         androidXmlResDocument.appendStringResource(
-            StringAndroidResource(
+            StringResource.named(
                 "some_name3",
-                "some content3",
-                scope
+                "some content3"
             )
         )
 
@@ -270,9 +262,11 @@ class AndroidXmlResDocumentTest {
     fun `verify custom prefixes`() {
         val document = AndroidXmlResDocument()
         val outputFile = temporaryFolder.newFile()
-        val resource = StringAndroidResource("someName", "someValue", scope)
         val namespace = "http://some.namespace.com/"
-        resource.attributes().set(namespaced("someAttr", namespace), "someAttrValue")
+        val resource = StringResource.named(
+            "someName", "someValue",
+            listOf(StringResource.Attribute("someAttr", "someAttrValue", namespace))
+        )
         document.appendStringResource(resource)
 
         document.saveToFile(outputFile)
@@ -288,12 +282,18 @@ class AndroidXmlResDocumentTest {
     fun `verify custom prefixes reused`() {
         val document = AndroidXmlResDocument()
         val outputFile = temporaryFolder.newFile()
-        val resource = StringAndroidResource("someName", "someValue", scope)
-        val resource2 = StringAndroidResource("someOtherName", "someOtherValue", scope)
         val namespace = "http://some.namespace.com/"
-        resource.attributes().set(namespaced("someAttr", namespace), "someAttrValue")
-        resource.attributes().set(namespaced("someAttr2", namespace), "someOtherAttrValue")
-        resource2.attributes().set(namespaced("someAttr3", namespace), "Some attr3 value")
+        val resource = StringResource.named(
+            "someName", "someValue", listOf(
+                StringResource.Attribute("someAttr", "someAttrValue", namespace),
+                StringResource.Attribute("someAttr2", "someOtherAttrValue", namespace)
+            )
+        )
+        val resource2 = StringResource.named(
+            "someOtherName", "someOtherValue", listOf(
+                StringResource.Attribute("someAttr3", "Some attr3 value", namespace)
+            )
+        )
         document.appendStringResource(resource)
         document.appendStringResource(resource2)
 
@@ -310,14 +310,20 @@ class AndroidXmlResDocumentTest {
     fun `verify multipl prefixes`() {
         val document = AndroidXmlResDocument()
         val outputFile = temporaryFolder.newFile()
-        val resource = StringAndroidResource("someName", "someValue", scope)
-        val resource2 = StringAndroidResource("someOtherName", "someOtherValue", scope)
         val namespace = "http://some.namespace.com/"
         val namespace2 = "http://someother.namespace.com/"
-        resource.attributes().set(namespaced("someAttr", namespace), "someAttrValue")
-        resource.attributes().set(namespaced("someAttr2", namespace), "someOtherAttrValue")
-        resource2.attributes().set(namespaced("someAttr3", namespace), "Some attr3 value")
-        resource2.attributes().set(namespaced("someAttr3", namespace2), "Some attr3 namespace2 value")
+        val resource = StringResource.named(
+            "someName", "someValue", listOf(
+                StringResource.Attribute("someAttr", "someAttrValue", namespace),
+                StringResource.Attribute("someAttr2", "someOtherAttrValue", namespace)
+            )
+        )
+        val resource2 = StringResource.named(
+            "someOtherName", "someOtherValue", listOf(
+                StringResource.Attribute("someAttr3", "Some attr3 value", namespace),
+                StringResource.Attribute("someAttr3", "Some attr3 namespace2 value", namespace2)
+            )
+        )
         document.appendStringResource(resource)
         document.appendStringResource(resource2)
 

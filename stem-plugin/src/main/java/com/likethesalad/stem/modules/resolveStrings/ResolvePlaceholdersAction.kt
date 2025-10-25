@@ -1,10 +1,9 @@
 package com.likethesalad.stem.modules.resolveStrings
 
+import com.likethesalad.android.resources.data.StringResource
 import com.likethesalad.stem.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.stem.modules.resolveStrings.resolver.TemplateResolver
-import com.likethesalad.tools.resource.api.android.attributes.plain
 import com.likethesalad.tools.resource.api.android.environment.Language
-import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -41,21 +40,22 @@ class ResolvePlaceholdersAction @AssistedInject constructor(
 
     private fun filterNonTranslatableStringsForLanguage(
         language: Language,
-        resolvedStrings: List<StringAndroidResource>
-    ): List<StringAndroidResource> {
+        resolvedStrings: List<StringResource>
+    ): List<StringResource> {
         if (language != Language.Default) {
             // It is a language specific file
-            return resolvedStrings.filter { isTranslatable(it) && belongsToLanguage(it, language) }
+            return resolvedStrings.filter { isTranslatable(it) }
+//            return resolvedStrings.filter { isTranslatable(it) && belongsToLanguage(it, language) }
         }
         return resolvedStrings
     }
 
-    private fun belongsToLanguage(stringAndroidResource: StringAndroidResource, language: Language): Boolean {
-        return stringAndroidResource.getAndroidScope().language == language
-    }
+//    private fun belongsToLanguage(stringAndroidResource: StringResource, language: Language): Boolean {
+//        return stringAndroidResource.getAndroidScope().language == language
+//    }
 
-    private fun isTranslatable(stringResource: StringAndroidResource): Boolean {
-        val translatable = stringResource.attributes().get(plain("translatable")) ?: return true
+    private fun isTranslatable(stringResource: StringResource): Boolean {
+        val translatable = stringResource.attributes.firstOrNull { it.name == "translatable" }?.value ?: return true
         return translatable.toBoolean()
     }
 }

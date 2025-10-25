@@ -1,22 +1,18 @@
 package com.likethesalad.stem.tasks.actions
 
+import com.likethesalad.android.resources.data.StringResource
 import com.likethesalad.stem.modules.common.helpers.android.AndroidVariantContext
 import com.likethesalad.stem.modules.common.helpers.resources.ResourcesHandler
 import com.likethesalad.stem.modules.resolveStrings.ResolvePlaceholdersAction
 import com.likethesalad.stem.modules.resolveStrings.resolver.TemplateResolver
 import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesModel
-import com.likethesalad.tools.resource.api.android.attributes.plain
 import com.likethesalad.tools.resource.api.android.environment.Language
-import com.likethesalad.tools.resource.api.android.environment.Variant
-import com.likethesalad.tools.resource.api.android.impl.AndroidResourceScope
-import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
-import com.likethesalad.tools.resource.api.attributes.AttributeContainer
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import java.io.File
 import org.junit.Before
 import org.junit.Test
-import java.io.File
 
 class ResolvePlaceholdersActionTest {
 
@@ -46,7 +42,7 @@ class ResolvePlaceholdersActionTest {
         val templatesFile = mockk<File>()
         val templates = mockk<StringsTemplatesModel>()
         val language = Language.Default
-        val expectedResult = listOf<StringAndroidResource>(mockk(), mockk())
+        val expectedResult = listOf<StringResource>(mockk(), mockk())
         every { templates.language }.returns(language)
         every { templatesDir.listFiles() }.returns(listOf(templatesFile).toTypedArray())
         every { resourcesHandler.getTemplatesFromFile(templatesFile) } returns templates
@@ -67,8 +63,8 @@ class ResolvePlaceholdersActionTest {
         val templatesFile = mockk<File>()
         val language = Language.Custom("es")
         val templates = mockk<StringsTemplatesModel>()
-        val translatableStrings = getStringsList(3, true, language)
-        val nonTranslatableStrings = getStringsList(2, false, language)
+        val translatableStrings = getStringsList(3, true)
+        val nonTranslatableStrings = getStringsList(2, false)
         val allStrings = translatableStrings + nonTranslatableStrings
         every { templates.language }.returns(language)
         every { templatesDir.listFiles() }.returns(listOf(templatesFile).toTypedArray())
@@ -106,17 +102,16 @@ class ResolvePlaceholdersActionTest {
     }
 
     private fun getStringsList(
-        count: Int, translatable: Boolean,
-        language: Language = Language.Default,
-        scope: AndroidResourceScope = AndroidResourceScope(Variant.Default, language)
-    ): List<StringAndroidResource> {
-        val strings = mutableListOf<StringAndroidResource>()
+        count: Int, translatable: Boolean
+    ): List<StringResource> {
+        val strings = mutableListOf<StringResource>()
         for (it in 0 until count) {
-            val string = mockk<StringAndroidResource>()
-            val attributes = mockk<AttributeContainer>()
-            every { attributes.get(plain("translatable")) }.returns(translatable.toString())
-            every { string.attributes() }.returns(attributes)
-            every { string.getAndroidScope() }.returns(scope)
+            val string = StringResource.named(
+                "name_$it", "value_$it",
+                listOf(
+                    StringResource.Attribute("translatable", translatable.toString(), null)
+                )
+            )
             strings.add(string)
         }
 

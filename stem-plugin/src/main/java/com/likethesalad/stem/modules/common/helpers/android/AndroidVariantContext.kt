@@ -8,7 +8,6 @@ import com.likethesalad.stem.modules.common.models.TasksNamesModel
 import com.likethesalad.stem.providers.ProjectDirsProvider
 import com.likethesalad.stem.providers.TaskProvider
 import com.likethesalad.tools.resource.collector.android.data.variant.VariantTree
-import com.likethesalad.tools.resource.serializer.ResourceSerializer
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -18,7 +17,6 @@ class AndroidVariantContext @AssistedInject constructor(
     @Assisted val variantTree: VariantTree,
     tasksNamesModelFactory: TasksNamesModel.Factory,
     variantBuildResolvedDirFactory: VariantBuildResolvedDir.Factory,
-    resourceSerializer: ResourceSerializer,
     private val taskProvider: TaskProvider,
     private val projectDirsProvider: ProjectDirsProvider
 ) {
@@ -42,8 +40,7 @@ class AndroidVariantContext @AssistedInject constructor(
 
     private val outputStringFileResolver = OutputStringFileResolver()
     val androidResourcesHandler: ResourcesHandler = AndroidResourcesHandler(
-        outputStringFileResolver,
-        resourceSerializer
+        outputStringFileResolver
     )
 
     fun findVariantTask(template: String): Task? {

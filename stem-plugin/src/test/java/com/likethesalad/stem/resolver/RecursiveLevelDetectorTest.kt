@@ -1,65 +1,53 @@
 package com.likethesalad.stem.resolver
 
 import com.google.common.truth.Truth
+import com.likethesalad.android.resources.data.StringResource
 import com.likethesalad.android.templates.common.configuration.StemConfiguration
 import com.likethesalad.stem.modules.resolveStrings.resolver.RecursiveLevelDetector
 import com.likethesalad.stem.modules.resolveStrings.resolver.TemplateContainerFinder
 import com.likethesalad.stem.testutils.createForTest
-import com.likethesalad.tools.resource.api.android.environment.Language
-import com.likethesalad.tools.resource.api.android.environment.Variant
-import com.likethesalad.tools.resource.api.android.impl.AndroidResourceScope
-import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
 import junit.framework.TestCase.fail
 import org.junit.Test
 
 class RecursiveLevelDetectorTest {
 
-    private val scope = AndroidResourceScope(Variant.Default, Language.Default)
-
     @Test
     fun check_orderTemplatesByRecursiveLevel() {
         // Given:
         val levelOneTemplate =
-            StringAndroidResource(
+            StringResource.named(
                 "name",
                 "The name",
-                scope
             )
         val levelOneTemplate2 =
-            StringAndroidResource(
+            StringResource.named(
                 "description",
-                "The description",
-                scope
+                "The description"
             )
         val levelTwoTemplate =
-            StringAndroidResource(
+            StringResource.named(
                 "the_message",
-                "Hello \${name}",
-                scope
+                "Hello \${name}"
             )
         val levelThreeTemplate =
-            StringAndroidResource(
+            StringResource.named(
                 "the_message_2",
-                "Hello2 \${the_message}",
-                scope
+                "Hello2 \${the_message}"
             )
         val levelThreeTemplate2 =
-            StringAndroidResource(
+            StringResource.named(
                 "message_4",
-                "The message4 \${the_message}",
-                scope
+                "The message4 \${the_message}"
             )
         val levelFourTemplate =
-            StringAndroidResource(
+            StringResource.named(
                 "message_3",
-                "The message3 \${the_message_2}",
-                scope
+                "The message3 \${the_message_2}"
             )
         val levelFourTemplate2 =
-            StringAndroidResource(
+            StringResource.named(
                 "message_5",
-                "The message5 \${the_message} \${message_4}",
-                scope
+                "The message5 \${the_message} \${message_4}"
             )
         val templates = listOf(
             levelOneTemplate,
@@ -95,21 +83,18 @@ class RecursiveLevelDetectorTest {
     @Test
     fun check_orderTemplatesByRecursiveLevel_verify_circular_dependency() {
         // Given:
-        val template = StringAndroidResource(
+        val template = StringResource.named(
             "name",
-            "The name",
-            scope
+            "The name"
         )
         val template2 =
-            StringAndroidResource(
+            StringResource.named(
                 "description",
-                "The description and message \${the_message}",
-                scope
+                "The description and message \${the_message}"
             )
-        val template3 = StringAndroidResource(
+        val template3 = StringResource.named(
             "the_message",
-            "Hello \${description}",
-            scope
+            "Hello \${description}"
         )
         val templates = listOf(
             template,
@@ -129,8 +114,8 @@ class RecursiveLevelDetectorTest {
         }
     }
 
-    private fun getTemplateContainerFinder(templates: List<StringAndroidResource>): TemplateContainerFinder {
+    private fun getTemplateContainerFinder(templates: List<StringResource>): TemplateContainerFinder {
         val configuration = StemConfiguration.createForTest()
-        return TemplateContainerFinder(configuration, templates.map { it.name() })
+        return TemplateContainerFinder(configuration, templates.map { it.getName() })
     }
 }
