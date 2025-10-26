@@ -3,8 +3,7 @@ package com.likethesalad.android.templates.common.tasks.identifier.action
 import com.likethesalad.android.resources.StringResourceCollector
 import com.likethesalad.android.resources.data.StringResource
 import com.likethesalad.android.templates.common.configuration.StemConfiguration
-import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItem
-import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer
+import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer2
 import java.io.File
 
 class TemplatesIdentifierAction2 private constructor(
@@ -27,11 +26,11 @@ class TemplatesIdentifierAction2 private constructor(
     }
 
     fun execute() {
-        val templates = getTemplatesFromResources()
-        outputFile.writeText(TemplateItemsSerializer.serialize(templates))
+        val templates = getTemplatesIdsFromResources()
+        outputFile.writeText(TemplateItemsSerializer2.serialize(templates))
     }
 
-    private fun getTemplatesFromResources(): List<TemplateItem> {
+    private fun getTemplatesIdsFromResources(): List<String> {
         val stringCollection = StringResourceCollector.collectStringResourcesPerValueDir(localResDirs, ignoreResDir)
         return if (configuration.searchForTemplatesInLanguages()) {
             getTemplatesFromAllCollections(stringCollection)
@@ -41,8 +40,8 @@ class TemplatesIdentifierAction2 private constructor(
         }
     }
 
-    private fun getTemplatesFromAllCollections(stringCollection: Map<String, Collection<StringResource>>): List<TemplateItem> {
-        val templates = mutableSetOf<TemplateItem>()
+    private fun getTemplatesFromAllCollections(stringCollection: Map<String, Collection<StringResource>>): List<String> {
+        val templates = mutableSetOf<String>()
 
         stringCollection.forEach { (_, strings) ->
             val collectionTemplates = getTemplatesForCollection(strings)
@@ -52,16 +51,16 @@ class TemplatesIdentifierAction2 private constructor(
         return templates.toList()
     }
 
-    private fun getTemplatesForCollection(stringResources: Collection<StringResource>?): List<TemplateItem> {
+    private fun getTemplatesForCollection(stringResources: Collection<StringResource>?): List<String> {
         if (stringResources == null) {
             return emptyList()
         }
 
         val templates = filterTemplates(stringResources)
 
-        return templates.sortedBy { it.getName() }.map {
-            TemplateItem(it.getName(), "string")
-        }
+        return templates.map {
+            it.getName()
+        }.sorted()
     }
 
     private fun filterTemplates(stringResources: Collection<StringResource>): List<StringResource> {

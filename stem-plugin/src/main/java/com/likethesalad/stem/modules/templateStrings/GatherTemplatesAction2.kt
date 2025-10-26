@@ -3,8 +3,7 @@ package com.likethesalad.stem.modules.templateStrings
 import com.likethesalad.android.resources.StringResourceCollector
 import com.likethesalad.android.resources.data.StringResource
 import com.likethesalad.android.templates.common.configuration.StemConfiguration
-import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItem
-import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer
+import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer2
 import com.likethesalad.stem.modules.common.helpers.resources.ResourcesHandler
 import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesModel
 import com.likethesalad.tools.resource.api.android.environment.Language
@@ -52,18 +51,17 @@ class GatherTemplatesAction2(
     }
 
     private fun getTemplatesFromResources(
-        templateIds: List<TemplateItem>,
+        templateIds: List<String>,
         resources: Collection<StringResource>
     ): List<StringResource> {
-        val templateNames = templateIds.map { it.name }
         return resources.filter {
-            it.getName() in templateNames
+            it.getName() in templateIds
         }
     }
 
-    private fun getTemplateIds(localTemplateIdsContainer: File): List<TemplateItem> {
+    private fun getTemplateIds(localTemplateIdsContainer: File): List<String> {
 //        val templateIdsFromDependencies = getTemplateIdsFromDependencies() //todo delete
-        return TemplateItemsSerializer.deserialize(localTemplateIdsContainer.readText())
+        return TemplateItemsSerializer2.deserialize(localTemplateIdsContainer.readText())
     }
 
 

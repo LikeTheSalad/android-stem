@@ -12,6 +12,7 @@ dependencies {
     implementation libs.dagger
     implementation libs.metadataConsumer
     implementation libs.byteBuddy
+    compileOnly libs.android.plugin
     kapt libs.dagger.compiler
     testImplementation libs.unitTesting
 }
