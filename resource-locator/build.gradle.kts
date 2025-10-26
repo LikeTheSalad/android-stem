@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.java.library)
+    alias(libs.plugins.wire)
 }
 
 libConventions {
@@ -17,4 +18,8 @@ dependencies {
 
 tasks.named<Test>("test") {
     useJUnitPlatform()
+}
+
+wire {
+    kotlin {}
 }

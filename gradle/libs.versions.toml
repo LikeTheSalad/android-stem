@@ -35,3 +35,4 @@ artifactPublisher = { id = "com.likethesalad.artifact-publisher", version = "3.3
 buildConfig = { id = "com.github.gmazzo.buildconfig", version = "5.6.7" }
 androidTestTools = { id = "com.likethesalad.tools.android-compilation-testing", version.ref = "project-utilities" }
 android-application = { id = "com.android.application", version.ref = "android" }
+wire = { id = "com.squareup.wire", version = "5.4.0" }
