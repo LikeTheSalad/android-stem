@@ -11,12 +11,18 @@ object StringResourceCollector {
     private val XML_PATTERN = Regex(".+\\.[xX][mM][lL]\$")
     private val VALUES_FOLDER_NAME_PATTERN = Regex("values(-.+)*")
 
-    fun collectStringResourcesPerValueDir(resDirCollections: List<Collection<File>>): Map<String, Collection<StringResource>> {
+    fun collectStringResourcesPerValueDir(
+        resDirCollections: List<Collection<File>>,
+        ignoreResDir: (File) -> Boolean = { false }
+    ): Map<String, Collection<StringResource>> {
         val stringResources = mutableMapOf<String, MutableMap<String, StringResource>>()
 
         resDirCollections.forEach { collection ->
             val collectionValues = mutableMapOf<String, MutableMap<String, StringResource>>()
-            collection.forEach { resDir ->
+            for (resDir in collection) {
+                if (ignoreResDir(resDir)) {
+                    continue
+                }
                 findValueDirs(resDir).forEach { valueDir ->
                     val valueResources = collectionValues.getOrPut(valueDir.name, ::mutableMapOf)
                     findXmlFiles(valueDir.dir).forEach { xmlFile ->

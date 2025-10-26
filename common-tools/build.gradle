@@ -5,6 +5,7 @@ plugins {
 dependencies {
     api gradleApi()
     api libs.resourceLocator
+    implementation project(':resource-locator')
     implementation libs.androidCompatApi
     testImplementation libs.unitTesting
 }

@@ -1,0 +1,5 @@
+package com.likethesalad.stem.modules.resolveStrings.data
+
+import com.likethesalad.stem.modules.resolveStrings.ResolvePlaceholdersAction2
+
+data class ResolvePlaceholdersArgs2(val resolvePlaceholdersAction: ResolvePlaceholdersAction2)

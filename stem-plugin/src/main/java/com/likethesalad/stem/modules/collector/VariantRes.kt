@@ -9,7 +9,20 @@ import java.util.Locale
 
 class VariantRes(private val androidExtension: ApplicationExtension) {
 
-    //TODO replace AndroidVariantData by android Variant
+    fun getResDirs(variant: Variant): List<Collection<File>> {
+        val collections = mutableListOf<Collection<File>>()
+        val layers = getLayerNames(variant)
+
+        layers.forEach { layer ->
+            val resDirs =
+                (androidExtension.sourceSets.getByName(layer).res as DefaultAndroidSourceDirectorySet).srcDirs
+            collections.add(resDirs)
+        }
+
+        return collections
+    }
+
+    //TODO remove function
     fun getResDirs(variantData: AndroidVariantData): List<Collection<File>> {
         val collections = mutableListOf<Collection<File>>()
         val layers = getLayerNames(variantData)
