@@ -1,5 +1,5 @@
 syntax = "proto3";
-package com.likethesalad.stem.protos;
+package com.likethesalad.android.protos;
 
 message ValuesStringResources {
   map<string, StringResources> values = 1;
@@ -10,12 +10,12 @@ message StringResources {
 }
 
 message StringResource {
-  string value = 1;
+  string text = 1;
   repeated Attribute attributes = 2;
 }
 
 message Attribute {
   string name = 1;
-  string value = 2;
+  string text = 2;
   optional string namespace = 3;
 }

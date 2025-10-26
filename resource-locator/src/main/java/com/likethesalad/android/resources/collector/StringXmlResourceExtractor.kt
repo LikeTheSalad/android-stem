@@ -1,6 +1,7 @@
 package com.likethesalad.android.resources.collector
 
-import com.likethesalad.android.resources.data.StringResource
+import com.likethesalad.android.protos.Attribute
+import com.likethesalad.android.protos.StringResource
 import org.w3c.dom.Node
 import org.w3c.dom.NodeList
 
@@ -20,13 +21,13 @@ object StringXmlResourceExtractor {
     }
 
     private fun parseNodeToStringAndroidResource(node: Node): StringResource {
-        val attributes = mutableListOf<StringResource.Attribute>()
+        val attributes = mutableListOf<Attribute>()
         val value = getNodeText(node)
         val attributesNodes = node.attributes
         for (index in 0 until attributesNodes.length) {
             val attr = attributesNodes.item(index)
             val attrName = attr.localName
-            attributes.add(StringResource.Attribute(attrName, attr.textContent, attr.namespaceURI))
+            attributes.add(Attribute(attrName, attr.textContent, attr.namespaceURI))
         }
         return StringResource(value, attributes)
     }

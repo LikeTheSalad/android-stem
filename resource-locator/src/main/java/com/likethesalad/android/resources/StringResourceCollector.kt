@@ -1,9 +1,12 @@
 package com.likethesalad.android.resources
 
+import com.likethesalad.android.protos.StringResource
+import com.likethesalad.android.protos.StringResources
+import com.likethesalad.android.protos.ValuesStringResources
 import com.likethesalad.android.resources.collector.AndroidXmlResDocument
 import com.likethesalad.android.resources.collector.StringXmlResourceExtractor
-import com.likethesalad.android.resources.data.StringResource
 import com.likethesalad.android.resources.data.ValueDir
+import com.likethesalad.android.resources.extensions.name
 import java.io.File
 
 object StringResourceCollector {
@@ -12,22 +15,18 @@ object StringResourceCollector {
     private val VALUES_FOLDER_NAME_PATTERN = Regex("values(-.+)*")
 
     fun collectStringResourcesPerValueDir(
-        resDirCollections: List<Collection<File>>,
-        ignoreResDir: (File) -> Boolean = { false }
-    ): Map<String, Collection<StringResource>> {
+        resDirCollections: List<Collection<File>>
+    ): ValuesStringResources {
         val stringResources = mutableMapOf<String, MutableMap<String, StringResource>>()
 
         resDirCollections.forEach { collection ->
             val collectionValues = mutableMapOf<String, MutableMap<String, StringResource>>()
-            for (resDir in collection) {
-                if (ignoreResDir(resDir)) {
-                    continue
-                }
+            collection.forEach { resDir ->
                 findValueDirs(resDir).forEach { valueDir ->
                     val valueResources = collectionValues.getOrPut(valueDir.name, ::mutableMapOf)
                     findXmlFiles(valueDir.dir).forEach { xmlFile ->
                         extractResources(xmlFile).forEach { stringResource ->
-                            val stringName = stringResource.getName()
+                            val stringName = stringResource.name()
                             if (stringName in valueResources) {
                                 throw IllegalStateException("Duplicate name '$stringName' in '${valueDir.name}'")
                             }
@@ -48,7 +47,11 @@ object StringResourceCollector {
             }
         }
 
-        return stringResources.map { it.key to it.value.values.sortedBy { resource -> resource.getName() } }.toMap()
+        val mapValues = stringResources.mapValues {
+            StringResources(it.value.values.sortedBy { res -> res.name() })
+        }
+
+        return ValuesStringResources(mapValues)
     }
 
     private fun findValueDirs(resDir: File): List<ValueDir> {
