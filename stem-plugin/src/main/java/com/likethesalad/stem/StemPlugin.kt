@@ -95,6 +95,13 @@ class StemPlugin : Plugin<Project> {
                 it.outputDir.set(resolvedDir)
             }
 
+            // Todo check for alternatives
+            project.afterEvaluate {
+                project.tasks.named("merge${variant.name.capitalize()}Resources").configure {
+                    it.dependsOn(resolvePlaceholdersTask)
+                }
+            }
+
             // Add new res dirs
             addResolvedResDir(variant, project)
         }
