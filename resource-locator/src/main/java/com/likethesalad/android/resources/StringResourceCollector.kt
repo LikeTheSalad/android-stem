@@ -41,7 +41,9 @@ object StringResourceCollector {
             collectionValues.forEach { (valuesName, valueResource) ->
                 val globalResources = stringResources.getOrPut(valuesName, ::mutableMapOf)
                 valueResource.forEach { (stringName, stringResource) ->
-                    globalResources[stringName] = stringResource
+                    if (stringName !in globalResources) {
+                        globalResources[stringName] = stringResource
+                    }
                 }
             }
         }

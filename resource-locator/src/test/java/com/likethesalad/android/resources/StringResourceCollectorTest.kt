@@ -79,9 +79,9 @@ class StringResourceCollectorTest {
     @Test
     fun `Verify multiple layers dirs merging`() {
         val layers = mutableListOf<Collection<File>>()
-        layers.add(listOf(getInputDir("multiplelayers/main/res")))
-        layers.add(listOf(getInputDir("multiplelayers/debug/res")))
         layers.add(listOf(getInputDir("multiplelayers/demoDebug/res")))
+        layers.add(listOf(getInputDir("multiplelayers/debug/res")))
+        layers.add(listOf(getInputDir("multiplelayers/main/res")))
 
         val resources = StringResourceCollector.collectStringResourcesPerValueDir(layers)
 
