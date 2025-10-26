@@ -78,7 +78,7 @@ class StemPlugin : Plugin<Project> {
             }
 
             val resolvePlaceholdersTask = taskContainer.register(
-                "resolve%sPlaceholders",
+                "resolve${variant.name.capitalize()}Placeholders",
                 ResolvePlaceholdersTask2::class.java,
                 ResolvePlaceholdersArgs2(
                     ResolvePlaceholdersAction2(

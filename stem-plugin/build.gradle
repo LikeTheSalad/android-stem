@@ -39,7 +39,7 @@ gradlePlugin {
     plugins {
         placeholderResolverPlugin {
             id = 'com.likethesalad.stem'
-            implementationClass = 'com.likethesalad.stem.ResolvePlaceholdersPlugin'
+            implementationClass = 'com.likethesalad.stem.StemPlugin'
         }
         templatesProvider {
             id = 'com.likethesalad.stem-library'
