@@ -68,6 +68,7 @@ class PlaceholderTasksCreator @Inject constructor(
 
         gatherTemplatesTask.configure {
             it.commonResourcesDir.set(commonResourcesInfo.taskInfo.outputDirectoryProvider.getOutputDirProperty())
+            it.libraryResources.from(androidVariantContext.androidVariantData.getLibrariesResources())
             it.templateIdsFile.set(templatesIdentifierTask.flatMap { identifierTask -> identifierTask.outputFile })
         }
 

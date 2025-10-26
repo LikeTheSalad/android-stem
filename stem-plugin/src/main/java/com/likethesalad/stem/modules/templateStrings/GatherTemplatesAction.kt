@@ -34,9 +34,13 @@ class GatherTemplatesAction @AssistedInject constructor(
     fun gatherTemplateStrings(
         outputDir: File,
         variantResDirs: List<Collection<File>>,
+        libraryResourcesDirs: Set<File>,
         templateIdsContainer: File
     ) {
-        val stringCollection = StringResourceCollector.collectStringResourcesPerValueDir(variantResDirs)
+        val allDirs = mutableListOf<Collection<File>>()
+        allDirs.add(libraryResourcesDirs)
+        allDirs.addAll(variantResDirs)
+        val stringCollection = StringResourceCollector.collectStringResourcesPerValueDir(allDirs)
         val templateIds = getTemplateIds(templateIdsContainer)
 
         if (templateIds.isEmpty()) {
