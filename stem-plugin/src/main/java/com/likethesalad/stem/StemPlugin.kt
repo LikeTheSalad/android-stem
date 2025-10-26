@@ -8,6 +8,7 @@ import com.android.build.gradle.internal.api.DefaultAndroidSourceDirectorySet
 import com.likethesalad.android.templates.common.configuration.StemConfiguration
 import com.likethesalad.android.templates.common.plugins.extension.StemExtension
 import com.likethesalad.android.templates.common.tasks.identifier.TemplatesIdentifierTask2
+import com.likethesalad.android.templates.common.tasks.rawcollector.RawStringCollectorTask
 import com.likethesalad.stem.modules.collector.VariantRes
 import com.likethesalad.stem.modules.common.helpers.dirs.VariantBuildResolvedDir.Companion.getBuildRelativeResolvedDir
 import com.likethesalad.stem.modules.common.helpers.files.OutputStringFileResolver
@@ -51,6 +52,11 @@ class StemPlugin : Plugin<Project> {
             val variantResDirs = variantRes.getResDirs(variant)
             val resolvedDir = project.layout.buildDirectory.dir(getBuildRelativeResolvedDir(variant.name))
 
+            val rawStringCollectorTask =
+                taskContainer.register("${variant.name}RawStringCollector", RawStringCollectorTask::class.java) {
+                    it.localResDirs.set(variant.sources.res!!.static)
+                }
+
             val templatesProvider = taskContainer.register(
                 "templates${variant.name.capitalize()}Identifier",
                 TemplatesIdentifierTask2::class.java,
@@ -73,6 +79,7 @@ class StemPlugin : Plugin<Project> {
             )
 
             gatherTemplatesTask.configure {
+                it.dependsOn(rawStringCollectorTask)//todo delete
                 it.libraryResources.from(getFilesFromConfiguration(variant, "android-res"))
                 it.templateIdsFile.set(templatesProvider.flatMap { identifierTask -> identifierTask.outputFile })
             }
@@ -95,15 +102,18 @@ class StemPlugin : Plugin<Project> {
                 it.outputDir.set(resolvedDir)
             }
 
-            // Todo check for alternatives
-            project.afterEvaluate {
-                project.tasks.named("merge${variant.name.capitalize()}Resources").configure {
-                    it.dependsOn(resolvePlaceholdersTask)
-                }
+            variant.sources.res?.let { res ->
+                res.addGeneratedSourceDirectory(resolvePlaceholdersTask, ResolvePlaceholdersTask2::outputDir)
             }
+//             Todo check for alternatives
+//            project.afterEvaluate {
+//                project.tasks.named("merge${variant.name.capitalize()}Resources").configure {
+//                    it.dependsOn(resolvePlaceholdersTask)
+//                }
+//            }
 
             // Add new res dirs
-            addResolvedResDir(variant, project)
+//            addResolvedResDir(variant, project)
         }
     }
 
