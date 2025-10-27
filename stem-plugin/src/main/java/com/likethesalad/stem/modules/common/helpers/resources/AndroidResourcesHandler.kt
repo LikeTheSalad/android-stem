@@ -1,7 +1,7 @@
 package com.likethesalad.stem.modules.common.helpers.resources
 
 import com.google.gson.GsonBuilder
-import com.likethesalad.android.resources.data.StringResource
+import com.likethesalad.android.protos.StringResource
 import com.likethesalad.stem.modules.common.helpers.files.AndroidXmlResDocument
 import com.likethesalad.stem.modules.common.helpers.files.OutputStringFileResolver
 import com.likethesalad.stem.modules.common.helpers.resources.utils.LanguageTypeAdapter

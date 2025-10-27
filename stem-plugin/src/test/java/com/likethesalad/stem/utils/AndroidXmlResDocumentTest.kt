@@ -1,11 +1,10 @@
 package com.likethesalad.stem.utils
 
 import com.google.common.truth.Truth
-import com.likethesalad.android.resources.data.StringResource
+import com.likethesalad.android.protos.Attribute
+import com.likethesalad.android.protos.StringResource
 import com.likethesalad.stem.modules.common.helpers.files.AndroidXmlResDocument
-import com.likethesalad.tools.resource.api.android.environment.Language
-import com.likethesalad.tools.resource.api.android.environment.Variant
-import com.likethesalad.tools.resource.api.android.impl.AndroidResourceScope
+import com.likethesalad.stem.testutils.named
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -26,7 +25,6 @@ class AndroidXmlResDocumentTest {
 
     @get:Rule
     val temporaryFolder = TemporaryFolder()
-    private val scope = AndroidResourceScope(Variant.Default, Language.Default)
 
     @Test
     fun checkEmptyConstructor_should_create_resources() {
@@ -265,7 +263,7 @@ class AndroidXmlResDocumentTest {
         val namespace = "http://some.namespace.com/"
         val resource = StringResource.named(
             "someName", "someValue",
-            listOf(StringResource.Attribute("someAttr", "someAttrValue", namespace))
+            listOf(Attribute("someAttr", "someAttrValue", namespace))
         )
         document.appendStringResource(resource)
 
@@ -285,13 +283,13 @@ class AndroidXmlResDocumentTest {
         val namespace = "http://some.namespace.com/"
         val resource = StringResource.named(
             "someName", "someValue", listOf(
-                StringResource.Attribute("someAttr", "someAttrValue", namespace),
-                StringResource.Attribute("someAttr2", "someOtherAttrValue", namespace)
+                Attribute("someAttr", "someAttrValue", namespace),
+                Attribute("someAttr2", "someOtherAttrValue", namespace)
             )
         )
         val resource2 = StringResource.named(
             "someOtherName", "someOtherValue", listOf(
-                StringResource.Attribute("someAttr3", "Some attr3 value", namespace)
+                Attribute("someAttr3", "Some attr3 value", namespace)
             )
         )
         document.appendStringResource(resource)
@@ -314,14 +312,14 @@ class AndroidXmlResDocumentTest {
         val namespace2 = "http://someother.namespace.com/"
         val resource = StringResource.named(
             "someName", "someValue", listOf(
-                StringResource.Attribute("someAttr", "someAttrValue", namespace),
-                StringResource.Attribute("someAttr2", "someOtherAttrValue", namespace)
+                Attribute("someAttr", "someAttrValue", namespace),
+                Attribute("someAttr2", "someOtherAttrValue", namespace)
             )
         )
         val resource2 = StringResource.named(
             "someOtherName", "someOtherValue", listOf(
-                StringResource.Attribute("someAttr3", "Some attr3 value", namespace),
-                StringResource.Attribute("someAttr3", "Some attr3 namespace2 value", namespace2)
+                Attribute("someAttr3", "Some attr3 value", namespace),
+                Attribute("someAttr3", "Some attr3 namespace2 value", namespace2)
             )
         )
         document.appendStringResource(resource)

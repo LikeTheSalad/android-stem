@@ -1,6 +1,6 @@
 package com.likethesalad.stem.modules.resolveStrings
 
-import com.likethesalad.android.resources.data.StringResource
+import com.likethesalad.android.protos.StringResource
 import com.likethesalad.stem.modules.common.helpers.resources.ResourcesHandler
 import com.likethesalad.stem.modules.resolveStrings.resolver.TemplateResolver
 import com.likethesalad.tools.resource.api.android.environment.Language
@@ -46,7 +46,7 @@ class ResolvePlaceholdersAction2(
 //    }
 
     private fun isTranslatable(stringResource: StringResource): Boolean {
-        val translatable = stringResource.attributes.firstOrNull { it.name == "translatable" }?.value ?: return true
+        val translatable = stringResource.attributes.firstOrNull { it.name == "translatable" }?.text ?: return true
         return translatable.toBoolean()
     }
 }

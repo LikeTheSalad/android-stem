@@ -1,11 +1,12 @@
 package com.likethesalad.stem.tasks.actions
 
-import com.likethesalad.android.resources.data.StringResource
-import com.likethesalad.stem.modules.common.helpers.android.AndroidVariantContext
+import com.likethesalad.android.protos.Attribute
+import com.likethesalad.android.protos.StringResource
 import com.likethesalad.stem.modules.common.helpers.resources.ResourcesHandler
-import com.likethesalad.stem.modules.resolveStrings.ResolvePlaceholdersAction
+import com.likethesalad.stem.modules.resolveStrings.ResolvePlaceholdersAction2
 import com.likethesalad.stem.modules.resolveStrings.resolver.TemplateResolver
 import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesModel
+import com.likethesalad.stem.testutils.named
 import com.likethesalad.tools.resource.api.android.environment.Language
 import io.mockk.every
 import io.mockk.mockk
@@ -19,18 +20,15 @@ class ResolvePlaceholdersActionTest {
     private lateinit var resourcesHandler: ResourcesHandler
     private lateinit var templateResolver: TemplateResolver
 
-    private lateinit var resolvePlaceholdersAction: ResolvePlaceholdersAction
+    private lateinit var resolvePlaceholdersAction: ResolvePlaceholdersAction2
 
     @Before
     fun setUp() {
-        val androidVariantContext = mockk<AndroidVariantContext>()
         resourcesHandler = mockk(relaxUnitFun = true)
         templateResolver = mockk(relaxUnitFun = true)
 
-        every { androidVariantContext.androidResourcesHandler }.returns(resourcesHandler)
-
-        resolvePlaceholdersAction = ResolvePlaceholdersAction(
-            androidVariantContext, templateResolver
+        resolvePlaceholdersAction = ResolvePlaceholdersAction2(
+            templateResolver, resourcesHandler
         )
     }
 
@@ -109,7 +107,7 @@ class ResolvePlaceholdersActionTest {
             val string = StringResource.named(
                 "name_$it", "value_$it",
                 listOf(
-                    StringResource.Attribute("translatable", translatable.toString(), null)
+                    Attribute("translatable", translatable.toString(), null)
                 )
             )
             strings.add(string)

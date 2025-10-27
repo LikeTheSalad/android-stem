@@ -1,6 +1,6 @@
 package com.likethesalad.stem.modules.common.helpers.files
 
-import com.likethesalad.android.resources.data.StringResource
+import com.likethesalad.android.protos.StringResource
 import com.likethesalad.stem.modules.common.Constants.Companion.XML_RESOURCES_TAG
 import com.likethesalad.stem.modules.common.Constants.Companion.XML_STRING_TAG
 import com.likethesalad.stem.modules.common.helpers.resources.utils.XmlUtils

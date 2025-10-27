@@ -1,20 +1,18 @@
 package com.likethesalad.stem.modules.resolveStrings.resolver
 
-import com.likethesalad.android.resources.data.StringResource
+import com.likethesalad.android.protos.StringResource
+import com.likethesalad.android.resources.extensions.name
 import com.likethesalad.android.templates.common.configuration.StemConfiguration
 import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesModel
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class TemplateResolver @Inject constructor(
+class TemplateResolver(
     private val configuration: StemConfiguration,
     private val recursiveLevelDetector: RecursiveLevelDetector
 ) {
 
     fun resolveTemplates(stringsTemplatesModel: StringsTemplatesModel): List<StringResource> {
         val templateContainerFinder = createTemplatesFinder(stringsTemplatesModel)
-        return if (stringsTemplatesModel.templates.any { templateContainerFinder.containsTemplates(it.value) }) {
+        return if (stringsTemplatesModel.templates.any { templateContainerFinder.containsTemplates(it.text) }) {
             // If there are recursive templates
             resolveRecursiveTemplates(
                 stringsTemplatesModel.templates,
@@ -51,7 +49,7 @@ class TemplateResolver @Inject constructor(
 
             // Add resolved templates to the values so that recursive templates can find them
             for (it in templatesResolved) {
-                mutableValues[it.getName()] = it.value
+                mutableValues[it.name()] = it.text
             }
         }
 
@@ -72,7 +70,7 @@ class TemplateResolver @Inject constructor(
     private fun getResolvedStringResourceModel(original: StringResource, values: Map<String, String>)
             : StringResource {
         return StringResource(
-            resolve(original.value, values),
+            resolve(original.text, values),
             original.attributes
         )
     }
@@ -87,6 +85,6 @@ class TemplateResolver @Inject constructor(
     }
 
     private fun createTemplatesFinder(stringsTemplatesModel: StringsTemplatesModel): TemplateContainerFinder {
-        return TemplateContainerFinder(configuration, stringsTemplatesModel.templates.map { it.getName() })
+        return TemplateContainerFinder(configuration, stringsTemplatesModel.templates.map { it.name() })
     }
 }

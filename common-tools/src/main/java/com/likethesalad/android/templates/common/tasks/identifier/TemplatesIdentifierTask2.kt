@@ -23,7 +23,6 @@ open class TemplatesIdentifierTask2 @Inject constructor(private val args: Args) 
         val action = TemplatesIdentifierAction2.create(
             args.stemConfiguration,
             args.localResDirs,
-            args.filterResDir,
             outputFile.get().asFile
         )
         action.execute()
@@ -31,7 +30,6 @@ open class TemplatesIdentifierTask2 @Inject constructor(private val args: Args) 
 
     data class Args(
         val localResDirs: List<Collection<File>>,
-        val stemConfiguration: StemConfiguration,
-        val filterResDir: (File) -> Boolean
+        val stemConfiguration: StemConfiguration
     )
 }

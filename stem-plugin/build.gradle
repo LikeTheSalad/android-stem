@@ -6,14 +6,12 @@ plugins {
 }
 
 dependencies {
-    embedded libs.dagger
     embedded project(':templates-provider-plugin')
     implementation project(':common-tools')
     implementation project(':resource-locator')
     implementation libs.gson
     implementation libs.classGraph
     compileOnly libs.android.plugin
-    kapt libs.dagger.compiler
     testImplementation libs.unitTesting
     testImplementation libs.zip4j
     testImplementation libs.xmlUnit
@@ -21,10 +19,6 @@ dependencies {
     testImplementation(libs.assertj)
     testImplementation(libs.mockk)
     testPluginDependency "com.android.tools.build:gradle:8.12.0"
-}
-
-shadowExtension {
-    relocate("dagger", "${group}.stem.dagger")
 }
 
 libConventions {

@@ -1,6 +1,6 @@
 package com.likethesalad.stem.modules.common.helpers.resources.utils
 
-import com.likethesalad.android.resources.data.StringResource
+import com.likethesalad.android.protos.StringResource
 import java.io.StringReader
 import javax.xml.parsers.DocumentBuilderFactory
 import org.w3c.dom.Element
@@ -17,13 +17,13 @@ object XmlUtils {
         stringResourceModel: StringResource,
         namespaceNameProvider: NamespaceNameProvider
     ): Element {
-        val reader = StringReader("<string>${stringResourceModel.value}</string>")
+        val reader = StringReader("<string>${stringResourceModel.text}</string>")
         val strElement = docBuilder.parse(InputSource(reader)).documentElement
         for (it in stringResourceModel.attributes) {
             it.namespace?.let { namespace ->
                 val namespaceName = namespaceNameProvider.getNameFor(namespace)
-                strElement.setAttribute("$namespaceName:${it.name}", it.value)
-            } ?: strElement.setAttribute(it.name, it.value)
+                strElement.setAttribute("$namespaceName:${it.name}", it.text)
+            } ?: strElement.setAttribute(it.name, it.text)
         }
         return strElement
     }

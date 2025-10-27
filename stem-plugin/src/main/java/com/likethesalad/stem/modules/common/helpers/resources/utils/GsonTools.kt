@@ -9,6 +9,7 @@ import com.google.gson.JsonSerializer
 import com.likethesalad.tools.resource.api.android.environment.Language
 import java.lang.reflect.Type
 
+// todo delete?
 class LanguageTypeAdapter : JsonSerializer<Language>, JsonDeserializer<Language> {
 
     override fun serialize(src: Language, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {

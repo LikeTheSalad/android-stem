@@ -1,6 +1,6 @@
 package com.likethesalad.stem.modules.common.helpers.resources
 
-import com.likethesalad.android.resources.data.StringResource
+import com.likethesalad.android.protos.StringResource
 import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesModel
 import com.likethesalad.tools.resource.api.android.environment.Language
 import java.io.File

@@ -1,7 +1,8 @@
 package com.likethesalad.stem.modules.templateStrings
 
+import com.likethesalad.android.protos.StringResource
 import com.likethesalad.android.resources.StringResourceCollector
-import com.likethesalad.android.resources.data.StringResource
+import com.likethesalad.android.resources.extensions.name
 import com.likethesalad.android.templates.common.configuration.StemConfiguration
 import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer2
 import com.likethesalad.stem.modules.common.helpers.resources.ResourcesHandler
@@ -31,10 +32,10 @@ class GatherTemplatesAction2(
             return
         }
 
-        stringCollection.forEach { (valueDirName, strings) ->
+        stringCollection.values.forEach { (valueDirName, strings) ->
             val language = getLanguage(valueDirName)
-            val templates = getTemplatesFromResources(templateIds, strings)
-            val resources = strings.minus(templates)
+            val templates = getTemplatesFromResources(templateIds, strings.strings)
+            val resources = strings.strings.minus(templates)
             resourcesHandler.saveTemplates(outputDir, gatheredStringsToTemplateStrings(language, resources, templates))
         }
     }
@@ -55,7 +56,7 @@ class GatherTemplatesAction2(
         resources: Collection<StringResource>
     ): List<StringResource> {
         return resources.filter {
-            it.getName() in templateIds
+            it.name() in templateIds
         }
     }
 
@@ -90,7 +91,7 @@ class GatherTemplatesAction2(
         templates: List<StringResource>
     ): Map<String, String> {
         val stringsMap = stringResourcesToMap(strings)
-        val placeholders = templates.map { stemConfiguration.placeholderRegex.findAll(it.value) }
+        val placeholders = templates.map { stemConfiguration.placeholderRegex.findAll(it.text) }
             .flatMap { it.toList().map { m -> m.groupValues[1] } }.toSet()
 
         val placeholdersResolved = mutableMapOf<String, String>()
@@ -105,7 +106,7 @@ class GatherTemplatesAction2(
     private fun stringResourcesToMap(list: List<StringResource>): Map<String, String> {
         val map = mutableMapOf<String, String>()
         for (it in list) {
-            map[it.getName()] = it.value
+            map[it.name()] = it.text
         }
         return map
     }

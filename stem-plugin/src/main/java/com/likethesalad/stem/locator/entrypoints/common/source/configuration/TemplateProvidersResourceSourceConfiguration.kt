@@ -3,48 +3,31 @@ package com.likethesalad.stem.locator.entrypoints.common.source.configuration
 import com.likethesalad.android.templates.common.utils.CommonConstants.FILE_SEPARATOR_MATCHER
 import com.likethesalad.android.templates.common.utils.Logger
 import com.likethesalad.stem.locator.entrypoints.common.utils.TemplatesProviderJarsFinder
-import com.likethesalad.stem.providers.ProjectDirsProvider
 import com.likethesalad.tools.resource.collector.android.data.resdir.ResDir
-import com.likethesalad.tools.resource.collector.android.data.variant.VariantTree
-import com.likethesalad.tools.resource.locator.android.extension.configuration.source.impl.AndroidLibrariesSourceConfiguration
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
-import org.gradle.api.file.FileCollection
 import java.io.File
 import java.util.regex.Pattern
 
-class TemplateProvidersResourceSourceConfiguration @AssistedInject constructor(
-    @Assisted variantTree: VariantTree,
-    @Assisted private val templatesProviderJarsFinder: TemplatesProviderJarsFinder,
-    private val projectDirsProvider: ProjectDirsProvider,
-) : AndroidLibrariesSourceConfiguration(variantTree) {
+class TemplateProvidersResourceSourceConfiguration(
+    private val templatesProviderJarsFinder: TemplatesProviderJarsFinder
+) {
 
     private val logger by lazy {
         Logger.create(javaClass)
-    }
-
-    @AssistedFactory
-    interface Factory {
-        fun create(
-            variantTree: VariantTree,
-            templatesProviderJarsFinder: TemplatesProviderJarsFinder
-        ): TemplateProvidersResourceSourceConfiguration
     }
 
     companion object {
         private val LOCAL_BUILD_DIR_PATTERN = Regex("^.+" + FILE_SEPARATOR_MATCHER + "build" + FILE_SEPARATOR_MATCHER)
     }
 
-    override fun getResDirs(): List<ResDir> {
-        val allResDirs = super.getResDirs()
-        return filterTemplateProviderResDirs(allResDirs)
-    }
-
-    override fun getLibrariesResourcesFileCollection(): FileCollection {
-        return super.getLibrariesResourcesFileCollection().plus(templatesProviderJarsFinder.allJarFiles)
-    }
-
+    //    private fun getResDirs(): List<ResDir> {
+//        val allResDirs = super.getResDirs()
+//        return filterTemplateProviderResDirs(allResDirs)
+//    }
+//      Todo replace?
+//    private fun getLibrariesResourcesFileCollection(): FileCollection {
+//        return super.getLibrariesResourcesFileCollection().plus(templatesProviderJarsFinder.allJarFiles)
+//    }
+//
     private fun filterTemplateProviderResDirs(allResDirs: List<ResDir>): List<ResDir> {
         val templatesProvidersPattern = createTemplatesProviderPathStartPattern() ?: return emptyList()
 
@@ -88,8 +71,10 @@ class TemplateProvidersResourceSourceConfiguration @AssistedInject constructor(
     }
 
     private fun filterLocalJars(templatesProviderJars: List<File>): List<File> {
-        val rootProjectDirPath = projectDirsProvider.getRootProjectDir().absolutePath
-        val localJarPattern = Regex("^${Pattern.quote(rootProjectDirPath)}.+")
-        return templatesProviderJars.filter { localJarPattern.matches(it.absolutePath) }
+//        val rootProjectDirPath = projectDirsProvider.getRootProjectDir().absolutePath
+//        val localJarPattern = Regex("^${Pattern.quote(rootProjectDirPath)}.+")
+//        return templatesProviderJars.filter { localJarPattern.matches(it.absolutePath) }
+        //todo fix?
+        return emptyList()
     }
 }

@@ -1,11 +1,13 @@
 package com.likethesalad.stem.resolver
 
 import com.google.common.truth.Truth
-import com.likethesalad.android.resources.data.StringResource
+import com.likethesalad.android.protos.StringResource
+import com.likethesalad.android.resources.extensions.name
 import com.likethesalad.android.templates.common.configuration.StemConfiguration
 import com.likethesalad.stem.modules.resolveStrings.resolver.RecursiveLevelDetector
 import com.likethesalad.stem.modules.resolveStrings.resolver.TemplateContainerFinder
 import com.likethesalad.stem.testutils.createForTest
+import com.likethesalad.stem.testutils.named
 import junit.framework.TestCase.fail
 import org.junit.Test
 
@@ -116,6 +118,6 @@ class RecursiveLevelDetectorTest {
 
     private fun getTemplateContainerFinder(templates: List<StringResource>): TemplateContainerFinder {
         val configuration = StemConfiguration.createForTest()
-        return TemplateContainerFinder(configuration, templates.map { it.getName() })
+        return TemplateContainerFinder(configuration, templates.map { it.name() })
     }
 }

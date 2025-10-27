@@ -1,8 +1,10 @@
 package com.likethesalad.stem.utils
 
 import com.google.common.truth.Truth
-import com.likethesalad.android.resources.data.StringResource
+import com.likethesalad.android.protos.Attribute
+import com.likethesalad.android.protos.StringResource
 import com.likethesalad.stem.modules.common.helpers.resources.utils.XmlUtils
+import com.likethesalad.stem.testutils.named
 import com.likethesalad.tools.resource.api.android.environment.Language
 import com.likethesalad.tools.resource.api.android.environment.Variant
 import com.likethesalad.tools.resource.api.android.impl.AndroidResourceScope
@@ -22,7 +24,7 @@ class XmlUtilsTest {
                 "some_name",
                 "some content",
                 listOf(
-                    StringResource.Attribute("extra", "some extra attr", null)
+                    Attribute("extra", "some extra attr", null)
                 )
             )
         val noOpNsProvider = object : XmlUtils.NamespaceNameProvider {
@@ -52,7 +54,7 @@ class XmlUtilsTest {
                 "some_name",
                 "some content <b>something bold</b>",
                 listOf(
-                    StringResource.Attribute("extra", "some extra attr", null)
+                    Attribute("extra", "some extra attr", null)
                 )
             )
         val noOpNsProvider = object : XmlUtils.NamespaceNameProvider {
@@ -84,8 +86,8 @@ class XmlUtilsTest {
                 "some_name",
                 "some content",
                 listOf(
-                    StringResource.Attribute("extra", "some extra attr", null),
-                    StringResource.Attribute("someNsKey", "some extra attr", namespaceValue)
+                    Attribute("extra", "some extra attr", null),
+                    Attribute("someNsKey", "some extra attr", namespaceValue)
                 )
             )
         val nsNameProvider = mockk<XmlUtils.NamespaceNameProvider>()

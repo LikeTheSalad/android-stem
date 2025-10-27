@@ -1,15 +1,16 @@
 package com.likethesalad.android.templates.common.tasks.identifier.action
 
+import com.likethesalad.android.protos.StringResource
+import com.likethesalad.android.protos.ValuesStringResources
 import com.likethesalad.android.resources.StringResourceCollector
-import com.likethesalad.android.resources.data.StringResource
+import com.likethesalad.android.resources.extensions.get
+import com.likethesalad.android.resources.extensions.name
 import com.likethesalad.android.templates.common.configuration.StemConfiguration
 import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer2
 import java.io.File
 
 class TemplatesIdentifierAction2 private constructor(
     private val localResDirs: List<Collection<File>>,
-    // Todo shouldn't be needed to filter dirs if the last variant (upmost) is removed from inputs.
-    private val ignoreResDir: (File) -> Boolean,
     private val outputFile: File,
     private val configuration: StemConfiguration
 ) {
@@ -18,10 +19,9 @@ class TemplatesIdentifierAction2 private constructor(
         fun create(
             stemConfiguration: StemConfiguration,
             localResources: List<Collection<File>>,
-            filterResDir: (File) -> Boolean,
             outputFile: File
         ): TemplatesIdentifierAction2 {
-            return TemplatesIdentifierAction2(localResources, filterResDir, outputFile, stemConfiguration)
+            return TemplatesIdentifierAction2(localResources, outputFile, stemConfiguration)
         }
     }
 
@@ -31,27 +31,27 @@ class TemplatesIdentifierAction2 private constructor(
     }
 
     private fun getTemplatesIdsFromResources(): List<String> {
-        val stringCollection = StringResourceCollector.collectStringResourcesPerValueDir(localResDirs, ignoreResDir)
+        val stringCollection = StringResourceCollector.collectStringResourcesPerValueDir(localResDirs)
         return if (configuration.searchForTemplatesInLanguages()) {
             getTemplatesFromAllCollections(stringCollection)
         } else {
-            val mainLanguageResources = stringCollection["values"]
+            val mainLanguageResources = stringCollection.get("values")
             getTemplatesForCollection(mainLanguageResources)
         }
     }
 
-    private fun getTemplatesFromAllCollections(stringCollection: Map<String, Collection<StringResource>>): List<String> {
+    private fun getTemplatesFromAllCollections(stringCollection: ValuesStringResources): List<String> {
         val templates = mutableSetOf<String>()
 
-        stringCollection.forEach { (_, strings) ->
-            val collectionTemplates = getTemplatesForCollection(strings)
+        stringCollection.values.forEach { (_, strings) ->
+            val collectionTemplates = getTemplatesForCollection(strings.strings)
             templates.addAll(collectionTemplates)
         }
 
         return templates.toList()
     }
 
-    private fun getTemplatesForCollection(stringResources: Collection<StringResource>?): List<String> {
+    private fun getTemplatesForCollection(stringResources: List<StringResource>?): List<String> {
         if (stringResources == null) {
             return emptyList()
         }
@@ -59,13 +59,13 @@ class TemplatesIdentifierAction2 private constructor(
         val templates = filterTemplates(stringResources)
 
         return templates.map {
-            it.getName()
+            it.name()
         }.sorted()
     }
 
     private fun filterTemplates(stringResources: Collection<StringResource>): List<StringResource> {
         return stringResources.filter { stringResource ->
-            configuration.placeholderRegex.containsMatchIn(stringResource.value)
+            configuration.placeholderRegex.containsMatchIn(stringResource.text)
         }
     }
 }

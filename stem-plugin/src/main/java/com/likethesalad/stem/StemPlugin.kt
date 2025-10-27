@@ -10,7 +10,6 @@ import com.likethesalad.android.templates.common.plugins.extension.StemExtension
 import com.likethesalad.android.templates.common.tasks.identifier.TemplatesIdentifierTask2
 import com.likethesalad.android.templates.common.tasks.rawcollector.RawStringCollectorTask
 import com.likethesalad.stem.modules.collector.VariantRes
-import com.likethesalad.stem.modules.common.helpers.dirs.VariantBuildResolvedDir.Companion.getBuildRelativeResolvedDir
 import com.likethesalad.stem.modules.common.helpers.files.OutputStringFileResolver
 import com.likethesalad.stem.modules.common.helpers.resources.AndroidResourcesHandler
 import com.likethesalad.stem.modules.resolveStrings.ResolvePlaceholdersAction2
@@ -21,6 +20,7 @@ import com.likethesalad.stem.modules.resolveStrings.resolver.TemplateResolver
 import com.likethesalad.stem.modules.templateStrings.GatherTemplatesAction2
 import com.likethesalad.stem.modules.templateStrings.GatherTemplatesTask2
 import com.likethesalad.stem.modules.templateStrings.data.GatherTemplatesArgs2
+import java.io.File
 import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -34,8 +34,13 @@ class StemPlugin : Plugin<Project> {
 
     companion object {
         private const val EXTENSION_NAME = "androidStem"
+        private val RESOLVED_DIR_BUILD_RELATIVE_PATH = "generated${File.separator}resolved"
 
         private val artifactTypeAttr = Attribute.of("artifactType", String::class.java)
+
+        fun getBuildRelativeResolvedDir(variantName: String): String {
+            return "$RESOLVED_DIR_BUILD_RELATIVE_PATH${File.separator}$variantName"
+        }
     }
 
     override fun apply(project: Project) {
@@ -63,10 +68,7 @@ class StemPlugin : Plugin<Project> {
                 TemplatesIdentifierTask2.Args(
                     variantResDirs,
                     stemConfiguration
-                ) {
-                    // Ignore res dir if it's the resolved one
-                    it.startsWith(resolvedDir.get().asFile.path)
-                }
+                )
             )
 
             val gatherTemplatesTask = taskContainer.register(
