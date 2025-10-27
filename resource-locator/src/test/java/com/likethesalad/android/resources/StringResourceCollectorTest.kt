@@ -1,6 +1,8 @@
 package com.likethesalad.android.resources
 
-import com.likethesalad.android.resources.data.StringResource
+import com.likethesalad.android.protos.Attribute
+import com.likethesalad.android.protos.StringResource
+import com.likethesalad.android.resources.extensions.get
 import java.io.File
 import java.nio.file.Paths
 import kotlin.io.path.absolutePathString
@@ -20,8 +22,8 @@ class StringResourceCollectorTest {
 
         val resources = StringResourceCollector.collectStringResourcesPerValueDir(listOf(resDirs))
 
-        assertThat(resources).containsOnlyKeys("values")
-        assertThat(resources["values"]).containsExactly(
+        assertThat(resources.values).containsOnlyKeys("values")
+        assertThat(resources.get("values")).containsExactly(
             createStringResource("app_name", "Strings playground"),
             createStringResource("welcome_message", "Welcome to the app")
         )
@@ -34,8 +36,8 @@ class StringResourceCollectorTest {
 
         val resources = StringResourceCollector.collectStringResourcesPerValueDir(listOf(resDirs))
 
-        assertThat(resources).containsOnlyKeys("values")
-        assertThat(resources["values"]).containsExactly(
+        assertThat(resources.values).containsOnlyKeys("values")
+        assertThat(resources.get("values")).containsExactly(
             createStringResource("app_name", "Strings playground"),
             createStringResource(
                 "welcome_message",
@@ -53,8 +55,8 @@ class StringResourceCollectorTest {
 
         val resources = StringResourceCollector.collectStringResourcesPerValueDir(listOf(resDirs))
 
-        assertThat(resources).containsOnlyKeys("values")
-        assertThat(resources["values"]).containsExactly(
+        assertThat(resources.values).containsOnlyKeys("values")
+        assertThat(resources.get("values")).containsExactly(
             createStringResource("app_name", "Strings playground"),
             createStringResource("app_name_res2", "Strings playground 2"),
             createStringResource("welcome_message", "Welcome to the app"),
@@ -85,8 +87,8 @@ class StringResourceCollectorTest {
 
         val resources = StringResourceCollector.collectStringResourcesPerValueDir(layers)
 
-        assertThat(resources).containsOnlyKeys("values")
-        assertThat(resources["values"]).containsExactly(
+        assertThat(resources.values).containsOnlyKeys("values")
+        assertThat(resources.get("values")).containsExactly(
             createStringResource("app_name", "Demo debug playground"),
             createStringResource("some_other", "Some main string"),
             createStringResource("welcome_message", "Welcome to the debug app")
@@ -100,8 +102,8 @@ class StringResourceCollectorTest {
 
         val resources = StringResourceCollector.collectStringResourcesPerValueDir(listOf(resDirs))
 
-        assertThat(resources).containsOnlyKeys("values")
-        assertThat(resources["values"]).containsExactly(
+        assertThat(resources.values).containsOnlyKeys("values")
+        assertThat(resources.get("values")).containsExactly(
             createStringResource("app_config_item", "Config item"),
             createStringResource("app_name", "Strings playground"),
             createStringResource("some_other_config", "Some other config"),
@@ -116,12 +118,12 @@ class StringResourceCollectorTest {
 
         val resources = StringResourceCollector.collectStringResourcesPerValueDir(listOf(resDirs))
 
-        assertThat(resources).containsOnlyKeys("values", "values-es")
-        assertThat(resources["values"]).containsExactly(
+        assertThat(resources.values).containsOnlyKeys("values", "values-es")
+        assertThat(resources.get("values")).containsExactly(
             createStringResource("app_name", "Strings playground"),
             createStringResource("welcome_message", "Welcome to the app")
         )
-        assertThat(resources["values-es"]).containsExactly(
+        assertThat(resources.get("values-es")).containsExactly(
             createStringResource("app_name_es", "Nombre de app"),
             createStringResource("welcome_message", "Bienvenido a la app")
         )
@@ -130,14 +132,14 @@ class StringResourceCollectorTest {
     private fun createStringResource(
         name: String,
         value: String,
-        vararg extraAttributes: StringResource.Attribute
+        vararg extraAttributes: Attribute
     ): StringResource {
         val attributes = listOf(createAttribute("name", name)).plus(extraAttributes)
         return StringResource(value, attributes)
     }
 
-    private fun createAttribute(name: String, value: String, namespace: String? = null): StringResource.Attribute {
-        return StringResource.Attribute(name, value, namespace)
+    private fun createAttribute(name: String, value: String, namespace: String? = null): Attribute {
+        return Attribute(name, value, namespace)
     }
 
     private fun getInputDir(path: String) = File(ASSETS_DIR, "inputs/$path")
