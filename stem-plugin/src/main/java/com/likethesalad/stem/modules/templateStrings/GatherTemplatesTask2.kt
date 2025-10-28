@@ -1,28 +1,26 @@
 package com.likethesalad.stem.modules.templateStrings
 
+import com.likethesalad.android.protos.ValuesStringResources
 import com.likethesalad.android.templates.common.tasks.BaseTask
 import com.likethesalad.android.templates.common.utils.DirectoryUtils
 import com.likethesalad.stem.modules.templateStrings.data.GatherTemplatesArgs2
 import javax.inject.Inject
-import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.InputFile
-import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 
-open class GatherTemplatesTask2
+abstract class GatherTemplatesTask2
 @Inject constructor(private val args: GatherTemplatesArgs2) : BaseTask() {
+    @get:InputFile
+    abstract val stringValuesProto: RegularFileProperty
 
-    @InputFiles
-    val libraryResources: ConfigurableFileCollection = project.objects.fileCollection()
+    @get:OutputDirectory
+    abstract val outDir: DirectoryProperty
 
-    @OutputDirectory
-    val outDir: DirectoryProperty = project.objects.directoryProperty()
-
-    @InputFile
-    val templateIdsFile: RegularFileProperty = project.objects.fileProperty()
+    @get:InputFile
+    abstract val templateIdsFile: RegularFileProperty
 
     init {
         outDir.set(project.layout.buildDirectory.dir("intermediates/incremental/$name"))
@@ -31,10 +29,14 @@ open class GatherTemplatesTask2
     @TaskAction
     fun gatherTemplateStrings() {
         DirectoryUtils.clearIfNeeded(outDir.get().asFile)
+
+        val stringValues = stringValuesProto.get().asFile.inputStream().use {
+            ValuesStringResources.ADAPTER.decode(it)
+        }
+
         args.gatherTemplatesAction.gatherTemplateStrings(
             outDir.get().asFile,
-            args.variantResDirs,
-            libraryResources.files,
+            stringValues,
             templateIdsFile.get().asFile
         )
     }

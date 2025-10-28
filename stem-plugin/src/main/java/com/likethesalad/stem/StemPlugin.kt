@@ -2,14 +2,11 @@ package com.likethesalad.stem
 
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
-import com.android.build.api.variant.ApplicationVariant
 import com.android.build.api.variant.Variant
-import com.android.build.gradle.internal.api.DefaultAndroidSourceDirectorySet
 import com.likethesalad.android.templates.common.configuration.StemConfiguration
 import com.likethesalad.android.templates.common.plugins.extension.StemExtension
 import com.likethesalad.android.templates.common.tasks.identifier.TemplatesIdentifierTask2
 import com.likethesalad.android.templates.common.tasks.rawcollector.RawStringCollectorTask
-import com.likethesalad.stem.modules.collector.VariantRes
 import com.likethesalad.stem.modules.common.helpers.files.OutputStringFileResolver
 import com.likethesalad.stem.modules.common.helpers.resources.AndroidResourcesHandler
 import com.likethesalad.stem.modules.resolveStrings.ResolvePlaceholdersAction2
@@ -51,38 +48,36 @@ class StemPlugin : Plugin<Project> {
         val outputStringFileResolver = OutputStringFileResolver()
         val androidResourcesHandler = AndroidResourcesHandler(outputStringFileResolver)
         val stemConfiguration = StemConfiguration.create(extension)
-        val variantRes = VariantRes(androidExtension)
 
         components.onVariants { variant ->
-            val variantResDirs = variantRes.getResDirs(variant)
             val resolvedDir = project.layout.buildDirectory.dir(getBuildRelativeResolvedDir(variant.name))
 
             val rawStringCollectorTask =
                 taskContainer.register("${variant.name}RawStringCollector", RawStringCollectorTask::class.java) {
                     it.localResDirs.set(variant.sources.res!!.static)
+                    it.libraryResDirs.from(getFilesFromConfiguration(variant, "android-res"))
+                    it.outputFile.set(project.layout.buildDirectory.file("intermediates/${it.name}/values.bin"))
                 }
 
             val templatesProvider = taskContainer.register(
                 "templates${variant.name.capitalize()}Identifier",
                 TemplatesIdentifierTask2::class.java,
-                TemplatesIdentifierTask2.Args(
-                    variantResDirs,
-                    stemConfiguration
-                )
+                TemplatesIdentifierTask2.Args(stemConfiguration)
             )
+            templatesProvider.configure {
+                it.stringValuesProto.set(rawStringCollectorTask.flatMap { rawValues -> rawValues.outputFile })
+            }
 
             val gatherTemplatesTask = taskContainer.register(
                 "gather${variant.name.capitalize()}StringTemplates",
                 GatherTemplatesTask2::class.java,
                 GatherTemplatesArgs2(
-                    GatherTemplatesAction2(androidResourcesHandler, stemConfiguration),
-                    variantResDirs
+                    GatherTemplatesAction2(androidResourcesHandler, stemConfiguration)
                 )
             )
 
             gatherTemplatesTask.configure {
-                it.dependsOn(rawStringCollectorTask)//todo delete
-                it.libraryResources.from(getFilesFromConfiguration(variant, "android-res"))
+                it.stringValuesProto.set(rawStringCollectorTask.flatMap { rawValues -> rawValues.outputFile })
                 it.templateIdsFile.set(templatesProvider.flatMap { identifierTask -> identifierTask.outputFile })
             }
 
@@ -107,32 +102,7 @@ class StemPlugin : Plugin<Project> {
             variant.sources.res?.let { res ->
                 res.addGeneratedSourceDirectory(resolvePlaceholdersTask, ResolvePlaceholdersTask2::outputDir)
             }
-//             Todo check for alternatives
-//            project.afterEvaluate {
-//                project.tasks.named("merge${variant.name.capitalize()}Resources").configure {
-//                    it.dependsOn(resolvePlaceholdersTask)
-//                }
-//            }
-
-            // Add new res dirs
-//            addResolvedResDir(variant, project)
         }
-    }
-
-    private fun addResolvedResDir(variant: ApplicationVariant, project: Project) {
-        addVariantSrcDir(
-            variant.name,
-            project.layout.buildDirectory.dir(getBuildRelativeResolvedDir(variant.name))
-        )
-    }
-
-    private fun addVariantSrcDir(variantName: String, dir: Any) {
-        getVariantRes(variantName).srcDir(dir)
-    }
-
-    private fun getVariantRes(variantName: String): DefaultAndroidSourceDirectorySet {
-        // Todo avoid cast to internal api
-        return androidExtension.sourceSets.getByName(variantName).res as DefaultAndroidSourceDirectorySet
     }
 
     private fun createExtension(project: Project): StemExtension {

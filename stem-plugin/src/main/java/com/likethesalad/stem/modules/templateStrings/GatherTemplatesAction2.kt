@@ -1,7 +1,7 @@
 package com.likethesalad.stem.modules.templateStrings
 
 import com.likethesalad.android.protos.StringResource
-import com.likethesalad.android.resources.StringResourceCollector
+import com.likethesalad.android.protos.ValuesStringResources
 import com.likethesalad.android.resources.extensions.name
 import com.likethesalad.android.templates.common.configuration.StemConfiguration
 import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer2
@@ -18,21 +18,16 @@ class GatherTemplatesAction2(
 
     fun gatherTemplateStrings(
         outputDir: File,
-        variantResDirs: List<Collection<File>>,
-        libraryResourcesDirs: Set<File>,
+        stringValues: ValuesStringResources,
         templateIdsContainer: File
     ) {
-        val allDirs = mutableListOf<Collection<File>>()
-        allDirs.add(libraryResourcesDirs)
-        allDirs.addAll(variantResDirs)
-        val stringCollection = StringResourceCollector.collectStringResourcesPerValueDir(allDirs)
         val templateIds = getTemplateIds(templateIdsContainer)
 
         if (templateIds.isEmpty()) {
             return
         }
 
-        stringCollection.values.forEach { (valueDirName, strings) ->
+        stringValues.values.forEach { (valueDirName, strings) ->
             val language = getLanguage(valueDirName)
             val templates = getTemplatesFromResources(templateIds, strings.strings)
             val resources = strings.strings.minus(templates)

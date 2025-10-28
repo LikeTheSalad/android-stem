@@ -2,7 +2,6 @@ package com.likethesalad.android.templates.common.tasks.identifier.action
 
 import com.likethesalad.android.protos.StringResource
 import com.likethesalad.android.protos.ValuesStringResources
-import com.likethesalad.android.resources.StringResourceCollector
 import com.likethesalad.android.resources.extensions.get
 import com.likethesalad.android.resources.extensions.name
 import com.likethesalad.android.templates.common.configuration.StemConfiguration
@@ -10,7 +9,7 @@ import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateI
 import java.io.File
 
 class TemplatesIdentifierAction2 private constructor(
-    private val localResDirs: List<Collection<File>>,
+    private val stringValues: ValuesStringResources,
     private val outputFile: File,
     private val configuration: StemConfiguration
 ) {
@@ -18,10 +17,10 @@ class TemplatesIdentifierAction2 private constructor(
     companion object {
         fun create(
             stemConfiguration: StemConfiguration,
-            localResources: List<Collection<File>>,
+            stringValues: ValuesStringResources,
             outputFile: File
         ): TemplatesIdentifierAction2 {
-            return TemplatesIdentifierAction2(localResources, outputFile, stemConfiguration)
+            return TemplatesIdentifierAction2(stringValues, outputFile, stemConfiguration)
         }
     }
 
@@ -31,11 +30,10 @@ class TemplatesIdentifierAction2 private constructor(
     }
 
     private fun getTemplatesIdsFromResources(): List<String> {
-        val stringCollection = StringResourceCollector.collectStringResourcesPerValueDir(localResDirs)
         return if (configuration.searchForTemplatesInLanguages()) {
-            getTemplatesFromAllCollections(stringCollection)
+            getTemplatesFromAllCollections(stringValues)
         } else {
-            val mainLanguageResources = stringCollection.get("values")
+            val mainLanguageResources = stringValues.get("values")
             getTemplatesForCollection(mainLanguageResources)
         }
     }
