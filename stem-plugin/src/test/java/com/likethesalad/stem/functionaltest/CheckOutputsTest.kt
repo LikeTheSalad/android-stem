@@ -115,7 +115,6 @@ class CheckOutputsTest : BasePluginTest() {
 
         verifyResultContainsText(
             result, """
-            > Task :$inOutDirName:templatesDebugIdentifier
             > Task :$inOutDirName:gatherDebugStringTemplates
             > Task :$inOutDirName:resolveDebugPlaceholders NO-SOURCE
         """.trimIndent()
@@ -136,7 +135,6 @@ class CheckOutputsTest : BasePluginTest() {
 
         verifyResultContainsText(
             result, """
-            > Task :$projectName:templatesDebugIdentifier
             > Task :$projectName:gatherDebugStringTemplates
             > Task :$projectName:resolveDebugPlaceholders
         """.trimIndent()
@@ -166,7 +164,6 @@ class CheckOutputsTest : BasePluginTest() {
         val result1 = project.runGradle(inOutDirName, commandList)
         verifyResultContainsText(
             result1, """
-            > Task :$inOutDirName:templatesDebugIdentifier
             > Task :$inOutDirName:gatherDebugStringTemplates
             > Task :$inOutDirName:resolveDebugPlaceholders
         """.trimIndent()
@@ -180,7 +177,6 @@ class CheckOutputsTest : BasePluginTest() {
         verifyVariantResults(variantNames, inOutDirName, inOutDirName)
         verifyResultContainsText(
             result2, """
-            > Task :$inOutDirName:templatesDebugIdentifier UP-TO-DATE
             > Task :$inOutDirName:gatherDebugStringTemplates UP-TO-DATE
             > Task :$inOutDirName:resolveDebugPlaceholders UP-TO-DATE
         """.trimIndent()
@@ -198,7 +194,6 @@ class CheckOutputsTest : BasePluginTest() {
         val result1 = project.runGradle(inOutDirName, commandList)
         verifyResultContainsText(
             result1, """
-            > Task :$inOutDirName:templatesDebugIdentifier
             > Task :$inOutDirName:gatherDebugStringTemplates
             > Task :$inOutDirName:resolveDebugPlaceholders
         """.trimIndent()
@@ -218,7 +213,6 @@ class CheckOutputsTest : BasePluginTest() {
         verifyVariantResults(variantNames, inOutDirName, dirName2)
         verifyResultContainsText(
             result2, """
-            > Task :$inOutDirName:templatesDebugIdentifier
             > Task :$inOutDirName:gatherDebugStringTemplates
             > Task :$inOutDirName:resolveDebugPlaceholders
         """.trimIndent()

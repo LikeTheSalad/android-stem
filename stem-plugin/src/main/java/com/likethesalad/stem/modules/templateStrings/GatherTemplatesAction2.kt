@@ -2,9 +2,9 @@ package com.likethesalad.stem.modules.templateStrings
 
 import com.likethesalad.android.protos.StringResource
 import com.likethesalad.android.protos.ValuesStringResources
+import com.likethesalad.android.resources.extensions.get
 import com.likethesalad.android.resources.extensions.name
 import com.likethesalad.android.templates.common.configuration.StemConfiguration
-import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer2
 import com.likethesalad.stem.modules.common.helpers.resources.ResourcesHandler
 import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesModel
 import com.likethesalad.tools.resource.api.android.environment.Language
@@ -18,10 +18,9 @@ class GatherTemplatesAction2(
 
     fun gatherTemplateStrings(
         outputDir: File,
-        stringValues: ValuesStringResources,
-        templateIdsContainer: File
+        stringValues: ValuesStringResources
     ) {
-        val templateIds = getTemplateIds(templateIdsContainer)
+        val templateIds = getTemplatesIdsFromResources(stringValues)
 
         if (templateIds.isEmpty()) {
             return
@@ -55,17 +54,43 @@ class GatherTemplatesAction2(
         }
     }
 
-    private fun getTemplateIds(localTemplateIdsContainer: File): List<String> {
-//        val templateIdsFromDependencies = getTemplateIdsFromDependencies() //todo delete
-        return TemplateItemsSerializer2.deserialize(localTemplateIdsContainer.readText())
+    private fun getTemplatesIdsFromResources(stringValues: ValuesStringResources): List<String> {
+        return if (stemConfiguration.searchForTemplatesInLanguages()) {
+            getTemplatesFromAllCollections(stringValues)
+        } else {
+            val mainLanguageResources = stringValues.get("values")
+            getTemplatesForCollection(mainLanguageResources)
+        }
     }
 
+    private fun getTemplatesFromAllCollections(stringCollection: ValuesStringResources): List<String> {
+        val templates = mutableSetOf<String>()
 
-//    Todo rework
-//    private fun getTemplateIdsFromDependencies(): List<TemplateItem> {
-//        val templatesProviders = TemplatesProviderLoader.load(templatesProviderJarsFinder.templateProviderJars)
-//        return templatesProviders.map { TemplateItemsSerializer.deserialize(it.getTemplates()) }.flatten()
-//    }
+        stringCollection.values.forEach { (_, strings) ->
+            val collectionTemplates = getTemplatesForCollection(strings.strings)
+            templates.addAll(collectionTemplates)
+        }
+
+        return templates.toList()
+    }
+
+    private fun getTemplatesForCollection(stringResources: List<StringResource>?): List<String> {
+        if (stringResources == null) {
+            return emptyList()
+        }
+
+        val templates = filterTemplates(stringResources)
+
+        return templates.map {
+            it.name()
+        }.sorted()
+    }
+
+    private fun filterTemplates(stringResources: Collection<StringResource>): List<StringResource> {
+        return stringResources.filter { stringResource ->
+            stemConfiguration.placeholderRegex.containsMatchIn(stringResource.text)
+        }
+    }
 
     private fun gatheredStringsToTemplateStrings(
         language: Language,

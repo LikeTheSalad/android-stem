@@ -5,7 +5,6 @@ import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.android.build.api.variant.Variant
 import com.likethesalad.android.templates.common.configuration.StemConfiguration
 import com.likethesalad.android.templates.common.plugins.extension.StemExtension
-import com.likethesalad.android.templates.common.tasks.identifier.TemplatesIdentifierTask2
 import com.likethesalad.android.templates.common.tasks.rawcollector.RawStringCollectorTask
 import com.likethesalad.stem.modules.common.helpers.files.OutputStringFileResolver
 import com.likethesalad.stem.modules.common.helpers.resources.AndroidResourcesHandler
@@ -59,15 +58,6 @@ class StemPlugin : Plugin<Project> {
                     it.outputFile.set(project.layout.buildDirectory.file("intermediates/${it.name}/values.bin"))
                 }
 
-            val templatesProvider = taskContainer.register(
-                "templates${variant.name.capitalize()}Identifier",
-                TemplatesIdentifierTask2::class.java,
-                TemplatesIdentifierTask2.Args(stemConfiguration)
-            )
-            templatesProvider.configure {
-                it.stringValuesProto.set(rawStringCollectorTask.flatMap { rawValues -> rawValues.outputFile })
-            }
-
             val gatherTemplatesTask = taskContainer.register(
                 "gather${variant.name.capitalize()}StringTemplates",
                 GatherTemplatesTask2::class.java,
@@ -78,7 +68,6 @@ class StemPlugin : Plugin<Project> {
 
             gatherTemplatesTask.configure {
                 it.stringValuesProto.set(rawStringCollectorTask.flatMap { rawValues -> rawValues.outputFile })
-                it.templateIdsFile.set(templatesProvider.flatMap { identifierTask -> identifierTask.outputFile })
             }
 
             val resolvePlaceholdersTask = taskContainer.register(

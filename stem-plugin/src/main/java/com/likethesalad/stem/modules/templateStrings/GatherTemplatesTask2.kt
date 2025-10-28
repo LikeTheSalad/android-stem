@@ -19,9 +19,6 @@ abstract class GatherTemplatesTask2
     @get:OutputDirectory
     abstract val outDir: DirectoryProperty
 
-    @get:InputFile
-    abstract val templateIdsFile: RegularFileProperty
-
     init {
         outDir.set(project.layout.buildDirectory.dir("intermediates/incremental/$name"))
     }
@@ -36,8 +33,7 @@ abstract class GatherTemplatesTask2
 
         args.gatherTemplatesAction.gatherTemplateStrings(
             outDir.get().asFile,
-            stringValues,
-            templateIdsFile.get().asFile
+            stringValues
         )
     }
 }
