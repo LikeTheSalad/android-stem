@@ -2,7 +2,7 @@ package com.likethesalad.stem.modules.collector
 
 import com.likethesalad.android.protos.Attribute
 import com.likethesalad.android.protos.StringResource
-import com.likethesalad.stem.extensions.get
+import com.likethesalad.stem.tools.extensions.get
 import java.io.File
 import java.nio.file.Paths
 import kotlin.io.path.absolutePathString

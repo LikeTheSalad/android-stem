@@ -2,8 +2,8 @@ package com.likethesalad.stem.modules.templateStrings
 
 import com.likethesalad.android.protos.StringResource
 import com.likethesalad.android.protos.ValuesStringResources
-import com.likethesalad.stem.extensions.get
-import com.likethesalad.stem.extensions.name
+import com.likethesalad.stem.tools.extensions.get
+import com.likethesalad.stem.tools.extensions.name
 import com.likethesalad.stem.configuration.StemConfiguration
 import com.likethesalad.stem.modules.common.helpers.resources.ResourcesHandler
 import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesModel

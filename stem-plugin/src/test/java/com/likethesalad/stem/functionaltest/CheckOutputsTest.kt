@@ -1,10 +1,10 @@
 package com.likethesalad.stem.functionaltest
 
 import com.google.common.truth.Truth
-import com.likethesalad.stem.tools.upperFirst
 import com.likethesalad.stem.functionaltest.testtools.BasePluginTest
 import com.likethesalad.stem.functionaltest.testtools.PlaceholderBlock
 import com.likethesalad.stem.functionaltest.testtools.StemConfigBlock
+import com.likethesalad.stem.tools.extensions.upperFirst
 import com.likethesalad.tools.functional.testing.AndroidTestProject
 import com.likethesalad.tools.functional.testing.android.blocks.AndroidBlockItem
 import com.likethesalad.tools.functional.testing.android.blocks.DefaultConfigAndroidBlockItem

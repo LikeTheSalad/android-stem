@@ -4,7 +4,7 @@ import com.likethesalad.android.protos.StringResource
 import com.likethesalad.android.protos.StringResources
 import com.likethesalad.android.protos.ValuesStringResources
 import com.likethesalad.android.resources.data.ValueDir
-import com.likethesalad.stem.extensions.name
+import com.likethesalad.stem.tools.extensions.name
 import com.likethesalad.stem.modules.collector.xml.AndroidXmlResDocument
 import com.likethesalad.stem.modules.collector.xml.StringXmlResourceExtractor
 import java.io.File
