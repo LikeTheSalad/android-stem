@@ -108,7 +108,7 @@ class StemPlugin : Plugin<Project> {
     private fun getAndroidComponents(project: Project): ApplicationAndroidComponentsExtension {
         val components = project.extensions.getByType(ApplicationAndroidComponentsExtension::class.java)
         if (components.pluginVersion.major < 8) {
-            throw IllegalStateException("Android Stem requires a minimum AGP version of 8.0.0, the current version is: " + components.pluginVersion.version)
+            throw IllegalStateException("Android Stem requires a minimum Android Gradle Plugin version of 8.0.0. The current version is: " + components.pluginVersion)
         }
         return components
     }
