@@ -6,15 +6,14 @@ import com.likethesalad.stem.configuration.StemConfiguration
 import com.likethesalad.stem.modules.collector.task.RawStringCollectorTask
 import com.likethesalad.stem.modules.common.helpers.files.OutputStringFileResolver
 import com.likethesalad.stem.modules.common.helpers.resources.AndroidResourcesHandler
-import com.likethesalad.stem.modules.resolveStrings.ResolvePlaceholdersAction2
-import com.likethesalad.stem.modules.resolveStrings.ResolvePlaceholdersTask2
-import com.likethesalad.stem.modules.resolveStrings.data.ResolvePlaceholdersArgs2
+import com.likethesalad.stem.modules.resolveStrings.ResolvePlaceholdersAction
+import com.likethesalad.stem.modules.resolveStrings.ResolvePlaceholdersTask
+import com.likethesalad.stem.modules.resolveStrings.data.ResolvePlaceholdersArgs
 import com.likethesalad.stem.modules.resolveStrings.resolver.RecursiveLevelDetector
 import com.likethesalad.stem.modules.resolveStrings.resolver.TemplateResolver
-import com.likethesalad.stem.modules.templateStrings.GatherTemplatesAction2
-import com.likethesalad.stem.modules.templateStrings.GatherTemplatesTask2
-import com.likethesalad.stem.modules.templateStrings.data.GatherTemplatesArgs2
-import java.io.File
+import com.likethesalad.stem.modules.templateStrings.GatherTemplatesAction
+import com.likethesalad.stem.modules.templateStrings.GatherTemplatesTask
+import com.likethesalad.stem.modules.templateStrings.data.GatherTemplatesArgs
 import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -30,13 +29,7 @@ class StemPlugin : Plugin<Project> {
 
     companion object {
         private const val EXTENSION_NAME = "androidStem"
-        private val RESOLVED_DIR_BUILD_RELATIVE_PATH = "generated${File.separator}resolved"
-
         private val artifactTypeAttr = Attribute.of("artifactType", String::class.java)
-
-        fun getBuildRelativeResolvedDir(variantName: String): String {
-            return "$RESOLVED_DIR_BUILD_RELATIVE_PATH${File.separator}$variantName"
-        }
     }
 
     override fun apply(project: Project) {
@@ -50,7 +43,6 @@ class StemPlugin : Plugin<Project> {
         val stemProviderConfig = createBucket(project, "stemProvider")
 
         components.onVariants { variant ->
-            val resolvedDir = project.layout.buildDirectory.dir(getBuildRelativeResolvedDir(variant.name))
             val stemProviderClasspath = createClasspath(project, stemProviderConfig, variant.name + "StemProvider")
             val runtimeAttributes = variant.runtimeConfiguration.attributes
             runtimeAttributes.keySet().forEach { key ->
@@ -65,26 +57,27 @@ class StemPlugin : Plugin<Project> {
                 taskContainer.register("${variant.name}RawStringCollector", RawStringCollectorTask::class.java) {
                     it.localResDirs.set(variant.sources.res!!.static)
                     it.libraryResDirs.from(getFilesFromConfiguration(stemProviderClasspath, "android-res"))
-                    it.outputFile.set(project.layout.buildDirectory.file("intermediates/${it.name}/values.bin"))
+                    it.outputFile.set(project.layout.buildDirectory.file("intermediates/stem/${it.name}/values.bin"))
                 }
 
             val gatherTemplatesTask = taskContainer.register(
                 "${variant.name}GatherStringTemplates",
-                GatherTemplatesTask2::class.java,
-                GatherTemplatesArgs2(
-                    GatherTemplatesAction2(androidResourcesHandler, stemConfiguration)
+                GatherTemplatesTask::class.java,
+                GatherTemplatesArgs(
+                    GatherTemplatesAction(androidResourcesHandler, stemConfiguration)
                 )
             )
 
             gatherTemplatesTask.configure {
+                it.outDir.set(project.layout.buildDirectory.dir("intermediates/stem/${it.name}"))
                 it.stringValuesProto.set(rawStringCollectorTask.flatMap { rawValues -> rawValues.outputFile })
             }
 
             val resolvePlaceholdersTask = taskContainer.register(
                 "${variant.name}ResolvePlaceholders",
-                ResolvePlaceholdersTask2::class.java,
-                ResolvePlaceholdersArgs2(
-                    ResolvePlaceholdersAction2(
+                ResolvePlaceholdersTask::class.java,
+                ResolvePlaceholdersArgs(
+                    ResolvePlaceholdersAction(
                         TemplateResolver(
                             stemConfiguration,
                             RecursiveLevelDetector()
@@ -95,12 +88,12 @@ class StemPlugin : Plugin<Project> {
 
             resolvePlaceholdersTask.configure {
                 it.templatesDir.set(gatherTemplatesTask.flatMap { gatherTemplates -> gatherTemplates.outDir })
-                it.outputDir.set(resolvedDir)
+                it.outputDir.set(project.layout.buildDirectory.dir("generated/stem/${variant.name}"))
             }
 
             variant.sources.res?.addGeneratedSourceDirectory(
                 resolvePlaceholdersTask,
-                ResolvePlaceholdersTask2::outputDir
+                ResolvePlaceholdersTask::outputDir
             )
         }
     }

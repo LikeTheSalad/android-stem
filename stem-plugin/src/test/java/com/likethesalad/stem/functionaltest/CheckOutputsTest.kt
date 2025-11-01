@@ -442,14 +442,14 @@ class CheckOutputsTest : BasePluginTest() {
         variantName: String
     ) {
         val projectDir = getTempFile(projectName)
-        val resultDir = File(projectDir, "build/generated/resolved/$variantName")
+        val resultDir = File(projectDir, "build/generated/stem/$variantName")
         Truth.assertThat(resultDir.exists()).isTrue()
         verifyDirsContentsAreEqual(getExpectedOutputDir(outputDirName, variantName), resultDir)
     }
 
     private fun verifyEmptyOutput(projectName: String, variantName: String) {
         val projectDir = getTempFile(projectName)
-        val resultDir = File(projectDir, "build/generated/resolved/$variantName")
+        val resultDir = File(projectDir, "build/generated/stem/$variantName")
         Truth.assertThat(resultDir.exists()).isFalse()
     }
 

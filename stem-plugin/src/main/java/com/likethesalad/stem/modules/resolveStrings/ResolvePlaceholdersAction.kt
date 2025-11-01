@@ -6,7 +6,7 @@ import com.likethesalad.stem.modules.resolveStrings.resolver.TemplateResolver
 import com.likethesalad.tools.resource.api.android.environment.Language
 import java.io.File
 
-class ResolvePlaceholdersAction2(
+class ResolvePlaceholdersAction(
     private val templateResolver: TemplateResolver,
     private val resourcesHandler: ResourcesHandler
 ) {
@@ -41,6 +41,7 @@ class ResolvePlaceholdersAction2(
         return resolvedStrings
     }
 
+    // todo
 //    private fun belongsToLanguage(stringAndroidResource: StringResource, language: Language): Boolean {
 //        return stringAndroidResource.getAndroidScope().language == language
 //    }

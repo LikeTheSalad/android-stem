@@ -19,14 +19,14 @@ class ResolvePlaceholdersActionTest {
     private lateinit var resourcesHandler: ResourcesHandler
     private lateinit var templateResolver: TemplateResolver
 
-    private lateinit var resolvePlaceholdersAction: ResolvePlaceholdersAction2
+    private lateinit var resolvePlaceholdersAction: ResolvePlaceholdersAction
 
     @Before
     fun setUp() {
         resourcesHandler = mockk(relaxUnitFun = true)
         templateResolver = mockk(relaxUnitFun = true)
 
-        resolvePlaceholdersAction = ResolvePlaceholdersAction2(
+        resolvePlaceholdersAction = ResolvePlaceholdersAction(
             templateResolver, resourcesHandler
         )
     }

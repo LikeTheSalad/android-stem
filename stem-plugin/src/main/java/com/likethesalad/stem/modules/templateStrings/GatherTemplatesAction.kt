@@ -2,15 +2,15 @@ package com.likethesalad.stem.modules.templateStrings
 
 import com.likethesalad.android.protos.StringResource
 import com.likethesalad.android.protos.ValuesStringResources
-import com.likethesalad.stem.tools.extensions.get
-import com.likethesalad.stem.tools.extensions.name
 import com.likethesalad.stem.configuration.StemConfiguration
 import com.likethesalad.stem.modules.common.helpers.resources.ResourcesHandler
 import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesModel
+import com.likethesalad.stem.tools.extensions.get
+import com.likethesalad.stem.tools.extensions.name
 import com.likethesalad.tools.resource.api.android.environment.Language
 import java.io.File
 
-class GatherTemplatesAction2(
+class GatherTemplatesAction(
     private val resourcesHandler: ResourcesHandler,
     private val stemConfiguration: StemConfiguration
 ) {
