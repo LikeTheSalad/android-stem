@@ -1,5 +1,0 @@
-<resources>
-    <string name="someString">Some value</string>
-    <string name="someTemplate">Some template holding ${someString}</string>
-    <string name="someTemplate2">Some other template holding ${someString}</string>
-</resources>

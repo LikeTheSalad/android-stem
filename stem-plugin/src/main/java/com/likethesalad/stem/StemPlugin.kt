@@ -4,7 +4,7 @@ import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.android.build.api.variant.Variant
 import com.likethesalad.stem.configuration.StemConfiguration
-import com.likethesalad.stem.modules.collector.RawStringCollectorTask
+import com.likethesalad.stem.modules.collector.task.RawStringCollectorTask
 import com.likethesalad.stem.modules.common.helpers.files.OutputStringFileResolver
 import com.likethesalad.stem.modules.common.helpers.resources.AndroidResourcesHandler
 import com.likethesalad.stem.modules.resolveStrings.ResolvePlaceholdersAction2

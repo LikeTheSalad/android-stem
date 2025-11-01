@@ -1,7 +1,7 @@
-package com.likethesalad.stem.modules.collector
+package com.likethesalad.stem.modules.collector.task
 
 import com.likethesalad.android.protos.ValuesStringResources
-import com.likethesalad.android.resources.StringResourceCollector
+import com.likethesalad.stem.modules.collector.StringResourceCollector
 import com.likethesalad.stem.modules.common.BaseTask
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory

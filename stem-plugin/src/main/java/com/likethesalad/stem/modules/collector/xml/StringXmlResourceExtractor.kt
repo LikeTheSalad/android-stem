@@ -1,4 +1,4 @@
-package com.likethesalad.android.resources.collector
+package com.likethesalad.stem.modules.collector.xml
 
 import com.likethesalad.android.protos.Attribute
 import com.likethesalad.android.protos.StringResource

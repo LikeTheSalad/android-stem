@@ -1,4 +1,4 @@
-package com.likethesalad.android.resources.extensions
+package com.likethesalad.stem.extensions
 
 import com.likethesalad.android.protos.StringResource
 import com.likethesalad.android.protos.ValuesStringResources

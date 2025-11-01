@@ -1,7 +1,7 @@
 package com.likethesalad.stem.modules.resolveStrings.resolver
 
 import com.likethesalad.android.protos.StringResource
-import com.likethesalad.android.resources.extensions.name
+import com.likethesalad.stem.extensions.name
 import com.likethesalad.stem.configuration.StemConfiguration
 import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesModel
 

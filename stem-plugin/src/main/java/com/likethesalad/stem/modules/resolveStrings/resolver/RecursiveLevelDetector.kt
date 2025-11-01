@@ -1,7 +1,7 @@
 package com.likethesalad.stem.modules.resolveStrings.resolver
 
 import com.likethesalad.android.protos.StringResource
-import com.likethesalad.android.resources.extensions.name
+import com.likethesalad.stem.extensions.name
 import javax.inject.Inject
 import javax.inject.Singleton
 

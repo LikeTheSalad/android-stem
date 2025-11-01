@@ -1,4 +1,4 @@
-package com.likethesalad.android.resources.collector
+package com.likethesalad.stem.modules.collector.xml
 
 import java.io.File
 import java.io.StringReader

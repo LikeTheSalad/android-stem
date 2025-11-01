@@ -1,11 +1,11 @@
 plugins {
     alias(libs.plugins.java.library)
     alias(libs.plugins.androidTestTools)
+    alias(libs.plugins.wire)
     id("java-gradle-plugin")
 }
 
 dependencies {
-    implementation(project(":resource-locator"))
     implementation(libs.resourceLocator)
     implementation(libs.gson)
     compileOnly(libs.android.plugin)
@@ -29,4 +29,8 @@ gradlePlugin {
             implementationClass = "com.likethesalad.stem.StemPlugin"
         }
     }
+}
+
+wire {
+    kotlin {}
 }

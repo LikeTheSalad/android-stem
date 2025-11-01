@@ -1,18 +1,18 @@
-package com.likethesalad.android.resources
+package com.likethesalad.stem.modules.collector
 
 import com.likethesalad.android.protos.Attribute
 import com.likethesalad.android.protos.StringResource
-import com.likethesalad.android.resources.extensions.get
+import com.likethesalad.stem.extensions.get
 import java.io.File
 import java.nio.file.Paths
 import kotlin.io.path.absolutePathString
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.fail
+import org.assertj.core.api.Assertions.fail
+import org.junit.Test
 
 class StringResourceCollectorTest {
     companion object {
-        private val ASSETS_DIR = File(Paths.get("src", "test", "assets").absolutePathString())
+        private val ASSETS_DIR = File(Paths.get("src", "test", "assets", "collector").absolutePathString())
     }
 
     @Test
