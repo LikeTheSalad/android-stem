@@ -1,11 +1,9 @@
-package com.likethesalad.stem.resolver
+package com.likethesalad.stem.modules.resolveStrings.resolver
 
 import com.google.common.truth.Truth
 import com.likethesalad.android.protos.StringResource
 import com.likethesalad.stem.tools.extensions.name
 import com.likethesalad.stem.configuration.StemConfiguration
-import com.likethesalad.stem.modules.resolveStrings.resolver.RecursiveLevelDetector
-import com.likethesalad.stem.modules.resolveStrings.resolver.TemplateContainerFinder
 import com.likethesalad.stem.testutils.createForTest
 import com.likethesalad.stem.testutils.named
 import junit.framework.TestCase.fail

@@ -1,15 +1,13 @@
-package com.likethesalad.stem.resolver
+package com.likethesalad.stem.modules.resolveStrings.resolver
 
 import com.google.common.truth.Truth
 import com.likethesalad.android.protos.Attribute
 import com.likethesalad.android.protos.StringResource
-import com.likethesalad.stem.tools.extensions.name
 import com.likethesalad.stem.configuration.StemConfiguration
-import com.likethesalad.stem.modules.resolveStrings.resolver.RecursiveLevelDetector
-import com.likethesalad.stem.modules.resolveStrings.resolver.TemplateResolver
 import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesModel
 import com.likethesalad.stem.testutils.createForTest
 import com.likethesalad.stem.testutils.named
+import com.likethesalad.stem.tools.extensions.name
 import com.likethesalad.tools.resource.api.android.environment.Language
 import io.mockk.spyk
 import io.mockk.verify
@@ -97,7 +95,7 @@ class TemplateResolverTest {
         val first = result.first()
         Truth.assertThat(first.name()).isEqualTo("the_name")
         Truth.assertThat(first.text).isEqualTo("This is the name: The name")
-        Truth.assertThat(first.attributes.map { it.name }).containsExactly(
+        Truth.assertThat(first.attributes.associate { it.name to it.text }).containsExactly(
             "one_attr", "one_value",
             "other_attr", "other value",
             "name", "the_name"

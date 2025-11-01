@@ -1,30 +1,27 @@
-package com.likethesalad.stem.utils
+package com.likethesalad.stem.modules.common.helpers.files
 
 import com.google.common.truth.Truth
 import com.likethesalad.android.protos.Attribute
 import com.likethesalad.android.protos.StringResource
-import com.likethesalad.stem.modules.common.helpers.files.AndroidXmlResDocument
 import com.likethesalad.stem.testutils.named
-import io.mockk.Runs
-import io.mockk.every
-import io.mockk.just
-import io.mockk.mockk
-import io.mockk.spyk
-import io.mockk.verify
+import java.io.StringReader
 import javax.xml.parsers.DocumentBuilderFactory
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
-import org.w3c.dom.DOMException
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
-import org.w3c.dom.NodeList
+import org.xml.sax.InputSource
 
 class AndroidXmlResDocumentTest {
 
     @get:Rule
     val temporaryFolder = TemporaryFolder()
+
+    private val documentBuilderFactory = DocumentBuilderFactory.newInstance().apply { isNamespaceAware = true }
+    private val docBuilder = documentBuilderFactory.newDocumentBuilder()
 
     @Test
     fun checkEmptyConstructor_should_create_resources() {
@@ -45,8 +42,7 @@ class AndroidXmlResDocumentTest {
         document.appendChild(resources)
 
         // When
-        val androidXmlResDocument =
-            AndroidXmlResDocument(document)
+        val androidXmlResDocument = AndroidXmlResDocument(document)
 
         // Then
         Truth.assertThat(androidXmlResDocument.resources).isEqualTo(resources)
@@ -55,106 +51,67 @@ class AndroidXmlResDocumentTest {
     @Test
     fun checkAppend() {
         // Given
-        val itemMock: Element = mockk()
-        val resourcesMock: Element = mockk(relaxed = true)
-        val documentMock: Document = mockk()
-        val nodeListResourcesMock: NodeList = mockk()
-        every { nodeListResourcesMock.length }.returns(1)
-        every { nodeListResourcesMock.item(0) }.returns(resourcesMock)
-        every { documentMock.getElementsByTagName("resources") }.returns(nodeListResourcesMock)
+        val stringItem = createXmlElement("<string>some string</string>")
 
-        val androidXmlResDocument =
-            AndroidXmlResDocument(
-                documentMock
-            )
+        val androidXmlResDocument = createDocument("<resources></resources>")
 
         // When
-        androidXmlResDocument.append(itemMock)
+        androidXmlResDocument.append(stringItem)
 
         // Then
-        verify { resourcesMock.appendChild(itemMock) }
-        verify(exactly = 0) { documentMock.importNode(any(), any()) }
-    }
-
-    @Test
-    fun checkAppend_importNode() {
-        // Given
-        val itemMock: Element = mockk()
-        val importedItemMock: Element = mockk()
-        val resourcesMock: Element = mockk(relaxed = true)
-        val documentMock: Document = mockk()
-        val nodeListResourcesMock: NodeList = mockk()
-        every { documentMock.importNode(itemMock, true) }.returns(importedItemMock)
-        every { nodeListResourcesMock.length }.returns(1)
-        every { nodeListResourcesMock.item(0) }.returns(resourcesMock)
-        every { documentMock.getElementsByTagName("resources") }.returns(nodeListResourcesMock)
-        every { resourcesMock.appendChild(itemMock) } throws DOMException(0, "")
-
-        val androidXmlResDocument =
-            AndroidXmlResDocument(
-                documentMock
-            )
-
-        // When
-        androidXmlResDocument.append(itemMock)
-
-        // Then
-        verify { resourcesMock.appendChild(importedItemMock) }
-        verify(exactly = 1) { documentMock.importNode(itemMock, true) }
+        assertThat(androidXmlResDocument.getStringList().length).isEqualTo(1)
     }
 
     @Test
     fun checkAppendStringResource() {
         // Given
-        val stringResourceModel =
-            StringResource.named(
-                "some_name",
-                "some content"
-            )
-        val androidXmlResDocumentSpy: AndroidXmlResDocument = spyk(
-            AndroidXmlResDocument()
+        val stringResourceModel = StringResource.named(
+            "some_name",
+            "some content"
         )
-        every { androidXmlResDocumentSpy.append(any()) } just Runs
+        val androidXmlResDocument = createDocument("<resources></resources>")
 
         // When
-        androidXmlResDocumentSpy.appendStringResource(stringResourceModel)
+        androidXmlResDocument.appendStringResource(stringResourceModel)
 
         // Then
-        verify { androidXmlResDocumentSpy.append(any()) }
+        assertThat(androidXmlResDocument.getStringList().length).isEqualTo(1)
     }
 
     @Test
     fun checkAppendAll() {
         // Given
-        val androidXmlResDocumentSpy: AndroidXmlResDocument = spyk(
-            AndroidXmlResDocument()
+        val sourceDocument = createDocument(
+            """
+            <resources>
+                <string>some string</string>
+                <string>some other string</string>
+            </resources>
+        """.trimIndent()
         )
-        val nodeList: NodeList = mockk()
-        every { nodeList.length }.returns(4)
-        every { nodeList.item(any()) }.returns(mockk())
-        every { androidXmlResDocumentSpy.append(any()) } just Runs
+        val destDocument = createDocument("<resources></resources>")
 
         // When
-        androidXmlResDocumentSpy.appendAll(nodeList)
+        destDocument.appendAll(sourceDocument.getStringList())
 
         // Then
-        verify(exactly = 4) { androidXmlResDocumentSpy.append(any()) }
+        assertThat(destDocument.getStringList().length).isEqualTo(2)
     }
 
     @Test
     fun checkAppendAllStringResources() {
         // Given
-        val androidXmlResDocumentSpy: AndroidXmlResDocument = spyk(
-            AndroidXmlResDocument()
+        val androidXmlResDocument = createDocument("<resources></resources>")
+        val stringResources = listOf(
+            StringResource.named("one string", "one value"),
+            StringResource.named("another string", "another value")
         )
-        val stringResources = listOf<StringResource>(mockk(), mockk(), mockk(), mockk(), mockk())
-        every { androidXmlResDocumentSpy.appendStringResource(any()) } just Runs
 
         // When
-        androidXmlResDocumentSpy.appendAllStringResources(stringResources)
+        androidXmlResDocument.appendAllStringResources(stringResources)
 
         // Then
-        verify(exactly = 5) { androidXmlResDocumentSpy.appendStringResource(any()) }
+        assertThat(androidXmlResDocument.getStringList().length).isEqualTo(2)
     }
 
     @Test
@@ -339,5 +296,15 @@ class AndroidXmlResDocumentTest {
         node.setAttribute("name", name)
         node.textContent = content
         return node
+    }
+
+    private fun createDocument(contents: String): AndroidXmlResDocument {
+        val xmlInput = InputSource(StringReader(contents))
+        return AndroidXmlResDocument(docBuilder.parse(xmlInput))
+    }
+
+    private fun createXmlElement(contents: String): Element {
+        val reader = StringReader(contents)
+        return docBuilder.parse(InputSource(reader)).documentElement
     }
 }

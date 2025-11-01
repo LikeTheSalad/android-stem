@@ -20,5 +20,5 @@ fun StringResource.Companion.named(
     val finalAttributes = mutableListOf<Attribute>()
     finalAttributes.add(Attribute("name", name))
     finalAttributes.addAll(attributes)
-    return StringResource(text, attributes)
+    return StringResource(text, finalAttributes)
 }

@@ -1,12 +1,11 @@
-package com.likethesalad.stem.data
+package com.likethesalad.stem.modules.common.helpers.files
 
 import com.google.common.truth.Truth
-import com.likethesalad.stem.modules.common.helpers.files.OutputStringFileResolver
+import java.io.File
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
-import java.io.File
 
 class OutputStringFileResolverTest {
 
@@ -67,7 +66,7 @@ class OutputStringFileResolverTest {
         )
         assertTemplateStringsFilePath(
             templatesDir,
-            "-es",
+            "es",
             "templates/templates-es.json"
         )
     }

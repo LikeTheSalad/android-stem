@@ -15,6 +15,9 @@ class OutputStringFileResolver {
     }
 
     fun getTemplateStringsFile(dir: File, suffix: String): File {
+        if (suffix.isEmpty()) {
+            return File(dir, "$TEMPLATE_BASE_FILE_NAME.json")
+        }
         return File(dir, "$TEMPLATE_BASE_FILE_NAME-$suffix.json")
     }
 }

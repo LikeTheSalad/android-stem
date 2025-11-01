@@ -1,20 +1,14 @@
-package com.likethesalad.stem.utils
+package com.likethesalad.stem.modules.common.helpers.resources.utils
 
 import com.google.common.truth.Truth
 import com.likethesalad.android.protos.Attribute
 import com.likethesalad.android.protos.StringResource
-import com.likethesalad.stem.modules.common.helpers.resources.utils.XmlUtils
 import com.likethesalad.stem.testutils.named
-import com.likethesalad.tools.resource.api.android.environment.Language
-import com.likethesalad.tools.resource.api.android.environment.Variant
-import com.likethesalad.tools.resource.api.android.impl.AndroidResourceScope
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Test
 
 class XmlUtilsTest {
-
-    private val scope = AndroidResourceScope(Variant.Default, Language.Default)
 
     @Test
     fun checkStringResourceModelToElement() {
@@ -87,7 +81,7 @@ class XmlUtilsTest {
                 "some content",
                 listOf(
                     Attribute("extra", "some extra attr", null),
-                    Attribute("someNsKey", "some extra attr", namespaceValue)
+                    Attribute("someNsKey", "Some namespaced value", namespaceValue)
                 )
             )
         val nsNameProvider = mockk<XmlUtils.NamespaceNameProvider>()

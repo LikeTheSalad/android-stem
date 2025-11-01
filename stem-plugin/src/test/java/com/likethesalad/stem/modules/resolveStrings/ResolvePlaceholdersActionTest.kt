@@ -1,9 +1,8 @@
-package com.likethesalad.stem.tasks.actions
+package com.likethesalad.stem.modules.resolveStrings
 
 import com.likethesalad.android.protos.Attribute
 import com.likethesalad.android.protos.StringResource
 import com.likethesalad.stem.modules.common.helpers.resources.ResourcesHandler
-import com.likethesalad.stem.modules.resolveStrings.ResolvePlaceholdersAction2
 import com.likethesalad.stem.modules.resolveStrings.resolver.TemplateResolver
 import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesModel
 import com.likethesalad.stem.testutils.named
