@@ -69,7 +69,7 @@ class StemPlugin : Plugin<Project> {
                 }
 
             val gatherTemplatesTask = taskContainer.register(
-                "gather${variant.name.capitalize()}StringTemplates",
+                "${variant.name}GatherStringTemplates",
                 GatherTemplatesTask2::class.java,
                 GatherTemplatesArgs2(
                     GatherTemplatesAction2(androidResourcesHandler, stemConfiguration)
@@ -81,7 +81,7 @@ class StemPlugin : Plugin<Project> {
             }
 
             val resolvePlaceholdersTask = taskContainer.register(
-                "resolve${variant.name.capitalize()}Placeholders",
+                "${variant.name}ResolvePlaceholders",
                 ResolvePlaceholdersTask2::class.java,
                 ResolvePlaceholdersArgs2(
                     ResolvePlaceholdersAction2(

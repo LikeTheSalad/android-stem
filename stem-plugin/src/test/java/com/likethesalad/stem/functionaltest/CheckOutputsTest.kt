@@ -114,8 +114,8 @@ class CheckOutputsTest : BasePluginTest() {
 
         verifyResultContainsText(
             result, """
-            > Task :$inOutDirName:gatherDebugStringTemplates
-            > Task :$inOutDirName:resolveDebugPlaceholders NO-SOURCE
+            > Task :$inOutDirName:debugGatherStringTemplates
+            > Task :$inOutDirName:debugResolvePlaceholders NO-SOURCE
         """.trimIndent()
         )
         verifyEmptyOutput(inOutDirName, "debug")
@@ -134,8 +134,8 @@ class CheckOutputsTest : BasePluginTest() {
 
         verifyResultContainsText(
             result, """
-            > Task :$projectName:gatherDebugStringTemplates
-            > Task :$projectName:resolveDebugPlaceholders
+            > Task :$projectName:debugGatherStringTemplates
+            > Task :$projectName:debugResolvePlaceholders
         """.trimIndent()
         )
         verifyVariantResults(variantNames, projectName, withTemplatesDir)
@@ -163,8 +163,8 @@ class CheckOutputsTest : BasePluginTest() {
         val result1 = project.runGradle(inOutDirName, commandList)
         verifyResultContainsText(
             result1, """
-            > Task :$inOutDirName:gatherDebugStringTemplates
-            > Task :$inOutDirName:resolveDebugPlaceholders
+            > Task :$inOutDirName:debugGatherStringTemplates
+            > Task :$inOutDirName:debugResolvePlaceholders
         """.trimIndent()
         )
 
@@ -176,8 +176,8 @@ class CheckOutputsTest : BasePluginTest() {
         verifyVariantResults(variantNames, inOutDirName, inOutDirName)
         verifyResultContainsText(
             result2, """
-            > Task :$inOutDirName:gatherDebugStringTemplates UP-TO-DATE
-            > Task :$inOutDirName:resolveDebugPlaceholders UP-TO-DATE
+            > Task :$inOutDirName:debugGatherStringTemplates UP-TO-DATE
+            > Task :$inOutDirName:debugResolvePlaceholders UP-TO-DATE
         """.trimIndent()
         )
     }
@@ -193,8 +193,8 @@ class CheckOutputsTest : BasePluginTest() {
         val result1 = project.runGradle(inOutDirName, commandList)
         verifyResultContainsText(
             result1, """
-            > Task :$inOutDirName:gatherDebugStringTemplates
-            > Task :$inOutDirName:resolveDebugPlaceholders
+            > Task :$inOutDirName:debugGatherStringTemplates
+            > Task :$inOutDirName:debugResolvePlaceholders
         """.trimIndent()
         )
 
@@ -212,8 +212,8 @@ class CheckOutputsTest : BasePluginTest() {
         verifyVariantResults(variantNames, inOutDirName, dirName2)
         verifyResultContainsText(
             result2, """
-            > Task :$inOutDirName:gatherDebugStringTemplates
-            > Task :$inOutDirName:resolveDebugPlaceholders
+            > Task :$inOutDirName:debugGatherStringTemplates
+            > Task :$inOutDirName:debugResolvePlaceholders
         """.trimIndent()
         )
     }
