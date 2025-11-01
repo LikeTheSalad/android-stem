@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
-    id "com.likethesalad.stem"
+    id("com.likethesalad.stem")
 }
 
 android {

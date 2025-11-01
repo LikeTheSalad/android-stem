@@ -6,11 +6,8 @@ plugins {
 }
 
 dependencies {
-    embedded project(':templates-provider-plugin')
     implementation project(':common-tools')
     implementation project(':resource-locator')
-    implementation libs.gson
-    implementation libs.classGraph
     compileOnly libs.android.plugin
     testImplementation libs.unitTesting
     testImplementation libs.zip4j
@@ -34,10 +31,6 @@ gradlePlugin {
         placeholderResolverPlugin {
             id = 'com.likethesalad.stem'
             implementationClass = 'com.likethesalad.stem.StemPlugin'
-        }
-        templatesProvider {
-            id = 'com.likethesalad.stem-library'
-            implementationClass = 'com.likethesalad.android.templates.provider.TemplatesProviderPlugin'
         }
     }
 }
