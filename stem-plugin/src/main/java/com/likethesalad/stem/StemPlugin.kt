@@ -42,7 +42,7 @@ class StemPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         androidExtension = project.extensions.getByType(ApplicationExtension::class.java)
         extension = createExtension(project)
-        val components = project.extensions.getByType(ApplicationAndroidComponentsExtension::class.java)
+        val components = getAndroidComponents(project)
         val taskContainer = project.tasks
         val outputStringFileResolver = OutputStringFileResolver()
         val androidResourcesHandler = AndroidResourcesHandler(outputStringFileResolver)
@@ -98,10 +98,19 @@ class StemPlugin : Plugin<Project> {
                 it.outputDir.set(resolvedDir)
             }
 
-            variant.sources.res?.let { res ->
-                res.addGeneratedSourceDirectory(resolvePlaceholdersTask, ResolvePlaceholdersTask2::outputDir)
-            }
+            variant.sources.res?.addGeneratedSourceDirectory(
+                resolvePlaceholdersTask,
+                ResolvePlaceholdersTask2::outputDir
+            )
         }
+    }
+
+    private fun getAndroidComponents(project: Project): ApplicationAndroidComponentsExtension {
+        val components = project.extensions.getByType(ApplicationAndroidComponentsExtension::class.java)
+        if (components.pluginVersion.major < 8) {
+            throw IllegalStateException("Android Stem requires a minimum AGP version of 8.0.0, the current version is: " + components.pluginVersion.version)
+        }
+        return components
     }
 
     private fun <T> copyAttribute(key: Attribute<T>, from: AttributeContainer, into: AttributeContainer) {
