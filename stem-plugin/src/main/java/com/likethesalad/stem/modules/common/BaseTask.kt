@@ -1,6 +1,6 @@
-package com.likethesalad.android.templates.common.tasks
+package com.likethesalad.stem.modules.common
 
-import com.likethesalad.android.templates.common.utils.CommonConstants
+import com.likethesalad.stem.tools.CommonConstants
 import org.gradle.api.DefaultTask
 
 open class BaseTask : DefaultTask() {

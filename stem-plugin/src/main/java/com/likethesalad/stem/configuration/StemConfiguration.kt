@@ -1,6 +1,6 @@
-package com.likethesalad.android.templates.common.configuration
+package com.likethesalad.stem.configuration
 
-import com.likethesalad.android.templates.common.plugins.extension.StemExtension
+import com.likethesalad.stem.StemExtension
 import java.util.function.Supplier
 import java.util.regex.Pattern
 

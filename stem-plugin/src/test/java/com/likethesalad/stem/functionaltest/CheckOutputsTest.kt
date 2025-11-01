@@ -1,7 +1,7 @@
 package com.likethesalad.stem.functionaltest
 
 import com.google.common.truth.Truth
-import com.likethesalad.android.templates.common.utils.upperFirst
+import com.likethesalad.stem.tools.upperFirst
 import com.likethesalad.stem.functionaltest.testtools.BasePluginTest
 import com.likethesalad.stem.functionaltest.testtools.PlaceholderBlock
 import com.likethesalad.stem.functionaltest.testtools.StemConfigBlock

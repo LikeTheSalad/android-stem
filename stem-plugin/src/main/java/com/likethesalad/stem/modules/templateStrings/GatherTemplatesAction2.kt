@@ -4,7 +4,7 @@ import com.likethesalad.android.protos.StringResource
 import com.likethesalad.android.protos.ValuesStringResources
 import com.likethesalad.android.resources.extensions.get
 import com.likethesalad.android.resources.extensions.name
-import com.likethesalad.android.templates.common.configuration.StemConfiguration
+import com.likethesalad.stem.configuration.StemConfiguration
 import com.likethesalad.stem.modules.common.helpers.resources.ResourcesHandler
 import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesModel
 import com.likethesalad.tools.resource.api.android.environment.Language

@@ -4,7 +4,7 @@ import com.google.common.truth.Truth
 import com.likethesalad.android.protos.Attribute
 import com.likethesalad.android.protos.StringResource
 import com.likethesalad.android.resources.extensions.name
-import com.likethesalad.android.templates.common.configuration.StemConfiguration
+import com.likethesalad.stem.configuration.StemConfiguration
 import com.likethesalad.stem.modules.resolveStrings.resolver.RecursiveLevelDetector
 import com.likethesalad.stem.modules.resolveStrings.resolver.TemplateResolver
 import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesModel

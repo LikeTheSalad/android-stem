@@ -9,7 +9,6 @@ import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesMode
 import com.likethesalad.tools.resource.api.android.environment.Language
 import java.io.File
 
-
 class AndroidResourcesHandler(
     private val outputStringFileResolver: OutputStringFileResolver
 ) : ResourcesHandler {

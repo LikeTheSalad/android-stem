@@ -2,7 +2,7 @@ package com.likethesalad.stem.testutils
 
 import com.likethesalad.android.protos.Attribute
 import com.likethesalad.android.protos.StringResource
-import com.likethesalad.android.templates.common.configuration.StemConfiguration
+import com.likethesalad.stem.configuration.StemConfiguration
 
 fun StemConfiguration.Companion.createForTest(
     placeholderStart: String = "\${",

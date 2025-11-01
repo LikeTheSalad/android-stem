@@ -3,7 +3,7 @@ package com.likethesalad.stem.resolver
 import com.google.common.truth.Truth
 import com.likethesalad.android.protos.StringResource
 import com.likethesalad.android.resources.extensions.name
-import com.likethesalad.android.templates.common.configuration.StemConfiguration
+import com.likethesalad.stem.configuration.StemConfiguration
 import com.likethesalad.stem.modules.resolveStrings.resolver.RecursiveLevelDetector
 import com.likethesalad.stem.modules.resolveStrings.resolver.TemplateContainerFinder
 import com.likethesalad.stem.testutils.createForTest

@@ -1,8 +1,8 @@
 package com.likethesalad.stem.modules.templateStrings
 
 import com.likethesalad.android.protos.ValuesStringResources
-import com.likethesalad.android.templates.common.tasks.BaseTask
-import com.likethesalad.android.templates.common.utils.DirectoryUtils
+import com.likethesalad.stem.modules.common.BaseTask
+import com.likethesalad.stem.tools.DirectoryUtils
 import com.likethesalad.stem.modules.templateStrings.data.GatherTemplatesArgs2
 import javax.inject.Inject
 import org.gradle.api.file.DirectoryProperty

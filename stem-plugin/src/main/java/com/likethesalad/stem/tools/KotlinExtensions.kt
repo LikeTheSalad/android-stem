@@ -1,4 +1,4 @@
-package com.likethesalad.android.templates.common.utils
+package com.likethesalad.stem.tools
 
 import java.util.Locale
 

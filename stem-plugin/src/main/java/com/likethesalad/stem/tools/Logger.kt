@@ -1,4 +1,4 @@
-package com.likethesalad.android.templates.common.utils
+package com.likethesalad.stem.tools
 
 class Logger private constructor(
     private val gradleLogger: org.gradle.api.logging.Logger,
@@ -9,7 +9,7 @@ class Logger private constructor(
         private var gradleLogger: org.gradle.api.logging.Logger? = null
 
         fun init(gradleLogger: org.gradle.api.logging.Logger) {
-            this.gradleLogger = gradleLogger
+            Companion.gradleLogger = gradleLogger
         }
 
         fun create(hostClass: Class<out Any>): Logger {

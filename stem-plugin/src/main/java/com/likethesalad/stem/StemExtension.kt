@@ -1,4 +1,4 @@
-package com.likethesalad.android.templates.common.plugins.extension
+package com.likethesalad.stem
 
 import javax.inject.Inject
 import org.gradle.api.Action

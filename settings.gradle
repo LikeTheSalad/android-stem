@@ -39,5 +39,4 @@ buildscript {
 }
 rootProject.name = 'stem'
 include ':stem-plugin'
-include ':common-tools'
 include ':resource-locator'

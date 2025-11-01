@@ -1,6 +1,6 @@
 package com.likethesalad.stem.modules.resolveStrings.resolver
 
-import com.likethesalad.android.templates.common.configuration.StemConfiguration
+import com.likethesalad.stem.configuration.StemConfiguration
 import java.util.regex.Pattern
 
 class TemplateContainerFinder(

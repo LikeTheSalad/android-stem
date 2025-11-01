@@ -1,8 +1,8 @@
-package com.likethesalad.android.templates.common.tasks.rawcollector
+package com.likethesalad.stem.modules.collector
 
 import com.likethesalad.android.protos.ValuesStringResources
 import com.likethesalad.android.resources.StringResourceCollector
-import com.likethesalad.android.templates.common.tasks.BaseTask
+import com.likethesalad.stem.modules.common.BaseTask
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
 import org.gradle.api.file.RegularFileProperty
