@@ -1,4 +1,4 @@
-package com.likethesalad.android.resources.data
+package com.likethesalad.stem.modules.collector.data
 
 import java.io.File
 

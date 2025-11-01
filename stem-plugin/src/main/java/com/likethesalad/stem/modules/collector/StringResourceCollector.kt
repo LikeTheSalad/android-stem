@@ -3,7 +3,7 @@ package com.likethesalad.stem.modules.collector
 import com.likethesalad.android.protos.StringResource
 import com.likethesalad.android.protos.StringResources
 import com.likethesalad.android.protos.ValuesStringResources
-import com.likethesalad.android.resources.data.ValueDir
+import com.likethesalad.stem.modules.collector.data.ValueDir
 import com.likethesalad.stem.modules.collector.xml.StringXmlResourceExtractor
 import com.likethesalad.stem.modules.common.helpers.files.AndroidXmlResDocument
 import com.likethesalad.stem.tools.extensions.name
