@@ -2,7 +2,6 @@ package com.likethesalad.stem
 
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
-import com.android.build.api.variant.Variant
 import com.likethesalad.stem.configuration.StemConfiguration
 import com.likethesalad.stem.modules.collector.task.RawStringCollectorTask
 import com.likethesalad.stem.modules.common.helpers.files.OutputStringFileResolver
@@ -20,7 +19,9 @@ import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ArtifactView
+import org.gradle.api.artifacts.Configuration
 import org.gradle.api.attributes.Attribute
+import org.gradle.api.attributes.AttributeContainer
 import org.gradle.api.file.FileCollection
 
 class StemPlugin : Plugin<Project> {
@@ -46,14 +47,24 @@ class StemPlugin : Plugin<Project> {
         val outputStringFileResolver = OutputStringFileResolver()
         val androidResourcesHandler = AndroidResourcesHandler(outputStringFileResolver)
         val stemConfiguration = StemConfiguration.create(extension)
+        val stemProviderConfig = createBucket(project, "stemProvider")
 
         components.onVariants { variant ->
             val resolvedDir = project.layout.buildDirectory.dir(getBuildRelativeResolvedDir(variant.name))
+            val stemProviderClasspath = createClasspath(project, stemProviderConfig, variant.name + "StemProvider")
+            val runtimeAttributes = variant.runtimeConfiguration.attributes
+            runtimeAttributes.keySet().forEach { key ->
+                copyAttribute(
+                    key,
+                    runtimeAttributes,
+                    stemProviderClasspath.attributes
+                )
+            }
 
             val rawStringCollectorTask =
                 taskContainer.register("${variant.name}RawStringCollector", RawStringCollectorTask::class.java) {
                     it.localResDirs.set(variant.sources.res!!.static)
-                    it.libraryResDirs.from(getFilesFromConfiguration(variant, "android-res"))
+                    it.libraryResDirs.from(getFilesFromConfiguration(stemProviderClasspath, "android-res"))
                     it.outputFile.set(project.layout.buildDirectory.file("intermediates/${it.name}/values.bin"))
                 }
 
@@ -93,12 +104,33 @@ class StemPlugin : Plugin<Project> {
         }
     }
 
+    private fun <T> copyAttribute(key: Attribute<T>, from: AttributeContainer, into: AttributeContainer) {
+        from.getAttribute(key)?.let {
+            into.attribute(key, it)
+        }
+    }
+
+    private fun createBucket(project: Project, name: String): Configuration {
+        return project.configurations.create(name) {
+            it.isCanBeResolved = false
+            it.isCanBeConsumed = false
+        }
+    }
+
+    private fun createClasspath(project: Project, bucket: Configuration, name: String): Configuration {
+        return project.configurations.create(name) {
+            it.extendsFrom(bucket)
+            it.isCanBeResolved = true
+            it.isCanBeConsumed = false
+        }
+    }
+
     private fun createExtension(project: Project): StemExtension {
         return project.extensions.create(EXTENSION_NAME, StemExtension::class.java)
     }
 
-    private fun getFilesFromConfiguration(variant: Variant, artifactType: String): FileCollection {
-        return variant.runtimeConfiguration.incoming
+    private fun getFilesFromConfiguration(from: Configuration, artifactType: String): FileCollection {
+        return from.incoming
             .artifactView(getAndroidArtifactViewAction(artifactType))
             .artifacts
             .artifactFiles

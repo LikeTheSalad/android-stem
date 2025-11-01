@@ -24,7 +24,6 @@ class CheckOutputsTest : BasePluginTest() {
 
     companion object {
         private const val RESOLVER_PLUGIN_ID = "com.likethesalad.stem"
-        private const val PROVIDER_PLUGIN_ID = "com.likethesalad.stem-library"
     }
 
     private val inputAssetsProvider = TestAssetsProvider("inputs")
@@ -280,14 +279,13 @@ class CheckOutputsTest : BasePluginTest() {
         // Create library
         val libName = "mylibrary"
         val libDescriptor = createAndroidLibProjectDescriptor(libName)
-        libDescriptor.pluginsBlock.addPlugin(GradlePluginDeclaration(PROVIDER_PLUGIN_ID))
         libDescriptor.dependenciesBlock.addDependency("implementation 'com.android.support:recyclerview-v7:28.0.0'")
 
         // Set up app
         val appName = "with_library"
         val appDescriptor = createAndroidAppProjectDescriptor(
             appName,
-            dependencies = listOf("implementation project(':$libName')")
+            dependencies = listOf("stemProvider project(':$libName')")
         )
         val project = createProject(libDescriptor, appDescriptor)
 
@@ -299,14 +297,13 @@ class CheckOutputsTest : BasePluginTest() {
         // Create library
         val libName = "mylibrary_with_namespaces"
         val libDescriptor = createAndroidLibProjectDescriptor(libName)
-        libDescriptor.pluginsBlock.addPlugin(GradlePluginDeclaration(PROVIDER_PLUGIN_ID))
         libDescriptor.dependenciesBlock.addDependency("implementation 'com.android.support:recyclerview-v7:28.0.0'")
 
         // Set up app
         val appName = "with_library_with_namespaces"
         val appDescriptor = createAndroidAppProjectDescriptor(
             appName,
-            dependencies = listOf("implementation project(':$libName')")
+            dependencies = listOf("stemProvider project(':$libName')")
         )
         val project = createProject(libDescriptor, appDescriptor)
 
@@ -318,7 +315,7 @@ class CheckOutputsTest : BasePluginTest() {
         val appName = "with_aar_file_library"
         val appDescriptor = createAndroidAppProjectDescriptor(
             appName,
-            dependencies = listOf("implementation fileTree(dir: 'src/libs', include: ['*.aar'])")
+            dependencies = listOf("stemProvider fileTree(dir: 'src/libs', include: ['*.aar'])")
         )
 
         runInputOutputComparisonTest(createProject(appDescriptor), appName, listOf("debug"))
@@ -329,15 +326,14 @@ class CheckOutputsTest : BasePluginTest() {
         // Create library
         val libName = "my_local_library"
         val libDescriptor = createAndroidLibProjectDescriptor(libName)
-        libDescriptor.pluginsBlock.addPlugin(GradlePluginDeclaration(PROVIDER_PLUGIN_ID))
 
         // Set up app
         val appName = "with_aar_and_local_libraries"
         val appDescriptor = createAndroidAppProjectDescriptor(
             appName,
             dependencies = listOf(
-                "implementation fileTree(dir: 'src/libs', include: ['*.aar'])",
-                "implementation project(':$libName')"
+                "stemProvider fileTree(dir: 'src/libs', include: ['*.aar'])",
+                "stemProvider project(':$libName')"
             )
         )
         val project = createProject(libDescriptor, appDescriptor)
@@ -350,27 +346,21 @@ class CheckOutputsTest : BasePluginTest() {
         // Create library
         val libName1 = "my_first_library"
         val libName2 = "my_other_library"
-        val libDescriptor1 = createProviderLibDescriptor(libName1)
-        val libDescriptor2 = createProviderLibDescriptor(libName2)
+        val libDescriptor1 = createAndroidLibProjectDescriptor(libName1)
+        val libDescriptor2 = createAndroidLibProjectDescriptor(libName2)
 
         // Set up app
         val appName = "with_multiple_libraries"
         val appDescriptor = createAndroidAppProjectDescriptor(
             appName,
             dependencies = listOf(
-                "implementation project(':$libName1')",
-                "implementation project(':$libName2')"
+                "stemProvider project(':$libName1')",
+                "stemProvider project(':$libName2')"
             )
         )
         val project = createProject(libDescriptor1, libDescriptor2, appDescriptor)
 
         runInputOutputComparisonTest(project, appName, listOf("debug"))
-    }
-
-    private fun createProviderLibDescriptor(libName: String): AndroidLibProjectDescriptor {
-        val libDescriptor = createAndroidLibProjectDescriptor(libName)
-        libDescriptor.pluginsBlock.addPlugin(GradlePluginDeclaration(PROVIDER_PLUGIN_ID))
-        return libDescriptor
     }
 
     private fun runInputOutputComparisonTest(
