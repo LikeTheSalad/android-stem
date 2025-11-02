@@ -60,7 +60,7 @@ class StemPlugin : Plugin<Project> {
             val rawStringCollectorTask =
                 taskContainer.register("${variant.name}RawStringCollector", RawStringCollectorTask::class.java) {
                     it.localResDirs.set(variant.sources.res!!.static)
-                    it.libraryResDirs.from(getFilesFromConfiguration(stemProviderClasspath, "android-res"))
+                    it.libraryResDirs.from(getResDirsFromConfiguration(stemProviderClasspath))
                     it.outputFile.set(project.layout.buildDirectory.file("intermediates/stem/${it.name}/values.bin"))
                 }
 
@@ -119,13 +119,6 @@ class StemPlugin : Plugin<Project> {
         }
     }
 
-    private fun createBucket(project: Project, name: String): Configuration {
-        return project.configurations.create(name) {
-            it.isCanBeResolved = false
-            it.isCanBeConsumed = false
-        }
-    }
-
     private fun createClasspath(project: Project, bucket: Configuration, name: String): Configuration {
         return project.configurations.create(name) {
             it.extendsFrom(bucket)
@@ -138,18 +131,18 @@ class StemPlugin : Plugin<Project> {
         return project.extensions.create(EXTENSION_NAME, StemExtension::class.java)
     }
 
-    private fun getFilesFromConfiguration(from: Configuration, artifactType: String): FileCollection {
+    private fun getResDirsFromConfiguration(from: Configuration): FileCollection {
         return from.incoming
-            .artifactView(getAndroidArtifactViewAction(artifactType))
+            .artifactView(getResDirViewAction())
             .artifacts
             .artifactFiles
     }
 
-    private fun getAndroidArtifactViewAction(artifactType: String): Action<ArtifactView.ViewConfiguration> {
+    private fun getResDirViewAction(): Action<ArtifactView.ViewConfiguration> {
         return Action { config ->
             config.isLenient = false
             config.attributes {
-                it.attribute(artifactTypeAttr, artifactType)
+                it.attribute(artifactTypeAttr, "android-res")
             }
         }
     }
