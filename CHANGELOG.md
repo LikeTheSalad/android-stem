@@ -6,7 +6,7 @@ Change Log
 * [BREAKING] Removed `com.likethesalad.stem-library` plugin for libraries. It's replaced by adding those libraries
   as `stemProvider` dependencies on the consumer app.
 * [BREAKING] Minimum Android Gradle Plugin version required: `8.4.0`.
-* [BREAKING] The resolver task have been renamed from `resolve[variant]Placeholders` to `[variant]ResolvePlaceholders`.
+* [BREAKING] The resolver task has been renamed from `resolve[variant]Placeholders` to `[variant]ResolvePlaceholders`.
 * Improved stability by relying on new AGP apis that are better suited to Stem's use case.
 * Improved placeholder extension config via Kotlin scripts.
 
