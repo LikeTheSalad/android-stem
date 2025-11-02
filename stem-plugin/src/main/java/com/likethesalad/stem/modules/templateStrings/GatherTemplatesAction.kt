@@ -30,7 +30,7 @@ class GatherTemplatesAction(
         stringValues.values.forEach { (valueDirName, strings) ->
             val suffix = getSuffix(valueDirName)
             val templates = getTemplatesFromResources(templateIds, strings.strings)
-            val localizedStrings = strings.strings.minus(templates)
+            val localizedStrings = strings.strings
             val stringResources = if (suffix.isEmpty()) {
                 listOf(localizedStrings)
             } else {
@@ -115,28 +115,28 @@ class GatherTemplatesAction(
         strings: List<List<StringResource>>,
         templates: List<StringResource>
     ): Map<String, String> {
-        val stringsMap = stringResourcesToMap(strings)
-        val placeholders = templates.map { stemConfiguration.placeholderRegex.findAll(it.text) }
-            .flatMap { it.toList().map { m -> m.groupValues[1] } }.toSet()
+        val unresolvedPlaceholders = templates.map { stemConfiguration.placeholderRegex.findAll(it.text) }
+            .flatMap { it.toList().map { m -> m.groupValues[1] } }.distinct().toMutableList()
 
         val placeholdersResolved = mutableMapOf<String, String>()
 
-        for (it in placeholders) {
-            placeholdersResolved[it] = stringsMap.getValue(it)
-        }
-
-        return placeholdersResolved
-    }
-
-    private fun stringResourcesToMap(lists: List<List<StringResource>>): Map<String, String> {
-        val map = mutableMapOf<String, String>()
-        for (list in lists) {
-            for (item in list) {
-                if (item.name() !in map) {
-                    map[item.name()] = item.text
+        for (list in strings) {
+            for (string in list) {
+                val name = string.name()
+                if (name in unresolvedPlaceholders) {
+                    placeholdersResolved[name] = string.text
+                    unresolvedPlaceholders.remove(name)
+                    if (unresolvedPlaceholders.isEmpty()) {
+                        break
+                    }
                 }
             }
         }
-        return map
+
+        if (unresolvedPlaceholders.isNotEmpty()) {
+            throw IllegalStateException("Could not find the following placeholder values: $unresolvedPlaceholders")
+        }
+
+        return placeholdersResolved
     }
 }
