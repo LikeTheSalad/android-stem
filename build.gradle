@@ -10,4 +10,4 @@ artifactPublisher {
     tags = ["android", "stem", "xml", "strings"]
 }
 
-description = "This is a Gradle plugin for Android applications which resolves XML string references in other XML strings."
+description = "Resolves Android app's XML string references in other XML strings at compile time."
