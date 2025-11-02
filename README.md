@@ -180,10 +180,12 @@ Output:
     <string name="welcome_message">Welcome to ${app_name}</string>
     <string name="app_version_name">The version for ${app_name} is ${my_version}</string>
 </resources>
+```
 
-        <!-- my_configs.xml -->
+```xml
+<!-- my_configs.xml -->
 <resources>
-<string name="my_version">1.0.0</string>
+    <string name="my_version">1.0.0</string>
 </resources>
 ```
 
@@ -225,8 +227,10 @@ Output:
 ```xml
 <!-- values -->
 <string name="welcome_message">Welcome to Test</string>
+```
 
-        <!-- values-es -->
+```xml
+<!-- values-es -->
 <string name="welcome_message">Bienvenido a Test</string>
 ```
 
@@ -242,10 +246,7 @@ Default:
     <string name="app_name">Test</string>
     <string name="welcome_message">Welcome to ${app_name}</string>
     <string name="app_version_name">The version for ${app_name} is ${my_version}</string>
-</resources>
-
-<resources>
-<string name="my_version">1.0.0</string>
+    <string name="my_version">1.0.0</string>
 </resources>
 ```
 
