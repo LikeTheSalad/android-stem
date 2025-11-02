@@ -14,7 +14,7 @@ dependencies {
     testImplementation(libs.android.plugin)
     testImplementation(libs.assertj)
     testImplementation(libs.mockk)
-    testPluginDependency("com.android.tools.build:gradle:8.12.0")
+    testPluginDependency("com.android.tools.build:gradle:8.13.0")
 }
 
 libConventions {
