@@ -4,10 +4,8 @@ android = "8.11.1"
 
 [libraries]
 resourceLocator = "com.likethesalad.tools.resources:string-android-resource-locator:2.4.0"
-byteBuddy = "net.bytebuddy:byte-buddy:1.17.6"
 android-plugin = { module = "com.android.tools.build:gradle", version.ref = "android" }
 gson = "com.google.code.gson:gson:2.13.1"
-robolectric = "org.robolectric:robolectric:4.15.1"
 xmlUnit = "org.xmlunit:xmlunit-core:2.10.3"
 
 #Testing
