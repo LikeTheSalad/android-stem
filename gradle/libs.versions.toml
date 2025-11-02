@@ -4,7 +4,7 @@ android = "8.11.1"
 
 [libraries]
 android-plugin = { module = "com.android.tools.build:gradle", version.ref = "android" }
-gson = "com.google.code.gson:gson:2.13.1"
+gson = "com.google.code.gson:gson:2.13.2"
 xmlUnit = "org.xmlunit:xmlunit-core:2.10.3"
 
 #Testing
