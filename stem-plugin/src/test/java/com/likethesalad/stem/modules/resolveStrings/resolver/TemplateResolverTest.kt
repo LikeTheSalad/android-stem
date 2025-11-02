@@ -1,6 +1,5 @@
 package com.likethesalad.stem.modules.resolveStrings.resolver
 
-import com.google.common.truth.Truth
 import com.likethesalad.android.protos.Attribute
 import com.likethesalad.android.protos.StringResource
 import com.likethesalad.stem.configuration.StemConfiguration
@@ -10,6 +9,8 @@ import com.likethesalad.stem.testutils.named
 import com.likethesalad.stem.tools.extensions.name
 import io.mockk.spyk
 import io.mockk.verify
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.entry
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -54,13 +55,13 @@ class TemplateResolverTest {
         val result = templateResolver.resolveTemplates(templatesModel)
 
         // Then:
-        Truth.assertThat(result.size).isEqualTo(2)
+        assertThat(result.size).isEqualTo(2)
         val first = result[0]
-        Truth.assertThat(first.name()).isEqualTo("welcome")
-        Truth.assertThat(first.text).isEqualTo("Welcome The name")
+        assertThat(first.name()).isEqualTo("welcome")
+        assertThat(first.text).isEqualTo("Welcome The name")
         val second = result[1]
-        Truth.assertThat(second.name()).isEqualTo("address_input")
-        Truth.assertThat(second.text).isEqualTo("The address is The address for the The name")
+        assertThat(second.name()).isEqualTo("address_input")
+        assertThat(second.text).isEqualTo("The address is The address for the The name")
         verify(exactly = 0) { recursiveLevelDetectorSpy.orderTemplatesByRecursiveLevel(any(), any()) }
     }
 
@@ -90,14 +91,14 @@ class TemplateResolverTest {
         val result = templateResolver.resolveTemplates(templatesModel)
 
         // Then:
-        Truth.assertThat(result.size).isEqualTo(1)
+        assertThat(result.size).isEqualTo(1)
         val first = result.first()
-        Truth.assertThat(first.name()).isEqualTo("the_name")
-        Truth.assertThat(first.text).isEqualTo("This is the name: The name")
-        Truth.assertThat(first.attributes.associate { it.name to it.text }).containsExactly(
-            "one_attr", "one_value",
-            "other_attr", "other value",
-            "name", "the_name"
+        assertThat(first.name()).isEqualTo("the_name")
+        assertThat(first.text).isEqualTo("This is the name: The name")
+        assertThat(first.attributes.associate { it.name to it.text }).containsExactly(
+            entry("name", "the_name"),
+            entry("one_attr", "one_value"),
+            entry("other_attr", "other value")
         )
     }
 
@@ -132,16 +133,16 @@ class TemplateResolverTest {
         val result = templateResolver.resolveTemplates(templatesModel)
 
         // Then:
-        Truth.assertThat(result.size).isEqualTo(3)
+        assertThat(result.size).isEqualTo(3)
         val first = result[0]
-        Truth.assertThat(first.name()).isEqualTo("welcome")
-        Truth.assertThat(first.text).isEqualTo("Welcome The name")
+        assertThat(first.name()).isEqualTo("welcome")
+        assertThat(first.text).isEqualTo("Welcome The name")
         val second = result[1]
-        Truth.assertThat(second.name()).isEqualTo("address_input")
-        Truth.assertThat(second.text).isEqualTo("The address is The address for the The name")
+        assertThat(second.name()).isEqualTo("address_input")
+        assertThat(second.text).isEqualTo("The address is The address for the The name")
         val third = result[2]
-        Truth.assertThat(third.name()).isEqualTo("using_other_template")
-        Truth.assertThat(third.text).isEqualTo("Reused: Welcome The name")
+        assertThat(third.name()).isEqualTo("using_other_template")
+        assertThat(third.text).isEqualTo("Reused: Welcome The name")
         verify { recursiveLevelDetectorSpy.orderTemplatesByRecursiveLevel(any(), any()) }
     }
 }

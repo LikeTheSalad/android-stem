@@ -1,6 +1,5 @@
 package com.likethesalad.stem.modules.common.helpers.files
 
-import com.google.common.truth.Truth
 import com.likethesalad.android.protos.Attribute
 import com.likethesalad.android.protos.StringResource
 import com.likethesalad.stem.testutils.named
@@ -30,8 +29,8 @@ class AndroidXmlResDocumentTest {
 
         // Then
         val resourcesList = androidXmlResDocument.document.getElementsByTagName("resources")
-        Truth.assertThat(resourcesList.length).isEqualTo(1)
-        Truth.assertThat(androidXmlResDocument.document.xmlStandalone).isTrue()
+        assertThat(resourcesList.length).isEqualTo(1)
+        assertThat(androidXmlResDocument.document.xmlStandalone).isTrue()
     }
 
     @Test
@@ -45,7 +44,7 @@ class AndroidXmlResDocumentTest {
         val androidXmlResDocument = AndroidXmlResDocument(document)
 
         // Then
-        Truth.assertThat(androidXmlResDocument.resources).isEqualTo(resources)
+        assertThat(androidXmlResDocument.resources).isEqualTo(resources)
     }
 
     @Test
@@ -132,12 +131,12 @@ class AndroidXmlResDocumentTest {
         val result = androidXmlResDocument.getStringList()
 
         // Then
-        Truth.assertThat(result.length).isEqualTo(3)
-        Truth.assertThat(result.item(0).attributes.getNamedItem("name").textContent)
+        assertThat(result.length).isEqualTo(3)
+        assertThat(result.item(0).attributes.getNamedItem("name").textContent)
             .isEqualTo("some_name")
-        Truth.assertThat(result.item(1).attributes.getNamedItem("name").textContent)
+        assertThat(result.item(1).attributes.getNamedItem("name").textContent)
             .isEqualTo("some_name2")
-        Truth.assertThat(result.item(2).attributes.getNamedItem("name").textContent)
+        assertThat(result.item(2).attributes.getNamedItem("name").textContent)
             .isEqualTo("some_name3")
     }
 
@@ -170,7 +169,7 @@ class AndroidXmlResDocumentTest {
         androidXmlResDocument.saveToFile(file)
 
         // Then
-        Truth.assertThat(file.readText()).isEqualTo(
+        assertThat(file.readText()).isEqualTo(
             """
             <resources><string name="some_name1">some content1</string><string name="some_name2">some content2</string><string name="some_name3">some content3</string></resources>
             """.trimIndent()
@@ -206,7 +205,7 @@ class AndroidXmlResDocumentTest {
         androidXmlResDocument.saveToFile(file)
 
         // Then
-        Truth.assertThat(file.readText()).isEqualTo(
+        assertThat(file.readText()).isEqualTo(
             """
             <resources><string name="some_name1">some content1</string><string name="some_name2">some content2</string><string name="some_name3">some content3</string></resources>
             """.trimIndent()
@@ -226,7 +225,7 @@ class AndroidXmlResDocumentTest {
 
         document.saveToFile(outputFile)
 
-        Truth.assertThat(outputFile.readText()).isEqualTo(
+        assertThat(outputFile.readText()).isEqualTo(
             """
                 <resources xmlns:ns1="$namespace"><string name="someName" ns1:someAttr="someAttrValue">someValue</string></resources>
             """.trimIndent()
@@ -254,7 +253,7 @@ class AndroidXmlResDocumentTest {
 
         document.saveToFile(outputFile)
 
-        Truth.assertThat(outputFile.readText()).isEqualTo(
+        assertThat(outputFile.readText()).isEqualTo(
             """
                 <resources xmlns:ns1="$namespace"><string name="someName" ns1:someAttr="someAttrValue" ns1:someAttr2="someOtherAttrValue">someValue</string><string name="someOtherName" ns1:someAttr3="Some attr3 value">someOtherValue</string></resources>
             """.trimIndent()
@@ -284,7 +283,7 @@ class AndroidXmlResDocumentTest {
 
         document.saveToFile(outputFile)
 
-        Truth.assertThat(outputFile.readText()).isEqualTo(
+        assertThat(outputFile.readText()).isEqualTo(
             """
                 <resources xmlns:ns1="$namespace" xmlns:ns2="$namespace2"><string name="someName" ns1:someAttr="someAttrValue" ns1:someAttr2="someOtherAttrValue">someValue</string><string name="someOtherName" ns1:someAttr3="Some attr3 value" ns2:someAttr3="Some attr3 namespace2 value">someOtherValue</string></resources>
             """.trimIndent()

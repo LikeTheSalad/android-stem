@@ -1,8 +1,8 @@
 package com.likethesalad.stem.modules.resolveStrings.resolver
 
-import com.google.common.truth.Truth
 import com.likethesalad.stem.configuration.StemConfiguration
 import com.likethesalad.stem.testutils.createForTest
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class TemplateContainerFinderTest {
@@ -41,13 +41,13 @@ class TemplateContainerFinderTest {
         val text = "Some text that contains \${$template1} and \${$template3} and some fake \${not_a_template}" +
                 "and a duplicate too \${$template1}"
 
-        Truth.assertThat(instance.getTemplateNamesFrom(text)).containsExactly(
+        assertThat(instance.getTemplateNamesFrom(text)).containsExactly(
             template1, template3
         )
     }
 
     private fun checkIfContainsTemplate(text: String, instance: TemplateContainerFinder, expected: Boolean) {
-        Truth.assertThat(instance.containsTemplates(text)).isEqualTo(expected)
+        assertThat(instance.containsTemplates(text)).isEqualTo(expected)
     }
 
     private fun getInstance(

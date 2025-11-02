@@ -1,9 +1,9 @@
 package com.likethesalad.stem.functionaltest.testtools
 
-import com.google.common.truth.Truth
 import com.likethesalad.tools.functional.testing.AndroidTestProject
 import com.likethesalad.tools.functional.testing.descriptor.ProjectDescriptor
 import java.io.File
+import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.BuildResult
 import org.junit.jupiter.api.io.TempDir
 
@@ -29,6 +29,6 @@ open class BasePluginTest {
     }
 
     protected fun verifyResultContainsText(result: BuildResult, text: String) {
-        Truth.assertThat(result.output).contains(text)
+        assertThat(result.output).contains(text)
     }
 }

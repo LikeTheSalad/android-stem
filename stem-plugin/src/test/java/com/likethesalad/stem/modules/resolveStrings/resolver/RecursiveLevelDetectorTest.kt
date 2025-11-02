@@ -1,12 +1,12 @@
 package com.likethesalad.stem.modules.resolveStrings.resolver
 
-import com.google.common.truth.Truth
 import com.likethesalad.android.protos.StringResource
 import com.likethesalad.stem.configuration.StemConfiguration
 import com.likethesalad.stem.testutils.createForTest
 import com.likethesalad.stem.testutils.named
 import com.likethesalad.stem.tools.extensions.name
 import junit.framework.TestCase.fail
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class RecursiveLevelDetectorTest {
@@ -65,17 +65,17 @@ class RecursiveLevelDetectorTest {
         val result = recursiveLevelDetector.orderTemplatesByRecursiveLevel(templates, templateContainerFinder)
 
         // Then:
-        Truth.assertThat(result.size).isEqualTo(4)
-        Truth.assertThat(result[0]).containsExactly(
+        assertThat(result.size).isEqualTo(4)
+        assertThat(result[0]).containsExactly(
             levelOneTemplate, levelOneTemplate2
         )
-        Truth.assertThat(result[1]).containsExactly(
+        assertThat(result[1]).containsExactly(
             levelTwoTemplate
         )
-        Truth.assertThat(result[2]).containsExactly(
+        assertThat(result[2]).containsExactly(
             levelThreeTemplate, levelThreeTemplate2
         )
-        Truth.assertThat(result[3]).containsExactly(
+        assertThat(result[3]).containsExactly(
             levelFourTemplate, levelFourTemplate2
         )
     }
@@ -110,7 +110,7 @@ class RecursiveLevelDetectorTest {
             fail()
         } catch (e: IllegalArgumentException) {
             // Then:
-            Truth.assertThat(e.message).isEqualTo("Circular dependency on string templates")
+            assertThat(e.message).isEqualTo("Circular dependency on string templates")
         }
     }
 

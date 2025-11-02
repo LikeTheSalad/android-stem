@@ -1,11 +1,11 @@
 package com.likethesalad.stem.modules.common.helpers.resources.utils
 
-import com.google.common.truth.Truth
 import com.likethesalad.android.protos.Attribute
 import com.likethesalad.android.protos.StringResource
 import com.likethesalad.stem.testutils.named
 import io.mockk.every
 import io.mockk.mockk
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class XmlUtilsTest {
@@ -34,10 +34,10 @@ class XmlUtilsTest {
         )
 
         // Then:
-        Truth.assertThat(result.textContent).isEqualTo("some content")
-        Truth.assertThat(result.attributes.length).isEqualTo(2)
-        Truth.assertThat(result.attributes.getNamedItem("name").textContent).isEqualTo("some_name")
-        Truth.assertThat(result.attributes.getNamedItem("extra").textContent).isEqualTo("some extra attr")
+        assertThat(result.textContent).isEqualTo("some content")
+        assertThat(result.attributes.length).isEqualTo(2)
+        assertThat(result.attributes.getNamedItem("name").textContent).isEqualTo("some_name")
+        assertThat(result.attributes.getNamedItem("extra").textContent).isEqualTo("some extra attr")
     }
 
     @Test
@@ -64,11 +64,11 @@ class XmlUtilsTest {
         )
 
         // Then:
-        Truth.assertThat(XmlUtils.getContents(result))
+        assertThat(XmlUtils.getContents(result))
             .isEqualTo("some content <b>something bold</b>")
-        Truth.assertThat(result.attributes.length).isEqualTo(2)
-        Truth.assertThat(result.attributes.getNamedItem("name").textContent).isEqualTo("some_name")
-        Truth.assertThat(result.attributes.getNamedItem("extra").textContent).isEqualTo("some extra attr")
+        assertThat(result.attributes.length).isEqualTo(2)
+        assertThat(result.attributes.getNamedItem("name").textContent).isEqualTo("some_name")
+        assertThat(result.attributes.getNamedItem("extra").textContent).isEqualTo("some extra attr")
     }
 
     @Test
@@ -91,10 +91,10 @@ class XmlUtilsTest {
         val result = XmlUtils.stringResourceModelToElement(stringResourceModel, nsNameProvider)
 
         // Then:
-        Truth.assertThat(result.textContent).isEqualTo("some content")
-        Truth.assertThat(result.attributes.length).isEqualTo(3)
-        Truth.assertThat(result.attributes.getNamedItem("name").textContent).isEqualTo("some_name")
-        Truth.assertThat(result.attributes.getNamedItem("extra").textContent).isEqualTo("some extra attr")
-        Truth.assertThat(result.attributes.getNamedItem("ns1:someNsKey").textContent).isEqualTo("Some namespaced value")
+        assertThat(result.textContent).isEqualTo("some content")
+        assertThat(result.attributes.length).isEqualTo(3)
+        assertThat(result.attributes.getNamedItem("name").textContent).isEqualTo("some_name")
+        assertThat(result.attributes.getNamedItem("extra").textContent).isEqualTo("some extra attr")
+        assertThat(result.attributes.getNamedItem("ns1:someNsKey").textContent).isEqualTo("Some namespaced value")
     }
 }

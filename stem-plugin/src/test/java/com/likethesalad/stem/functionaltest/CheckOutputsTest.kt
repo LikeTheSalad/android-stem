@@ -1,6 +1,5 @@
 package com.likethesalad.stem.functionaltest
 
-import com.google.common.truth.Truth
 import com.likethesalad.stem.functionaltest.testtools.BasePluginTest
 import com.likethesalad.stem.functionaltest.testtools.PlaceholderBlock
 import com.likethesalad.stem.functionaltest.testtools.StemConfigBlock
@@ -16,6 +15,7 @@ import com.likethesalad.tools.functional.testing.blocks.impl.plugins.GradlePlugi
 import com.likethesalad.tools.functional.testing.utils.TestAssetsProvider
 import java.io.File
 import junit.framework.TestCase.fail
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.xmlunit.builder.DiffBuilder.compare
 import org.xmlunit.builder.Input
@@ -443,14 +443,14 @@ class CheckOutputsTest : BasePluginTest() {
     ) {
         val projectDir = getTempFile(projectName)
         val resultDir = File(projectDir, "build/generated/stem/$variantName")
-        Truth.assertThat(resultDir.exists()).isTrue()
+        assertThat(resultDir.exists()).isTrue()
         verifyDirsContentsAreEqual(getExpectedOutputDir(outputDirName, variantName), resultDir)
     }
 
     private fun verifyEmptyOutput(projectName: String, variantName: String) {
         val projectDir = getTempFile(projectName)
         val resultDir = File(projectDir, "build/generated/stem/$variantName")
-        Truth.assertThat(resultDir.exists()).isFalse()
+        assertThat(resultDir.exists()).isFalse()
     }
 
     private fun getExpectedOutputDir(inOutDirName: String, variantName: String): File {
@@ -483,7 +483,7 @@ class CheckOutputsTest : BasePluginTest() {
     private fun checkRootContentFileNames(dirFiles1: List<File>, dirFiles2: List<File>) {
         val dirFileNames1 = dirFiles1.map { it.name }
         val dirFileNames2 = dirFiles2.map { it.name }
-        Truth.assertThat(dirFileNames2).containsExactlyElementsIn(dirFileNames1)
+        assertThat(dirFileNames2).containsExactlyElementsOf(dirFileNames1)
     }
 
     private fun checkIfFileIsInList(file: File, list: List<File>) {

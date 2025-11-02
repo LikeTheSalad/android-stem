@@ -1,7 +1,7 @@
 package com.likethesalad.stem.modules.common.helpers.files
 
-import com.google.common.truth.Truth
 import java.io.File
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
@@ -71,7 +71,7 @@ class OutputStringFileResolverTest {
     }
 
     private fun assertTemplateStringsFilePath(templatesDir: File, suffix: String, expectedRelativePath: String) {
-        Truth.assertThat(outputStringFileResolver.getTemplateStringsFile(templatesDir, suffix).absolutePath)
+        assertThat(outputStringFileResolver.getTemplateStringsFile(templatesDir, suffix).absolutePath)
             .isEqualTo(File(incrementalDir, expectedRelativePath).absolutePath)
     }
 
@@ -80,7 +80,7 @@ class OutputStringFileResolverTest {
         valuesFolderName: String,
         expectedRelativePath: String
     ) {
-        Truth.assertThat(
+        assertThat(
             outputStringFileResolver.getResolvedStringsFile(resolvedDir, valuesFolderName)
                 .absolutePath
         ).isEqualTo(File(srcDir, expectedRelativePath).absolutePath)
