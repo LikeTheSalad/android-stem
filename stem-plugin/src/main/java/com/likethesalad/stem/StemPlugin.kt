@@ -40,7 +40,11 @@ class StemPlugin : Plugin<Project> {
         val outputStringFileResolver = OutputStringFileResolver()
         val androidResourcesHandler = AndroidResourcesHandler(outputStringFileResolver)
         val stemConfiguration = StemConfiguration.create(extension)
-        val stemProviderConfig = createBucket(project, "stemProvider")
+        val stemProviderConfig = project.configurations.create("stemProvider") {
+            it.setTransitive(false)
+            it.isCanBeResolved = false
+            it.isCanBeConsumed = false
+        }
 
         components.onVariants { variant ->
             val stemProviderClasspath = createClasspath(project, stemProviderConfig, variant.name + "StemProvider")
