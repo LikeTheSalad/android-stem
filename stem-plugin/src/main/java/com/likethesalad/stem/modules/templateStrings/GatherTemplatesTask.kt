@@ -1,39 +1,35 @@
 package com.likethesalad.stem.modules.templateStrings
 
-import com.likethesalad.android.templates.common.tasks.BaseTask
-import com.likethesalad.android.templates.common.utils.DirectoryUtils
+import com.likethesalad.android.protos.ValuesStringResources
+import com.likethesalad.stem.modules.common.BaseTask
 import com.likethesalad.stem.modules.templateStrings.data.GatherTemplatesArgs
+import com.likethesalad.stem.tools.DirectoryUtils
+import javax.inject.Inject
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
-import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
-import javax.inject.Inject
 
-open class GatherTemplatesTask
+abstract class GatherTemplatesTask
 @Inject constructor(private val args: GatherTemplatesArgs) : BaseTask() {
+    @get:InputFile
+    abstract val stringValuesProto: RegularFileProperty
 
-    @InputDirectory
-    val commonResourcesDir: DirectoryProperty = project.objects.directoryProperty()
-
-    @InputFile
-    val templateIdsFile: RegularFileProperty = project.objects.fileProperty()
-
-    @OutputDirectory
-    val outDir: DirectoryProperty = project.objects.directoryProperty()
-
-    init {
-        outDir.set(project.layout.buildDirectory.dir("intermediates/incremental/$name"))
-    }
+    @get:OutputDirectory
+    abstract val outDir: DirectoryProperty
 
     @TaskAction
     fun gatherTemplateStrings() {
         DirectoryUtils.clearIfNeeded(outDir.get().asFile)
+
+        val stringValues = stringValuesProto.get().asFile.inputStream().use {
+            ValuesStringResources.ADAPTER.decode(it)
+        }
+
         args.gatherTemplatesAction.gatherTemplateStrings(
             outDir.get().asFile,
-            args.commonResourcesProvider,
-            templateIdsFile.get().asFile
+            stringValues
         )
     }
 }

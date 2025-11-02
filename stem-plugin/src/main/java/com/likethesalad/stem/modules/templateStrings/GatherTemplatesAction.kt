@@ -1,117 +1,142 @@
 package com.likethesalad.stem.modules.templateStrings
 
-import com.likethesalad.android.templates.common.configuration.StemConfiguration
-import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItem
-import com.likethesalad.android.templates.common.tasks.identifier.data.TemplateItemsSerializer
-import com.likethesalad.stem.locator.entrypoints.common.utils.TemplatesProviderJarsFinder
-import com.likethesalad.stem.modules.common.helpers.android.AndroidVariantContext
+import com.likethesalad.android.protos.StringResource
+import com.likethesalad.android.protos.ValuesStringResources
+import com.likethesalad.stem.configuration.StemConfiguration
+import com.likethesalad.stem.modules.common.helpers.resources.ResourcesHandler
 import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesModel
-import com.likethesalad.stem.utils.TemplatesProviderLoader
-import com.likethesalad.tools.resource.api.android.environment.Language
-import com.likethesalad.tools.resource.api.android.impl.AndroidResourceType
-import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
-import com.likethesalad.tools.resource.api.collection.ResourceCollection
-import com.likethesalad.tools.resource.locator.android.extension.configuration.data.ResourcesProvider
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import com.likethesalad.stem.tools.extensions.get
+import com.likethesalad.stem.tools.extensions.name
 import java.io.File
 
-class GatherTemplatesAction @AssistedInject constructor(
-    @Assisted private val androidVariantContext: AndroidVariantContext,
+class GatherTemplatesAction(
+    private val resourcesHandler: ResourcesHandler,
     private val stemConfiguration: StemConfiguration
 ) {
-
-    @AssistedFactory
-    interface Factory {
-        fun create(androidVariantContext: AndroidVariantContext): GatherTemplatesAction
+    companion object {
+        private val VALUES_REGEX = Regex("values(?:-(.+))*")
     }
-
-    private val resourcesHandler = androidVariantContext.androidResourcesHandler
-    private val templatesProviderJarsFinder =
-        TemplatesProviderJarsFinder(androidVariantContext.androidVariantData.getLibrariesJars())
 
     fun gatherTemplateStrings(
         outputDir: File,
-        commonResources: ResourcesProvider,
-        templateIdsContainer: File
+        stringValues: ValuesStringResources
     ) {
-        val commonHandler = commonResources.resources
-        val templateIds = getTemplateIds(templateIdsContainer)
+        val templateIds = getTemplatesIdsFromResources(stringValues)
 
         if (templateIds.isEmpty()) {
             return
         }
 
-        for (language in commonHandler.listLanguages()) {
-            val allResources = asStringResources(commonHandler.getMergedResourcesForLanguage(language))
-            val templates = getTemplatesFromResources(templateIds, allResources)
-            val resources = allResources.minus(templates)
-            resourcesHandler.saveTemplates(outputDir, gatheredStringsToTemplateStrings(language, resources, templates))
+        stringValues.values.forEach { (valueDirName, strings) ->
+            val suffix = getSuffix(valueDirName)
+            val templates = getTemplatesFromResources(templateIds, strings.strings)
+            val localizedStrings = strings.strings
+            val stringResources = if (suffix.isEmpty()) {
+                listOf(localizedStrings)
+            } else {
+                stringValues.get("values")?.let { listOf(localizedStrings, it) } ?: listOf(localizedStrings)
+            }
+            resourcesHandler.saveTemplates(
+                outputDir,
+                gatheredStringsToTemplateStrings(suffix, stringResources, templates)
+            )
         }
+    }
+
+    private fun getSuffix(valuesDirName: String): String {
+        val match = VALUES_REGEX.matchEntire(valuesDirName)
+            ?: throw IllegalArgumentException("Invalid values dir name: $valuesDirName")
+
+        return match.groupValues[1]
     }
 
     private fun getTemplatesFromResources(
-        templateIds: List<TemplateItem>,
-        resources: List<StringAndroidResource>
-    ): List<StringAndroidResource> {
-        val templateNames = templateIds.map { it.name }
+        templateIds: List<String>,
+        resources: Collection<StringResource>
+    ): List<StringResource> {
         return resources.filter {
-            it.name() in templateNames
+            it.name() in templateIds
         }
     }
 
-    private fun getTemplateIds(localTemplateIdsContainer: File): List<TemplateItem> {
-        val templateIdsFromDependencies = getTemplateIdsFromDependencies()
-        return TemplateItemsSerializer.deserialize(localTemplateIdsContainer.readText()) + templateIdsFromDependencies
+    private fun getTemplatesIdsFromResources(stringValues: ValuesStringResources): List<String> {
+        return if (stemConfiguration.searchForTemplatesInLanguages()) {
+            getTemplatesFromAllCollections(stringValues)
+        } else {
+            val mainLanguageResources = stringValues.get("values")
+            getTemplatesForCollection(mainLanguageResources)
+        }
     }
 
-    private fun getTemplateIdsFromDependencies(): List<TemplateItem> {
-        val templatesProviders = TemplatesProviderLoader.load(templatesProviderJarsFinder.templateProviderJars)
-        return templatesProviders.map { TemplateItemsSerializer.deserialize(it.getTemplates()) }.flatten()
+    private fun getTemplatesFromAllCollections(stringCollection: ValuesStringResources): List<String> {
+        val templates = mutableSetOf<String>()
+
+        stringCollection.values.forEach { (_, strings) ->
+            val collectionTemplates = getTemplatesForCollection(strings.strings)
+            templates.addAll(collectionTemplates)
+        }
+
+        return templates.toList()
+    }
+
+    private fun getTemplatesForCollection(stringResources: List<StringResource>?): List<String> {
+        if (stringResources == null) {
+            return emptyList()
+        }
+
+        val templates = filterTemplates(stringResources)
+
+        return templates.map {
+            it.name()
+        }.sorted()
+    }
+
+    private fun filterTemplates(stringResources: Collection<StringResource>): List<StringResource> {
+        return stringResources.filter { stringResource ->
+            stemConfiguration.placeholderRegex.containsMatchIn(stringResource.text)
+        }
     }
 
     private fun gatheredStringsToTemplateStrings(
-        language: Language,
-        stringResources: List<StringAndroidResource>,
-        stringTemplates: List<StringAndroidResource>
+        suffix: String,
+        stringResources: List<List<StringResource>>,
+        stringTemplates: List<StringResource>
     ): StringsTemplatesModel {
         val placeholdersResolved = getPlaceholdersResolved(stringResources, stringTemplates)
 
         return StringsTemplatesModel(
-            language,
+            suffix,
             stringTemplates,
             placeholdersResolved
         )
     }
 
-    @Suppress("UNCHECKED_CAST")
-    private fun asStringResources(resources: ResourceCollection): List<StringAndroidResource> {
-        return resources.getResourcesByType(AndroidResourceType.StringType) as List<StringAndroidResource>
-    }
-
     private fun getPlaceholdersResolved(
-        strings: List<StringAndroidResource>,
-        templates: List<StringAndroidResource>
+        strings: List<List<StringResource>>,
+        templates: List<StringResource>
     ): Map<String, String> {
-        val stringsMap = stringResourcesToMap(strings)
-        val placeholders = templates.map { stemConfiguration.placeholderRegex.findAll(it.stringValue()) }
-            .flatMap { it.toList().map { m -> m.groupValues[1] } }.toSet()
+        val unresolvedPlaceholders = templates.map { stemConfiguration.placeholderRegex.findAll(it.text) }
+            .flatMap { it.toList().map { m -> m.groupValues[1] } }.distinct().toMutableList()
 
         val placeholdersResolved = mutableMapOf<String, String>()
 
-        for (it in placeholders) {
-            placeholdersResolved[it] = stringsMap.getValue(it)
+        for (list in strings) {
+            for (string in list) {
+                val name = string.name()
+                if (name in unresolvedPlaceholders) {
+                    placeholdersResolved[name] = string.text
+                    unresolvedPlaceholders.remove(name)
+                    if (unresolvedPlaceholders.isEmpty()) {
+                        break
+                    }
+                }
+            }
+        }
+
+        if (unresolvedPlaceholders.isNotEmpty()) {
+            throw IllegalStateException("Could not find the following placeholder values: $unresolvedPlaceholders")
         }
 
         return placeholdersResolved
-    }
-
-    private fun stringResourcesToMap(list: Collection<StringAndroidResource>): Map<String, String> {
-        val map = mutableMapOf<String, String>()
-        for (it in list) {
-            map[it.name()] = it.stringValue()
-        }
-        return map
     }
 }

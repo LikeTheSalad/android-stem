@@ -1,23 +1,22 @@
 package com.likethesalad.stem.functionaltest.testtools
 
-import com.google.common.truth.Truth
 import com.likethesalad.tools.functional.testing.AndroidTestProject
 import com.likethesalad.tools.functional.testing.descriptor.ProjectDescriptor
-import org.gradle.testkit.runner.BuildResult
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import java.io.File
+import org.assertj.core.api.Assertions.assertThat
+import org.gradle.testkit.runner.BuildResult
+import org.junit.jupiter.api.io.TempDir
 
 open class BasePluginTest {
 
-    @get:Rule
-    val temporaryFolder = TemporaryFolder()
+    @TempDir
+    lateinit var temporaryFolder: File
 
     protected fun getTempFile(vararg paths: String): File {
         return if (paths.isEmpty()) {
-            temporaryFolder.root
+            temporaryFolder
         } else {
-            File(temporaryFolder.root, paths.joinToString("/"))
+            File(temporaryFolder, paths.joinToString("/"))
         }
     }
 
@@ -30,6 +29,6 @@ open class BasePluginTest {
     }
 
     protected fun verifyResultContainsText(result: BuildResult, text: String) {
-        Truth.assertThat(result.output).contains(text)
+        assertThat(result.output).contains(text)
     }
 }

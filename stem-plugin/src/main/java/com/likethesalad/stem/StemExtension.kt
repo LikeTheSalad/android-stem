@@ -1,0 +1,26 @@
+package com.likethesalad.stem
+
+import javax.inject.Inject
+import org.gradle.api.Action
+import org.gradle.api.model.ObjectFactory
+import org.gradle.api.provider.Property
+
+open class StemExtension @Inject constructor(objectFactory: ObjectFactory) {
+    val includeLocalizedOnlyTemplates: Property<Boolean> = objectFactory.property(Boolean::class.java)
+    val placeholder: Placeholder = objectFactory.newInstance(Placeholder::class.java)
+
+    init {
+        includeLocalizedOnlyTemplates.convention(false)
+        placeholder.start.convention("\${")
+        placeholder.end.convention("}")
+    }
+
+    fun placeholder(action: Action<Placeholder>) {
+        action.execute(placeholder)
+    }
+
+    interface Placeholder {
+        val start: Property<String>
+        val end: Property<String>
+    }
+}

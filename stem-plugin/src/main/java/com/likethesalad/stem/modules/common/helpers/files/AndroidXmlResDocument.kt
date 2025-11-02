@@ -1,20 +1,25 @@
 package com.likethesalad.stem.modules.common.helpers.files
 
+import com.likethesalad.android.protos.StringResource
 import com.likethesalad.stem.modules.common.Constants.Companion.XML_RESOURCES_TAG
 import com.likethesalad.stem.modules.common.Constants.Companion.XML_STRING_TAG
 import com.likethesalad.stem.modules.common.helpers.resources.utils.XmlUtils
-import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
-import org.w3c.dom.DOMException
-import org.w3c.dom.Document
-import org.w3c.dom.Element
-import org.w3c.dom.Node
-import org.w3c.dom.NodeList
 import java.io.File
+import java.io.StringReader
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.transform.OutputKeys
 import javax.xml.transform.TransformerFactory
 import javax.xml.transform.dom.DOMSource
 import javax.xml.transform.stream.StreamResult
+import javax.xml.xpath.XPath
+import javax.xml.xpath.XPathConstants
+import javax.xml.xpath.XPathFactory
+import org.w3c.dom.DOMException
+import org.w3c.dom.Document
+import org.w3c.dom.Element
+import org.w3c.dom.Node
+import org.w3c.dom.NodeList
+import org.xml.sax.InputSource
 
 class AndroidXmlResDocument(
     val document: Document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument().apply {
@@ -24,9 +29,17 @@ class AndroidXmlResDocument(
 
     val resources: Element = getOrCreateResources()
     private val namespacesToNames = mutableMapOf<String, String>()
+    private val xPath: XPath by lazy { XPathFactory.newInstance().newXPath() }
 
     companion object {
         private const val NS_ALIAS_FORMAT = "ns%d"
+
+        fun fromFile(xmlFile: File): AndroidXmlResDocument {
+            val documentBuilderFactory = DocumentBuilderFactory.newInstance().apply { isNamespaceAware = true }
+            val dBuilder = documentBuilderFactory.newDocumentBuilder()
+            val xmlInput = InputSource(StringReader(xmlFile.readText()))
+            return AndroidXmlResDocument(dBuilder.parse(xmlInput))
+        }
     }
 
     fun saveToFile(file: File) {
@@ -49,7 +62,7 @@ class AndroidXmlResDocument(
         }
     }
 
-    fun appendStringResource(stringResourceModel: StringAndroidResource) {
+    fun appendStringResource(stringResourceModel: StringResource) {
         append(
             XmlUtils.stringResourceModelToElement(
                 stringResourceModel,
@@ -64,7 +77,7 @@ class AndroidXmlResDocument(
         }
     }
 
-    fun appendAllStringResources(list: Collection<StringAndroidResource>) {
+    fun appendAllStringResources(list: Collection<StringResource>) {
         for (it in list) {
             appendStringResource(it)
         }
@@ -100,5 +113,9 @@ class AndroidXmlResDocument(
         }
 
         return existingName
+    }
+
+    fun getElementsByXPath(xpath: String): NodeList {
+        return xPath.compile(xpath).evaluate(document, XPathConstants.NODESET) as NodeList
     }
 }

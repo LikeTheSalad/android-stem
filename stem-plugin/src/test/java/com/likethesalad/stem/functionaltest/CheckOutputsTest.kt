@@ -1,10 +1,9 @@
 package com.likethesalad.stem.functionaltest
 
-import com.google.common.truth.Truth
-import com.likethesalad.android.templates.common.utils.upperFirst
 import com.likethesalad.stem.functionaltest.testtools.BasePluginTest
 import com.likethesalad.stem.functionaltest.testtools.PlaceholderBlock
 import com.likethesalad.stem.functionaltest.testtools.StemConfigBlock
+import com.likethesalad.stem.testutils.upperFirst
 import com.likethesalad.tools.functional.testing.AndroidTestProject
 import com.likethesalad.tools.functional.testing.android.blocks.AndroidBlockItem
 import com.likethesalad.tools.functional.testing.android.blocks.DefaultConfigAndroidBlockItem
@@ -14,17 +13,17 @@ import com.likethesalad.tools.functional.testing.android.descriptor.AndroidLibPr
 import com.likethesalad.tools.functional.testing.blocks.GradleBlockItem
 import com.likethesalad.tools.functional.testing.blocks.impl.plugins.GradlePluginDeclaration
 import com.likethesalad.tools.functional.testing.utils.TestAssetsProvider
+import java.io.File
 import junit.framework.TestCase.fail
-import org.junit.Test
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
 import org.xmlunit.builder.DiffBuilder.compare
 import org.xmlunit.builder.Input
-import java.io.File
 
 class CheckOutputsTest : BasePluginTest() {
 
     companion object {
         private const val RESOLVER_PLUGIN_ID = "com.likethesalad.stem"
-        private const val PROVIDER_PLUGIN_ID = "com.likethesalad.stem-library"
     }
 
     private val inputAssetsProvider = TestAssetsProvider("inputs")
@@ -115,9 +114,8 @@ class CheckOutputsTest : BasePluginTest() {
 
         verifyResultContainsText(
             result, """
-            > Task :$inOutDirName:templatesDebugIdentifier
-            > Task :$inOutDirName:gatherDebugStringTemplates
-            > Task :$inOutDirName:resolveDebugPlaceholders NO-SOURCE
+            > Task :$inOutDirName:debugGatherStringTemplates
+            > Task :$inOutDirName:debugResolvePlaceholders NO-SOURCE
         """.trimIndent()
         )
         verifyEmptyOutput(inOutDirName, "debug")
@@ -136,9 +134,8 @@ class CheckOutputsTest : BasePluginTest() {
 
         verifyResultContainsText(
             result, """
-            > Task :$projectName:templatesDebugIdentifier
-            > Task :$projectName:gatherDebugStringTemplates
-            > Task :$projectName:resolveDebugPlaceholders
+            > Task :$projectName:debugGatherStringTemplates
+            > Task :$projectName:debugResolvePlaceholders
         """.trimIndent()
         )
         verifyVariantResults(variantNames, projectName, withTemplatesDir)
@@ -166,9 +163,8 @@ class CheckOutputsTest : BasePluginTest() {
         val result1 = project.runGradle(inOutDirName, commandList)
         verifyResultContainsText(
             result1, """
-            > Task :$inOutDirName:templatesDebugIdentifier
-            > Task :$inOutDirName:gatherDebugStringTemplates
-            > Task :$inOutDirName:resolveDebugPlaceholders
+            > Task :$inOutDirName:debugGatherStringTemplates
+            > Task :$inOutDirName:debugResolvePlaceholders
         """.trimIndent()
         )
 
@@ -180,9 +176,8 @@ class CheckOutputsTest : BasePluginTest() {
         verifyVariantResults(variantNames, inOutDirName, inOutDirName)
         verifyResultContainsText(
             result2, """
-            > Task :$inOutDirName:templatesDebugIdentifier UP-TO-DATE
-            > Task :$inOutDirName:gatherDebugStringTemplates UP-TO-DATE
-            > Task :$inOutDirName:resolveDebugPlaceholders UP-TO-DATE
+            > Task :$inOutDirName:debugGatherStringTemplates UP-TO-DATE
+            > Task :$inOutDirName:debugResolvePlaceholders UP-TO-DATE
         """.trimIndent()
         )
     }
@@ -198,9 +193,8 @@ class CheckOutputsTest : BasePluginTest() {
         val result1 = project.runGradle(inOutDirName, commandList)
         verifyResultContainsText(
             result1, """
-            > Task :$inOutDirName:templatesDebugIdentifier
-            > Task :$inOutDirName:gatherDebugStringTemplates
-            > Task :$inOutDirName:resolveDebugPlaceholders
+            > Task :$inOutDirName:debugGatherStringTemplates
+            > Task :$inOutDirName:debugResolvePlaceholders
         """.trimIndent()
         )
 
@@ -218,9 +212,8 @@ class CheckOutputsTest : BasePluginTest() {
         verifyVariantResults(variantNames, inOutDirName, dirName2)
         verifyResultContainsText(
             result2, """
-            > Task :$inOutDirName:templatesDebugIdentifier
-            > Task :$inOutDirName:gatherDebugStringTemplates
-            > Task :$inOutDirName:resolveDebugPlaceholders
+            > Task :$inOutDirName:debugGatherStringTemplates
+            > Task :$inOutDirName:debugResolvePlaceholders
         """.trimIndent()
         )
     }
@@ -229,6 +222,13 @@ class CheckOutputsTest : BasePluginTest() {
     fun `verify multi-languages app outputs`() {
         runInputOutputComparisonTest(
             "multi_languages", listOf("debug")
+        )
+    }
+
+    @Test
+    fun `verify multi-languages app outputs with shared upstream values`() {
+        runInputOutputComparisonTest(
+            "multi_languages_shared_values", listOf("debug")
         )
     }
 
@@ -286,14 +286,13 @@ class CheckOutputsTest : BasePluginTest() {
         // Create library
         val libName = "mylibrary"
         val libDescriptor = createAndroidLibProjectDescriptor(libName)
-        libDescriptor.pluginsBlock.addPlugin(GradlePluginDeclaration(PROVIDER_PLUGIN_ID))
         libDescriptor.dependenciesBlock.addDependency("implementation 'com.android.support:recyclerview-v7:28.0.0'")
 
         // Set up app
         val appName = "with_library"
         val appDescriptor = createAndroidAppProjectDescriptor(
             appName,
-            dependencies = listOf("implementation project(':$libName')")
+            dependencies = listOf("stemProvider project(':$libName')")
         )
         val project = createProject(libDescriptor, appDescriptor)
 
@@ -305,14 +304,13 @@ class CheckOutputsTest : BasePluginTest() {
         // Create library
         val libName = "mylibrary_with_namespaces"
         val libDescriptor = createAndroidLibProjectDescriptor(libName)
-        libDescriptor.pluginsBlock.addPlugin(GradlePluginDeclaration(PROVIDER_PLUGIN_ID))
         libDescriptor.dependenciesBlock.addDependency("implementation 'com.android.support:recyclerview-v7:28.0.0'")
 
         // Set up app
         val appName = "with_library_with_namespaces"
         val appDescriptor = createAndroidAppProjectDescriptor(
             appName,
-            dependencies = listOf("implementation project(':$libName')")
+            dependencies = listOf("stemProvider project(':$libName')")
         )
         val project = createProject(libDescriptor, appDescriptor)
 
@@ -324,7 +322,7 @@ class CheckOutputsTest : BasePluginTest() {
         val appName = "with_aar_file_library"
         val appDescriptor = createAndroidAppProjectDescriptor(
             appName,
-            dependencies = listOf("implementation fileTree(dir: 'src/libs', include: ['*.aar'])")
+            dependencies = listOf("stemProvider fileTree(dir: 'src/libs', include: ['*.aar'])")
         )
 
         runInputOutputComparisonTest(createProject(appDescriptor), appName, listOf("debug"))
@@ -335,15 +333,14 @@ class CheckOutputsTest : BasePluginTest() {
         // Create library
         val libName = "my_local_library"
         val libDescriptor = createAndroidLibProjectDescriptor(libName)
-        libDescriptor.pluginsBlock.addPlugin(GradlePluginDeclaration(PROVIDER_PLUGIN_ID))
 
         // Set up app
         val appName = "with_aar_and_local_libraries"
         val appDescriptor = createAndroidAppProjectDescriptor(
             appName,
             dependencies = listOf(
-                "implementation fileTree(dir: 'src/libs', include: ['*.aar'])",
-                "implementation project(':$libName')"
+                "stemProvider fileTree(dir: 'src/libs', include: ['*.aar'])",
+                "stemProvider project(':$libName')"
             )
         )
         val project = createProject(libDescriptor, appDescriptor)
@@ -356,27 +353,21 @@ class CheckOutputsTest : BasePluginTest() {
         // Create library
         val libName1 = "my_first_library"
         val libName2 = "my_other_library"
-        val libDescriptor1 = createProviderLibDescriptor(libName1)
-        val libDescriptor2 = createProviderLibDescriptor(libName2)
+        val libDescriptor1 = createAndroidLibProjectDescriptor(libName1)
+        val libDescriptor2 = createAndroidLibProjectDescriptor(libName2)
 
         // Set up app
         val appName = "with_multiple_libraries"
         val appDescriptor = createAndroidAppProjectDescriptor(
             appName,
             dependencies = listOf(
-                "implementation project(':$libName1')",
-                "implementation project(':$libName2')"
+                "stemProvider project(':$libName1')",
+                "stemProvider project(':$libName2')"
             )
         )
         val project = createProject(libDescriptor1, libDescriptor2, appDescriptor)
 
         runInputOutputComparisonTest(project, appName, listOf("debug"))
-    }
-
-    private fun createProviderLibDescriptor(libName: String): AndroidLibProjectDescriptor {
-        val libDescriptor = createAndroidLibProjectDescriptor(libName)
-        libDescriptor.pluginsBlock.addPlugin(GradlePluginDeclaration(PROVIDER_PLUGIN_ID))
-        return libDescriptor
     }
 
     private fun runInputOutputComparisonTest(
@@ -458,15 +449,15 @@ class CheckOutputsTest : BasePluginTest() {
         variantName: String
     ) {
         val projectDir = getTempFile(projectName)
-        val resultDir = File(projectDir, "build/generated/resolved/$variantName")
-        Truth.assertThat(resultDir.exists()).isTrue()
+        val resultDir = File(projectDir, "build/generated/stem/$variantName")
+        assertThat(resultDir.exists()).isTrue()
         verifyDirsContentsAreEqual(getExpectedOutputDir(outputDirName, variantName), resultDir)
     }
 
     private fun verifyEmptyOutput(projectName: String, variantName: String) {
         val projectDir = getTempFile(projectName)
-        val resultDir = File(projectDir, "build/generated/resolved/$variantName")
-        Truth.assertThat(resultDir.exists()).isFalse()
+        val resultDir = File(projectDir, "build/generated/stem/$variantName")
+        assertThat(resultDir.exists()).isFalse()
     }
 
     private fun getExpectedOutputDir(inOutDirName: String, variantName: String): File {
@@ -499,7 +490,7 @@ class CheckOutputsTest : BasePluginTest() {
     private fun checkRootContentFileNames(dirFiles1: List<File>, dirFiles2: List<File>) {
         val dirFileNames1 = dirFiles1.map { it.name }
         val dirFileNames2 = dirFiles2.map { it.name }
-        Truth.assertThat(dirFileNames2).containsExactlyElementsIn(dirFileNames1)
+        assertThat(dirFileNames2).containsExactlyElementsOf(dirFileNames1)
     }
 
     private fun checkIfFileIsInList(file: File, list: List<File>) {

@@ -1,0 +1,21 @@
+syntax = "proto3";
+package com.likethesalad.android.protos;
+
+message ValuesStringResources {
+  map<string, StringResources> values = 1;
+}
+
+message StringResources {
+  repeated StringResource strings = 1;
+}
+
+message StringResource {
+  string text = 1;
+  repeated Attribute attributes = 2;
+}
+
+message Attribute {
+  string name = 1;
+  string text = 2;
+  optional string namespace = 3;
+}

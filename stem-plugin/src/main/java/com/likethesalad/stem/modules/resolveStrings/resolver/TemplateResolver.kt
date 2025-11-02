@@ -1,38 +1,35 @@
 package com.likethesalad.stem.modules.resolveStrings.resolver
 
-import com.likethesalad.android.templates.common.configuration.StemConfiguration
+import com.likethesalad.android.protos.StringResource
+import com.likethesalad.stem.tools.extensions.name
+import com.likethesalad.stem.configuration.StemConfiguration
 import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesModel
-import com.likethesalad.tools.resource.api.android.attributes.plain
-import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class TemplateResolver @Inject constructor(
+class TemplateResolver(
     private val configuration: StemConfiguration,
     private val recursiveLevelDetector: RecursiveLevelDetector
 ) {
 
-    fun resolveTemplates(stringsTemplatesModel: StringsTemplatesModel): List<StringAndroidResource> {
+    fun resolveTemplates(stringsTemplatesModel: StringsTemplatesModel): List<StringResource> {
         val templateContainerFinder = createTemplatesFinder(stringsTemplatesModel)
-        return if (stringsTemplatesModel.templates.any { templateContainerFinder.containsTemplates(it.stringValue()) }) {
-            // If there's recursive templates
+        return if (stringsTemplatesModel.templates.any { templateContainerFinder.containsTemplates(it.text) }) {
+            // If there are recursive templates
             resolveRecursiveTemplates(
                 stringsTemplatesModel.templates,
                 stringsTemplatesModel.values,
                 templateContainerFinder
             )
         } else {
-            // If there's no recursive templates
+            // If there are no recursive templates
             resolveSimpleTemplates(stringsTemplatesModel.templates, stringsTemplatesModel.values)
         }
     }
 
     private fun resolveRecursiveTemplates(
-        templates: List<StringAndroidResource>,
+        templates: List<StringResource>,
         originalValues: Map<String, String>,
         templateContainerFinder: TemplateContainerFinder
-    ): List<StringAndroidResource> {
+    ): List<StringResource> {
         // Get metaList of recursive level per template
         val recursiveLevelMetaList =
             recursiveLevelDetector.orderTemplatesByRecursiveLevel(templates, templateContainerFinder)
@@ -41,7 +38,7 @@ class TemplateResolver @Inject constructor(
         val mutableValues = HashMap(originalValues)
 
         // The result:
-        val resolvedTemplateList = mutableListOf<StringAndroidResource>()
+        val resolvedTemplateList = mutableListOf<StringResource>()
 
         for (lst in recursiveLevelMetaList) {
             // Resolve this lst templates:
@@ -52,7 +49,7 @@ class TemplateResolver @Inject constructor(
 
             // Add resolved templates to the values so that recursive templates can find them
             for (it in templatesResolved) {
-                mutableValues[it.name()] = it.stringValue()
+                mutableValues[it.name()] = it.text
             }
         }
 
@@ -60,24 +57,21 @@ class TemplateResolver @Inject constructor(
     }
 
     private fun resolveSimpleTemplates(
-        templateList: List<StringAndroidResource>,
+        templateList: List<StringResource>,
         values: Map<String, String>
-    ): List<StringAndroidResource> {
-        val resolvedTemplates = mutableListOf<StringAndroidResource>()
+    ): List<StringResource> {
+        val resolvedTemplates = mutableListOf<StringResource>()
         for (it in templateList) {
             resolvedTemplates.add(getResolvedStringResourceModel(it, values))
         }
         return resolvedTemplates
     }
 
-    private fun getResolvedStringResourceModel(original: StringAndroidResource, values: Map<String, String>)
-            : StringAndroidResource {
-        val attrs = original.attributes().asMap().toMutableMap()
-        attrs[plain("name")] = original.name()
-        return StringAndroidResource(
-            attrs,
-            resolve(original.stringValue(), values),
-            original.getAndroidScope()
+    private fun getResolvedStringResourceModel(original: StringResource, values: Map<String, String>)
+            : StringResource {
+        return StringResource(
+            resolve(original.text, values),
+            original.attributes
         )
     }
 

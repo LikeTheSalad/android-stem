@@ -39,6 +39,3 @@ buildscript {
 }
 rootProject.name = 'stem'
 include ':stem-plugin'
-include ':templates-provider-plugin'
-include ':templates-provider-api'
-include ':common-tools'

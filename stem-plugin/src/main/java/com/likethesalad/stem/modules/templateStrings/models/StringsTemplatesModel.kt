@@ -1,10 +1,9 @@
 package com.likethesalad.stem.modules.templateStrings.models
 
-import com.likethesalad.tools.resource.api.android.environment.Language
-import com.likethesalad.tools.resource.api.android.modules.string.StringAndroidResource
+import com.likethesalad.android.protos.StringResource
 
 data class StringsTemplatesModel(
-    val language: Language,
-    val templates: List<StringAndroidResource>,
+    val suffix: String,
+    val templates: List<StringResource>,
     val values: Map<String, String>
 )

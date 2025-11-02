@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "attributes": {
+        "plain|name|": "another_message"
+      },
+      "value": "Only on main",
+      "scope": "main:main",
+      "type": "string"
+    },
+    {
+      "attributes": {
+        "plain|name|": "app_name"
+      },
+      "value": "Strings playground on demo",
+      "scope": "demo:main",
+      "type": "string"
+    },
+    {
+      "attributes": {
+        "plain|name|": "welcome_message"
+      },
+      "value": "Welcome to the app on demoStableDebug",
+      "scope": "demoStableDebug:main",
+      "type": "string"
+    }
+  ]
+}
