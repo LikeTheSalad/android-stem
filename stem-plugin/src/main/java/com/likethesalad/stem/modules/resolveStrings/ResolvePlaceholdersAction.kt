@@ -1,6 +1,5 @@
 package com.likethesalad.stem.modules.resolveStrings
 
-import com.likethesalad.android.protos.StringResource
 import com.likethesalad.stem.modules.common.helpers.resources.ResourcesHandler
 import com.likethesalad.stem.modules.resolveStrings.resolver.TemplateResolver
 import java.io.File
@@ -15,37 +14,13 @@ class ResolvePlaceholdersAction(
         for (templateFile in templateFiles) {
             val templatesModel = resourcesHandler.getTemplatesFromFile(templateFile)
             val resolvedTemplates = templateResolver.resolveTemplates(templatesModel)
-            val curatedTemplates =
-                filterNonTranslatableStringsForLanguage(templatesModel.suffix, resolvedTemplates)
-            if (curatedTemplates.isNotEmpty()) {
+            if (resolvedTemplates.isNotEmpty()) {
                 resourcesHandler.saveResolvedStringList(
                     outputDir,
-                    curatedTemplates,
+                    resolvedTemplates,
                     templatesModel.suffix
                 )
             }
         }
-    }
-
-    private fun filterNonTranslatableStringsForLanguage(
-        suffix: String,
-        resolvedStrings: List<StringResource>
-    ): List<StringResource> {
-        if (suffix.isNotEmpty()) {
-            // It is a language specific file
-            return resolvedStrings.filter { isTranslatable(it) }
-//            return resolvedStrings.filter { isTranslatable(it) && belongsToLanguage(it, language) }
-        }
-        return resolvedStrings
-    }
-
-    // todo
-//    private fun belongsToLanguage(stringAndroidResource: StringResource, language: Language): Boolean {
-//        return stringAndroidResource.getAndroidScope().language == language
-//    }
-
-    private fun isTranslatable(stringResource: StringResource): Boolean {
-        val translatable = stringResource.attributes.firstOrNull { it.name == "translatable" }?.text ?: return true
-        return translatable.toBoolean()
     }
 }
