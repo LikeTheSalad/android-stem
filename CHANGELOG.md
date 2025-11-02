@@ -1,6 +1,14 @@
 Change Log
 ==========
 
+## Unreleased
+
+* [BREAKING] Removed `com.likethesalad.stem-library` plugin for libraries. It's replaced by adding those libraries
+  as `stemProvider` dependencies on the consumer app.
+* [BREAKING] Minimum Android Gradle Plugin version required: `8.4.0`.
+* [BREAKING] The resolver task have been renamed from `resolve[variant]Placeholders` to `[variant]ResolvePlaceholders`.
+* Improved stability by relying on new AGP apis that are better suited to Stem's use case.
+
 ## Version 2.12.0 (2024-11-10)
 
 * Adding placeholder delimiter customization config params.
