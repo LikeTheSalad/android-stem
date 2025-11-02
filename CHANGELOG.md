@@ -8,6 +8,7 @@ Change Log
 * [BREAKING] Minimum Android Gradle Plugin version required: `8.4.0`.
 * [BREAKING] The resolver task have been renamed from `resolve[variant]Placeholders` to `[variant]ResolvePlaceholders`.
 * Improved stability by relying on new AGP apis that are better suited to Stem's use case.
+* Improved placeholder extension config via Kotlin scripts.
 
 ## Version 2.12.0 (2024-11-10)
 

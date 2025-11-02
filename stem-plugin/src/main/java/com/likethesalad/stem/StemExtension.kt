@@ -11,8 +11,8 @@ open class StemExtension @Inject constructor(objectFactory: ObjectFactory) {
 
     init {
         includeLocalizedOnlyTemplates.convention(false)
-        placeholder.getStart().convention("\${")
-        placeholder.getEnd().convention("}")
+        placeholder.start.convention("\${")
+        placeholder.end.convention("}")
     }
 
     fun placeholder(action: Action<Placeholder>) {
@@ -20,7 +20,7 @@ open class StemExtension @Inject constructor(objectFactory: ObjectFactory) {
     }
 
     interface Placeholder {
-        fun getStart(): Property<String>
-        fun getEnd(): Property<String>
+        val start: Property<String>
+        val end: Property<String>
     }
 }

@@ -13,8 +13,8 @@ class StemConfiguration(
     companion object {
         fun create(extension: StemExtension): StemConfiguration {
             return StemConfiguration(
-                extension.placeholder.getStart()::get,
-                extension.placeholder.getEnd()::get,
+                extension.placeholder.start::get,
+                extension.placeholder.end::get,
                 extension.includeLocalizedOnlyTemplates::get
             )
         }
