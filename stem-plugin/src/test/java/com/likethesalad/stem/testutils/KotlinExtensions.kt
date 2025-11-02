@@ -3,6 +3,7 @@ package com.likethesalad.stem.testutils
 import com.likethesalad.android.protos.Attribute
 import com.likethesalad.android.protos.StringResource
 import com.likethesalad.stem.configuration.StemConfiguration
+import java.util.Locale
 
 fun StemConfiguration.Companion.createForTest(
     placeholderStart: String = "\${",
@@ -21,4 +22,12 @@ fun StringResource.Companion.named(
     finalAttributes.add(Attribute("name", name))
     finalAttributes.addAll(attributes)
     return StringResource(text, finalAttributes)
+}
+
+fun String.upperFirst(): String {
+    return this.replaceFirstChar {
+        if (it.isLowerCase()) it.titlecase(
+            Locale.US
+        ) else it.toString()
+    }
 }
