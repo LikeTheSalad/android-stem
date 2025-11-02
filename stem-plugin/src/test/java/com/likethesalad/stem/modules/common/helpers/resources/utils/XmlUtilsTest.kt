@@ -64,7 +64,7 @@ class XmlUtilsTest {
         )
 
         // Then:
-        Truth.assertThat(com.likethesalad.tools.resource.collector.android.data.xml.XmlUtils.getContents(result))
+        Truth.assertThat(XmlUtils.getContents(result))
             .isEqualTo("some content <b>something bold</b>")
         Truth.assertThat(result.attributes.length).isEqualTo(2)
         Truth.assertThat(result.attributes.getNamedItem("name").textContent).isEqualTo("some_name")

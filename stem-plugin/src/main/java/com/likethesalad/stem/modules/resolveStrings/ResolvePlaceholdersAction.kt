@@ -3,7 +3,6 @@ package com.likethesalad.stem.modules.resolveStrings
 import com.likethesalad.android.protos.StringResource
 import com.likethesalad.stem.modules.common.helpers.resources.ResourcesHandler
 import com.likethesalad.stem.modules.resolveStrings.resolver.TemplateResolver
-import com.likethesalad.tools.resource.api.android.environment.Language
 import java.io.File
 
 class ResolvePlaceholdersAction(
@@ -17,22 +16,22 @@ class ResolvePlaceholdersAction(
             val templatesModel = resourcesHandler.getTemplatesFromFile(templateFile)
             val resolvedTemplates = templateResolver.resolveTemplates(templatesModel)
             val curatedTemplates =
-                filterNonTranslatableStringsForLanguage(templatesModel.language, resolvedTemplates)
+                filterNonTranslatableStringsForLanguage(templatesModel.suffix, resolvedTemplates)
             if (curatedTemplates.isNotEmpty()) {
                 resourcesHandler.saveResolvedStringList(
                     outputDir,
                     curatedTemplates,
-                    templatesModel.language
+                    templatesModel.suffix
                 )
             }
         }
     }
 
     private fun filterNonTranslatableStringsForLanguage(
-        language: Language,
+        suffix: String,
         resolvedStrings: List<StringResource>
     ): List<StringResource> {
-        if (language != Language.Default) {
+        if (suffix.isNotEmpty()) {
             // It is a language specific file
             return resolvedStrings.filter { isTranslatable(it) }
 //            return resolvedStrings.filter { isTranslatable(it) && belongsToLanguage(it, language) }

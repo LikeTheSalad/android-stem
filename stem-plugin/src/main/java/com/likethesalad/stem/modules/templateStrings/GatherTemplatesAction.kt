@@ -7,14 +7,15 @@ import com.likethesalad.stem.modules.common.helpers.resources.ResourcesHandler
 import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesModel
 import com.likethesalad.stem.tools.extensions.get
 import com.likethesalad.stem.tools.extensions.name
-import com.likethesalad.tools.resource.api.android.environment.Language
 import java.io.File
 
 class GatherTemplatesAction(
     private val resourcesHandler: ResourcesHandler,
     private val stemConfiguration: StemConfiguration
 ) {
-    private val VALUES_REGEX = Regex("values(?:-(.+))*")
+    companion object {
+        private val VALUES_REGEX = Regex("values(?:-(.+))*")
+    }
 
     fun gatherTemplateStrings(
         outputDir: File,
@@ -27,22 +28,18 @@ class GatherTemplatesAction(
         }
 
         stringValues.values.forEach { (valueDirName, strings) ->
-            val language = getLanguage(valueDirName)
+            val language = getSuffix(valueDirName)
             val templates = getTemplatesFromResources(templateIds, strings.strings)
             val resources = strings.strings.minus(templates)
             resourcesHandler.saveTemplates(outputDir, gatheredStringsToTemplateStrings(language, resources, templates))
         }
     }
 
-    private fun getLanguage(valuesDirName: String): Language {
+    private fun getSuffix(valuesDirName: String): String {
         val match = VALUES_REGEX.matchEntire(valuesDirName)
             ?: throw IllegalArgumentException("Invalid values dir name: $valuesDirName")
 
-        val languagePart = match.groupValues[1]
-        if (languagePart.isEmpty()) {
-            return Language.Default
-        }
-        return Language.Custom(languagePart)
+        return match.groupValues[1]
     }
 
     private fun getTemplatesFromResources(
@@ -93,14 +90,14 @@ class GatherTemplatesAction(
     }
 
     private fun gatheredStringsToTemplateStrings(
-        language: Language,
+        suffix: String,
         stringResources: List<StringResource>,
         stringTemplates: List<StringResource>
     ): StringsTemplatesModel {
         val placeholdersResolved = getPlaceholdersResolved(stringResources, stringTemplates)
 
         return StringsTemplatesModel(
-            language,
+            suffix,
             stringTemplates,
             placeholdersResolved
         )

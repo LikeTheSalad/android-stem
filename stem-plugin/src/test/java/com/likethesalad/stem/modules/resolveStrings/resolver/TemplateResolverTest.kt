@@ -8,7 +8,6 @@ import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesMode
 import com.likethesalad.stem.testutils.createForTest
 import com.likethesalad.stem.testutils.named
 import com.likethesalad.stem.tools.extensions.name
-import com.likethesalad.tools.resource.api.android.environment.Language
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
@@ -48,7 +47,7 @@ class TemplateResolverTest {
         )
         val templatesModel =
             StringsTemplatesModel(
-                Language.Default, templates, values
+                "", templates, values
             )
 
         // When:
@@ -84,7 +83,7 @@ class TemplateResolverTest {
         )
         val templatesModel =
             StringsTemplatesModel(
-                Language.Default, templates, values
+                "", templates, values
             )
 
         // When:
@@ -126,7 +125,7 @@ class TemplateResolverTest {
         )
         val templatesModel =
             StringsTemplatesModel(
-                Language.Default, templates, values
+                "", templates, values
             )
 
         // When:

@@ -2,8 +2,15 @@ package com.likethesalad.stem.modules.common.helpers.resources.utils
 
 import com.likethesalad.android.protos.StringResource
 import java.io.StringReader
+import java.io.StringWriter
 import javax.xml.parsers.DocumentBuilderFactory
+import javax.xml.transform.OutputKeys
+import javax.xml.transform.TransformerException
+import javax.xml.transform.TransformerFactory
+import javax.xml.transform.dom.DOMSource
+import javax.xml.transform.stream.StreamResult
 import org.w3c.dom.Element
+import org.w3c.dom.Node
 import org.xml.sax.InputSource
 
 object XmlUtils {
@@ -12,6 +19,12 @@ object XmlUtils {
             .newInstance()
             .newDocumentBuilder()
     }
+    private val contentExtractor by lazy {
+        val transformer = TransformerFactory.newInstance().newTransformer()
+        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes")
+        transformer
+    }
+    private val OUTER_XML_TAGS_PATTERN = Regex("^<[^>]*>|<[^>]*>\$")
 
     fun stringResourceModelToElement(
         stringResourceModel: StringResource,
@@ -26,6 +39,18 @@ object XmlUtils {
             } ?: strElement.setAttribute(it.name, it.text)
         }
         return strElement
+    }
+
+    fun getContents(node: Node): String {
+        val outText = StringWriter()
+        val streamResult = StreamResult(outText)
+        return try {
+            contentExtractor.transform(DOMSource(node), streamResult)
+            val text = outText.toString()
+            return OUTER_XML_TAGS_PATTERN.replace(text, "")
+        } catch (e: TransformerException) {
+            node.textContent
+        }
     }
 
     interface NamespaceNameProvider {

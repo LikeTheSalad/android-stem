@@ -3,7 +3,6 @@ project-utilities = "3.1.0"
 android = "8.11.1"
 
 [libraries]
-resourceLocator = "com.likethesalad.tools.resources:string-android-resource-locator:2.4.0"
 android-plugin = { module = "com.android.tools.build:gradle", version.ref = "android" }
 gson = "com.google.code.gson:gson:2.13.1"
 xmlUnit = "org.xmlunit:xmlunit-core:2.10.3"

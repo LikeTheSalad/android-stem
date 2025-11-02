@@ -6,7 +6,6 @@ import com.likethesalad.stem.modules.common.helpers.resources.ResourcesHandler
 import com.likethesalad.stem.modules.resolveStrings.resolver.TemplateResolver
 import com.likethesalad.stem.modules.templateStrings.models.StringsTemplatesModel
 import com.likethesalad.stem.testutils.named
-import com.likethesalad.tools.resource.api.android.environment.Language
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -38,9 +37,8 @@ class ResolvePlaceholdersActionTest {
         val outputDir = mockk<File>()
         val templatesFile = mockk<File>()
         val templates = mockk<StringsTemplatesModel>()
-        val language = Language.Default
         val expectedResult = listOf<StringResource>(mockk(), mockk())
-        every { templates.language }.returns(language)
+        every { templates.suffix }.returns("")
         every { templatesDir.listFiles() }.returns(listOf(templatesFile).toTypedArray())
         every { resourcesHandler.getTemplatesFromFile(templatesFile) } returns templates
         every { templateResolver.resolveTemplates(templates) }.returns(expectedResult)
@@ -49,7 +47,7 @@ class ResolvePlaceholdersActionTest {
         resolvePlaceholdersAction.resolve(templatesDir, outputDir)
 
         // Then:
-        verify { resourcesHandler.saveResolvedStringList(outputDir, expectedResult, language) }
+        verify { resourcesHandler.saveResolvedStringList(outputDir, expectedResult, "") }
     }
 
     @Test
@@ -58,12 +56,12 @@ class ResolvePlaceholdersActionTest {
         val templatesDir = mockk<File>()
         val outputDir = mockk<File>()
         val templatesFile = mockk<File>()
-        val language = Language.Custom("es")
+        val suffix = "es"
         val templates = mockk<StringsTemplatesModel>()
         val translatableStrings = getStringsList(3, true)
         val nonTranslatableStrings = getStringsList(2, false)
         val allStrings = translatableStrings + nonTranslatableStrings
-        every { templates.language }.returns(language)
+        every { templates.suffix }.returns(suffix)
         every { templatesDir.listFiles() }.returns(listOf(templatesFile).toTypedArray())
         every { resourcesHandler.getTemplatesFromFile(templatesFile) } returns templates
         every { templateResolver.resolveTemplates(templates) }.returns(allStrings)
@@ -72,7 +70,7 @@ class ResolvePlaceholdersActionTest {
         resolvePlaceholdersAction.resolve(templatesDir, outputDir)
 
         // Then:
-        verify { resourcesHandler.saveResolvedStringList(outputDir, translatableStrings, language) }
+        verify { resourcesHandler.saveResolvedStringList(outputDir, translatableStrings, suffix) }
     }
 
     @Test
@@ -81,12 +79,12 @@ class ResolvePlaceholdersActionTest {
         val templatesDir = mockk<File>()
         val outputDir = mockk<File>()
         val templatesFile = mockk<File>()
-        val language = Language.Default
+        val suffix = ""
         val templates = mockk<StringsTemplatesModel>()
         val translatableStrings = getStringsList(3, true)
         val nonTranslatableStrings = getStringsList(2, false)
         val allStrings = translatableStrings + nonTranslatableStrings
-        every { templates.language }.returns(language)
+        every { templates.suffix }.returns(suffix)
         every { templatesDir.listFiles() }.returns(listOf(templatesFile).toTypedArray())
         every { resourcesHandler.getTemplatesFromFile(templatesFile) } returns templates
         every { templateResolver.resolveTemplates(templates) }.returns(allStrings)
@@ -95,7 +93,7 @@ class ResolvePlaceholdersActionTest {
         resolvePlaceholdersAction.resolve(templatesDir, outputDir)
 
         // Then:
-        verify { resourcesHandler.saveResolvedStringList(outputDir, allStrings, language) }
+        verify { resourcesHandler.saveResolvedStringList(outputDir, allStrings, suffix) }
     }
 
     private fun getStringsList(

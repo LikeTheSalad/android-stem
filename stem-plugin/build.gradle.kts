@@ -6,7 +6,6 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.resourceLocator)
     implementation(libs.gson)
     compileOnly(libs.android.plugin)
     testImplementation(platform(libs.junit.bom))
