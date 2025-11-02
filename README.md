@@ -1,6 +1,6 @@
 # Android Stem
 
-![version](https://img.shields.io/gradle-plugin-portal/v/com.likethesalad.stem)
+[![version](https://img.shields.io/gradle-plugin-portal/v/com.likethesalad.stem)](https://plugins.gradle.org/plugin/com.likethesalad.stem)
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=VJWEQ767PEYCA)
 [<img src="https://cdn.ko-fi.com/cdn/kofi2.png?v=3" alt="ko-fi" width="100px"/>](https://ko-fi.com/N4N31QU53)
