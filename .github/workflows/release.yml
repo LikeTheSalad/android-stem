@@ -33,13 +33,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      - name: Release to Maven Central
-        run: ./gradlew publishToMavenCentral -Prelease=true
-        env:
-          ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.SONATYPE_USERNAME }}
-          ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.SONATYPE_PASSWORD }}
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          GPG_PASSWORD: ${{ secrets.GPG_PASSWORD }}
       - name: Release to the Gradle plugin portal
         run: ./gradlew publishPlugins -Prelease=true
         env:
