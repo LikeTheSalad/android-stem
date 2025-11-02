@@ -30,8 +30,16 @@ class GatherTemplatesAction(
         stringValues.values.forEach { (valueDirName, strings) ->
             val suffix = getSuffix(valueDirName)
             val templates = getTemplatesFromResources(templateIds, strings.strings)
-            val resources = strings.strings.minus(templates)
-            resourcesHandler.saveTemplates(outputDir, gatheredStringsToTemplateStrings(suffix, resources, templates))
+            val localizedStrings = strings.strings.minus(templates)
+            val stringResources = if (suffix.isEmpty()) {
+                listOf(localizedStrings)
+            } else {
+                stringValues.get("values")?.let { listOf(localizedStrings, it) } ?: listOf(localizedStrings)
+            }
+            resourcesHandler.saveTemplates(
+                outputDir,
+                gatheredStringsToTemplateStrings(suffix, stringResources, templates)
+            )
         }
     }
 
@@ -91,7 +99,7 @@ class GatherTemplatesAction(
 
     private fun gatheredStringsToTemplateStrings(
         suffix: String,
-        stringResources: List<StringResource>,
+        stringResources: List<List<StringResource>>,
         stringTemplates: List<StringResource>
     ): StringsTemplatesModel {
         val placeholdersResolved = getPlaceholdersResolved(stringResources, stringTemplates)
@@ -104,7 +112,7 @@ class GatherTemplatesAction(
     }
 
     private fun getPlaceholdersResolved(
-        strings: List<StringResource>,
+        strings: List<List<StringResource>>,
         templates: List<StringResource>
     ): Map<String, String> {
         val stringsMap = stringResourcesToMap(strings)
@@ -114,16 +122,20 @@ class GatherTemplatesAction(
         val placeholdersResolved = mutableMapOf<String, String>()
 
         for (it in placeholders) {
-            placeholdersResolved[it] = stringsMap.getValue(it)//todo issue
+            placeholdersResolved[it] = stringsMap.getValue(it)
         }
 
         return placeholdersResolved
     }
 
-    private fun stringResourcesToMap(list: List<StringResource>): Map<String, String> {
+    private fun stringResourcesToMap(lists: List<List<StringResource>>): Map<String, String> {
         val map = mutableMapOf<String, String>()
-        for (it in list) {
-            map[it.name()] = it.text
+        for (list in lists) {
+            for (item in list) {
+                if (item.name() !in map) {
+                    map[item.name()] = item.text
+                }
+            }
         }
         return map
     }
