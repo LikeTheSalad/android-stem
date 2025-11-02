@@ -8,7 +8,7 @@ import java.nio.file.Paths
 import kotlin.io.path.absolutePathString
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class StringResourceCollectorTest {
     companion object {

@@ -4,12 +4,12 @@ import com.google.common.truth.Truth
 import com.likethesalad.android.protos.Attribute
 import com.likethesalad.android.protos.StringResource
 import com.likethesalad.stem.testutils.named
+import java.io.File
 import java.io.StringReader
 import javax.xml.parsers.DocumentBuilderFactory
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TemporaryFolder
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.TempDir
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
@@ -17,8 +17,8 @@ import org.xml.sax.InputSource
 
 class AndroidXmlResDocumentTest {
 
-    @get:Rule
-    val temporaryFolder = TemporaryFolder()
+    @TempDir
+    lateinit var temporaryFolder: File
 
     private val documentBuilderFactory = DocumentBuilderFactory.newInstance().apply { isNamespaceAware = true }
     private val docBuilder = documentBuilderFactory.newDocumentBuilder()
@@ -146,7 +146,7 @@ class AndroidXmlResDocumentTest {
         // Given
         val androidXmlResDocument =
             AndroidXmlResDocument()
-        val file = temporaryFolder.newFile()
+        val file = File(temporaryFolder, "temp_file")
         androidXmlResDocument.appendStringResource(
             StringResource.named(
                 "some_name1",
@@ -182,7 +182,7 @@ class AndroidXmlResDocumentTest {
         // Given
         val androidXmlResDocument =
             AndroidXmlResDocument()
-        val file = temporaryFolder.newFile()
+        val file = File(temporaryFolder, "temp_file")
         androidXmlResDocument.appendStringResource(
             StringResource.named(
                 "some_name1",
@@ -216,7 +216,7 @@ class AndroidXmlResDocumentTest {
     @Test
     fun `verify custom prefixes`() {
         val document = AndroidXmlResDocument()
-        val outputFile = temporaryFolder.newFile()
+        val outputFile = File(temporaryFolder, "temp_file")
         val namespace = "http://some.namespace.com/"
         val resource = StringResource.named(
             "someName", "someValue",
@@ -236,7 +236,7 @@ class AndroidXmlResDocumentTest {
     @Test
     fun `verify custom prefixes reused`() {
         val document = AndroidXmlResDocument()
-        val outputFile = temporaryFolder.newFile()
+        val outputFile = File(temporaryFolder, "temp_file")
         val namespace = "http://some.namespace.com/"
         val resource = StringResource.named(
             "someName", "someValue", listOf(
@@ -264,7 +264,7 @@ class AndroidXmlResDocumentTest {
     @Test
     fun `verify multipl prefixes`() {
         val document = AndroidXmlResDocument()
-        val outputFile = temporaryFolder.newFile()
+        val outputFile = File(temporaryFolder, "temp_file")
         val namespace = "http://some.namespace.com/"
         val namespace2 = "http://someother.namespace.com/"
         val resource = StringResource.named(

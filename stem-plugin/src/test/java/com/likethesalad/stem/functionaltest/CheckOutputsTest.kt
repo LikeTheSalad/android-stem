@@ -16,7 +16,7 @@ import com.likethesalad.tools.functional.testing.blocks.impl.plugins.GradlePlugi
 import com.likethesalad.tools.functional.testing.utils.TestAssetsProvider
 import java.io.File
 import junit.framework.TestCase.fail
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.xmlunit.builder.DiffBuilder.compare
 import org.xmlunit.builder.Input
 

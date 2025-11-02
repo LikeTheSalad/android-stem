@@ -11,7 +11,6 @@ class ResolvePlaceholdersAction(
     private val resourcesHandler: ResourcesHandler
 ) {
 
-
     fun resolve(templatesDir: File, outputDir: File) {
         val templateFiles = templatesDir.listFiles()?.toList() ?: emptyList<File>()
         for (templateFile in templateFiles) {

@@ -11,15 +11,15 @@ import com.likethesalad.stem.tools.extensions.name
 import com.likethesalad.tools.resource.api.android.environment.Language
 import io.mockk.spyk
 import io.mockk.verify
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 class TemplateResolverTest {
 
     private lateinit var templateResolver: TemplateResolver
     private lateinit var recursiveLevelDetectorSpy: RecursiveLevelDetector
 
-    @Before
+    @BeforeEach
     fun setUp() {
         recursiveLevelDetectorSpy = spyk(RecursiveLevelDetector())
         templateResolver =

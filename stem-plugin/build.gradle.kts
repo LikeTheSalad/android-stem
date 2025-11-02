@@ -9,8 +9,8 @@ dependencies {
     implementation(libs.resourceLocator)
     implementation(libs.gson)
     compileOnly(libs.android.plugin)
-    testImplementation(libs.unitTesting)
-    testImplementation(libs.zip4j)
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.bundles.junit)
     testImplementation(libs.xmlUnit)
     testImplementation(libs.android.plugin)
     testImplementation(libs.assertj)
@@ -20,6 +20,10 @@ dependencies {
 
 libConventions {
     setJavaVersion("11")
+}
+
+tasks.withType(Test::class).configureEach {
+    useJUnitPlatform()
 }
 
 gradlePlugin {

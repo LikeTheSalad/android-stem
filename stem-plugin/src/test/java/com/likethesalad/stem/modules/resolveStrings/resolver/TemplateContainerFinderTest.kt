@@ -3,7 +3,7 @@ package com.likethesalad.stem.modules.resolveStrings.resolver
 import com.google.common.truth.Truth
 import com.likethesalad.stem.configuration.StemConfiguration
 import com.likethesalad.stem.testutils.createForTest
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class TemplateContainerFinderTest {
 

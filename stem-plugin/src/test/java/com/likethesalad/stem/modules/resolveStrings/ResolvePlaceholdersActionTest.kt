@@ -11,8 +11,8 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import java.io.File
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 class ResolvePlaceholdersActionTest {
 
@@ -21,7 +21,7 @@ class ResolvePlaceholdersActionTest {
 
     private lateinit var resolvePlaceholdersAction: ResolvePlaceholdersAction
 
-    @Before
+    @BeforeEach
     fun setUp() {
         resourcesHandler = mockk(relaxUnitFun = true)
         templateResolver = mockk(relaxUnitFun = true)

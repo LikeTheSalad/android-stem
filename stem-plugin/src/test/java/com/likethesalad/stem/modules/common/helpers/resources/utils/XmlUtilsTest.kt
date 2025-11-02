@@ -6,7 +6,7 @@ import com.likethesalad.android.protos.StringResource
 import com.likethesalad.stem.testutils.named
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class XmlUtilsTest {
 

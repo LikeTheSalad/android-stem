@@ -2,25 +2,24 @@ package com.likethesalad.stem.modules.common.helpers.files
 
 import com.google.common.truth.Truth
 import java.io.File
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TemporaryFolder
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.TempDir
 
 class OutputStringFileResolverTest {
 
-    @get:Rule
-    val temporaryFolder = TemporaryFolder()
+    @TempDir
+    lateinit var temporaryFolder: File
 
     private val srcDirName = "src"
     private lateinit var srcDir: File
     private lateinit var incrementalDir: File
     private lateinit var outputStringFileResolver: OutputStringFileResolver
 
-    @Before
+    @BeforeEach
     fun setup() {
-        srcDir = temporaryFolder.newFolder(srcDirName)
-        incrementalDir = temporaryFolder.newFolder("build", "incremental", "taskName")
+        srcDir = File(temporaryFolder, srcDirName)
+        incrementalDir = File(temporaryFolder, "build/incremental/taskName")
         outputStringFileResolver = OutputStringFileResolver()
     }
 
