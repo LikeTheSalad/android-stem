@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Different Languages</string>
+    <string name="welcome_message">Welcome to ${app_name}</string>
+</resources>

@@ -226,6 +226,13 @@ class CheckOutputsTest : BasePluginTest() {
     }
 
     @Test
+    fun `verify multi-languages app outputs with shared upstream values`() {
+        runInputOutputComparisonTest(
+            "multi_languages_shared_values", listOf("debug")
+        )
+    }
+
+    @Test
     fun `verify multi-languages app outputs with localized-only templates`() {
         val inOutDirName = "multi_languages_localized_templates"
         val androidProjectDescriptor = createAndroidAppProjectDescriptor(

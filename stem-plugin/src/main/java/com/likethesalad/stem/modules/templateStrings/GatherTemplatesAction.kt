@@ -28,10 +28,10 @@ class GatherTemplatesAction(
         }
 
         stringValues.values.forEach { (valueDirName, strings) ->
-            val language = getSuffix(valueDirName)
+            val suffix = getSuffix(valueDirName)
             val templates = getTemplatesFromResources(templateIds, strings.strings)
             val resources = strings.strings.minus(templates)
-            resourcesHandler.saveTemplates(outputDir, gatheredStringsToTemplateStrings(language, resources, templates))
+            resourcesHandler.saveTemplates(outputDir, gatheredStringsToTemplateStrings(suffix, resources, templates))
         }
     }
 
@@ -114,7 +114,7 @@ class GatherTemplatesAction(
         val placeholdersResolved = mutableMapOf<String, String>()
 
         for (it in placeholders) {
-            placeholdersResolved[it] = stringsMap.getValue(it)
+            placeholdersResolved[it] = stringsMap.getValue(it)//todo issue
         }
 
         return placeholdersResolved
