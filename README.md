@@ -55,7 +55,7 @@ Find the latest version [here](https://plugins.gradle.org/plugin/com.likethesala
 
 ---
 
-### 2. Add Templates
+### 2. Create and use Templates
 
 A **template** is a string that references one or more placeholders.  
 You can define templates in your app's `res` directories or import them from external libraries.
@@ -122,6 +122,43 @@ You can trigger it in multiple ways:
   ```
 
 More details under [Running It Manually](#running-it-manually).
+
+### 4. Checking its results
+
+#### At Runtime
+
+You can check the resolved strings at runtime by using the templates created on **Step 2** on your layout files. For example:
+
+```xml
+<!-- my_activity.xml -->
+<TextView
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:text="@string/welcome_message" />
+```
+
+By the time your app is running, the `welcome_message` template will be already resolved, so your TextView in this example will read: `Welcome to My App Name`.
+
+#### In Unit Tests
+
+You could also check resolved strings in unit tests by using [Robolectric](https://robolectric.org/), and **ensuring you include android resources** for your tests, as explained in their [setup guide](https://robolectric.org/getting-started/#building-with-gradle).
+
+**Example**
+
+```kotlin
+@RunWith(RobolectricTestRunner::class)
+class StringResolvingTest {
+
+    @Test
+    fun check_welcomeMessageStringIsResolved() {
+        val application = RuntimeEnvironment.getApplication()
+
+        val welcomeMessage = application.getString(R.string.welcome_message)
+
+        assertEquals("Welcome to My App Name", welcomeMessage)
+    }
+}
+```
 
 ---
 
