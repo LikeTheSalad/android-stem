@@ -13,7 +13,7 @@ junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
 junit-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine" }
 assertj = "org.assertj:assertj-core:3.27.6"
-mockk = "io.mockk:mockk:1.14.6"
+mockk = "io.mockk:mockk:1.14.7"
 
 [bundles]
 junit = ["junit-jupiter", "junit-launcher", "junit-engine"]
