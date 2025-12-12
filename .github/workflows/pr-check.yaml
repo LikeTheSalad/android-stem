@@ -24,7 +24,7 @@ jobs:
         run: ./check.sh
       - name: Store build report
         if: failure()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ matrix.os }}-reports
           path: |
