@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.artifactPublisher)
+    kotlin("jvm") version "2.3.0" apply false
 }
 
 artifactPublisher {
@@ -7,7 +8,7 @@ artifactPublisher {
     url = "https://github.com/LikeTheSalad/android-stem"
     vcsUrl = "https://github.com/LikeTheSalad/android-stem"
     issueTrackerUrl = "https://github.com/LikeTheSalad/android-stem/issues"
-    tags = ["android", "stem", "xml", "strings"]
+    tags.addAll("android", "stem", "xml", "strings")
 }
 
 description = "Resolves Android app's XML string references in other XML strings at compile time."

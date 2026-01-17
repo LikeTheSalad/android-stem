@@ -1,8 +1,10 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+
 plugins {
-    alias(libs.plugins.java.library)
+    kotlin("jvm")
+    id("java-gradle-plugin")
     alias(libs.plugins.androidTestTools)
     alias(libs.plugins.wire)
-    id("java-gradle-plugin")
 }
 
 dependencies {
@@ -17,8 +19,12 @@ dependencies {
     testPluginDependency("com.android.tools.build:gradle:8.13.1")
 }
 
-libConventions {
-    setJavaVersion("11")
+kotlin {
+    jvmToolchain(17)
+    compilerOptions {
+        apiVersion.set(KotlinVersion.KOTLIN_1_9)
+        languageVersion.set(KotlinVersion.KOTLIN_1_9)
+    }
 }
 
 tasks.withType(Test::class).configureEach {
