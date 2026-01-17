@@ -33,10 +33,10 @@ tasks.withType(Test::class).configureEach {
 
 gradlePlugin {
     plugins {
-        create("placeholderResolverPlugin") {
+        create("stemPlugin", Action<PluginDeclaration> {
             id = "com.likethesalad.stem"
             implementationClass = "com.likethesalad.stem.StemPlugin"
-        }
+        })
     }
 }
 
