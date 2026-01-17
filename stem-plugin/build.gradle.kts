@@ -33,10 +33,10 @@ tasks.withType(Test::class).configureEach {
 
 gradlePlugin {
     plugins {
-        create("stemPlugin", Action<PluginDeclaration> {
+        create("stemPlugin") {
             id = "com.likethesalad.stem"
             implementationClass = "com.likethesalad.stem.StemPlugin"
-        })
+        }
     }
 }
 
