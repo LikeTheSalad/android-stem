@@ -16,11 +16,6 @@ android {
         versionName = "1.0"
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
@@ -28,7 +23,15 @@ android {
     }
 }
 
+kotlin {
+    compilerOptions {
+        jvmToolchain(17)
+    }
+}
+
 dependencies {
+    implementation(project(":my-library"))
+    stemProvider(project(":my-library"))
     testImplementation(libs.unitTesting)
     testImplementation(libs.robolectric)
 }

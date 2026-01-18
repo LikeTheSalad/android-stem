@@ -14,3 +14,4 @@ dependencyResolutionManagement {
 }
 includeBuild("..")
 include(":app")
+include(":my-library")
