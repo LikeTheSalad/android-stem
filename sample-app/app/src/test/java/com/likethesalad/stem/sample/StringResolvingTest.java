@@ -1,4 +1,4 @@
-package com.likethesalad.stem.test;
+package com.likethesalad.stem.sample;
 
 import static org.junit.Assert.assertEquals;
 
