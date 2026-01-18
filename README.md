@@ -97,7 +97,16 @@ plugins {
 }
 
 dependencies {
+    // You still need to add your dependency as usual (with `implementation` or `api`), as adding it with `stemProvider` will only
+    // make it available to Stem's compile task where it gathers external strings. However, `stemProvider` does not
+    // include the libraries defined with it as regular app's dependencies, so you need to define your dependencies
+    // twice, one with the regular `implementation` or `api` declaration for it to become your app's dependency, and another
+    // with `stemProvider` for Stem to use its strings at compile-time.
+    implementation(project(":my-submodule-with-templates")) 
     stemProvider(project(":my-submodule-with-templates"))
+  
+    // Another example but this time it uses an external library and not a subproject.
+    implementation("an.external.lib:with-templates:0.0.0")
     stemProvider("an.external.lib:with-templates:0.0.0")
 }
 ```
