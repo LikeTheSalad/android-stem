@@ -38,7 +38,6 @@ class StemPlugin : Plugin<Project> {
         val androidResourcesHandler = AndroidResourcesHandler(outputStringFileResolver)
         val stemConfiguration = StemConfiguration.create(extension)
         val stemProviderConfig = project.configurations.create("stemProvider") {
-            it.setTransitive(false)
             it.isCanBeResolved = false
             it.isCanBeConsumed = false
         }
@@ -119,6 +118,7 @@ class StemPlugin : Plugin<Project> {
     private fun createClasspath(project: Project, bucket: Configuration, name: String): Configuration {
         return project.configurations.create(name) {
             it.extendsFrom(bucket)
+            it.isTransitive = false
             it.isCanBeResolved = true
             it.isCanBeConsumed = false
         }
