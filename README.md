@@ -319,6 +319,13 @@ Output for `demo` build:
 
 ---
 
+## Try it out
+
+You can check out the [demo-app](demo-app) to see it working right now. Make sure you open the `demo-app` folder directly
+with Android Studio and **NOT** the root folder of this repo, so that the `demo-app` works properly.
+
+---
+
 ## Running It Manually
 
 To run only the placeholder resolution task (without building the app):
