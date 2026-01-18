@@ -8,3 +8,4 @@ unitTesting = { module = "com.likethesalad.tools:unit-testing", version.ref = "p
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android" }
+kotlin = { id = "org.jetbrains.kotlin.android", version = "2.2.20" }

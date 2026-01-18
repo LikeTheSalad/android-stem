@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
-    kotlin("jvm")
+    alias(libs.plugins.kotlin)
     id("java-gradle-plugin")
     alias(libs.plugins.androidTestTools)
     alias(libs.plugins.wire)

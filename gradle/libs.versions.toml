@@ -23,3 +23,4 @@ artifactPublisher = { id = "com.likethesalad.artifact-publisher", version = "3.5
 androidTestTools = { id = "com.likethesalad.tools.android-compilation-testing", version.ref = "project-utilities" }
 android-application = { id = "com.android.application", version.ref = "android" }
 wire = { id = "com.squareup.wire", version = "5.4.0" }
+kotlin = { id = "org.jetbrains.kotlin.jvm", version = "2.2.20" }

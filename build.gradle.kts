@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.artifactPublisher)
-    kotlin("jvm") version "2.2.20" apply false
+    alias(libs.plugins.kotlin) apply false
 }
 
 artifactPublisher {
