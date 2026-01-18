@@ -5,4 +5,5 @@
     <string name="welcome_message_bold">Welcome to <b>${app_name}</b></string>
     <string name="tag_control">Welcome to <b>something bold</b></string>
     <string name="uses_lib_string">This string uses a lib named ${lib_name}</string>
+    <string name="uses_generated_string">This string uses a gradle-generated string: ${generated_string}</string>
 </resources>

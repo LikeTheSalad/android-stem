@@ -18,12 +18,12 @@ import org.robolectric.RuntimeEnvironment;
 public class StringResolvingTest {
 
     @Test
-    public void check_welcomeMessageStringIsResolved() {
+    public void check_resolveStrings() {
         Application application = RuntimeEnvironment.getApplication();
 
-        String welcomeMessage = application.getString(R.string.welcome_message);
-
-        assertEquals("Welcome to Stem Test", welcomeMessage);
+        assertEquals("Welcome to Stem Test", application.getString(R.string.welcome_message));
+        assertEquals("This string uses a lib named My Library", application.getString(R.string.uses_lib_string));
+        assertEquals("This string uses a gradle-generated string: My generated string", application.getString(R.string.uses_generated_string));
     }
 
     @Test

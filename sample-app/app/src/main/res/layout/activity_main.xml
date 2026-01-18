@@ -22,4 +22,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="@string/uses_lib_string" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/uses_generated_string" />
 </LinearLayout>

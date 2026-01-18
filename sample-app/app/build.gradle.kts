@@ -14,6 +14,7 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+        resValue("string", "generated_string", "My generated string")
     }
 
     testOptions {
