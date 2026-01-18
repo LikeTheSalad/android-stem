@@ -5,7 +5,7 @@ plugins {
 
 android {
     compileSdk = 34
-    namespace = "com.likethesalad.stem.sample.lib"
+    namespace = "com.likethesalad.stem.demo.lib"
 
     defaultConfig {
         minSdk = 26
