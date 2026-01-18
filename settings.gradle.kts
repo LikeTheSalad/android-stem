@@ -1,5 +1,3 @@
-import org.gradle.api.initialization.resolve.RepositoriesMode
-
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -8,15 +6,15 @@ pluginManagement {
     }
     resolutionStrategy {
         eachPlugin {
-            def pluginId = it.requested.id.id
+            val pluginId = requested.id.id
             if (pluginId == "com.likethesalad.artifact-publisher") {
-                useModule("com.likethesalad.tools:artifact-publisher:${it.requested.version}")
+                useModule("com.likethesalad.tools:artifact-publisher:${requested.version}")
             }
             if (pluginId == "plugin-metadata-producer") {
                 useModule("com.likethesalad.tools:plugin-metadata-producer:1.0.0")
             }
-            if (it.requested.id.namespace == "com.likethesalad.tools") {
-                useModule("com.likethesalad.tools:plugin-tools:${it.requested.version}")
+            if (requested.id.namespace == "com.likethesalad.tools") {
+                useModule("com.likethesalad.tools:plugin-tools:${requested.version}")
             }
         }
     }
@@ -29,13 +27,5 @@ dependencyResolutionManagement {
         google()
     }
 }
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.21"
-    }
-}
-rootProject.name = 'stem'
-include ':stem-plugin'
+rootProject.name = "stem"
+include(":stem-plugin")

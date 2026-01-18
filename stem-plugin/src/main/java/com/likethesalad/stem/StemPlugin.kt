@@ -1,6 +1,5 @@
 package com.likethesalad.stem
 
-import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.likethesalad.stem.configuration.StemConfiguration
 import com.likethesalad.stem.modules.collector.task.RawStringCollectorTask
@@ -24,7 +23,6 @@ import org.gradle.api.attributes.AttributeContainer
 import org.gradle.api.file.FileCollection
 
 class StemPlugin : Plugin<Project> {
-    private lateinit var androidExtension: ApplicationExtension
     private lateinit var extension: StemExtension
 
     companion object {
@@ -33,7 +31,6 @@ class StemPlugin : Plugin<Project> {
     }
 
     override fun apply(project: Project) {
-        androidExtension = project.extensions.getByType(ApplicationExtension::class.java)
         extension = createExtension(project)
         val components = getAndroidComponents(project)
         val taskContainer = project.tasks
@@ -41,7 +38,6 @@ class StemPlugin : Plugin<Project> {
         val androidResourcesHandler = AndroidResourcesHandler(outputStringFileResolver)
         val stemConfiguration = StemConfiguration.create(extension)
         val stemProviderConfig = project.configurations.create("stemProvider") {
-            it.setTransitive(false)
             it.isCanBeResolved = false
             it.isCanBeConsumed = false
         }
@@ -122,6 +118,7 @@ class StemPlugin : Plugin<Project> {
     private fun createClasspath(project: Project, bucket: Configuration, name: String): Configuration {
         return project.configurations.create(name) {
             it.extendsFrom(bucket)
+            it.isTransitive = false
             it.isCanBeResolved = true
             it.isCanBeConsumed = false
         }

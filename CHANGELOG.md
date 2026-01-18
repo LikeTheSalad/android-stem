@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+## Unreleased
+
+* Fix bug #255 by ensuring that "stemProvider" dependencies are not transitive.
+
 ## Version 3.0.0 (2025-11-02)
 
 * [BREAKING] Removed `com.likethesalad.stem-library` plugin for libraries. It's replaced by adding those libraries

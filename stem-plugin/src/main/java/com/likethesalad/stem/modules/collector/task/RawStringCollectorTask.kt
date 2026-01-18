@@ -24,7 +24,9 @@ abstract class RawStringCollectorTask : BaseTask() {
     @TaskAction
     fun execute() {
         val resDirs = localResDirs.get().map { collection -> collection.map { dir -> dir.asFile } }.toMutableList()
-        resDirs.add(libraryResDirs.files.toList())
+        val files = libraryResDirs.files.toList()
+        logger.debug("[STEM] Library res dirs found: {}", files)
+        resDirs.add(files)
         val values = StringResourceCollector.collectStringResourcesPerValueDir(resDirs)
         outputFile.get().asFile.outputStream().use {
             ValuesStringResources.ADAPTER.encode(it, values)
