@@ -1,3 +1,3 @@
 #!/bin/sh -e
 ./gradlew check
-./gradlew -p "sample-app" testDebugUnitTest
+./gradlew -p "demo-app" testDebugUnitTest
