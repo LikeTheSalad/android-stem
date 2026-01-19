@@ -8,7 +8,7 @@ gson = "com.google.code.gson:gson:2.13.2"
 xmlUnit = "org.xmlunit:xmlunit-core:2.11.0"
 
 #Testing
-junit-bom = "org.junit:junit-bom:5.14.1"
+junit-bom = "org.junit:junit-bom:5.14.2"
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
 junit-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine" }
