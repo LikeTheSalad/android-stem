@@ -1,6 +1,6 @@
 package com.likethesalad.stem.functionaltest.testtools
 
-import com.likethesalad.tools.functional.testing.blocks.GradleBlockItem
+import com.likethesalad.tools.blocks.GradleBlockItem
 
 class PlaceholderBlock(private val start: String?=null, private val end: String?=null) : GradleBlockItem {
 

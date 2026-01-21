@@ -1,5 +1,4 @@
 [versions]
-project-utilities = "3.1.0"
 android = "9.0.0"
 
 [libraries]
@@ -20,7 +19,6 @@ junit = ["junit-jupiter", "junit-launcher", "junit-engine"]
 
 [plugins]
 artifactPublisher = { id = "com.likethesalad.artifact-publisher", version = "3.5.0" }
-androidTestTools = { id = "com.likethesalad.tools.android-compilation-testing", version.ref = "project-utilities" }
 android-application = { id = "com.android.application", version.ref = "android" }
 wire = { id = "com.squareup.wire", version = "5.5.0" }
 kotlin = { id = "org.jetbrains.kotlin.jvm", version = "2.3.0" }

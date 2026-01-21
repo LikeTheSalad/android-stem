@@ -1,7 +1,7 @@
 package com.likethesalad.stem.functionaltest.testtools
 
-import com.likethesalad.tools.functional.testing.AndroidTestProject
-import com.likethesalad.tools.functional.testing.descriptor.ProjectDescriptor
+import com.likethesalad.tools.AndroidTestProject
+import com.likethesalad.tools.descriptor.ProjectDescriptor
 import java.io.File
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.BuildResult
