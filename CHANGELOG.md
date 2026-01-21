@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-## Unreleased
+## Version 3.1.1 (2026-01-21)
 
 * Fix bug #264
 * Clean up internal utils
