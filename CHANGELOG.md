@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+## Unreleased
+
+* Fix bug #264
+* Clean up internal utils
+
 ## Version 3.1.0 (2026-01-18)
 
 * Fix bug #255 by ensuring that "stemProvider" dependencies are not transitive.
