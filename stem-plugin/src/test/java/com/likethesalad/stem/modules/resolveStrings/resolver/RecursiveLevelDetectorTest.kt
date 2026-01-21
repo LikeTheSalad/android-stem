@@ -5,8 +5,8 @@ import com.likethesalad.stem.configuration.StemConfiguration
 import com.likethesalad.stem.testutils.createForTest
 import com.likethesalad.stem.testutils.named
 import com.likethesalad.stem.tools.extensions.name
-import junit.framework.TestCase.fail
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.Test
 
 class RecursiveLevelDetectorTest {

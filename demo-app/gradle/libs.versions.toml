@@ -1,6 +1,6 @@
 [versions]
 project-utilities = "3.1.0"
-android = "8.13.2"
+android = "9.0.0"
 
 [libraries]
 robolectric = "org.robolectric:robolectric:4.16"
@@ -9,4 +9,3 @@ unitTesting = { module = "com.likethesalad.tools:unit-testing", version.ref = "p
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android" }
 android-library = { id = "com.android.library", version.ref = "android" }
-kotlin = { id = "org.jetbrains.kotlin.android", version = "2.3.0" }

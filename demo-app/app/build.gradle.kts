@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin)
     id("com.likethesalad.stem")
 }
 
@@ -14,6 +13,9 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+        buildFeatures {
+            resValues = true
+        }
         resValue("string", "generated_string", "My generated string")
     }
 

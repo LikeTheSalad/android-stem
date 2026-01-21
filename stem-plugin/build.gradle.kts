@@ -3,8 +3,17 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 plugins {
     alias(libs.plugins.kotlin)
     id("java-gradle-plugin")
-    alias(libs.plugins.androidTestTools)
     alias(libs.plugins.wire)
+}
+
+val testPluginDependency: Configuration by configurations.creating
+val testPluginClasspath: Configuration = configurations.create("testPluginClasspath") {
+    extendsFrom(testPluginDependency)
+    isCanBeConsumed = false
+    isCanBeResolved = true
+}
+tasks.withType<PluginUnderTestMetadata> {
+    pluginClasspath.from(testPluginClasspath)
 }
 
 dependencies {
@@ -16,7 +25,7 @@ dependencies {
     testImplementation(libs.android.plugin)
     testImplementation(libs.assertj)
     testImplementation(libs.mockk)
-    testPluginDependency("com.android.tools.build:gradle:8.13.2")
+    testPluginDependency("com.android.tools.build:gradle:9.0.0")
 }
 
 kotlin {

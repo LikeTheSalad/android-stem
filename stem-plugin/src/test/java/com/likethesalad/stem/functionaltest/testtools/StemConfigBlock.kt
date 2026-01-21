@@ -1,6 +1,6 @@
 package com.likethesalad.stem.functionaltest.testtools
 
-import com.likethesalad.tools.functional.testing.blocks.GradleBlockItem
+import com.likethesalad.tools.blocks.GradleBlockItem
 
 class StemConfigBlock(
     private val includeLocalizedOnlyTemplates: Boolean? = null,

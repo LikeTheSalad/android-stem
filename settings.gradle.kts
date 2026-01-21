@@ -1,5 +1,6 @@
 pluginManagement {
     repositories {
+        mavenLocal()
         gradlePluginPortal()
         mavenCentral()
         google()
@@ -9,12 +10,6 @@ pluginManagement {
             val pluginId = requested.id.id
             if (pluginId == "com.likethesalad.artifact-publisher") {
                 useModule("com.likethesalad.tools:artifact-publisher:${requested.version}")
-            }
-            if (pluginId == "plugin-metadata-producer") {
-                useModule("com.likethesalad.tools:plugin-metadata-producer:1.0.0")
-            }
-            if (requested.id.namespace == "com.likethesalad.tools") {
-                useModule("com.likethesalad.tools:plugin-tools:${requested.version}")
             }
         }
     }
