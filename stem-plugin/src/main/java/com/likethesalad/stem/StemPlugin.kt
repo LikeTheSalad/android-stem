@@ -1,5 +1,6 @@
 package com.likethesalad.stem
 
+import com.android.build.api.AndroidPluginVersion
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.likethesalad.stem.configuration.StemConfiguration
 import com.likethesalad.stem.modules.collector.task.RawStringCollectorTask
@@ -28,6 +29,7 @@ class StemPlugin : Plugin<Project> {
     companion object {
         private const val EXTENSION_NAME = "androidStem"
         private val artifactTypeAttr = Attribute.of("artifactType", String::class.java)
+        private val AGP_MIN_SUPPORTED_VERSION = AndroidPluginVersion(8, 4, 0)
     }
 
     override fun apply(project: Project) {
@@ -102,11 +104,11 @@ class StemPlugin : Plugin<Project> {
         val components = project.extensions.getByType(ApplicationAndroidComponentsExtension::class.java)
         val pluginVersion = components.pluginVersion
 
-        if (pluginVersion.major >= 8 && pluginVersion.minor >= 4) {
-            return components
+        if (pluginVersion < AGP_MIN_SUPPORTED_VERSION) {
+            throw IllegalStateException("Android Stem requires a minimum Android Gradle Plugin version of 8.4.0. The current version is: $pluginVersion")
         }
 
-        throw IllegalStateException("Android Stem requires a minimum Android Gradle Plugin version of 8.4.0. The current version is: $pluginVersion")
+        return components
     }
 
     private fun <T> copyAttribute(key: Attribute<T>, from: AttributeContainer, into: AttributeContainer) {
