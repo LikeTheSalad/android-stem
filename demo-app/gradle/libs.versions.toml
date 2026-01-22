@@ -3,7 +3,7 @@ project-utilities = "3.1.0"
 android = "9.0.0"
 
 [libraries]
-robolectric = "org.robolectric:robolectric:4.16"
+robolectric = "org.robolectric:robolectric:4.16.1"
 unitTesting = { module = "com.likethesalad.tools:unit-testing", version.ref = "project-utilities" }
 
 [plugins]
