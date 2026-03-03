@@ -25,7 +25,7 @@ dependencies {
     testImplementation(libs.android.plugin)
     testImplementation(libs.assertj)
     testImplementation(libs.mockk)
-    testPluginDependency("com.android.tools.build:gradle:9.0.0")
+    testPluginDependency("com.android.tools.build:gradle:9.1.0")
 }
 
 kotlin {
