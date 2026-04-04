@@ -21,4 +21,4 @@ junit = ["junit-jupiter", "junit-launcher", "junit-engine"]
 artifactPublisher = { id = "com.likethesalad.artifact-publisher", version = "3.5.0" }
 android-application = { id = "com.android.application", version.ref = "android" }
 wire = { id = "com.squareup.wire", version = "5.5.0" }
-kotlin = { id = "org.jetbrains.kotlin.jvm", version = "2.3.10" }
+kotlin = { id = "org.jetbrains.kotlin.jvm", version = "2.3.20" }
