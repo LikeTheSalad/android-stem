@@ -9,7 +9,9 @@ import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 
+@DisableCachingByDefault(because = "Not worth caching")
 open class ResolvePlaceholdersTask
 @Inject constructor(private val args: ResolvePlaceholdersArgs) : BaseTask() {
 

@@ -9,13 +9,19 @@ import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 
+@DisableCachingByDefault(because = "Not worth caching")
 abstract class RawStringCollectorTask : BaseTask() {
     @get:InputFiles
+    @get:PathSensitive(PathSensitivity.RELATIVE)
     abstract val localResDirs: ListProperty<Collection<Directory>>
 
     @get:InputFiles
+    @get:PathSensitive(PathSensitivity.RELATIVE)
     abstract val libraryResDirs: ConfigurableFileCollection
 
     @get:OutputFile
