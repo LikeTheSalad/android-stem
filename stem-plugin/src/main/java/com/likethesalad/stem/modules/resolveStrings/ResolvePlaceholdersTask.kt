@@ -5,17 +5,25 @@ import com.likethesalad.stem.modules.resolveStrings.data.ResolvePlaceholdersArgs
 import com.likethesalad.stem.tools.DirectoryUtils
 import javax.inject.Inject
 import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.CacheableTask
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.TaskAction
-import org.gradle.work.DisableCachingByDefault
 
-@DisableCachingByDefault(because = "Not worth caching")
+@CacheableTask
 open class ResolvePlaceholdersTask
 @Inject constructor(private val args: ResolvePlaceholdersArgs) : BaseTask() {
+
+    @get:Input
+    val placeholderStart: Property<String> = project.objects.property(String::class.java)
+
+    @get:Input
+    val placeholderEnd: Property<String> = project.objects.property(String::class.java)
 
     @SkipWhenEmpty
     @InputDirectory

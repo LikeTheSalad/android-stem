@@ -7,14 +7,14 @@ import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.ListProperty
+import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
-import org.gradle.work.DisableCachingByDefault
 
-@DisableCachingByDefault(because = "Not worth caching")
+@CacheableTask
 abstract class RawStringCollectorTask : BaseTask() {
     @get:InputFiles
     @get:PathSensitive(PathSensitivity.RELATIVE)

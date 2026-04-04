@@ -349,6 +349,96 @@ class CheckOutputsTest : BasePluginTest() {
     }
 
     @Test
+    fun `verify tasks load results from cache`() {
+        val projectName = "basic_from_cache"
+        val variantNames = listOf("debug")
+        val commandList = variantNamesToResolveCommands(variantNames)
+        val cacheDir = getTempFile("build-cache")
+        val project = createProjectWithCache(cacheDir, createAndroidAppProjectDescriptor(projectName, "basic"))
+
+        // First run: populates the cache
+        project.runGradle(projectName, commandList)
+
+        // Wipe build outputs to force a cache look-up on the next run
+        getTempFile(projectName, "build").deleteRecursively()
+
+        // Second run: all tasks should be restored FROM-CACHE
+        val result = project.runGradle(projectName, commandList)
+
+        verifyResultContainsText(
+            result, """
+            > Task :$projectName:debugRawStringCollector FROM-CACHE
+            > Task :$projectName:debugGatherStringTemplates FROM-CACHE
+            > Task :$projectName:debugResolvePlaceholders FROM-CACHE
+        """.trimIndent()
+        )
+        verifyVariantResults(variantNames, projectName, "basic")
+    }
+
+    @Test
+    fun `verify cache is invalidated when placeholder config changes`() {
+        val projectName = "cache_invalidation_placeholder"
+        val variantNames = listOf("debug")
+        val commandList = variantNamesToResolveCommands(variantNames)
+        val cacheDir = getTempFile("build-cache")
+
+        // First run with custom placeholder start "{{" to populate cache
+        val descriptor1 = createAndroidAppProjectDescriptor(
+            projectName,
+            "custom_placeholder_start",
+            config = StemConfigBlock(placeholderBlock = PlaceholderBlock(start = "{{"))
+        )
+        val project = createProjectWithCache(cacheDir, descriptor1)
+        project.runGradle(projectName, commandList)
+
+        // Wipe outputs and change placeholder config
+        getTempFile(projectName, "build").deleteRecursively()
+        val descriptor2 = createAndroidAppProjectDescriptor(
+            projectName,
+            "custom_placeholder_start"
+        )
+        getTempFile(projectName, "build.gradle").writeText(descriptor2.getBuildGradleContents())
+
+        // Second run: RawStringCollector can come FROM-CACHE (no config dependency),
+        // but GatherStringTemplates and ResolvePlaceholders must re-run
+        val result = project.runGradle(projectName, commandList)
+
+        assertThat(result.output).contains("> Task :$projectName:debugRawStringCollector FROM-CACHE")
+        assertThat(result.output).doesNotContain("> Task :$projectName:debugGatherStringTemplates FROM-CACHE")
+        assertThat(result.output).doesNotContain("> Task :$projectName:debugResolvePlaceholders FROM-CACHE")
+    }
+
+    @Test
+    fun `verify cache is invalidated when includeLocalizedOnlyTemplates changes`() {
+        val projectName = "cache_invalidation_localized"
+        val variantNames = listOf("debug")
+        val commandList = variantNamesToResolveCommands(variantNames)
+        val cacheDir = getTempFile("build-cache")
+
+        // First run with includeLocalizedOnlyTemplates = false (default) to populate cache
+        val descriptor1 = createAndroidAppProjectDescriptor(projectName, "multi_languages_localized_templates")
+        val project = createProjectWithCache(cacheDir, descriptor1)
+        project.runGradle(projectName, commandList)
+
+        // Wipe outputs and enable includeLocalizedOnlyTemplates
+        getTempFile(projectName, "build").deleteRecursively()
+        val descriptor2 = createAndroidAppProjectDescriptor(
+            projectName,
+            "multi_languages_localized_templates",
+            config = StemConfigBlock(includeLocalizedOnlyTemplates = true)
+        )
+        getTempFile(projectName, "build.gradle").writeText(descriptor2.getBuildGradleContents())
+
+        // Second run: RawStringCollector can come FROM-CACHE,
+        // but GatherStringTemplates and ResolvePlaceholders must re-run
+        val result = project.runGradle(projectName, commandList)
+
+        assertThat(result.output).contains("> Task :$projectName:debugRawStringCollector FROM-CACHE")
+        assertThat(result.output).doesNotContain("> Task :$projectName:debugGatherStringTemplates FROM-CACHE")
+        assertThat(result.output).doesNotContain("> Task :$projectName:debugResolvePlaceholders FROM-CACHE")
+    }
+
+    @Test
     fun `verify app that takes resources from multiple libraries`() {
         // Create library
         val libName1 = "my_first_library"

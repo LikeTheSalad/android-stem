@@ -5,7 +5,7 @@ import java.io.File
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 
-class AndroidTestProject(val rootDir: File) {
+class AndroidTestProject(val rootDir: File, private val localBuildCacheDir: File? = null) {
     private lateinit var rootGradleFile: File
     private lateinit var settingsFile: File
 
@@ -44,6 +44,9 @@ class AndroidTestProject(val rootDir: File) {
         if (withInfo) {
             extraArgs.add("--info")
         }
+        if (localBuildCacheDir != null) {
+            extraArgs.add("--build-cache")
+        }
         return createGradleRunner()
             .withArguments(commands.map { ":$forProjectName:$it" }.plus(extraArgs))
             .build()
@@ -57,6 +60,9 @@ class AndroidTestProject(val rootDir: File) {
         val extraArgs = mutableListOf("--stacktrace")
         if (withInfo) {
             extraArgs.add("--info")
+        }
+        if (localBuildCacheDir != null) {
+            extraArgs.add("--build-cache")
         }
         return createGradleRunner()
             .withArguments(commands.map { ":$forProjectName:$it" }.plus(extraArgs))
@@ -114,6 +120,16 @@ class AndroidTestProject(val rootDir: File) {
         """.trimIndent()
         )
 
+        val buildCacheBlock = if (localBuildCacheDir != null) {
+            """
+            buildCache {
+                local {
+                    directory = new File('${localBuildCacheDir.absolutePath.replace("\\", "/")}')
+                }
+            }
+            """.trimIndent()
+        } else ""
+
         settingsFile.writeText(
             """
                 pluginManagement {
@@ -123,6 +139,7 @@ class AndroidTestProject(val rootDir: File) {
                         google()
                     }
                 }
+                $buildCacheBlock
                 dependencyResolutionManagement {
                     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
                     repositories {
