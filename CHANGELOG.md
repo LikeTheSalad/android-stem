@@ -4,7 +4,7 @@ Change Log
 ## Version 3.2.0 (2026-04-04)
 
 * Making tasks cacheable
-* Bumpping up dependencies
+* Bumping up dependencies
 
 ## Version 3.1.1 (2026-01-21)
 
