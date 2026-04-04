@@ -9,11 +9,16 @@ import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 
+@DisableCachingByDefault(because = "Not worth caching")
 abstract class GatherTemplatesTask
 @Inject constructor(private val args: GatherTemplatesArgs) : BaseTask() {
     @get:InputFile
+    @get:PathSensitive(PathSensitivity.RELATIVE)
     abstract val stringValuesProto: RegularFileProperty
 
     @get:OutputDirectory

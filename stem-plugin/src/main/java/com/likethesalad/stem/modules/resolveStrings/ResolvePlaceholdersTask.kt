@@ -7,6 +7,8 @@ import javax.inject.Inject
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.TaskAction
 import org.gradle.work.DisableCachingByDefault
@@ -17,6 +19,7 @@ open class ResolvePlaceholdersTask
 
     @SkipWhenEmpty
     @InputDirectory
+    @PathSensitive(PathSensitivity.RELATIVE)
     val templatesDir: DirectoryProperty = project.objects.directoryProperty()
 
     @OutputDirectory
