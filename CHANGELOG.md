@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+## Unreleased
+
+* Making tasks cacheable
+* Bumpping up dependencies
+
 ## Version 3.1.1 (2026-01-21)
 
 * Fix bug #264
