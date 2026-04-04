@@ -7,13 +7,29 @@ import com.likethesalad.stem.tools.DirectoryUtils
 import javax.inject.Inject
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.CacheableTask
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
 
+@CacheableTask
 abstract class GatherTemplatesTask
 @Inject constructor(private val args: GatherTemplatesArgs) : BaseTask() {
+    @get:Input
+    abstract val placeholderStart: Property<String>
+
+    @get:Input
+    abstract val placeholderEnd: Property<String>
+
+    @get:Input
+    abstract val includeLocalizedOnlyTemplates: Property<Boolean>
+
     @get:InputFile
+    @get:PathSensitive(PathSensitivity.RELATIVE)
     abstract val stringValuesProto: RegularFileProperty
 
     @get:OutputDirectory

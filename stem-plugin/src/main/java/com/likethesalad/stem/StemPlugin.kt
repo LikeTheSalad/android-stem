@@ -73,6 +73,9 @@ class StemPlugin : Plugin<Project> {
             gatherTemplatesTask.configure {
                 it.outDir.set(project.layout.buildDirectory.dir("intermediates/stem/${it.name}"))
                 it.stringValuesProto.set(rawStringCollectorTask.flatMap { rawValues -> rawValues.outputFile })
+                it.placeholderStart.set(extension.placeholder.start)
+                it.placeholderEnd.set(extension.placeholder.end)
+                it.includeLocalizedOnlyTemplates.set(extension.includeLocalizedOnlyTemplates)
             }
 
             val resolvePlaceholdersTask = taskContainer.register(
@@ -91,6 +94,8 @@ class StemPlugin : Plugin<Project> {
             resolvePlaceholdersTask.configure {
                 it.templatesDir.set(gatherTemplatesTask.flatMap { gatherTemplates -> gatherTemplates.outDir })
                 it.outputDir.set(project.layout.buildDirectory.dir("generated/stem/${variant.name}"))
+                it.placeholderStart.set(extension.placeholder.start)
+                it.placeholderEnd.set(extension.placeholder.end)
             }
 
             variant.sources.res?.addGeneratedSourceDirectory(

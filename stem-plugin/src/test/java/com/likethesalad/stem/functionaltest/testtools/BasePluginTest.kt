@@ -28,6 +28,17 @@ open class BasePluginTest {
         return project
     }
 
+    protected fun createProjectWithCache(
+        cacheDir: File,
+        vararg descriptors: ProjectDescriptor
+    ): AndroidTestProject {
+        val project = AndroidTestProject(getTempFile(), cacheDir)
+        descriptors.forEach {
+            project.addSubproject(it)
+        }
+        return project
+    }
+
     protected fun verifyResultContainsText(result: BuildResult, text: String) {
         assertThat(result.output).contains(text)
     }
