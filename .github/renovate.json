@@ -3,6 +3,9 @@
   "extends": [
     "config:recommended"
   ],
+  "automerge": true,
+  "automergeStrategy": "squash",
+  "schedule": ["* * 2-31 * *"],
   "packageRules": [
     {
       "matchPackageNames": [
