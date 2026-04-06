@@ -10,4 +10,6 @@ jobs:
       java-version: '17'
       checks-command: './check.sh'
       run-on-windows: true
-    secrets: inherit
+    secrets:
+      GH_BOT_PRIVATE_KEY: '${{ secrets.GH_BOT_PRIVATE_KEY }}'
+
