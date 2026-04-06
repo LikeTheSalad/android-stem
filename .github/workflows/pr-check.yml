@@ -1,0 +1,15 @@
+name: PR Check
+on:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  checks:
+    uses: LikeTheSalad/github-tools/.github/workflows/pr-check.yml@main
+    with:
+      app-id: '${{ vars.APP_ID }}'
+      java-version: '17'
+      checks-command: './check.sh'
+      run-on-windows: true
+    secrets:
+      GH_BOT_PRIVATE_KEY: '${{ secrets.GH_BOT_PRIVATE_KEY }}'
+
