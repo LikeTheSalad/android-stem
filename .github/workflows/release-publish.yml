@@ -1,16 +1,14 @@
 name: Release — Publish
-
 on:
   pull_request:
     types: [closed]
     branches:
       - 'release/**'
-
 jobs:
   release:
     uses: LikeTheSalad/github-tools/.github/workflows/release-publish.yml@main
     with:
-      app-id: ${{ vars.APP_ID }}
-      java-version: '17'
+      java-version: 17
+      app-id: '${{ vars.APP_ID }}'
       publish-to-gradle-portal: true
     secrets: inherit
