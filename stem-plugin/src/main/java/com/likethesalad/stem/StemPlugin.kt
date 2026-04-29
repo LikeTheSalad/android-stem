@@ -2,18 +2,9 @@ package com.likethesalad.stem
 
 import com.android.build.api.AndroidPluginVersion
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
-import com.likethesalad.stem.configuration.StemConfiguration
 import com.likethesalad.stem.modules.collector.task.RawStringCollectorTask
-import com.likethesalad.stem.modules.common.helpers.files.OutputStringFileResolver
-import com.likethesalad.stem.modules.common.helpers.resources.AndroidResourcesHandler
-import com.likethesalad.stem.modules.resolveStrings.ResolvePlaceholdersAction
 import com.likethesalad.stem.modules.resolveStrings.ResolvePlaceholdersTask
-import com.likethesalad.stem.modules.resolveStrings.data.ResolvePlaceholdersArgs
-import com.likethesalad.stem.modules.resolveStrings.resolver.RecursiveLevelDetector
-import com.likethesalad.stem.modules.resolveStrings.resolver.TemplateResolver
-import com.likethesalad.stem.modules.templateStrings.GatherTemplatesAction
 import com.likethesalad.stem.modules.templateStrings.GatherTemplatesTask
-import com.likethesalad.stem.modules.templateStrings.data.GatherTemplatesArgs
 import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -36,9 +27,6 @@ class StemPlugin : Plugin<Project> {
         extension = createExtension(project)
         val components = getAndroidComponents(project)
         val taskContainer = project.tasks
-        val outputStringFileResolver = OutputStringFileResolver()
-        val androidResourcesHandler = AndroidResourcesHandler(outputStringFileResolver)
-        val stemConfiguration = StemConfiguration.create(extension)
         val stemProviderConfig = project.configurations.create("stemProvider") {
             it.isCanBeResolved = false
             it.isCanBeConsumed = false
@@ -64,10 +52,7 @@ class StemPlugin : Plugin<Project> {
 
             val gatherTemplatesTask = taskContainer.register(
                 "${variant.name}GatherStringTemplates",
-                GatherTemplatesTask::class.java,
-                GatherTemplatesArgs(
-                    GatherTemplatesAction(androidResourcesHandler, stemConfiguration)
-                )
+                GatherTemplatesTask::class.java
             )
 
             gatherTemplatesTask.configure {
@@ -80,15 +65,7 @@ class StemPlugin : Plugin<Project> {
 
             val resolvePlaceholdersTask = taskContainer.register(
                 "${variant.name}ResolvePlaceholders",
-                ResolvePlaceholdersTask::class.java,
-                ResolvePlaceholdersArgs(
-                    ResolvePlaceholdersAction(
-                        TemplateResolver(
-                            stemConfiguration,
-                            RecursiveLevelDetector()
-                        ), androidResourcesHandler
-                    )
-                )
+                ResolvePlaceholdersTask::class.java
             )
 
             resolvePlaceholdersTask.configure {

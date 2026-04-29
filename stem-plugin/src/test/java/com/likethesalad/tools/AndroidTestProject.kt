@@ -22,23 +22,26 @@ class AndroidTestProject(val rootDir: File, private val localBuildCacheDir: File
     fun runGradle(
         forProjectName: String,
         command: String,
-        withInfo: Boolean = false
+        withInfo: Boolean = false,
+        withConfigurationCache: Boolean = false
     ): BuildResult {
-        return runGradle(forProjectName, listOf(command), withInfo)
+        return runGradle(forProjectName, listOf(command), withInfo, withConfigurationCache)
     }
 
     fun runGradleAndFail(
         forProjectName: String,
         command: String,
-        withInfo: Boolean = false
+        withInfo: Boolean = false,
+        withConfigurationCache: Boolean = false
     ): BuildResult {
-        return runGradleAndFail(forProjectName, listOf(command), withInfo)
+        return runGradleAndFail(forProjectName, listOf(command), withInfo, withConfigurationCache)
     }
 
     fun runGradle(
         forProjectName: String,
         commands: List<String>,
-        withInfo: Boolean = false
+        withInfo: Boolean = false,
+        withConfigurationCache: Boolean = false
     ): BuildResult {
         val extraArgs = mutableListOf("--stacktrace")
         if (withInfo) {
@@ -46,6 +49,9 @@ class AndroidTestProject(val rootDir: File, private val localBuildCacheDir: File
         }
         if (localBuildCacheDir != null) {
             extraArgs.add("--build-cache")
+        }
+        if (withConfigurationCache) {
+            extraArgs.add("--configuration-cache")
         }
         return createGradleRunner()
             .withArguments(commands.map { ":$forProjectName:$it" }.plus(extraArgs))
@@ -55,7 +61,8 @@ class AndroidTestProject(val rootDir: File, private val localBuildCacheDir: File
     fun runGradleAndFail(
         forProjectName: String,
         commands: List<String>,
-        withInfo: Boolean = false
+        withInfo: Boolean = false,
+        withConfigurationCache: Boolean = false
     ): BuildResult {
         val extraArgs = mutableListOf("--stacktrace")
         if (withInfo) {
@@ -63,6 +70,9 @@ class AndroidTestProject(val rootDir: File, private val localBuildCacheDir: File
         }
         if (localBuildCacheDir != null) {
             extraArgs.add("--build-cache")
+        }
+        if (withConfigurationCache) {
+            extraArgs.add("--configuration-cache")
         }
         return createGradleRunner()
             .withArguments(commands.map { ":$forProjectName:$it" }.plus(extraArgs))

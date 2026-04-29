@@ -1,9 +1,12 @@
 package com.likethesalad.stem.modules.resolveStrings
 
+import com.likethesalad.stem.configuration.StemConfiguration
 import com.likethesalad.stem.modules.common.BaseTask
-import com.likethesalad.stem.modules.resolveStrings.data.ResolvePlaceholdersArgs
+import com.likethesalad.stem.modules.common.helpers.files.OutputStringFileResolver
+import com.likethesalad.stem.modules.common.helpers.resources.AndroidResourcesHandler
+import com.likethesalad.stem.modules.resolveStrings.resolver.RecursiveLevelDetector
+import com.likethesalad.stem.modules.resolveStrings.resolver.TemplateResolver
 import com.likethesalad.stem.tools.DirectoryUtils
-import javax.inject.Inject
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.CacheableTask
@@ -16,8 +19,7 @@ import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.TaskAction
 
 @CacheableTask
-open class ResolvePlaceholdersTask
-@Inject constructor(private val args: ResolvePlaceholdersArgs) : BaseTask() {
+open class ResolvePlaceholdersTask : BaseTask() {
 
     @get:Input
     val placeholderStart: Property<String> = project.objects.property(String::class.java)
@@ -36,6 +38,14 @@ open class ResolvePlaceholdersTask
     @TaskAction
     fun resolve() {
         DirectoryUtils.clearIfNeeded(outputDir.get().asFile)
-        args.resolvePlaceholdersAction.resolve(templatesDir.get().asFile, outputDir.get().asFile)
+        val stemConfiguration = StemConfiguration(
+            { placeholderStart.get() },
+            { placeholderEnd.get() },
+            { false }
+        )
+        ResolvePlaceholdersAction(
+            TemplateResolver(stemConfiguration, RecursiveLevelDetector()),
+            AndroidResourcesHandler(OutputStringFileResolver())
+        ).resolve(templatesDir.get().asFile, outputDir.get().asFile)
     }
 }

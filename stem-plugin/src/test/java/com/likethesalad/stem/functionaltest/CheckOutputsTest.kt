@@ -439,6 +439,24 @@ class CheckOutputsTest : BasePluginTest() {
     }
 
     @Test
+    fun `verify basic app works with configuration cache`() {
+        val variantNames = listOf("debug")
+        val projectName = "basic_config_cache"
+        val commandList = variantNamesToResolveCommands(variantNames)
+        val project = createProject(createAndroidAppProjectDescriptor(projectName, "basic"))
+
+        // First run: stores configuration cache
+        val result1 = project.runGradle(projectName, commandList, withConfigurationCache = true)
+        verifyResultContainsText(result1, "Configuration cache entry stored.")
+        verifyVariantResults(variantNames, projectName, "basic")
+
+        // Second run: reuses configuration cache
+        val result2 = project.runGradle(projectName, commandList, withConfigurationCache = true)
+        verifyResultContainsText(result2, "Configuration cache entry reused.")
+        verifyVariantResults(variantNames, projectName, "basic")
+    }
+
+    @Test
     fun `verify app that takes resources from multiple libraries`() {
         // Create library
         val libName1 = "my_first_library"
