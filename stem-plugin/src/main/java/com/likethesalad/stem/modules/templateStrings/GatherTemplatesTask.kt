@@ -1,10 +1,11 @@
 package com.likethesalad.stem.modules.templateStrings
 
 import com.likethesalad.android.protos.ValuesStringResources
+import com.likethesalad.stem.configuration.StemConfiguration
 import com.likethesalad.stem.modules.common.BaseTask
-import com.likethesalad.stem.modules.templateStrings.data.GatherTemplatesArgs
+import com.likethesalad.stem.modules.common.helpers.files.OutputStringFileResolver
+import com.likethesalad.stem.modules.common.helpers.resources.AndroidResourcesHandler
 import com.likethesalad.stem.tools.DirectoryUtils
-import javax.inject.Inject
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
@@ -17,8 +18,7 @@ import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
 
 @CacheableTask
-abstract class GatherTemplatesTask
-@Inject constructor(private val args: GatherTemplatesArgs) : BaseTask() {
+abstract class GatherTemplatesTask : BaseTask() {
     @get:Input
     abstract val placeholderStart: Property<String>
 
@@ -43,9 +43,14 @@ abstract class GatherTemplatesTask
             ValuesStringResources.ADAPTER.decode(it)
         }
 
-        args.gatherTemplatesAction.gatherTemplateStrings(
-            outDir.get().asFile,
-            stringValues
+        val stemConfiguration = StemConfiguration(
+            { placeholderStart.get() },
+            { placeholderEnd.get() },
+            { includeLocalizedOnlyTemplates.get() }
         )
+        GatherTemplatesAction(
+            AndroidResourcesHandler(OutputStringFileResolver()),
+            stemConfiguration
+        ).gatherTemplateStrings(outDir.get().asFile, stringValues)
     }
 }
