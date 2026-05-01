@@ -3,6 +3,24 @@ Change Log
 
 <!-- CHANGELOG_INSERT -->
 
+## Version 3.3.0 (2026-05-01)
+
+* Update Gradle to v9.5.0 ([#299](https://github.com/LikeTheSalad/android-stem/pull/299))
+* Update dependency org.junit:junit-bom to v5.14.4 ([#298](https://github.com/LikeTheSalad/android-stem/pull/298))
+* Update dependency com.google.code.gson:gson to v2.14.0 ([#296](https://github.com/LikeTheSalad/android-stem/pull/296))
+* Update plugin kotlin to v2.3.21 ([#295](https://github.com/LikeTheSalad/android-stem/pull/295))
+* Update dependency com.android.tools.build:gradle to v9.2.0 ([#294](https://github.com/LikeTheSalad/android-stem/pull/294))
+* Update android to v9.2.0 ([#293](https://github.com/LikeTheSalad/android-stem/pull/293))
+* Update dependency com.android.tools.build:gradle to v9.1.1 ([#292](https://github.com/LikeTheSalad/android-stem/pull/292))
+* Update android to v9.1.1 ([#291](https://github.com/LikeTheSalad/android-stem/pull/291))
+* Adding permissions ([#290](https://github.com/LikeTheSalad/android-stem/pull/290))
+* Clean up ([#289](https://github.com/LikeTheSalad/android-stem/pull/289))
+* Migrate to GitHub tools ([#288](https://github.com/LikeTheSalad/android-stem/pull/288))
+
+### Features
+
+* Adding Gradle config cache support ([#300](https://github.com/LikeTheSalad/android-stem/pull/300))
+
 ## Version 3.2.0 (2026-04-04)
 
 * Making tasks cacheable
