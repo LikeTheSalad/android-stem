@@ -1,5 +1,5 @@
 [versions]
-android = "9.2.0"
+android = "9.2.1"
 
 [libraries]
 android-plugin = { module = "com.android.tools.build:gradle", version.ref = "android" }
