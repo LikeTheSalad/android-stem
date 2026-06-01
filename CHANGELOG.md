@@ -3,6 +3,16 @@ Change Log
 
 <!-- CHANGELOG_INSERT -->
 
+## Version 3.3.1 (2026-06-01)
+
+* Update dependency org.xmlunit:xmlunit-core to v2.12.0 ([#309](https://github.com/LikeTheSalad/android-stem/pull/309))
+* Update dependency io.mockk:mockk to v1.14.11 ([#308](https://github.com/LikeTheSalad/android-stem/pull/308))
+* Update plugin wire to v6.4.0 ([#307](https://github.com/LikeTheSalad/android-stem/pull/307))
+* Update plugin wire to v6.3.0 ([#306](https://github.com/LikeTheSalad/android-stem/pull/306))
+* Update Gradle to v9.5.1 ([#305](https://github.com/LikeTheSalad/android-stem/pull/305))
+* Update dependency com.android.tools.build:gradle to v9.2.1 ([#304](https://github.com/LikeTheSalad/android-stem/pull/304))
+* Update android to v9.2.1 ([#303](https://github.com/LikeTheSalad/android-stem/pull/303))
+
 ## Version 3.3.0 (2026-05-01)
 
 * Update Gradle to v9.5.0 ([#299](https://github.com/LikeTheSalad/android-stem/pull/299))
