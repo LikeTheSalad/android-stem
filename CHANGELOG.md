@@ -3,6 +3,16 @@ Change Log
 
 <!-- CHANGELOG_INSERT -->
 
+## Version 3.3.3 (2026-08-01)
+
+* Update dependency org.xmlunit:xmlunit-core to v2.13.0 ([#329](https://github.com/LikeTheSalad/android-stem/pull/329))
+* Update dependency com.android.tools.build:gradle to v9.3.1 ([#328](https://github.com/LikeTheSalad/android-stem/pull/328))
+* Update android to v9.3.1 ([#327](https://github.com/LikeTheSalad/android-stem/pull/327))
+* Update dependency com.android.tools.build:gradle to v9.3.0 ([#326](https://github.com/LikeTheSalad/android-stem/pull/326))
+* Update android to v9.3.0 ([#325](https://github.com/LikeTheSalad/android-stem/pull/325))
+* Update plugin kotlin to v2.4.10 ([#324](https://github.com/LikeTheSalad/android-stem/pull/324))
+* Update dependency org.junit:junit-bom to v6.1.2 ([#323](https://github.com/LikeTheSalad/android-stem/pull/323))
+
 ## Version 3.3.2 (2026-07-01)
 
 * Update plugin wire to v6.4.5 ([#320](https://github.com/LikeTheSalad/android-stem/pull/320))
