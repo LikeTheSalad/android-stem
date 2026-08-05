@@ -14,16 +14,10 @@ import org.w3c.dom.Node
 import org.xml.sax.InputSource
 
 object XmlUtils {
-    private val docBuilder by lazy {
-        DocumentBuilderFactory
-            .newInstance()
-            .newDocumentBuilder()
+    private fun createContentExtractor() = TransformerFactory.newInstance().newTransformer().apply {
+        setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes")
     }
-    private val contentExtractor by lazy {
-        val transformer = TransformerFactory.newInstance().newTransformer()
-        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes")
-        transformer
-    }
+
     private val OUTER_XML_TAGS_PATTERN = Regex("^<[^>]*>|<[^>]*>\$")
 
     fun stringResourceModelToElement(
@@ -31,7 +25,10 @@ object XmlUtils {
         namespaceNameProvider: NamespaceNameProvider
     ): Element {
         val reader = StringReader("<string>${stringResourceModel.text}</string>")
-        val strElement = docBuilder.parse(InputSource(reader)).documentElement
+        val strElement = DocumentBuilderFactory.newInstance()
+            .newDocumentBuilder()
+            .parse(InputSource(reader))
+            .documentElement
         for (it in stringResourceModel.attributes) {
             it.namespace?.let { namespace ->
                 val namespaceName = namespaceNameProvider.getNameFor(namespace)
@@ -45,7 +42,7 @@ object XmlUtils {
         val outText = StringWriter()
         val streamResult = StreamResult(outText)
         return try {
-            contentExtractor.transform(DOMSource(node), streamResult)
+            createContentExtractor().transform(DOMSource(node), streamResult)
             val text = outText.toString()
             return OUTER_XML_TAGS_PATTERN.replace(text, "")
         } catch (e: TransformerException) {
