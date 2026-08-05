@@ -51,10 +51,8 @@ class XmlUtilsConcurrencyTest {
     }
 
     /**
-     * Verifies that concurrent calls do not share a Transformer. [XmlUtils.getContents] swallows
-     * TransformerException and falls back to Node.getTextContent(), which drops inline markup, so
-     * the original race corrupted string resources silently rather than failing the build. The
-     * inline `<b>` tag below makes that corruption observable.
+     * Verifies that concurrent calls do not share a Transformer. The inline `<b>` tag makes
+     * corrupted output observable.
      */
     @Test
     fun checkGetContentsUnderConcurrentUse() {
@@ -81,7 +79,7 @@ class XmlUtilsConcurrencyTest {
         val executor = Executors.newFixedThreadPool(THREAD_COUNT)
         val barrier = CyclicBarrier(THREAD_COUNT)
         val failureCount = AtomicInteger()
-        val firstFailure = AtomicReference<Exception>()
+        val firstFailure = AtomicReference<Throwable>()
 
         try {
             val futures = (0 until THREAD_COUNT).map { threadIndex ->
@@ -90,7 +88,7 @@ class XmlUtilsConcurrencyTest {
                         barrier.await()
                         try {
                             body(threadIndex, iteration)
-                        } catch (e: Exception) {
+                        } catch (e: Throwable) {
                             failureCount.incrementAndGet()
                             firstFailure.compareAndSet(null, e)
                         }
