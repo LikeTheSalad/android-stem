@@ -3,6 +3,12 @@ Change Log
 
 <!-- CHANGELOG_INSERT -->
 
+## Version 3.3.4 (2026-08-05)
+
+### Bug Fixes
+
+* Xmlutils thread safety ([#333](https://github.com/LikeTheSalad/android-stem/pull/333))
+
 ## Version 3.3.3 (2026-08-01)
 
 * Update dependency org.xmlunit:xmlunit-core to v2.13.0 ([#329](https://github.com/LikeTheSalad/android-stem/pull/329))
