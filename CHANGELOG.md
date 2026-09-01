@@ -3,6 +3,16 @@ Change Log
 
 <!-- CHANGELOG_INSERT -->
 
+## Version 3.3.5 (2026-09-01)
+
+* Update plugin wire to v6.4.7 ([#342](https://github.com/LikeTheSalad/android-stem/pull/342))
+* Update dependency com.android.tools.build:gradle to v9.3.2 ([#341](https://github.com/LikeTheSalad/android-stem/pull/341))
+* Update android to v9.3.2 ([#340](https://github.com/LikeTheSalad/android-stem/pull/340))
+* Update Gradle to v9.7.1 ([#339](https://github.com/LikeTheSalad/android-stem/pull/339))
+* Update plugin wire to v6.4.6 ([#338](https://github.com/LikeTheSalad/android-stem/pull/338))
+* Update dependency org.junit:junit-bom to v6.1.3 ([#337](https://github.com/LikeTheSalad/android-stem/pull/337))
+* Update Gradle to v9.7.0 ([#336](https://github.com/LikeTheSalad/android-stem/pull/336))
+
 ## Version 3.3.4 (2026-08-05)
 
 ### Bug Fixes
