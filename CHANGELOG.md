@@ -3,6 +3,21 @@ Change Log
 
 <!-- CHANGELOG_INSERT -->
 
+## Version 3.3.6 (2026-10-01)
+
+* Update plugin wire to v7.1.0 ([#356](https://github.com/LikeTheSalad/android-stem/pull/356))
+* Update plugin wire to v7.0.4 ([#355](https://github.com/LikeTheSalad/android-stem/pull/355))
+* Update Gradle to v9.8.0 ([#354](https://github.com/LikeTheSalad/android-stem/pull/354))
+* Update dependency org.xmlunit:xmlunit-core to v2.14.0 ([#353](https://github.com/LikeTheSalad/android-stem/pull/353))
+* Update dependency com.android.tools.build:gradle to v9.4.1 ([#352](https://github.com/LikeTheSalad/android-stem/pull/352))
+* Update android to v9.4.1 ([#351](https://github.com/LikeTheSalad/android-stem/pull/351))
+* Update plugin wire to v7.0.3 ([#350](https://github.com/LikeTheSalad/android-stem/pull/350))
+* Update dependency org.robolectric:robolectric to v4.17 ([#349](https://github.com/LikeTheSalad/android-stem/pull/349))
+* Update plugin wire to v7 ([#348](https://github.com/LikeTheSalad/android-stem/pull/348))
+* Update plugin kotlin to v2.4.20 ([#347](https://github.com/LikeTheSalad/android-stem/pull/347))
+* Update dependency com.android.tools.build:gradle to v9.4.0 ([#346](https://github.com/LikeTheSalad/android-stem/pull/346))
+* Update android to v9.4.0 ([#345](https://github.com/LikeTheSalad/android-stem/pull/345))
+
 ## Version 3.3.5 (2026-09-01)
 
 * Update plugin wire to v6.4.7 ([#342](https://github.com/LikeTheSalad/android-stem/pull/342))
